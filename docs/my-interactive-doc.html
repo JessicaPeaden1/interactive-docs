@@ -1,1193 +1,1296 @@
-Title- Hock Technical Reference -<!DOCTYPE html>
+Title: Hock Interactive Demo   HTML Markdown-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>HOCK International — Content Production Agent | Technical Reference</title>
+<title>HOCK International — AI Content Production Agent Demo</title>
 <style>
-:root {
-  --orange: #F47920;
-  --orange-light: #FEF0E6;
-  --orange-mid: #FBCDA0;
-  --blue: #1B4B8A;
-  --blue-light: #E8EEF7;
-  --blue-mid: #9DB5D4;
-  --bg: #F4F4F1;
-  --surface: #FFFFFF;
-  --surface-soft: #FAFAF8;
-  --border: #E2E2DC;
-  --border-strong: #C8C8C0;
-  --text: #1A1A18;
-  --text-muted: #6B6B64;
-  --text-light: #9A9A92;
-  --green: #166534;
-  --green-light: #DCFCE7;
-  --green-mid: #A7F3C0;
-  --amber: #92400E;
-  --amber-light: #FEF3E2;
-  --red: #991B1B;
-  --red-light: #FEE2E2;
-  --purple: #5B21B6;
-  --purple-light: #EDE9FE;
-  --radius: 8px;
-  --radius-sm: 5px;
-  --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 2px 12px rgba(0,0,0,0.04);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+:root{
+  --hock-orange:#F7941D;
+  --hock-blue:#1B4F8A;
+  --hock-blue-light:#2D6DB5;
+  --navy:#FFFFFF;
+  --line:#E0D8CF;
+  --line2:#D4CBC0;
+  --text:#1A1612;
+  --muted:#6B6259;
+  --muted2:#9E9188;
+  --card:#FFFFFF;
+  --card2:#FAFAF9;
+  --card3:#F5F0EB;
+  --white:#FFFFFF;
+  --bg:#F2EDE6;
+  --teal:#F7941D;--teal2:#d97d0f;--blue:#1B4F8A;--blue2:#163f6e;
+  --green:#16a34a;--amber:#d97706;--purple:#7c3aed;--red:#dc2626;
+  --radius:14px;--radius-sm:8px;
+  --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.65; }
 
-/* ── Header ── */
-.page-header { background: var(--blue); border-bottom: 4px solid var(--orange); }
-.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; }
-.header-brand { display: flex; align-items: center; gap: 14px; }
-.logo { display: flex; align-items: baseline; gap: 0; }
-.logo-hock { font-size: 26px; font-weight: 900; color: var(--orange); letter-spacing: -1px; font-style: italic; }
-.logo-int { font-size: 13px; font-weight: 700; color: #fff; background: var(--orange); padding: 2px 8px; border-radius: 2px; margin-left: 6px; letter-spacing: 0.03em; }
-.header-divider { width: 1px; height: 32px; background: rgba(255,255,255,0.2); }
-.header-title { color: #fff; }
-.header-title h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.1px; }
-.header-title p { font-size: 11.5px; color: rgba(255,255,255,0.6); margin-top: 2px; }
-.header-meta { display: flex; gap: 8px; align-items: center; }
-.hbadge { font-size: 10.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase; }
-.hbadge-orange { background: var(--orange); color: #fff; }
-.hbadge-outline { border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+.hock-logo-wrap{display:flex;align-items:center;padding:2px 0 6px}
+.hock-logo-wrap svg{display:block}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F2EDE6;color:#1A1612;font-size:14px;line-height:1.6}
 
-/* ── Layout ── */
-.layout { display: flex; min-height: calc(100vh - 78px); }
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:280px 1fr;height:100vh;overflow:hidden}
 
-/* ── Sidebar ── */
-.sidebar { width: 224px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 20px 0; position: sticky; top: 0; height: calc(100vh - 78px); overflow-y: auto; }
-.sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); padding: 0 20px 8px; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; cursor: pointer; font-size: 13px; color: var(--text-muted); border-left: 3px solid transparent; transition: all 0.15s; user-select: none; }
-.nav-item:hover { background: var(--bg); color: var(--text); }
-.nav-item.active { background: var(--orange-light); color: var(--orange); border-left-color: var(--orange); font-weight: 600; }
-.nav-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
-.sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 10px 20px; }
-.version-box { margin: 16px; padding: 10px 12px; background: var(--blue-light); border-radius: var(--radius-sm); border: 1px solid var(--blue-mid); }
-.version-box p { font-size: 11px; color: var(--blue); line-height: 1.5; }
-.version-box strong { font-weight: 700; }
+/* SIDEBAR */
+.sidebar{background:#FFFFFF;border-right:1px solid #E0D8CF;display:flex;flex-direction:column;overflow:hidden}
+.sidebar-header{padding:20px 18px 14px;border-bottom:1px solid #E0D8CF}
+.brand-logo{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 
-/* ── Main ── */
-.main { flex: 1; padding: 32px 40px; max-width: 900px; }
-.section { display: none; }
-.section.active { display: block; }
-.section-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-.section-header-left h2 { font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
-.section-header-left p { color: var(--text-muted); font-size: 13.5px; max-width: 600px; }
-.section-icon { font-size: 28px; flex-shrink: 0; }
+.brand-name{font-size:15px;font-weight:700;color:#1A1612}
+.brand-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.sidebar-tagline{font-size:12px;color:#6B6259;line-height:1.5;padding:10px 12px;background:#FFF8F0;border-radius:var(--radius-sm);border:1px solid rgba(247,148,29,.25)}
 
-/* ── Cards ── */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
-.card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-.card p { color: var(--text-muted); font-size: 13px; line-height: 1.65; }
-.card p + p { margin-top: 8px; }
-.card-orange { border-left: 4px solid var(--orange); }
-.card-blue { border-left: 4px solid var(--blue); }
-.card-green { border-left: 4px solid #16a34a; }
-.card-amber { border-left: 4px solid var(--amber); }
-.card-purple { border-left: 4px solid var(--purple); }
-.card-red { border-left: 4px solid var(--red); }
+.sidebar-nav{flex:1;overflow-y:auto;padding:14px 10px}
+.nav-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#9E9188;padding:10px 10px 5px;font-weight:600}
+.nav-btn{width:100%;background:none;border:none;color:#6B6259;text-align:left;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;transition:all .15s;margin:1px 0}
+.nav-btn:hover{background:#F5F0EB;color:#1A1612}
+.nav-btn.active{background:#FFF3E0;color:#C4720A;border-left:3px solid #F7941D;font-weight:600}
+.nav-btn .nav-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:#F0EAE0}
+.nav-btn.active .nav-icon{background:#FFE0B2}
+.nav-phase-num{font-size:10px;font-weight:700;margin-left:auto;padding:2px 7px;border-radius:999px;background:#F0EAE0;color:#9E9188}
+.nav-btn.active .nav-phase-num{background:#FFE0B2;color:#C4720A}
+.nav-btn.done .nav-phase-num{background:#DCFCE7;color:#16a34a}
 
-/* ── Badges ── */
-.badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; }
-.badge-orange { background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-mid); }
-.badge-blue { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-mid); }
-.badge-green { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
-.badge-amber { background: var(--amber-light); color: var(--amber); border: 1px solid #FDE68A; }
-.badge-purple { background: var(--purple-light); color: var(--purple); border: 1px solid #C4B5FD; }
-.badge-red { background: var(--red-light); color: var(--red); border: 1px solid #FCA5A5; }
-.badge-gray { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+.sidebar-footer{padding:14px;border-top:1px solid #E0D8CF}
+.progress-track{background:#E0D8CF;border-radius:999px;height:4px;margin-top:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#F7941D,#1B4F8A);transition:width .4s}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:#9E9188;margin-bottom:4px}
 
-/* ── Tables ── */
-.data-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
-.data-table th { text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--surface-soft); }
-.data-table td { padding: 10px 12px; color: var(--text-muted); border-bottom: 1px solid var(--border); vertical-align: top; }
-.data-table tr:last-child td { border-bottom: none; }
-.data-table td:first-child { color: var(--text); font-weight: 500; }
-.data-table tr:hover td { background: var(--surface-soft); }
+/* MAIN */
+.main{overflow-y:auto;background:#F2EDE6}
+.section{display:none;padding:24px 28px 40px;max-width:1200px;background:#F2EDE6}
+.section.active{display:block}
 
-/* ── Code ── */
-.code-block { background: #1A1D23; border-radius: var(--radius); padding: 14px 18px; margin: 10px 0; overflow-x: auto; }
-.code-block code { font-family: 'SF Mono','Menlo',monospace; font-size: 12px; color: #ABB2BF; line-height: 1.7; white-space: pre; display: block; }
-.c-key { color: #61AFEF; }
-.c-val { color: #98C379; }
-.c-comment { color: #5C6370; }
-.c-orange { color: #E5C07B; }
-.inline-code { font-family: 'SF Mono','Menlo',monospace; font-size: 12px; background: var(--bg); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); color: var(--blue); }
+/* SECTION HEADER */
+.section-header{margin-bottom:22px}
+.phase-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.phase-chip{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 10px;border-radius:999px;background:#FFF3E0;color:#C4720A;border:1px solid rgba(247,148,29,.4)}
+.skills-chip{font-size:11px;padding:3px 10px;border-radius:999px;background:#EBF2FA;color:#1B4F8A;border:1px solid rgba(27,79,138,.25)}
+.section-title{font-size:22px;font-weight:700;color:#1A1612;margin-bottom:6px}
+.section-desc{color:#6B6259;font-size:14px;max-width:680px;line-height:1.6}
 
-/* ── Alert ── */
-.alert { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; border-radius: var(--radius); margin-bottom: 14px; font-size: 13px; line-height: 1.55; }
-.alert-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-.alert-orange { background: var(--orange-light); border: 1px solid var(--orange-mid); color: #7A3A0A; }
-.alert-blue { background: var(--blue-light); border: 1px solid var(--blue-mid); color: var(--blue); }
-.alert-green { background: var(--green-light); border: 1px solid var(--green-mid); color: var(--green); }
-.alert-amber { background: var(--amber-light); border: 1px solid #FDE68A; color: var(--amber); }
+/* GRID */
+.demo-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:start}
+.demo-grid.single{grid-template-columns:1fr}
 
-/* ── Steps list ── */
-.step-list { list-style: none; }
-.step-item { display: flex; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--border); }
-.step-item:last-child { border-bottom: none; padding-bottom: 0; }
-.step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-.step-num.orange { background: var(--orange); }
-.step-content { flex: 1; }
-.step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-.step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+/* CARDS */
+.card{background:#FFFFFF;border:1px solid #E0D8CF;border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.card-header{padding:12px 16px;border-bottom:1px solid #E0D8CF;display:flex;align-items:center;justify-content:space-between;background:#FAFAF9;border-top:3px solid #F7941D}
+.card-title{font-size:13px;font-weight:600;color:#1A1612}
+.card-badge{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid #E0D8CF;color:#6B6259;background:#F5F0EB}
+.card-body{padding:16px}
 
-/* ── Phase tabs ── */
-.phase-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-.phase-tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); color: var(--text-muted); background: var(--surface); transition: all 0.15s; user-select: none; }
-.phase-tab:hover { border-color: var(--orange); color: var(--orange); }
-.phase-tab.active { background: var(--orange); color: #fff; border-color: var(--orange); }
-.phase-panel { display: none; }
-.phase-panel.active { display: block; }
+/* CHAT */
+.chat-messages{display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.55;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:#FFF3E0;border:1px solid rgba(247,148,29,.4);color:#7a3f00;border-bottom-right-radius:4px}
+.msg.agent{align-self:flex-start;background:#F5F0EB;border:1px solid #E0D8CF;color:#1A1612;border-bottom-left-radius:4px}
+.msg.system{align-self:flex-start;background:#fffbf0;border:1px solid #f0d080;color:#7a5f00;border-radius:8px;font-size:12px;font-style:italic}
+.msg-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin-bottom:3px}
+.msg-label.you{color:#C4720A;text-align:right}
+.msg-label.ai{color:#1B4F8A}
+.msg-label.sys{color:#d97706}
+.msg-wrap{display:flex;flex-direction:column}
+.msg-wrap.user-wrap{align-items:flex-end}
+.msg-wrap.agent-wrap{align-items:flex-start}
 
-/* ── SVG Flow ── */
-.flow-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; overflow-x: auto; }
-.flow-wrap svg { display: block; margin: 0 auto; }
+.chat-divider{border:none;border-top:1px dashed var(--line);margin:6px 0;opacity:.5}
 
-/* ── Skill cards ── */
-.skill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-.skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.15s; }
-.skill-card:hover { border-color: var(--orange); box-shadow: 0 2px 8px rgba(244,121,32,0.12); }
-.skill-card.active { border-color: var(--orange); border-left: 4px solid var(--orange); background: var(--orange-light); }
-.skill-card h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.skill-card p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-.skill-detail { display: none; }
-.skill-detail.active { display: block; }
+.chat-input{border-top:1px solid var(--line);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:#FAFAF9}
+.chat-input-pill{font-size:12px;color:#9d9185;padding:7px 12px;background:#F5F0EB;border:1px solid #E0D8CF;border-radius:999px}
+.chat-send{font-size:12px;color:#9E9188;font-weight:600}
 
-/* ── Tags ── */
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.tag { font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 500; background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); }
+/* CONNECTOR BLOCK */
+.connector{background:#FFFFFF;border:1px solid #E0D8CF;border-radius:10px;overflow:hidden;margin:8px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.connector-header{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #E0D8CF;background:#FFF8F2;border-top:2px solid #F7941D}
+.connector-tool-left{display:flex;align-items:center;gap:8px}
+.connector-tool-icon{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#F7941D,#e07c0d);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.connector-tool-icon svg{width:14px;height:14px}
+.connector-tool-name{font-size:12px;font-weight:700;color:#1A1612}
+.connector-tool-sub{font-size:11px;color:#9E9188;margin-top:1px}
+.connector-status{display:flex;align-items:center;gap:5px;font-size:11px;color:#6B6259;background:#F5F0EB;padding:3px 9px;border-radius:999px;border:1px solid #E0D8CF}
+.connector-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;flex-shrink:0}
+.connector-dot.orange{background:#F7941D}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.connector-tag{font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(27,79,138,.12);color:#1B4F8A;border:1px solid rgba(27,79,138,.25)}
+.connector-payload{padding:11px 13px;font-size:12px;color:#3A3330;line-height:1.75;background:#FAFAF9}
+.conn-row{display:flex;align-items:baseline;gap:8px;padding:2px 0}
+.conn-key{font-size:11px;font-weight:600;color:#C4720A;min-width:80px;flex-shrink:0;font-family:'Courier New',monospace}
+.conn-arrow{color:#C0B8AE;font-size:11px;flex-shrink:0}
+.conn-val{font-size:12px;color:#1A1612;font-weight:500}
+.conn-val.blue{color:#1B4F8A}
 
-/* ── Changelog ── */
-.changelog-row td:first-child { font-family: 'SF Mono','Menlo',monospace; font-size: 11.5px; color: var(--blue); font-weight: 600; }
+/* MONDAY BOARD */
+.board{overflow:hidden;border-radius:var(--radius-sm);border:1px solid #E0D8CF}
+.board-head{display:grid;font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:#9E9188;padding:8px 12px;background:#F5F0EB;border-bottom:1px solid #E0D8CF}
+.board-row-data{display:grid;padding:10px 12px;border-bottom:1px solid #F0EAE0;align-items:center;font-size:12px;color:#1A1612}
+.board-row-data:last-child{border-bottom:none}
+.status-pill{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.s-teal{background:#FFF3E0;color:#C4720A;border:1px solid rgba(247,148,29,.35)}
+.s-blue{background:#EBF2FA;color:#1B4F8A;border:1px solid rgba(27,79,138,.3)}
+.s-green{background:#DCFCE7;color:#16a34a;border:1px solid rgba(22,163,74,.3)}
+.s-amber{background:#FFFBEB;color:#d97706;border:1px solid rgba(217,119,6,.35)}
+.s-purple{background:#F5F3FF;color:#7c3aed;border:1px solid rgba(124,58,237,.3)}
+.s-red{background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.2)}
 
-/* ── Nav buttons ── */
-.nav-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); }
-.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
-.btn-primary { background: var(--orange); color: #fff; }
-.btn-primary:hover { background: #D4650F; }
-.btn-ghost { background: var(--surface); color: var(--text-muted); border: 1px solid var(--border); }
-.btn-ghost:hover { border-color: var(--border-strong); color: var(--text); }
-.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+/* PROMPT BOX */
+.prompt-box{background:#FFFFFF;border:1px solid #E0D8CF;border-radius:var(--radius-sm);overflow:hidden}
+.prompt-box-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #E0D8CF;background:#FFF8F0}
+.prompt-box-title{font-size:11px;font-weight:700;color:#C4720A;text-transform:uppercase;letter-spacing:.07em}
+.prompt-box-copy{font-size:10px;padding:2px 8px;border-radius:999px;border:1px solid #D4CBC0;color:#6B6259;cursor:pointer;background:#F5F0EB;transition:all .15s}
+.prompt-box-copy:hover{background:#FFF3E0;color:#C4720A;border-color:rgba(247,148,29,.5)}
+.prompt-code{padding:12px;font-family:'Courier New',monospace;font-size:11px;color:#4A3F38;line-height:1.65;white-space:pre-wrap;max-height:320px;overflow-y:auto;background:#FAFAF9}
+.prompt-code .ph{color:#d97706}
+.prompt-code .kw{color:#C4720A}
+.prompt-code .cm{color:#9E9188;font-style:italic}
 
-/* ── Connector cards ── */
-.connector-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.connector-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
-.connector-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-.connector-icon { font-size: 20px; }
-.connector-header h4 { font-size: 13px; font-weight: 700; color: var(--text); }
-.connector-header p { font-size: 11.5px; color: var(--text-muted); }
-.connector-body { padding: 14px 18px; }
-.connector-body table { width: 100%; font-size: 12.5px; border-collapse: collapse; }
-.connector-body td { padding: 5px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
-.connector-body td:first-child { color: var(--text); font-weight: 600; width: 90px; }
-.connector-body tr:last-child td { border-bottom: none; }
+/* OVERVIEW CARDS */
+.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.ov-card{background:#FFFFFF;border:1px solid #E0D8CF;border-radius:var(--radius);padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ov-card-icon{font-size:20px;margin-bottom:8px}
+.ov-card-title{font-size:13px;font-weight:700;color:#1A1612;margin-bottom:5px}
+.ov-card-desc{font-size:12px;color:#6B6259;line-height:1.55}
+
+.phase-flow{display:grid;grid-template-columns:repeat(8,1fr);gap:0;background:#FFFFFF;border:1px solid #E0D8CF;border-radius:var(--radius);overflow:hidden;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.pf-step{padding:14px 10px;text-align:center;border-right:1px solid #E0D8CF;cursor:pointer;transition:background .15s;position:relative}
+.pf-step:last-child{border-right:none}
+.pf-step:hover{background:#FFF8F0}
+.pf-step.pf-active{background:#FFF3E0;border-bottom:3px solid #F7941D}
+.pf-num{font-size:10px;font-weight:700;color:#9E9188;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.pf-icon{font-size:18px;display:block;margin-bottom:4px}
+.pf-label{font-size:11px;font-weight:600;color:#1A1612}
+.pf-sub{font-size:10px;color:#9E9188;margin-top:2px}
+
+/* GAMMA ANIMATION */
+.gamma-processing{border:1px solid rgba(247,148,29,.3);background:#FFF8F0;border-radius:var(--radius-sm);padding:14px;margin-bottom:12px}
+.gamma-proc-title{font-size:12px;font-weight:700;color:#C4720A;margin-bottom:4px}
+.gamma-proc-sub{font-size:11px;color:#6B6259;margin-bottom:10px}
+.progress-bar-wrap{height:6px;background:#E0D8CF;border-radius:999px;overflow:hidden}
+.progress-bar-fill{height:100%;width:45%;border-radius:999px;background:linear-gradient(90deg,#F7941D,#1B4F8A,#F7941D);background-size:200% 100%;animation:shimmer 2s linear infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:0% 0}}
+.slide-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gslide{border:1px solid #E0D8CF;border-radius:8px;padding:10px;background:#FAFAF9;min-height:80px}
+.gslide-bar{height:8px;border-radius:999px;background:#BFDBFE;margin-bottom:7px;width:65%}
+.gslide-line{height:6px;border-radius:999px;background:#E0D8CF;margin:5px 0}
+.gslide-line.short{width:50%}
+
+/* SECTION TABS */
+.phase-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.phase-tab{font-size:12px;padding:6px 14px;border-radius:999px;border:1px solid #E0D8CF;color:#6B6259;cursor:pointer;background:#FFFFFF;transition:all .15s}
+.phase-tab:hover{border-color:rgba(247,148,29,.4);color:#C4720A}
+.phase-tab.active{background:#FFF3E0;border-color:rgba(247,148,29,.4);color:#C4720A;font-weight:600}
+
+/* SKILL BADGES */
+.skills-row{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.skill-badge{font-size:11px;padding:3px 9px;border-radius:999px;background:#EBF2FA;border:1px solid rgba(27,79,138,.25);color:#1B4F8A}
+.skill-badge.required{background:#FFF3E0;border-color:rgba(247,148,29,.4);color:#C4720A}
+.skill-badge.optional{background:#F5F0EB;border-color:#D4CBC0;color:#6B6259}
+
+/* RULE BOX */
+.rule-box{background:#FFFBEB;border:1px solid rgba(217,119,6,.25);border-radius:var(--radius-sm);padding:10px 12px;margin:10px 0}
+.rule-box-title{font-size:11px;font-weight:700;color:#b45309;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.rule-box li{font-size:12px;color:#92400e;line-height:1.6;margin-left:14px}
+
+/* DETAIL COLUMN */
+.detail-stack{display:flex;flex-direction:column;gap:14px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#D4CBC0;border-radius:2px}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;height:auto}
+  .sidebar{height:auto;position:relative}
+  .main{overflow:visible}
+  .demo-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr 1fr}
+  .phase-flow{grid-template-columns:repeat(4,1fr)}
+}
 </style>
 </head>
 <body>
-
-<!-- Header -->
-<div class="page-header">
-  <div class="header-inner">
-    <div class="header-brand">
-      <div class="logo">
-        <span class="logo-hock">HOCK</span>
-        <span class="logo-int">International</span>
-      </div>
-      <div class="header-divider"></div>
-      <div class="header-title">
-        <h1>Content Production Agent — Technical Reference</h1>
-        <p>Architecture · Workflow Logic · Connectors · Skills · Maintenance</p>
-      </div>
-    </div>
-    <div class="header-meta">
-      <span class="hbadge hbadge-orange">v1.0</span>
-      <span class="hbadge hbadge-outline">March 2026</span>
-    </div>
-  </div>
-</div>
-
 <div class="layout">
 
-<!-- Sidebar -->
-<nav class="sidebar">
-  <div class="sidebar-label">Sections</div>
-  <div class="nav-item active" onclick="showSection('overview',this)"><span class="nav-icon">📋</span> Overview</div>
-  <div class="nav-item" onclick="showSection('architecture',this)"><span class="nav-icon">🏗</span> System Architecture</div>
-  <div class="nav-item" onclick="showSection('workflow',this)"><span class="nav-icon">🔀</span> Phase Workflow</div>
-  <div class="nav-item" onclick="showSection('connectors',this)"><span class="nav-icon">🔌</span> Connectors & Webhooks</div>
-  <div class="nav-item" onclick="showSection('skills',this)"><span class="nav-icon">⚡</span> Skill Reference</div>
-  <div class="nav-item" onclick="showSection('maintenance',this)"><span class="nav-icon">🔧</span> Maintenance</div>
-  <hr class="sidebar-divider"/>
-  <div class="version-box">
-    <p><strong>Agent Version:</strong> 1.0<br/>
-    <strong>Last Updated:</strong> Mar 17 2026<br/>
-    <strong>Owner:</strong> Plus 1 Technology<br/>
-    <strong>Client:</strong> HOCK International</p>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand-logo">
+      <div class="hock-logo-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 80" width="160" height="58" aria-label="HOCK International">
+          <!-- Orange HOCK text -->
+          <text x="4" y="54" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="58" fill="#F7941D" letter-spacing="-2">HOCK</text>
+          <!-- Blue International bar -->
+          <rect x="0" y="60" width="220" height="20" fill="#1B4F8A" rx="2"/>
+          <text x="110" y="75" font-family="Arial,sans-serif" font-weight="700" font-size="13" fill="#fff" text-anchor="middle" letter-spacing="1">International</text>
+        </svg>
+      </div>
+    </div>
+    <div class="sidebar-tagline">Phase-locked workflow: Textbook → MCQs → Slides → Script → Video. Each phase requires upstream approval before proceeding.</div>
   </div>
-</nav>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Start here</div>
+    <button class="nav-btn active" data-target="overview" onclick="showSection('overview',this)">
+      <span class="nav-icon">🗺</span> Overview &amp; Flow
+    </button>
 
-<!-- Main -->
+    <div class="nav-section-label">Production Phases</div>
+    <button class="nav-btn" data-target="textbook" onclick="showSection('textbook',this)">
+      <span class="nav-icon">📝</span> Textbook Creation
+      <span class="nav-phase-num">Ph 1</span>
+    </button>
+    <button class="nav-btn" data-target="revision" onclick="showSection('revision',this)">
+      <span class="nav-icon">✏️</span> Textbook Revision
+      <span class="nav-phase-num">Ph 1b</span>
+    </button>
+    <button class="nav-btn" data-target="mcq" onclick="showSection('mcq',this)">
+      <span class="nav-icon">❓</span> MCQs Creation
+      <span class="nav-phase-num">Ph 2</span>
+    </button>
+    <button class="nav-btn" data-target="outline" onclick="showSection('outline',this)">
+      <span class="nav-icon">📋</span> Presentation Outline
+      <span class="nav-phase-num">Ph 3</span>
+    </button>
+    <button class="nav-btn" data-target="gamma" onclick="showSection('gamma',this)">
+      <span class="nav-icon">📊</span> Gamma Creation
+      <span class="nav-phase-num">Ph 4</span>
+    </button>
+    <button class="nav-btn" data-target="script" onclick="showSection('script',this)">
+      <span class="nav-icon">🎙</span> Slide Script
+      <span class="nav-phase-num">Ph 5</span>
+    </button>
+    <button class="nav-btn" data-target="video" onclick="showSection('video',this)">
+      <span class="nav-icon">🎬</span> Video (HeyGen)
+      <span class="nav-phase-num">Ph 6</span>
+    </button>
+    <button class="nav-btn" data-target="closeout" onclick="showSection('closeout',this)">
+      <span class="nav-icon">✅</span> Close-Out
+      <span class="nav-phase-num">Ph 7</span>
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="progress-label">
+      <span id="progress-label-text">Overview</span>
+      <span id="progress-pct">0 / 8</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-bar" style="width:0%"></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
 <main class="main">
 
-<!-- ═══════════════ OVERVIEW ═══════════════ -->
+<!-- ── OVERVIEW ── -->
 <div class="section active" id="section-overview">
   <div class="section-header">
-    <div class="section-header-left">
-      <h2>System Overview</h2>
-      <p>The HOCK Content Production Agent is a Claude Project that manages the end-to-end production of certification exam prep materials — textbooks, MCQs, slide presentations, narration scripts, and video. Claude generates content; the agent manages approvals, workflow tracking, and external tool actions.</p>
+    <div class="phase-eyebrow"><span class="phase-chip">Start Here</span></div>
+    <div class="section-title">HOCK AI Content Production Workflow</div>
+    <div class="section-desc">A phase-locked production pipeline. Claude generates and manages all content. Connectors to Monday.com, Gamma, and Dropbox handle file storage and workflow tracking. Each phase requires explicit approval before the next begins.</div>
+  </div>
+
+  <div class="phase-flow">
+    <div class="pf-step pf-active" onclick="showSection('textbook',document.querySelector('[data-target=textbook]'))">
+      <div class="pf-num">Phase 1</div><span class="pf-icon">📝</span><div class="pf-label">Textbook</div><div class="pf-sub">Word Doc</div>
     </div>
-    <div class="section-icon">📋</div>
+    <div class="pf-step" onclick="showSection('revision',document.querySelector('[data-target=revision]'))">
+      <div class="pf-num">Phase 1b</div><span class="pf-icon">✏️</span><div class="pf-label">Revision</div><div class="pf-sub">if needed</div>
+    </div>
+    <div class="pf-step" onclick="showSection('mcq',document.querySelector('[data-target=mcq]'))">
+      <div class="pf-num">Phase 2</div><span class="pf-icon">❓</span><div class="pf-label">MCQs</div><div class="pf-sub">Excel</div>
+    </div>
+    <div class="pf-step" onclick="showSection('outline',document.querySelector('[data-target=outline]'))">
+      <div class="pf-num">Phase 3</div><span class="pf-icon">📋</span><div class="pf-label">Outline</div><div class="pf-sub">Markdown</div>
+    </div>
+    <div class="pf-step" onclick="showSection('gamma',document.querySelector('[data-target=gamma]'))">
+      <div class="pf-num">Phase 4</div><span class="pf-icon">📊</span><div class="pf-label">Gamma</div><div class="pf-sub">PPTX + URL</div>
+    </div>
+    <div class="pf-step" onclick="showSection('script',document.querySelector('[data-target=script]'))">
+      <div class="pf-num">Phase 5</div><span class="pf-icon">🎙</span><div class="pf-label">Script</div><div class="pf-sub">Narration Doc</div>
+    </div>
+    <div class="pf-step" onclick="showSection('video',document.querySelector('[data-target=video]'))">
+      <div class="pf-num">Phase 6</div><span class="pf-icon">🎬</span><div class="pf-label">Video</div><div class="pf-sub">HeyGen</div>
+    </div>
+    <div class="pf-step" onclick="showSection('closeout',document.querySelector('[data-target=closeout]'))">
+      <div class="pf-num">Phase 7</div><span class="pf-icon">✅</span><div class="pf-label">Close-Out</div><div class="pf-sub">Complete</div>
+    </div>
   </div>
 
-  <div class="alert alert-blue">
-    <span class="alert-icon">ℹ</span>
-    <div>This document is the authoritative technical reference for the HOCK Content Production Agent. It covers architecture, workflow logic, connector specs, skill behavior, and maintenance procedures. It is intended for internal use, handoff, and client team reference.</div>
-  </div>
-
-  <div class="card card-orange">
-    <div class="card-title">🎯 What the Agent Does</div>
-    <p>The agent phase-locks all content generation to a strict 8-step production order. It invokes the correct skill at each phase, gates every action behind user approval, tracks workflow state across the session, and pushes finalized artifacts to Monday.com, Dropbox, and Gamma using n8n webhooks and MCP connectors.</p>
+  <div class="overview-grid">
+    <div class="ov-card">
+      <div class="ov-card-icon">🔒</div>
+      <div class="ov-card-title">Phase-Locked Production</div>
+      <div class="ov-card-desc">No phase begins without an approved upstream artifact. Textbook must be finalized before MCQs. MCQs must be approved before the slide outline. The agent enforces this gate at every step.</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-card-icon">🤝</div>
+      <div class="ov-card-title">One Decision Gate Per Message</div>
+      <div class="ov-card-desc">Claude asks one question at a time and waits. No bulk decisions, no assumed approvals. Every connector action — Monday update, Gamma creation, file save — requires explicit user confirmation.</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-card-icon">📐</div>
+      <div class="ov-card-title">Depth Calibration First</div>
+      <div class="ov-card-desc">Before generating any content, Claude runs depth calibration — analyzing scope, cognitive level, and exam weight. Output length and structure are determined by the calibration result, not guessed.</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-card-icon">🗄</div>
+      <div class="ov-card-title">Monday-First Storage</div>
+      <div class="ov-card-desc">Textbooks → Word Doc → Monday Textbook File Column. MCQs → Excel → Monday MCQ File Column. Presentations → Gamma URL + PPTX → Monday. Scripts → Doc → Monday Slide Script Column.</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-card-icon">✂️</div>
+      <div class="ov-card-title">Revise Only What's Asked</div>
+      <div class="ov-card-desc">Revisions target only the flagged section, question, or cue. All approved content outside the revision area is preserved exactly. The agent never rewrites unflagged sections.</div>
+    </div>
+    <div class="ov-card">
+      <div class="ov-card-icon">⚡</div>
+      <div class="ov-card-title">Token Optimization Built In</div>
+      <div class="ov-card-desc">Claude batches content generation into chunks, pauses for mid-gen checks, and references prior sections rather than repeating them. Comprehensive depth always triggers chunking.</div>
+    </div>
   </div>
 
   <div class="card">
-    <div class="card-title">🗂 Production Order (Locked)</div>
-    <table class="data-table">
-      <thead><tr><th>#</th><th>Phase</th><th>Output</th><th>Destination</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>Initiation</td><td>Source materials confirmed</td><td>—</td></tr>
-        <tr><td>2</td><td>Textbook Creation</td><td>Word Doc</td><td>Monday — Textbook File Column</td></tr>
-        <tr><td>3</td><td>MCQs Creation</td><td>Excel file</td><td>Monday — MCQ File Column</td></tr>
-        <tr><td>4</td><td>Presentation Outline</td><td>Markdown outline → Gamma</td><td>Monday — Presentation Link + File</td></tr>
-        <tr><td>5</td><td>Gamma Creation</td><td>PPTX + Gamma URL</td><td>Monday — Presentation Link + File</td></tr>
-        <tr><td>6</td><td>Slide Script</td><td>Doc + Speaker Notes</td><td>Monday — Slide Script Column</td></tr>
-        <tr><td>7</td><td>Video</td><td>HeyGen (manual)</td><td>—</td></tr>
-        <tr><td>8</td><td>Close-Out</td><td>All artifacts confirmed</td><td>Monday — Complete</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card">
-    <div class="card-title">👥 Intended Audiences</div>
-    <table class="data-table">
-      <thead><tr><th>Audience</th><th>How They Use This Doc</th></tr></thead>
-      <tbody>
-        <tr><td>Plus 1 Technology (Internal)</td><td>Architecture decisions, connector specs, skill maintenance, project updates</td></tr>
-        <tr><td>Handoff / New Developer</td><td>Understand the full system, reproduce the setup, extend phases or skills</td></tr>
-        <tr><td>HOCK Team</td><td>Understand what the agent does at each phase, what fields get updated in Monday, how to interact with it</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="nav-buttons">
-    <button class="btn btn-ghost" disabled>← Back</button>
-    <button class="btn btn-primary" onclick="showSection('architecture',document.querySelectorAll('.nav-item')[1])">System Architecture →</button>
+    <div class="card-header"><div class="card-title">Connector Overview — What Gets Automated</div></div>
+    <div class="card-body">
+      <div class="board">
+        <div class="board-head" style="grid-template-columns:1fr 1fr 2fr"><div>Connector</div><div>Phases Used</div><div>Actions</div></div>
+        <div class="board-row-data" style="grid-template-columns:1fr 1fr 2fr"><div style="color:#93c5fd;font-weight:600">Monday.com</div><div style="color:var(--muted)">All phases</div><div style="color:var(--muted)">Attach files, update status, set assignee, update due dates</div></div>
+        <div class="board-row-data" style="grid-template-columns:1fr 1fr 2fr"><div style="color:#5eead4;font-weight:600">Gamma</div><div style="color:var(--muted)">Ph 4 + Ph 5</div><div style="color:var(--muted)">Create presentation, export PPTX, add speaker notes</div></div>
+        <div class="board-row-data" style="grid-template-columns:1fr 1fr 2fr"><div style="color:#fcd34d;font-weight:600">Dropbox</div><div style="color:var(--muted)">N/A for textbooks</div><div style="color:var(--muted)">File retrieval only — textbooks always go to Monday, not Dropbox</div></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ═══════════════ ARCHITECTURE ═══════════════ -->
-<div class="section" id="section-architecture">
+<!-- ── PHASE 1: TEXTBOOK ── -->
+<div class="section" id="section-textbook">
   <div class="section-header">
-    <div class="section-header-left">
-      <h2>System Architecture</h2>
-      <p>How all components connect — the Claude Project, knowledge files, skills, connectors, and external platforms.</p>
+    <div class="phase-eyebrow">
+      <span class="phase-chip">Phase 1</span>
+      <span class="skills-chip">depth-calibration → token-optimization → textbook-style-guide</span>
     </div>
-    <div class="section-icon">🏗</div>
+    <div class="section-title">Textbook Creation</div>
+    <div class="section-desc">Claude generates exam-prep textbook content from the uploaded syllabus. Depth calibration runs first and must be confirmed before any text is produced. Content is generated in segments with mid-gen pauses.</div>
+  </div>
+  <div class="skills-row">
+    <span class="skill-badge required">depth-calibration-skill</span>
+    <span class="skill-badge required">textbook-style-guide</span>
+    <span class="skill-badge required">token-optimization</span>
+    <span class="skill-badge optional">monday-workflow-skill (close-out)</span>
   </div>
 
-  <!-- Architecture Diagram -->
-  <div class="flow-wrap">
-    <svg viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg" width="780" height="520">
-      <defs>
-        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="#6B6B64"/>
-        </marker>
-        <marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="#F47920"/>
-        </marker>
-        <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="#1B4B8A"/>
-        </marker>
-      </defs>
-
-      <!-- Claude Project Box -->
-      <rect x="10" y="10" width="480" height="360" rx="10" fill="#F4F4F1" stroke="#C8C8C0" stroke-width="1.5" stroke-dasharray="6,3"/>
-      <text x="250" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#6B6B64" letter-spacing="1" font-family="sans-serif">CLAUDE PROJECT</text>
-
-      <!-- System Prompt -->
-      <rect x="30" y="45" width="200" height="56" rx="6" fill="#1B4B8A"/>
-      <text x="130" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="white" font-family="sans-serif">System Prompt</text>
-      <text x="130" y="85" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Agent identity · Rules · Phase order</text>
-
-      <!-- Knowledge Files -->
-      <rect x="260" y="45" width="210" height="56" rx="6" fill="#fff" stroke="#E2E2DC" stroke-width="1.5"/>
-      <text x="365" y="65" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A18" font-family="sans-serif">Knowledge Files</text>
-      <text x="365" y="80" text-anchor="middle" font-size="10" fill="#6B6B64" font-family="sans-serif">Core Ops · Content Standards</text>
-      <text x="365" y="93" text-anchor="middle" font-size="10" fill="#6B6B64" font-family="sans-serif">Revision Prompts</text>
-
-      <!-- Skills row -->
-      <text x="250" y="128" text-anchor="middle" font-size="10" font-weight="700" fill="#9A9A92" letter-spacing="0.5" font-family="sans-serif">SKILLS (invoked by name at each phase)</text>
-
-      <!-- Skill boxes -->
-      <rect x="30" y="138" width="96" height="40" rx="5" fill="#FEF0E6" stroke="#FBCDA0" stroke-width="1.5"/>
-      <text x="78" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#F47920" font-family="sans-serif">depth-calibration</text>
-      <text x="78" y="168" text-anchor="middle" font-size="9" fill="#7A3A0A" font-family="sans-serif">All phases first</text>
-
-      <rect x="136" y="138" width="96" height="40" rx="5" fill="#FEF0E6" stroke="#FBCDA0" stroke-width="1.5"/>
-      <text x="184" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#F47920" font-family="sans-serif">token-optimization</text>
-      <text x="184" y="168" text-anchor="middle" font-size="9" fill="#7A3A0A" font-family="sans-serif">All phases second</text>
-
-      <rect x="242" y="138" width="90" height="40" rx="5" fill="#E8EEF7" stroke="#9DB5D4" stroke-width="1.5"/>
-      <text x="287" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#1B4B8A" font-family="sans-serif">textbook-style</text>
-      <text x="287" y="168" text-anchor="middle" font-size="9" fill="#1B4B8A" font-family="sans-serif">Phase 2</text>
-
-      <rect x="342" y="138" width="80" height="40" rx="5" fill="#E8EEF7" stroke="#9DB5D4" stroke-width="1.5"/>
-      <text x="382" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#1B4B8A" font-family="sans-serif">mcq-creation</text>
-      <text x="382" y="168" text-anchor="middle" font-size="9" fill="#1B4B8A" font-family="sans-serif">Phase 3</text>
-
-      <rect x="432" y="138" width="48" height="40" rx="5" fill="#E8EEF7" stroke="#9DB5D4" stroke-width="1.5"/>
-      <text x="456" y="155" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1B4B8A" font-family="sans-serif">slide</text>
-      <text x="456" y="168" text-anchor="middle" font-size="9" fill="#1B4B8A" font-family="sans-serif">Ph 4</text>
-
-      <!-- Skills row 2 -->
-      <rect x="30" y="190" width="90" height="40" rx="5" fill="#EDE9FE" stroke="#C4B5FD" stroke-width="1.5"/>
-      <text x="75" y="207" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6" font-family="sans-serif">slide-script</text>
-      <text x="75" y="220" text-anchor="middle" font-size="9" fill="#5B21B6" font-family="sans-serif">Phase 6</text>
-
-      <rect x="130" y="190" width="100" height="40" rx="5" fill="#DCFCE7" stroke="#A7F3C0" stroke-width="1.5"/>
-      <text x="180" y="207" text-anchor="middle" font-size="10" font-weight="700" fill="#166534" font-family="sans-serif">monday-workflow</text>
-      <text x="180" y="220" text-anchor="middle" font-size="9" fill="#166534" font-family="sans-serif">Ph1 required · rest optional</text>
-
-      <!-- Claude Engine -->
-      <rect x="30" y="250" width="440" height="100" rx="8" fill="#1B4B8A"/>
-      <text x="250" y="278" text-anchor="middle" font-size="13" font-weight="700" fill="white" font-family="sans-serif">Claude (Sonnet 4.6)</text>
-      <text x="250" y="296" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Content Generation · Phase Routing · Skill Invocation</text>
-      <text x="250" y="312" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Decision Gates · Session State Management</text>
-      <text x="250" y="328" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.5)" font-family="sans-serif">One decision gate per message · Phase-locked at all times</text>
-
-      <!-- User -->
-      <rect x="30" y="400" width="440" height="50" rx="8" fill="#F47920"/>
-      <text x="250" y="421" text-anchor="middle" font-size="13" font-weight="700" fill="white" font-family="sans-serif">HOCK Team / User</text>
-      <text x="250" y="438" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.8)" font-family="sans-serif">Provides prompts · Reviews content · Approves phases · Triggers actions</text>
-
-      <!-- Arrows user ↔ Claude -->
-      <line x1="250" y1="395" x2="250" y2="358" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#arrow)"/>
-      <line x1="240" y1="358" x2="240" y2="395" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-      <!-- External platforms -->
-      <!-- n8n -->
-      <rect x="560" y="45" width="120" height="60" rx="8" fill="#fff" stroke="#E2E2DC" stroke-width="1.5"/>
-      <text x="620" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#F47920" font-family="sans-serif">n8n</text>
-      <text x="620" y="86" text-anchor="middle" font-size="10" fill="#6B6B64" font-family="sans-serif">hockintl.app.n8n.cloud</text>
-      <text x="620" y="98" text-anchor="middle" font-size="9.5" fill="#9A9A92" font-family="sans-serif">Webhook orchestration</text>
-
-      <!-- Monday -->
-      <rect x="700" y="45" width="110" height="60" rx="8" fill="#fff" stroke="#E2E2DC" stroke-width="1.5"/>
-      <text x="755" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#F41472" font-family="sans-serif">Monday.com</text>
-      <text x="755" y="86" text-anchor="middle" font-size="10" fill="#6B6B64" font-family="sans-serif">Task tracking</text>
-      <text x="755" y="98" text-anchor="middle" font-size="9.5" fill="#9A9A92" font-family="sans-serif">Status · Files · Dates</text>
-
-      <!-- Dropbox -->
-      <rect x="560" y="140" width="120" height="60" rx="8" fill="#fff" stroke="#E2E2DC" stroke-width="1.5"/>
-      <text x="620" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="#0061FF" font-family="sans-serif">Dropbox</text>
-      <text x="620" y="181" text-anchor="middle" font-size="10" fill="#6B6B64" font-family="sans-serif">File storage</text>
-      <text x="620" y="193" text-anchor="middle" font-size="9.5" fill="#9A9A92" font-family="sans-serif">MCQs · Scripts · Media</text>
-
-      <!-- Gamma -->
-      <rect x="700" y="140" width="110" height="60" rx="8" fill="#fff" stroke="#E2E2DC" stroke-width="1.5"/>
-      <text x="755" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="#7C3AED" font-family="sans-serif">Gamma</text>
-      <text x="755" y="181" text-anchor="middle" font-size="10" fill="#6B6B64" font-family="sans-serif">Presentation</text>
-      <text x="755" y="193" text-anchor="middle" font-size="9.5" fill="#9A9A92" font-family="sans-serif">Create · Export · Notes</text>
-
-      <!-- HeyGen -->
-      <rect x="630" y="235" width="110" height="55" rx="8" fill="#fff" stroke="#E2E2DC" stroke-width="1.5"/>
-      <text x="685" y="258" text-anchor="middle" font-size="12" font-weight="700" fill="#1A1A18" font-family="sans-serif">HeyGen</text>
-      <text x="685" y="274" text-anchor="middle" font-size="10" fill="#6B6B64" font-family="sans-serif">Video (manual)</text>
-      <text x="685" y="286" text-anchor="middle" font-size="9.5" fill="#9A9A92" font-family="sans-serif">Phase 7 only</text>
-
-      <!-- Connector lines -->
-      <!-- Claude → n8n -->
-      <line x1="490" y1="290" x2="555" y2="75" stroke="#F47920" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-orange)"/>
-      <!-- n8n → Monday -->
-      <line x1="682" y1="75" x2="700" y2="75" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#arrow)"/>
-      <!-- n8n → Dropbox -->
-      <line x1="620" y1="107" x2="620" y2="138" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#arrow)"/>
-      <!-- Claude → Gamma -->
-      <line x1="490" y1="310" x2="698" y2="170" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-blue)"/>
-      <!-- Claude → HeyGen label -->
-      <line x1="490" y1="325" x2="628" y2="262" stroke="#C8C8C0" stroke-width="1.5" stroke-dasharray="4,4"/>
-
-      <!-- Legend -->
-      <rect x="560" y="330" width="248" height="90" rx="6" fill="#FAFAF8" stroke="#E2E2DC" stroke-width="1"/>
-      <text x="572" y="348" font-size="10" font-weight="700" fill="#6B6B64" font-family="sans-serif">LEGEND</text>
-      <line x1="572" y1="360" x2="600" y2="360" stroke="#F47920" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="606" y="364" font-size="10" fill="#6B6B64" font-family="sans-serif">Claude → n8n (webhook POST)</text>
-      <line x1="572" y1="378" x2="600" y2="378" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="606" y="382" font-size="10" fill="#6B6B64" font-family="sans-serif">Claude → Gamma (MCP connector)</text>
-      <line x1="572" y1="396" x2="600" y2="396" stroke="#6B6B64" stroke-width="1.5"/>
-      <text x="606" y="400" font-size="10" fill="#6B6B64" font-family="sans-serif">n8n → platforms (API calls)</text>
-      <line x1="572" y1="414" x2="600" y2="414" stroke="#C8C8C0" stroke-width="1.5" stroke-dasharray="4,4"/>
-      <text x="606" y="418" font-size="10" fill="#6B6B64" font-family="sans-serif">Manual (user action)</text>
-    </svg>
-  </div>
-
-  <div class="card card-blue">
-    <div class="card-title">🔁 Data Flow Summary</div>
-    <ul class="step-list">
-      <li class="step-item">
-        <div class="step-num orange">1</div>
-        <div class="step-content">
-          <div class="step-title">User → Claude</div>
-          <div class="step-desc">User provides prompts, source materials, and approvals. Claude reads system prompt + knowledge files + skills on every session start.</div>
+  <div class="demo-grid">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Claude Project Chat — Phase 1: Textbook Creation</div>
+          <div class="card-badge">Exact conversation flow</div>
         </div>
-      </li>
-      <li class="step-item">
-        <div class="step-num orange">2</div>
-        <div class="step-content">
-          <div class="step-title">Claude → Content Generation</div>
-          <div class="step-desc">Claude invokes the correct skill per phase, applies depth calibration and token optimization, generates content in chat, and pauses for user review at defined checkpoints.</div>
-        </div>
-      </li>
-      <li class="step-item">
-        <div class="step-num orange">3</div>
-        <div class="step-content">
-          <div class="step-title">Claude → n8n (POST webhooks)</div>
-          <div class="step-desc">On user approval, Claude POSTs to n8n webhook endpoints to save files to Dropbox. n8n handles the Dropbox API calls and returns confirmation.</div>
-        </div>
-      </li>
-      <li class="step-item">
-        <div class="step-num orange">4</div>
-        <div class="step-content">
-          <div class="step-title">Claude → Monday (MCP connector)</div>
-          <div class="step-desc">Claude uses the Monday MCP connector to update task status, assignee, dates, and attach files to the correct columns on the HOCK board.</div>
-        </div>
-      </li>
-      <li class="step-item">
-        <div class="step-num orange">5</div>
-        <div class="step-content">
-          <div class="step-title">Claude → Gamma (MCP connector)</div>
-          <div class="step-desc">Claude uses the Gamma MCP connector to create presentations from approved outlines, export PPTX, and add speaker notes. Gamma is asynchronous — Claude waits for completed status before returning the gammaUrl.</div>
-        </div>
-      </li>
-    </ul>
-  </div>
+        <div class="card-body chat-messages">
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">Create textbook content for 3c. Existing and Emerging Cybersecurity Risks and Data Security from the uploaded syllabus for CIA Part 2.</div></div>
 
-  <div class="nav-buttons">
-    <button class="btn btn-ghost" onclick="showSection('overview',document.querySelectorAll('.nav-item')[0])">← Overview</button>
-    <button class="btn btn-primary" onclick="showSection('workflow',document.querySelectorAll('.nav-item')[2])">Phase Workflow →</button>
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">Before I generate content, I'll run depth calibration and present the recommended depth for your review.
+
+<strong>Depth Calibration — CIA Part 2 · 3c Cybersecurity Risks</strong>
+Scope: Broad (6+ concepts) · Cognitive Level: Medium (assess, interpret) · Exam Weight: Medium (~12%)
+→ Recommended depth: <strong>Comprehensive</strong>
+
+Estimated output: ~4,200–6,000 words · 20–30 MCQs · 15–25 slides · 15–25 min script
+
+Confirm depth to proceed, or provide adjustments.</div></div>
+
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">Approved. Continue.</div></div>
+
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">Chunking strategy for Comprehensive depth: 3 segments of ~1,800 words each. Pausing after segment 1 for review.
+
+Here's the first section. Would you like me to continue, revise this section, or stop here?</div></div>
+
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">Continue.</div></div>
+
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">Continuing the next section now…</div></div>
+
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">The section is complete. Do you want revisions to this textbook, or is it finalized?</div></div>
+
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">It's finalized.</div></div>
+
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">Are you ready to turn the textbook into a Word Doc?</div></div>
+
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">Yes.</div></div>
+
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">Would you like to add the Word Doc to Monday's Textbook File column?</div></div>
+
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">Yes.</div></div>
+
+          <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">monday.com</div><div class="connector-tool-sub">Monday Workflow Skill</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>Textbook File Column</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">action</span><span class="conn-arrow">→</span><span class="conn-val">Search task by exact name</span></div>
+<div class="conn-row"><span class="conn-key">attach</span><span class="conn-arrow">→</span><span class="conn-val blue">Word Doc → Textbook File Column</span></div>
+<div class="conn-row"><span class="conn-key">status</span><span class="conn-arrow">→</span><span class="conn-val">"Textbook Ready for Review"</span></div>
+<div class="conn-row"><span class="conn-key">assign</span><span class="conn-arrow">→</span><span class="conn-val">creator</span></div>
+<div class="conn-row"><span class="conn-key">dates</span><span class="conn-arrow">→</span><span class="conn-val">start: today · due: as applicable</span></div>
+</div>
+          </div>
+
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">Would you like to update the status, assignee, and dates?</div></div>
+
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">Yes.</div></div>
+
+          <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+          <div class="msg agent">Would you like to save the textbook to this project?</div></div>
+
+          <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+          <div class="msg user">Yes.</div></div>
+        </div>
+        <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
+      </div>
+    </div>
+
+    <div class="detail-stack">
+      <div class="card">
+        <div class="card-header"><div class="card-title">monday.com — Textbook State</div><div class="card-badge">Phase 1 result</div></div>
+        <div class="card-body">
+          <div class="board">
+            <div class="board-head" style="grid-template-columns:1.6fr 1fr .8fr .8fr"><div>Task</div><div>Status</div><div>Assignee</div><div>File</div></div>
+            <div class="board-row-data" style="grid-template-columns:1.6fr 1fr .8fr .8fr">
+              <div style="font-size:11px;color:var(--muted)">CIA P2 · SU5 · 3c — Cybersecurity Risks</div>
+              <div><span class="status-pill s-teal">Textbook Ready for Review</span></div>
+              <div style="color:var(--muted);font-size:11px">Creator</div>
+              <div style="color:#5eead4;font-size:11px">Word Doc ✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-box">
+        <div class="rule-box-title">⚠ Storage Rule</div>
+        <ul><li>Textbooks → Monday Textbook File Column only</li><li>Do NOT save textbooks to Dropbox</li><li>monday-workflow-skill is required after Phase 1 finalization</li></ul>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header">
+          <div class="prompt-box-title">Exact Phase Prompt</div>
+          <button class="prompt-box-copy" onclick="copyPrompt(this,'You are a HOCK International Content Expert creating exam prep textbooks for internal auditors with 2-4 years experience studying for CIA Part 2.\n\nCreate textbook content for [SECTION_ID] from the uploaded syllabus.\n\nSection: [e.g., \"3c. Cybersecurity Risks\"]\nCertification: [CIA Part 2]\n\nProcess:\n1. Confirm prerequisites: Syllabus and standards documents uploaded?\n2. Apply Depth Calibration Skill: Analyze scope, cognitive level, exam weight. Present summary table and recommended depth. Wait for YES or adjustments.\n3. Follow Textbook Creation Skills: Prose-dominant (65% narrative), integrate standards naturally by number.\n4. Apply Token Optimization Skill: Chunk if comprehensive depth; pause after first segment for check.\n5. Output in Markdown: Start with H1, use hierarchy, end with Summary paragraph.\n\nIntegrate relevant standards from uploaded standards document.')">Copy</button>
+        </div>
+        <div class="prompt-code">You are a HOCK International Content Expert creating exam prep
+textbooks for internal auditors with 2-4 years experience
+studying for CIA Part 2.
+
+Create textbook content for <span class="ph">[SECTION_ID]</span> from the uploaded syllabus.
+
+Section: <span class="ph">[e.g., "3c. Cybersecurity Risks"]</span>
+Certification: <span class="ph">[CIA Part 2]</span>
+
+Process:
+<span class="kw">1.</span> Confirm prerequisites: Syllabus and standards docs uploaded?
+<span class="kw">2.</span> Apply Depth Calibration Skill: Analyze scope, cognitive level,
+   exam weight. Present summary table + recommended depth.
+   Wait for YES or adjustments.
+<span class="kw">3.</span> Follow Textbook Creation Skills: Prose-dominant (65% narrative),
+   integrate standards naturally by number.
+<span class="kw">4.</span> Apply Token Optimization Skill: Chunk if comprehensive depth;
+   pause after first segment for check.
+<span class="kw">5.</span> Output in Markdown: Start with H1, use hierarchy,
+   end with Summary paragraph.
+
+Integrate relevant standards from uploaded standards document.</div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">Phase Gating Language</div></div>
+        <div class="prompt-code"><span class="cm">"Here's the first section. Would you like me to continue,
+revise this section, or stop here?"</span>
+
+<span class="cm">"Continuing the next section now…"</span>
+
+<span class="cm">"The section is complete. Do you want revisions to this
+textbook, or is it finalized?"</span>
+
+<span class="cm">"Are you ready to turn the textbook into a Word Doc?"</span>
+
+<span class="cm">"Would you like to add the Word Doc to Monday's Textbook
+File column?"</span>
+
+<span class="cm">"Would you like to update the status, assignee, and dates?"</span>
+
+<span class="cm">"Would you like to save the textbook to this project?"</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ═══════════════ WORKFLOW ═══════════════ -->
-<div class="section" id="section-workflow">
+<!-- ── PHASE 1b: REVISION ── -->
+<div class="section" id="section-revision">
   <div class="section-header">
-    <div class="section-header-left">
-      <h2>Phase Workflow Logic</h2>
-      <p>All 7 production phases with decision gates, dialog scripts, prerequisites, and Monday field updates. Click a phase tab to view its full flow.</p>
+    <div class="phase-eyebrow"><span class="phase-chip">Phase 1b</span><span class="skills-chip">HOCK_Revision_Prompts + textbook-style-guide</span></div>
+    <div class="section-title">Textbook Revision</div>
+    <div class="section-desc">Revisions target only the flagged section. All approved content outside the flagged area is preserved exactly. Use the most specific revision type available — expand, condense, rewrite, insert, or format.</div>
+  </div>
+  <div class="skills-row">
+    <span class="skill-badge required">textbook-style-guide</span>
+    <span class="skill-badge required">token-optimization</span>
+    <span class="skill-badge optional">depth-calibration-skill (if depth changes materially)</span>
+  </div>
+
+  <div class="demo-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Claude Project Chat — Textbook Revision</div><div class="card-badge">Expand revision type</div></div>
+      <div class="card-body chat-messages">
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Expand the section and add two examples under Emerging Risks.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Intent: PROMPT_EXPAND
+
+I'll revise only the Emerging Risks portion of the section and preserve all other approved content exactly as-is. Adding two new examples now.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Updated section ready. I added the requested examples under Emerging Risks. All other content is unchanged.
+
+Do you want more revisions, or is this finalized?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">It's finalized.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Are you ready to turn the textbook into a Word Doc?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Would you like to add the Word Doc to Monday's Textbook File column?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">monday.com</div><div class="connector-tool-sub">Monday Workflow Skill</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>Updated Word Doc</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">action</span><span class="conn-arrow">→</span><span class="conn-val">Replace existing Textbook File attachment</span></div>
+<div class="conn-row"><span class="conn-key">status</span><span class="conn-arrow">→</span><span class="conn-val">"Textbook Ready for Review"</span></div>
+<div class="conn-row"><span class="conn-key">note</span><span class="conn-arrow">→</span><span class="conn-val">Append revision note to task description</span></div>
+</div>
+          </div>
+      </div>
+      <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
     </div>
-    <div class="section-icon">🔀</div>
-  </div>
 
-  <!-- Master flow SVG -->
-  <div class="flow-wrap">
-    <svg viewBox="0 0 760 120" xmlns="http://www.w3.org/2000/svg" width="740" height="120">
-      <defs>
-        <marker id="a2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L7,3 z" fill="#C8C8C0"/>
-        </marker>
-      </defs>
-      <!-- Phase boxes -->
-      <g font-family="sans-serif">
-        <!-- P1 -->
-        <rect x="4" y="30" width="80" height="50" rx="6" fill="#1B4B8A"/>
-        <text x="44" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="white">Phase 2</text>
-        <text x="44" y="65" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.8)">Textbook</text>
-        <text x="44" y="76" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)">Word Doc</text>
-        <!-- arrow -->
-        <line x1="84" y1="55" x2="100" y2="55" stroke="#C8C8C0" stroke-width="1.5" marker-end="url(#a2)"/>
-        <!-- P2 -->
-        <rect x="100" y="30" width="80" height="50" rx="6" fill="#1B4B8A"/>
-        <text x="140" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="white">Phase 3</text>
-        <text x="140" y="65" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.8)">MCQs</text>
-        <text x="140" y="76" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)">Excel</text>
-        <line x1="180" y1="55" x2="196" y2="55" stroke="#C8C8C0" stroke-width="1.5" marker-end="url(#a2)"/>
-        <!-- P3 -->
-        <rect x="196" y="30" width="84" height="50" rx="6" fill="#F47920"/>
-        <text x="238" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="white">Phase 4</text>
-        <text x="238" y="65" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.8)">Outline</text>
-        <text x="238" y="76" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)">Markdown</text>
-        <line x1="280" y1="55" x2="296" y2="55" stroke="#C8C8C0" stroke-width="1.5" marker-end="url(#a2)"/>
-        <!-- P4 -->
-        <rect x="296" y="30" width="84" height="50" rx="6" fill="#F47920"/>
-        <text x="338" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="white">Phase 5</text>
-        <text x="338" y="65" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.8)">Gamma</text>
-        <text x="338" y="76" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)">PPTX + URL</text>
-        <line x1="380" y1="55" x2="396" y2="55" stroke="#C8C8C0" stroke-width="1.5" marker-end="url(#a2)"/>
-        <!-- P5 -->
-        <rect x="396" y="30" width="84" height="50" rx="6" fill="#5B21B6"/>
-        <text x="438" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="white">Phase 6</text>
-        <text x="438" y="65" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.8)">Script</text>
-        <text x="438" y="76" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)">Doc + Notes</text>
-        <line x1="480" y1="55" x2="496" y2="55" stroke="#C8C8C0" stroke-width="1.5" marker-end="url(#a2)"/>
-        <!-- P6 -->
-        <rect x="496" y="30" width="84" height="50" rx="6" fill="#6B6B64"/>
-        <text x="538" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="white">Phase 7</text>
-        <text x="538" y="65" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.8)">Video</text>
-        <text x="538" y="76" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)">HeyGen (manual)</text>
-        <line x1="580" y1="55" x2="596" y2="55" stroke="#C8C8C0" stroke-width="1.5" marker-end="url(#a2)"/>
-        <!-- P7 -->
-        <rect x="596" y="30" width="84" height="50" rx="6" fill="#166534"/>
-        <text x="638" y="52" text-anchor="middle" font-size="9" font-weight="700" fill="white">Phase 8</text>
-        <text x="638" y="65" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.8)">Close-Out</text>
-        <text x="638" y="76" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.6)">Complete</text>
-      </g>
-      <!-- Gate symbols -->
-      <text x="92" y="12" text-anchor="middle" font-size="9" fill="#9A9A92" font-family="sans-serif">✓ approved</text>
-      <text x="188" y="12" text-anchor="middle" font-size="9" fill="#9A9A92" font-family="sans-serif">✓ approved</text>
-      <text x="288" y="12" text-anchor="middle" font-size="9" fill="#9A9A92" font-family="sans-serif">✓ outline</text>
-      <text x="388" y="12" text-anchor="middle" font-size="9" fill="#9A9A92" font-family="sans-serif">✓ finalized</text>
-      <text x="488" y="12" text-anchor="middle" font-size="9" fill="#9A9A92" font-family="sans-serif">✓ approved</text>
-      <text x="588" y="12" text-anchor="middle" font-size="9" fill="#9A9A92" font-family="sans-serif">✓ complete</text>
-    </svg>
-  </div>
+    <div class="detail-stack">
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">Expand Revision Prompt</div><button class="prompt-box-copy" onclick="copyPrompt(this,'You are a HOCK International Content Expert creating exam-prep textbooks for [CERTIFICATION] candidates.\nExpand only the specified part of the previously generated textbook section.\nKeep all other content identical unless the user explicitly requests additional changes.\n\nSection: [SECTION_ID / SECTION_NAME]\nCertification: [CERTIFICATION]\nExpansion needed:\n- [Describe exactly what to add]\n\nIf the expansion materially changes instructional depth, briefly re-apply Depth Calibration and note the adjusted level.\nInvoke textbook-style-guide skill.\nApply token optimization and checkpoint if the added content becomes substantial.\nOutput the full revised section in Markdown.')">Copy</button></div>
+        <div class="prompt-code">You are a HOCK International Content Expert creating exam-prep
+textbooks for <span class="ph">[CERTIFICATION]</span> candidates.
+Expand only the specified part of the previously generated
+textbook section.
+Keep all other content identical unless the user explicitly
+requests additional changes.
 
-  <!-- Phase tabs -->
-  <div class="phase-tabs">
-    <div class="phase-tab active" onclick="showPhase('p2',this)">Phase 2 — Textbook</div>
-    <div class="phase-tab" onclick="showPhase('p3',this)">Phase 3 — MCQs</div>
-    <div class="phase-tab" onclick="showPhase('p4',this)">Phase 4 — Outline</div>
-    <div class="phase-tab" onclick="showPhase('p5',this)">Phase 5 — Gamma</div>
-    <div class="phase-tab" onclick="showPhase('p6',this)">Phase 6 — Script</div>
-    <div class="phase-tab" onclick="showPhase('p7',this)">Phase 7 — Video</div>
-    <div class="phase-tab" onclick="showPhase('p8',this)">Phase 8 — Close-Out</div>
-  </div>
+Section: <span class="ph">[SECTION_ID / SECTION_NAME]</span>
+Certification: <span class="ph">[CERTIFICATION]</span>
+Expansion needed:
+- <span class="ph">[Describe exactly what to add]</span>
 
-  <!-- Phase 2 -->
-  <div class="phase-panel active" id="phase-p2">
-    <div class="card card-blue">
-      <div class="card-title"><span class="badge badge-blue">Phase 2</span> Textbook Creation</div>
-      <div style="margin-bottom:10px">
-        <span class="badge badge-gray" style="margin-right:6px">Skills: depth-calibration → textbook-style-guide → token-optimization</span>
-        <span class="badge badge-orange">Monday: always required</span>
+If the expansion materially changes instructional depth,
+briefly re-apply Depth Calibration and note the adjusted level.
+Invoke <span class="kw">textbook-style-guide</span> skill.
+Apply token optimization and checkpoint if substantial.
+Output the full revised section in Markdown.</div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">All Revision Types</div></div>
+        <div class="prompt-code"><span class="kw">Expand Section</span>      → PROMPT_EXPAND
+<span class="kw">Condense Section</span>    → PROMPT_CONDENSE
+<span class="kw">Rewrite Section</span>     → PROMPT_REWRITE
+<span class="kw">Insert Content</span>      → PROMPT_INSERT_CONTENT
+<span class="kw">Format Only</span>         → Format / structure changes only
+<span class="kw">Fallback General</span>    → When changes span multiple categories
+
+<span class="cm">Rule: Handle one revision type at a time.
+Use targeted prompts for precise requests.
+Use fallback only when changes span multiple categories.</span></div>
+      </div>
+
+      <div class="rule-box">
+        <div class="rule-box-title">⚠ Revision Rules</div>
+        <ul>
+          <li>Revise only the specific content requested</li>
+          <li>Preserve all other approved content exactly as-is</li>
+          <li>Choose the most specific revision type available</li>
+          <li>Do not rewrite unflagged sections</li>
+          <li>Do not replace already-approved content</li>
+        </ul>
       </div>
     </div>
-    <div class="flow-wrap">
-      <svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" width="680" height="360">
-        <defs><marker id="aw" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#6B6B64"/></marker></defs>
-        <g font-family="sans-serif">
-          <!-- Start -->
-          <ellipse cx="100" cy="24" rx="80" ry="18" fill="#1B4B8A"/>
-          <text x="100" y="28" text-anchor="middle" font-size="10" font-weight="700" fill="white">User provides prompt</text>
-          <line x1="100" y1="42" x2="100" y2="58" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw)"/>
-          <!-- Depth cal -->
-          <rect x="20" y="58" width="160" height="36" rx="6" fill="#FEF0E6" stroke="#F47920" stroke-width="1.5"/>
-          <text x="100" y="74" text-anchor="middle" font-size="10" font-weight="700" fill="#F47920">depth-calibration-skill</text>
-          <text x="100" y="87" text-anchor="middle" font-size="9" fill="#7A3A0A">Present table · wait for approval</text>
-          <line x1="100" y1="94" x2="100" y2="110" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw)"/>
-          <!-- Generate -->
-          <rect x="20" y="110" width="160" height="36" rx="6" fill="#E8EEF7" stroke="#1B4B8A" stroke-width="1.5"/>
-          <text x="100" y="126" text-anchor="middle" font-size="10" font-weight="700" fill="#1B4B8A">Generate in chat</text>
-          <text x="100" y="139" text-anchor="middle" font-size="9" fill="#1B4B8A">Pause after first page</text>
-          <line x1="100" y1="146" x2="100" y2="162" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw)"/>
-          <!-- Decision: revise or finalize -->
-          <polygon points="100,162 180,196 100,230 20,196" fill="#FEF9EE" stroke="#92400E" stroke-width="1.5"/>
-          <text x="100" y="193" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400E">Revise or</text>
-          <text x="100" y="206" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400E">Finalize?</text>
-          <!-- Revise branch -->
-          <line x1="20" y1="196" x2="-10" y2="196" stroke="#6B6B64" stroke-width="1.5"/>
-          <line x1="-10" y1="196" x2="-10" y2="128" stroke="#6B6B64" stroke-width="1.5"/>
-          <line x1="-10" y1="128" x2="20" y2="128" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw)"/>
-          <text x="-22" y="170" text-anchor="middle" font-size="9" fill="#92400E" transform="rotate(-90,-22,170)">Revise</text>
-          <!-- Finalize -->
-          <line x1="100" y1="230" x2="100" y2="246" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw)"/>
-          <text x="180" y="200" font-size="9" fill="#166534">Finalized</text>
-          <!-- Word Doc -->
-          <rect x="20" y="246" width="160" height="30" rx="6" fill="#DCFCE7" stroke="#166534" stroke-width="1.5"/>
-          <text x="100" y="265" text-anchor="middle" font-size="10" font-weight="700" fill="#166534">Convert → Word Doc</text>
-          <line x1="100" y1="276" x2="100" y2="292" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw)"/>
-          <!-- Monday -->
-          <rect x="20" y="292" width="160" height="40" rx="6" fill="#F41472" opacity="0.9"/>
-          <text x="100" y="309" text-anchor="middle" font-size="10" font-weight="700" fill="white">Monday Update</text>
-          <text x="100" y="322" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.85)">Textbook File Col · Status · Assignee</text>
-
-          <!-- Right column labels -->
-          <text x="260" y="82" font-size="10" fill="#6B6B64">→ Scope · Cognitive Level · Exam Weight</text>
-          <text x="260" y="128" font-size="10" fill="#6B6B64">→ textbook-style-guide + token-optimization</text>
-          <text x="260" y="162" font-size="10" fill="#6B6B64">→ "Here's the first section. Continue, revise, or stop?"</text>
-          <text x="260" y="265" font-size="10" fill="#6B6B64">→ Ask user before converting</text>
-          <text x="260" y="309" font-size="10" fill="#6B6B64">→ Always required after textbook approval</text>
-          <text x="260" y="322" font-size="10" fill="#6B6B64">→ Ask: save to project?</text>
-        </g>
-      </svg>
-    </div>
-    <div class="card">
-      <div class="card-title">📋 Monday Fields Updated</div>
-      <table class="data-table">
-        <thead><tr><th>Field</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Textbook File Column</td><td>Word Doc attached</td></tr>
-          <tr><td>Status</td><td>Textbook Ready for Review</td></tr>
-          <tr><td>Assignee</td><td>Creator</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Phase 3 -->
-  <div class="phase-panel" id="phase-p3">
-    <div class="card card-blue">
-      <div class="card-title"><span class="badge badge-blue">Phase 3</span> MCQs Creation</div>
-      <div><span class="badge badge-gray">Skills: depth-calibration → mcq-creation-skill → token-optimization</span></div>
-    </div>
-    <div class="flow-wrap">
-      <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" width="680" height="320">
-        <defs><marker id="aw3" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#6B6B64"/></marker></defs>
-        <g font-family="sans-serif">
-          <ellipse cx="100" cy="22" rx="90" ry="17" fill="#1B4B8A"/>
-          <text x="100" y="26" text-anchor="middle" font-size="10" font-weight="700" fill="white">Approved textbook confirmed</text>
-          <line x1="100" y1="39" x2="100" y2="55" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw3)"/>
-          <rect x="20" y="55" width="160" height="34" rx="6" fill="#FEF0E6" stroke="#F47920" stroke-width="1.5"/>
-          <text x="100" y="70" text-anchor="middle" font-size="10" font-weight="700" fill="#F47920">Batch generation</text>
-          <text x="100" y="82" text-anchor="middle" font-size="9" fill="#7A3A0A">15 first · pause · 10 more</text>
-          <line x1="100" y1="89" x2="100" y2="105" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw3)"/>
-          <polygon points="100,105 180,138 100,171 20,138" fill="#FEF9EE" stroke="#92400E" stroke-width="1.5"/>
-          <text x="100" y="135" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400E">Revise or</text>
-          <text x="100" y="148" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400E">Approve?</text>
-          <line x1="20" y1="138" x2="-8" y2="138" stroke="#6B6B64" stroke-width="1.5"/>
-          <line x1="-8" y1="138" x2="-8" y2="72" stroke="#6B6B64" stroke-width="1.5"/>
-          <line x1="-8" y1="72" x2="20" y2="72" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw3)"/>
-          <text x="-20" y="112" text-anchor="middle" font-size="9" fill="#92400E" transform="rotate(-90,-20,112)">Revise</text>
-          <line x1="100" y1="171" x2="100" y2="187" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw3)"/>
-          <rect x="20" y="187" width="160" height="30" rx="6" fill="#DCFCE7" stroke="#166534" stroke-width="1.5"/>
-          <text x="100" y="206" text-anchor="middle" font-size="10" font-weight="700" fill="#166534">Convert → Excel</text>
-          <line x1="100" y1="217" x2="100" y2="233" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw3)"/>
-          <rect x="20" y="233" width="160" height="50" rx="6" fill="#F41472" opacity="0.9"/>
-          <text x="100" y="252" text-anchor="middle" font-size="10" font-weight="700" fill="white">Monday Update</text>
-          <text x="100" y="265" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.85)">MCQ File Col · Status</text>
-          <text x="100" y="278" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.85)">Assignee · Due Date +2</text>
-          <text x="260" y="72" font-size="10" fill="#6B6B64">→ mcq-creation-skill · Choice A = correct</text>
-          <text x="260" y="206" font-size="10" fill="#6B6B64">→ 11-column JSON → .xlsx format</text>
-          <text x="260" y="260" font-size="10" fill="#6B6B64">→ MCQ File Column · Status: MCQs Ready for Review</text>
-          <text x="260" y="275" font-size="10" fill="#6B6B64">→ Assignee: creatorEmail · Start: today · Due: today+2</text>
-        </g>
-      </svg>
-    </div>
-    <div class="card">
-      <div class="card-title">📋 Monday Fields Updated</div>
-      <table class="data-table">
-        <thead><tr><th>Field</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>MCQ File Column</td><td>Excel file attached</td></tr>
-          <tr><td>Status</td><td>MCQs Ready for Review</td></tr>
-          <tr><td>Assignee</td><td>creatorEmail</td></tr>
-          <tr><td>Start Date</td><td>Today</td></tr>
-          <tr><td>Due Date</td><td>Today + 2 days</td></tr>
-          <tr><td>Description</td><td>MCQ update note appended</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Phase 4 -->
-  <div class="phase-panel" id="phase-p4">
-    <div class="card card-orange">
-      <div class="card-title"><span class="badge badge-orange">Phase 4</span> Presentation Outline</div>
-      <div><span class="badge badge-gray">Skills: depth-calibration → slide-creation-skill → token-optimization</span></div>
-    </div>
-    <div class="flow-wrap">
-      <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" width="680" height="280">
-        <defs><marker id="aw4" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#6B6B64"/></marker></defs>
-        <g font-family="sans-serif">
-          <ellipse cx="100" cy="22" rx="90" ry="17" fill="#1B4B8A"/>
-          <text x="100" y="26" text-anchor="middle" font-size="10" font-weight="700" fill="white">Textbook + MCQs confirmed</text>
-          <line x1="100" y1="39" x2="100" y2="55" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw4)"/>
-          <rect x="20" y="55" width="160" height="34" rx="6" fill="#FEF0E6" stroke="#F47920" stroke-width="1.5"/>
-          <text x="100" y="70" text-anchor="middle" font-size="10" font-weight="700" fill="#F47920">Generate Markdown outline</text>
-          <text x="100" y="83" text-anchor="middle" font-size="9" fill="#7A3A0A">Titles · bullets · placeholders · notes</text>
-          <line x1="100" y1="89" x2="100" y2="105" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw4)"/>
-          <polygon points="100,105 180,138 100,171 20,138" fill="#FEF9EE" stroke="#92400E" stroke-width="1.5"/>
-          <text x="100" y="135" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400E">Revise or</text>
-          <text x="100" y="148" text-anchor="middle" font-size="9.5" font-weight="700" fill="#92400E">Approve?</text>
-          <line x1="20" y1="138" x2="-8" y2="138" stroke="#6B6B64" stroke-width="1.5"/>
-          <line x1="-8" y1="138" x2="-8" y2="72" stroke="#6B6B64" stroke-width="1.5"/>
-          <line x1="-8" y1="72" x2="20" y2="72" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw4)"/>
-          <line x1="100" y1="171" x2="100" y2="187" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw4)"/>
-          <rect x="20" y="187" width="160" height="34" rx="6" fill="#7C3AED"/>
-          <text x="100" y="203" text-anchor="middle" font-size="10" font-weight="700" fill="white">Create in Gamma</text>
-          <text x="100" y="216" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.85)">MCP connector · HOCK theme</text>
-          <line x1="100" y1="221" x2="100" y2="237" stroke="#6B6B64" stroke-width="1.5" marker-end="url(#aw4)"/>
-          <rect x="20" y="237" width="160" height="30" rx="6" fill="#DCFCE7" stroke="#166534" stroke-width="1.5"/>
-          <text x="100" y="256" text-anchor="middle" font-size="10" font-weight="700" fill="#166534">Return Gamma link → Phase 5</text>
-          <text x="260" y="72" font-size="10" fill="#6B6B64">→ slide-creation-skill · Gamma-ready Markdown</text>
-          <text x="260" y="203" font-size="10" fill="#6B6B64">→ DO NOT trigger until outline approved</text>
-          <text x="260" y="216" font-size="10" fill="#6B6B64">→ Async — wait for completed status</text>
-          <text x="260" y="256" font-size="10" fill="#6B6B64">→ Transitions to Phase 5 (Gamma Creation)</text>
-        </g>
-      </svg>
-    </div>
-  </div>
-
-  <!-- Phase 5 -->
-  <div class="phase-panel" id="phase-p5">
-    <div class="card card-orange">
-      <div class="card-title"><span class="badge badge-orange">Phase 5</span> Gamma Creation</div>
-      <div><span class="badge badge-gray">Prerequisite: approved outline from Phase 4</span></div>
-    </div>
-    <div class="alert alert-amber">
-      <span class="alert-icon">⚠</span>
-      <div><strong>Gamma is asynchronous.</strong> Do not treat the initial create response as final. Wait for completed status before using <span class="inline-code">gammaUrl</span> or <span class="inline-code">exportUrl</span>. All post-creation edits must be made by the user at the Gamma URL — never use the connector to edit.</div>
-    </div>
-    <div class="card">
-      <div class="card-title">📋 Monday Fields Updated</div>
-      <table class="data-table">
-        <thead><tr><th>Field</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Presentation Link Column</td><td>Gamma URL</td></tr>
-          <tr><td>Presentation File Column</td><td>PPTX downloaded via connector</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div class="card-title">🔁 Revision Flow</div>
-      <ul class="step-list">
-        <li class="step-item"><div class="step-num orange">1</div><div class="step-content"><div class="step-title">Return Gamma link to user</div><div class="step-desc">"Here's your Gamma link. Are any revisions needed, or is it finalized?"</div></div></li>
-        <li class="step-item"><div class="step-num orange">2</div><div class="step-content"><div class="step-title">If revisions needed</div><div class="step-desc">Direct user to Gamma URL. Say: "Once your changes are complete, let me know so I can download the PowerPoint."</div></div></li>
-        <li class="step-item"><div class="step-num orange">3</div><div class="step-content"><div class="step-title">On finalized</div><div class="step-desc">Retrieve Gamma URL → download PPTX via connector → update Monday Presentation Link + File columns.</div></div></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Phase 6 -->
-  <div class="phase-panel" id="phase-p6">
-    <div class="card card-purple">
-      <div class="card-title"><span class="badge badge-purple">Phase 6</span> Slide Script</div>
-      <div><span class="badge badge-gray">Skills: slide-script-skill → token-optimization</span> <span class="badge badge-amber">Prerequisite: presentation in project</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title">📋 Monday Fields Updated</div>
-      <table class="data-table">
-        <thead><tr><th>Field</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Slide Script Column</td><td>Script doc attached</td></tr>
-          <tr><td>Status</td><td>Slide Script Ready for Review</td></tr>
-          <tr><td>Assignee</td><td>brian@hockinternational.com</td></tr>
-          <tr><td>Due Date</td><td>Today + 2 days</td></tr>
-          <tr><td>Description</td><td>Slide script update note appended</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="alert alert-blue">
-      <span class="alert-icon">ℹ</span>
-      <div>After Monday update, ask: <em>"Would you like me to add the script to the Gamma presentation as speaker notes?"</em> If yes — use Gamma connector to add speaker notes.</div>
-    </div>
-  </div>
-
-  <!-- Phase 7 -->
-  <div class="phase-panel" id="phase-p7">
-    <div class="card card-green">
-      <div class="card-title"><span class="badge badge-green">Phase 7</span> Video Production</div>
-    </div>
-    <div class="alert alert-orange">
-      <span class="alert-icon">⚠</span>
-      <div>Video is created <strong>manually</strong> by the user in HeyGen. Claude does not automate video creation. No content generation skills are invoked in this phase.</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Steps</div>
-      <ul class="step-list">
-        <li class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">User creates video in HeyGen</div><div class="step-desc">Uses approved slide script and PPTX as source material.</div></div></li>
-        <li class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">User confirms completion to Claude</div><div class="step-desc">Agent does not proceed to close-out until video is explicitly confirmed.</div></div></li>
-        <li class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Update Monday if directed</div><div class="step-desc">Status: Video is Ready for Review</div></div></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Phase 8 -->
-  <div class="phase-panel" id="phase-p8">
-    <div class="card card-green">
-      <div class="card-title"><span class="badge badge-green">Phase 8</span> Close-Out</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Close-Out Checklist</div>
-      <table class="data-table">
-        <thead><tr><th>Artifact</th><th>Saved To</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td>Textbook (Word Doc)</td><td>Monday — Textbook File Column</td><td>Textbook Ready for Review</td></tr>
-          <tr><td>MCQs (Excel)</td><td>Monday — MCQ File Column</td><td>MCQs Ready for Review</td></tr>
-          <tr><td>Presentation (PPTX)</td><td>Monday — Presentation File Column</td><td>—</td></tr>
-          <tr><td>Gamma URL</td><td>Monday — Presentation Link Column</td><td>—</td></tr>
-          <tr><td>Slide Script (Doc)</td><td>Monday — Slide Script Column</td><td>Slide Script Ready for Review</td></tr>
-          <tr><td>Video</td><td>HeyGen (manual)</td><td>Video is Ready for Review</td></tr>
-          <tr><td>All above</td><td>—</td><td><strong>Complete</strong></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="nav-buttons">
-    <button class="btn btn-ghost" onclick="showSection('architecture',document.querySelectorAll('.nav-item')[1])">← Architecture</button>
-    <button class="btn btn-primary" onclick="showSection('connectors',document.querySelectorAll('.nav-item')[3])">Connectors →</button>
   </div>
 </div>
 
-<!-- ═══════════════ CONNECTORS ═══════════════ -->
-<div class="section" id="section-connectors">
+<!-- ── PHASE 2: MCQs ── -->
+<div class="section" id="section-mcq">
   <div class="section-header">
-    <div class="section-header-left">
-      <h2>Connectors & Webhook Specs</h2>
-      <p>Full specifications for every external connector — method, endpoint, inputs, and behavior rules.</p>
-    </div>
-    <div class="section-icon">🔌</div>
+    <div class="phase-eyebrow"><span class="phase-chip">Phase 2</span><span class="skills-chip">depth-calibration → mcq-creation-skill → token-optimization</span></div>
+    <div class="section-title">MCQs Creation</div>
+    <div class="section-desc">Scenario-based, application-focused MCQs generated from the approved textbook. Choice A is always correct. All four choices must be similar in length. Each question includes detailed explanations for all four choices. Batched in groups of 15 then 10.</div>
+  </div>
+  <div class="skills-row">
+    <span class="skill-badge required">depth-calibration-skill</span>
+    <span class="skill-badge required">mcq-creation-skill</span>
+    <span class="skill-badge required">token-optimization</span>
+    <span class="skill-badge optional">monday-workflow-skill (on approval)</span>
   </div>
 
-  <div class="alert alert-orange">
-    <span class="alert-icon">⚠</span>
-    <div><strong>Approval required.</strong> No connector is triggered without explicit user confirmation. Claude must ask before every external action.</div>
-  </div>
+  <div class="demo-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Claude Project Chat — Phase 2: MCQs</div><div class="card-badge">Exact conversation flow</div></div>
+      <div class="card-body chat-messages">
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">I'll generate scenario-based, application-focused MCQs using the completed textbook section as the source. Choice A will be correct, answer choices will be balanced in length, and each question will include detailed explanations.
 
-  <div class="connector-grid">
-    <!-- n8n Save -->
-    <div class="connector-card">
-      <div class="connector-header" style="background: var(--orange-light); border-bottom-color: var(--orange-mid);">
-        <span class="connector-icon">📤</span>
-        <div><h4>Dropbox — Save File</h4><p>n8n webhook · POST</p></div>
+Generating first batch of 15 now…</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">First batch of 15 MCQs ready. Here are the MCQs for review. Let me know if revisions are needed or if these are approved before I generate the remaining 10.</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">These are approved. Continue with the next batch.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Generating final batch of 10 MCQs…
+
+All 25 MCQs are complete. Are you ready to convert these to Excel?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Are you ready for me to update Monday and save the MCQs to the MCQ File column?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">monday.com</div><div class="connector-tool-sub">Monday Workflow Skill</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>MCQ File Column</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">action</span><span class="conn-arrow">→</span><span class="conn-val blue">Attach Excel → MCQ File Column</span></div>
+<div class="conn-row"><span class="conn-key">status</span><span class="conn-arrow">→</span><span class="conn-val">"MCQs Ready for Review"</span></div>
+<div class="conn-row"><span class="conn-key">assign</span><span class="conn-arrow">→</span><span class="conn-val">creatorEmail</span></div>
+<div class="conn-row"><span class="conn-key">start</span><span class="conn-arrow">→</span><span class="conn-val">today</span></div>
+<div class="conn-row"><span class="conn-key">due</span><span class="conn-arrow">→</span><span class="conn-val">today + 2</span></div>
+<div class="conn-row"><span class="conn-key">desc</span><span class="conn-arrow">→</span><span class="conn-val">Append MCQ update note</span></div>
+</div>
+          </div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Would you like to save the MCQs to this project?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
       </div>
-      <div class="connector-body">
-        <table>
-          <tr><td>Method</td><td><span class="inline-code">POST</span></td></tr>
-          <tr><td>Endpoint</td><td style="font-size:11px; font-family:'SF Mono',monospace; color:var(--blue)">hockintl.app.n8n.cloud/<br/>webhook/hock-save-dropbox-file</td></tr>
-          <tr><td>Input: content</td><td>Full file content (markdown or text)</td></tr>
-          <tr><td>Input: fileName</td><td>Artifact name per naming standard</td></tr>
-          <tr><td>Input: folderPath</td><td>Target Dropbox folder path</td></tr>
-          <tr><td>Used When</td><td>Artifact finalized — MCQs, scripts</td></tr>
-        </table>
-      </div>
+      <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
     </div>
 
-    <!-- n8n Get -->
-    <div class="connector-card">
-      <div class="connector-header" style="background: var(--blue-light); border-bottom-color: var(--blue-mid);">
-        <span class="connector-icon">📥</span>
-        <div><h4>Dropbox — Get File</h4><p>n8n webhook · POST</p></div>
+    <div class="detail-stack">
+      <div class="card">
+        <div class="card-header"><div class="card-title">monday.com — MCQ State</div><div class="card-badge">Phase 2 result</div></div>
+        <div class="card-body">
+          <div class="board">
+            <div class="board-head" style="grid-template-columns:1.6fr 1fr .8fr .8fr"><div>Task</div><div>Status</div><div>Assignee</div><div>File</div></div>
+            <div class="board-row-data" style="grid-template-columns:1.6fr 1fr .8fr .8fr">
+              <div style="font-size:11px;color:var(--muted)">CIA P2 · SU5 · 3c — Cybersecurity Risks</div>
+              <div><span class="status-pill s-blue">MCQs Ready for Review</span></div>
+              <div style="color:var(--muted);font-size:11px">Creator</div>
+              <div style="color:#5eead4;font-size:11px">Excel ✓</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="connector-body">
-        <table>
-          <tr><td>Method</td><td><span class="inline-code">POST</span></td></tr>
-          <tr><td>Endpoint</td><td style="font-size:11px; font-family:'SF Mono',monospace; color:var(--blue)">hockintl.app.n8n.cloud/<br/>webhook/hock-get-dropbox-file</td></tr>
-          <tr><td>Input: filePath</td><td>Full Dropbox path to file</td></tr>
-          <tr><td>Used When</td><td>Retrieving a previously stored artifact</td></tr>
-        </table>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">Exact MCQ Prompt</div><button class="prompt-box-copy" onclick="copyPrompt(this,'You are a HOCK International Content Expert creating exam prep MCQs for professional certification candidates with 2-4 years of relevant experience.\n\nCORE RULES:\n1. Choice A is ALWAYS correct. B, C, D are plausible distractors.\n2. All four choices MUST be similar in length. Rewrite if uneven. For Qs 7-13 & 22-27, make A the shortest.\n3. Never use extreme words (always, never, exclusively, only, solely, under no circumstances, etc.).\n4. Explanations: Detailed (50-100 words each) for all four choices. Use complete sentences. Make them teaching opportunities.\n5. Questions: Scenario-based, application-focused, challenging.\n6. Use the completed textbook section as source.\n7. Follow MCQ_Creation_Guide and MCQ_Creation_Skills.\n\nGenerate first batch of 15, pause for review, then generate remaining 10.')">Copy</button></div>
+        <div class="prompt-code">You are a HOCK International Content Expert creating exam prep
+MCQs for professional certification candidates.
+
+CORE RULES:
+<span class="kw">1.</span> Choice A is ALWAYS correct. B, C, D are plausible distractors.
+<span class="kw">2.</span> All four choices MUST be similar in length. Rewrite if uneven.
+   For Qs 7-13 &amp; 22-27, make A the shortest.
+<span class="kw">3.</span> Never use extreme words (always, never, exclusively, only,
+   solely, under no circumstances, etc.).
+<span class="kw">4.</span> Explanations: 50-100 words each for all four choices.
+   Complete sentences. Make them teaching opportunities.
+<span class="kw">5.</span> Questions: Scenario-based, application-focused, challenging.
+<span class="kw">6.</span> Use the completed textbook section as source.
+<span class="kw">7.</span> Follow MCQ_Creation_Guide and MCQ_Creation_Skills.
+
+Generate first batch of 15, pause for review, then
+generate remaining 10.</div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">11-Column Excel Output Format</div></div>
+        <div class="prompt-code"><span class="kw">Category</span>        | Study unit ID (e.g., 2796)
+<span class="kw">Question ID</span>     | e.g., CIA26 03.0501
+<span class="kw">Question Text</span>   | Scenario + question stem
+<span class="kw">Choice A</span>        | Correct answer
+<span class="kw">Choice B</span>        | Distractor
+<span class="kw">Choice C</span>        | Distractor
+<span class="kw">Choice D</span>        | Distractor
+<span class="kw">Explanation A</span>   | Why correct
+<span class="kw">Explanation B</span>   | Why incorrect
+<span class="kw">Explanation C</span>   | Why incorrect
+<span class="kw">Explanation D</span>   | Why incorrect</div>
       </div>
     </div>
-
-    <!-- Monday -->
-    <div class="connector-card">
-      <div class="connector-header" style="background: #FEE2F8; border-bottom-color: #F9A8E8;">
-        <span class="connector-icon">📊</span>
-        <div><h4>Monday.com</h4><p>MCP connector</p></div>
-      </div>
-      <div class="connector-body">
-        <table>
-          <tr><td>Board</td><td style="font-size:11px">hock-international-company<br/>.monday.com/boards/18398486903</td></tr>
-          <tr><td>Actions</td><td>Search task · Update status · Update assignee · Update due date · Attach files</td></tr>
-          <tr><td>Columns</td><td>Textbook File · MCQ File · Presentation Link · Presentation File · Slide Script</td></tr>
-          <tr><td>Rule</td><td>Use existing board statuses only. Never create a new item without confirmation.</td></tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- Gamma -->
-    <div class="connector-card">
-      <div class="connector-header" style="background: var(--purple-light); border-bottom-color: #C4B5FD;">
-        <span class="connector-icon">🎨</span>
-        <div><h4>Gamma</h4><p>MCP connector</p></div>
-      </div>
-      <div class="connector-body">
-        <table>
-          <tr><td>Actions</td><td>Create presentation · Export PowerPoint · Add speaker notes</td></tr>
-          <tr><td>Theme</td><td style="font-size:11px; font-family:'SF Mono',monospace; color:var(--blue)">gamma.app/themes/share/<br/>0mk4i94ypgimwxi</td></tr>
-          <tr><td>Phases</td><td>Phase 4 (Outline) + Phase 5 (Gamma Creation) + Phase 6 (speaker notes)</td></tr>
-          <tr><td>Async Rule</td><td>Wait for completed status before using gammaUrl or exportUrl</td></tr>
-          <tr><td>Edit Rule</td><td>Never edit via connector after creation — user edits at Gamma URL directly</td></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:16px">
-    <div class="card-title">⚡ Example Payload — Save File</div>
-    <div class="code-block"><code><span class="c-comment">// POST https://hockintl.app.n8n.cloud/webhook/hock-save-dropbox-file</span>
-{
-  <span class="c-key">"content"</span>: <span class="c-val">"# Study Unit 3: Risk Management\n\n..."</span>,
-  <span class="c-key">"fileName"</span>: <span class="c-val">"CIA26_SU03_MCQ_Final.xlsx"</span>,
-  <span class="c-key">"folderPath"</span>: <span class="c-val">"/HOCK/CIA/Part1/SU03"</span>
-}</code></div>
-  </div>
-
-  <div class="nav-buttons">
-    <button class="btn btn-ghost" onclick="showSection('workflow',document.querySelectorAll('.nav-item')[2])">← Phase Workflow</button>
-    <button class="btn btn-primary" onclick="showSection('skills',document.querySelectorAll('.nav-item')[4])">Skill Reference →</button>
   </div>
 </div>
 
-<!-- ═══════════════ SKILLS ═══════════════ -->
-<div class="section" id="section-skills">
+<!-- ── PHASE 3: OUTLINE ── -->
+<div class="section" id="section-outline">
   <div class="section-header">
-    <div class="section-header-left">
-      <h2>Skill Reference</h2>
-      <p>All 7 project skills — what each does, when it fires, what it gates, and what breaks if it's skipped.</p>
-    </div>
-    <div class="section-icon">⚡</div>
+    <div class="phase-eyebrow"><span class="phase-chip">Phase 3</span><span class="skills-chip">depth-calibration → slide-creation-skill → token-optimization</span></div>
+    <div class="section-title">Presentation Outline</div>
+    <div class="section-desc">A Gamma-ready Markdown outline generated from the approved textbook and MCQs. Depth calibration determines slide count. Includes titles, bullets, visual placeholders, and short speaker notes. Gamma connector is NOT triggered until the outline is approved.</div>
+  </div>
+  <div class="skills-row">
+    <span class="skill-badge required">depth-calibration-skill</span>
+    <span class="skill-badge required">slide-creation-skill</span>
+    <span class="skill-badge required">token-optimization</span>
   </div>
 
-  <div class="alert alert-blue">
-    <span class="alert-icon">ℹ</span>
-    <div>Skills are invoked by their <span class="inline-code">name:</span> frontmatter field, not the filename. If the frontmatter name doesn't match exactly what's in the system prompt, the skill will not fire. Verify frontmatter after every file upload or edit.</div>
-  </div>
+  <div class="demo-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Claude Project Chat — Phase 3: Presentation Outline</div><div class="card-badge">Exact conversation flow</div></div>
+      <div class="card-body chat-messages">
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Confirming prerequisites: Textbook for CIA P2 · 3c ✓ · MCQs ✓
 
-  <div class="skill-grid">
-    <div class="skill-card active" onclick="showSkill('s1',this)">
-      <h4>depth-calibration-skill</h4>
-      <p>Determines content depth before any generation. Always invoked first.</p>
-    </div>
-    <div class="skill-card" onclick="showSkill('s2',this)">
-      <h4>token-optimization</h4>
-      <p>Sets chunking and batching strategy for confirmed depth. Always second.</p>
-    </div>
-    <div class="skill-card" onclick="showSkill('s3',this)">
-      <h4>textbook-style-guide</h4>
-      <p>Style, structure, and tone standards for all textbook content.</p>
-    </div>
-    <div class="skill-card" onclick="showSkill('s4',this)">
-      <h4>mcq-creation-skill</h4>
-      <p>MCQ construction rules, output format, and quality gates.</p>
-    </div>
-    <div class="skill-card" onclick="showSkill('s5',this)">
-      <h4>slide-creation-skill</h4>
-      <p>Gamma-ready Markdown outline generation rules and Gamma trigger gate.</p>
-    </div>
-    <div class="skill-card" onclick="showSkill('s6',this)">
-      <h4>slide-script-skill</h4>
-      <p>Narration script generation matched to finalized slide deck.</p>
-    </div>
-    <div class="skill-card" onclick="showSkill('s7',this)">
-      <h4>monday-workflow-skill</h4>
-      <p>Monday.com interaction rules — always required Phase 1, user-directed elsewhere.</p>
-    </div>
-  </div>
+I'll recommend slide count using depth calibration, then generate a Gamma-ready Markdown outline with titles, bullets, visual placeholders, and short speaker notes.
 
-  <!-- Skill details -->
-  <div class="skill-detail active" id="skill-s1">
-    <div class="card card-orange">
-      <div class="card-title">depth-calibration-skill</div>
-      <table class="data-table">
-        <tr><td>Frontmatter name</td><td><span class="inline-code">depth-calibration-skill</span></td></tr>
-        <tr><td>Invoke when</td><td>Before ANY content generation — textbook, MCQs, slides, scripts</td></tr>
-        <tr><td>Phase</td><td>All phases — always first</td></tr>
-        <tr><td>Gates</td><td>No content generated until depth confirmed by user</td></tr>
-        <tr><td>Output</td><td>Confirmation table: Scope · Cognitive Level · Exam Weight · Recommended Depth</td></tr>
-        <tr><td>Breaks if skipped</td><td>Content generated at wrong depth — wrong word count, MCQ count, slide count</td></tr>
-      </table>
-      <div class="tags"><span class="tag">Scope: Narrow / Moderate / Broad</span><span class="tag">Cognitive: Basic / Medium / Comprehensive</span><span class="tag">Weight: Low / Medium / High</span></div>
-    </div>
-  </div>
+Depth: Comprehensive → Recommended 15–25 slides at high density. Confirm to proceed?</div></div>
 
-  <div class="skill-detail" id="skill-s2">
-    <div class="card card-orange">
-      <div class="card-title">token-optimization</div>
-      <table class="data-table">
-        <tr><td>Frontmatter name</td><td><span class="inline-code">token-optimization</span></td></tr>
-        <tr><td>Invoke when</td><td>Before all content generation — immediately after depth confirmed</td></tr>
-        <tr><td>Phase</td><td>All phases — always second</td></tr>
-        <tr><td>Gates</td><td>Sets chunking plan before output begins</td></tr>
-        <tr><td>Output</td><td>Chunking strategy: segment sizes, batch sizes, checkpoint cadence</td></tr>
-        <tr><td>Breaks if skipped</td><td>Comprehensive content hits token limits mid-generation with no recovery plan</td></tr>
-      </table>
-    </div>
-  </div>
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Confirmed. Proceed.</div></div>
 
-  <div class="skill-detail" id="skill-s3">
-    <div class="card card-blue">
-      <div class="card-title">textbook-style-guide</div>
-      <table class="data-table">
-        <tr><td>Frontmatter name</td><td><span class="inline-code">textbook-style-guide</span></td></tr>
-        <tr><td>Invoke when</td><td>Phase 2 — Textbook Creation and all textbook revisions</td></tr>
-        <tr><td>Output</td><td>65% prose / 25% bullets / 10% examples · H1→H2→H3 hierarchy · Summary table</td></tr>
-        <tr><td>Do NOT apply to</td><td>MCQs, slides, or scripts — those have dedicated skills</td></tr>
-        <tr><td>Breaks if skipped</td><td>Bullet-heavy output, wrong tone, missing summary table, inconsistent hierarchy</td></tr>
-      </table>
-    </div>
-  </div>
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Generating outline now…
 
-  <div class="skill-detail" id="skill-s4">
-    <div class="card card-blue">
-      <div class="card-title">mcq-creation-skill</div>
-      <table class="data-table">
-        <tr><td>Frontmatter name</td><td><span class="inline-code">mcq-creation-skill</span></td></tr>
-        <tr><td>Invoke when</td><td>Phase 3 — MCQs Creation and all MCQ revisions</td></tr>
-        <tr><td>Prerequisite</td><td>Approved textbook must exist as source material</td></tr>
-        <tr><td>Output format</td><td>11-column JSON → .xlsx: Category · Q ID · Text · A/B/C/D · 4 Explanations</td></tr>
-        <tr><td>Key rules</td><td>Choice A always correct · Balance answer lengths · No extreme qualifier words</td></tr>
-        <tr><td>Breaks if skipped</td><td>Wrong output format, unbalanced choices, missing explanations</td></tr>
-      </table>
-    </div>
-  </div>
+Here is the slide outline for review. Do you need changes, or is this ready to build in Gamma?</div></div>
 
-  <div class="skill-detail" id="skill-s5">
-    <div class="card card-orange">
-      <div class="card-title">slide-creation-skill</div>
-      <table class="data-table">
-        <tr><td>Frontmatter name</td><td><span class="inline-code">slide-creation-skill</span></td></tr>
-        <tr><td>Invoke when</td><td>Phase 4 — Presentation Outline only</td></tr>
-        <tr><td>Prerequisite</td><td>Approved textbook AND MCQs both complete</td></tr>
-        <tr><td>Output</td><td>Gamma-ready Markdown outline: titles · bullets · visual placeholders · speaker notes</td></tr>
-        <tr><td>Hard rule</td><td>Do NOT create in Gamma until outline is explicitly approved</td></tr>
-        <tr><td>Breaks if skipped</td><td>Gamma created from unapproved content · wrong slide count for depth</td></tr>
-      </table>
-    </div>
-  </div>
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">It's ready to build in Gamma.</div></div>
 
-  <div class="skill-detail" id="skill-s6">
-    <div class="card card-purple">
-      <div class="card-title">slide-script-skill</div>
-      <table class="data-table">
-        <tr><td>Frontmatter name</td><td><span class="inline-code">slide-script-skill</span></td></tr>
-        <tr><td>Invoke when</td><td>Phase 6 — Slide Script only</td></tr>
-        <tr><td>Prerequisite</td><td>Finalized Gamma presentation added to project resources</td></tr>
-        <tr><td>Output</td><td>Markdown script per slide: narration · [Pause Xs] · [Emphasize: term] · [Transition]</td></tr>
-        <tr><td>Hard rule</td><td>Ask: "Has the presentation been added to the project?" before generating</td></tr>
-        <tr><td>Breaks if skipped</td><td>Script doesn't match slides · wrong timing · missing cues</td></tr>
-      </table>
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Outline is ready for Gamma. Triggering Gamma connector now.</div></div>
+      </div>
+      <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
     </div>
-  </div>
 
-  <div class="skill-detail" id="skill-s7">
-    <div class="card card-green">
-      <div class="card-title">monday-workflow-skill</div>
-      <table class="data-table">
-        <tr><td>Frontmatter name</td><td><span class="inline-code">monday-workflow-skill</span></td></tr>
-        <tr><td>Phase 1 (Textbook)</td><td>Always required — ask Markdown or Word Doc → post to correct column</td></tr>
-        <tr><td>All other phases</td><td>User-directed only — never activate automatically</td></tr>
-        <tr><td>Never do</td><td>Create new Monday items · assume board structure · activate unsolicited</td></tr>
-        <tr><td>Breaks if skipped (Ph1)</td><td>Textbook not saved to Monday — blocks downstream phase tracking</td></tr>
-      </table>
+    <div class="detail-stack">
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">Exact Outline Prompt</div><button class="prompt-box-copy" onclick="copyPrompt(this,'Task: Create a presentation slide outline for the section above.\n\nProcess:\n1. Confirm prerequisites: Textbook and MCQs for this section complete in chat history?\n2. Apply Depth Calibration Skill: Recommend slide count and density (Basic: 5-8 slides, Medium: 10-15, Comprehensive: 15-25). Present table and wait for YES or adjustments.\n3. Use completed textbook as source (reference previous generation).\n4. Follow Presentation_Creation_Skills and Presentation_Creation_Guide:\n   - One key idea per slide\n   - 3-6 bullets max\n   - Visual placeholders (e.g., [Image: Risk matrix chart])\n   - Short speaker notes (1-2 sentences for narration)\n   - Gamma-ready Markdown format\n   - Use HOCK theme: https://gamma.app/themes/share/0mk4i94ypgimwxi\n5. Apply Token Optimization Skill.\n6. Output: Full Markdown outline only.\n\nAfter outline is confirmed, ask: \"Outline ready. Grant Gamma connector access to create in Gamma? Reply Y/N or adjustments.\"\nExecute now.')">Copy</button></div>
+        <div class="prompt-code">Task: Create a presentation slide outline for the section above.
+
+Process:
+<span class="kw">1.</span> Confirm prerequisites: Textbook and MCQs complete?
+<span class="kw">2.</span> Apply Depth Calibration Skill: Recommend slide count and density
+   (Basic: 5-8 · Medium: 10-15 · Comprehensive: 15-25).
+   Present table and wait for YES or adjustments.
+<span class="kw">3.</span> Use completed textbook as source (reference previous generation).
+<span class="kw">4.</span> Follow Presentation_Creation_Skills:
+   - One key idea per slide
+   - 3-6 bullets max
+   - Visual placeholders: <span class="ph">[Image: Risk matrix chart]</span>
+   - Short speaker notes (1-2 sentences)
+   - Gamma-ready Markdown format
+   - Theme: <span class="val">https://gamma.app/themes/share/0mk4i94ypgimwxi</span>
+<span class="kw">5.</span> Apply Token Optimization Skill.
+<span class="kw">6.</span> Output: Full Markdown outline only.
+
+After outline is confirmed:
+<span class="cm">"Outline ready. Grant Gamma connector access? Y/N"</span>
+
+<span class="cm">Do NOT trigger Gamma until outline is approved.</span></div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">Phase Gating Language</div></div>
+        <div class="prompt-code"><span class="cm">"I'll confirm the textbook and MCQs are available, recommend
+slide count using depth calibration, and generate a Gamma-
+ready Markdown outline with titles, bullets, visual
+placeholders, and short speaker notes."</span>
+
+<span class="cm">"Here is the slide outline for review. Do you need changes,
+or is this ready to build in Gamma?"</span>
+
+<span class="cm">"Outline is ready for Gamma."</span></div>
+      </div>
+
+      <div class="rule-box">
+        <div class="rule-box-title">⚠ Critical Rule</div>
+        <ul><li>Do NOT trigger Gamma connector until outline is explicitly approved</li><li>Outline approval is the gate into Phase 4</li></ul>
+      </div>
     </div>
-  </div>
-
-  <div class="nav-buttons">
-    <button class="btn btn-ghost" onclick="showSection('connectors',document.querySelectorAll('.nav-item')[3])">← Connectors</button>
-    <button class="btn btn-primary" onclick="showSection('maintenance',document.querySelectorAll('.nav-item')[5])">Maintenance →</button>
   </div>
 </div>
 
-<!-- ═══════════════ MAINTENANCE ═══════════════ -->
-<div class="section" id="section-maintenance">
+<!-- ── PHASE 4: GAMMA ── -->
+<div class="section" id="section-gamma">
   <div class="section-header">
-    <div class="section-header-left">
-      <h2>Maintenance Guide</h2>
-      <p>How to update the project, what to touch when things change, and a changelog for tracking updates over time.</p>
+    <div class="phase-eyebrow"><span class="phase-chip">Phase 4</span><span class="skills-chip">Gamma connector only — no content generation</span></div>
+    <div class="section-title">Gamma Creation</div>
+    <div class="section-desc">Gamma is handled entirely through the connector — not content generation. Creation is asynchronous; the initial response is not treated as final. Wait for completed status before using gammaUrl or exportUrl. All post-creation edits are made directly at the Gamma URL by the user.</div>
+  </div>
+
+  <div class="demo-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Claude Project Chat — Phase 4: Gamma Creation</div><div class="card-badge">Connector-only phase</div></div>
+      <div class="card-body chat-messages">
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">The outline is approved. Creating the presentation in Gamma now.</div></div>
+
+        <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">Gamma</div><div class="connector-tool-sub">Create Presentation</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>Awaiting completion…</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">source</span><span class="conn-arrow">→</span><span class="conn-val">Approved Markdown outline</span></div>
+<div class="conn-row"><span class="conn-key">theme</span><span class="conn-arrow">→</span><span class="conn-val blue">gamma.app/themes/share/0mk4i94ypgimwxi</span></div>
+<div class="conn-row"><span class="conn-key">mode</span><span class="conn-arrow">→</span><span class="conn-val">async — wait for status = complete</span></div>
+</div>
+          </div>
+
+        <div class="msg-wrap system"><div class="msg-label sys">System</div>
+        <div class="msg system">Gamma generation is asynchronous. The initial create response is not treated as final. Waiting for completed status before surfacing gammaUrl or exportUrl.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Here's your Gamma link: [gammaUrl]
+
+Are any revisions needed, or is it finalized?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">A few slides need edits. I'll update them directly in Gamma.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Make your changes at the Gamma URL directly. Once your changes are complete, let me know so I can download the PowerPoint and add it to Monday.</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Changes are done. It's finalized.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Retrieving the Gamma URL and downloading the PowerPoint now.</div></div>
+
+        <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">monday.com</div><div class="connector-tool-sub">Monday Workflow Skill</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>Presentation columns</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">link col</span><span class="conn-arrow">→</span><span class="conn-val blue">Gamma URL attached</span></div>
+<div class="conn-row"><span class="conn-key">file col</span><span class="conn-arrow">→</span><span class="conn-val blue">PPTX export attached</span></div>
+</div>
+          </div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Would you like to save the presentation to this project?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+      </div>
+      <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
     </div>
-    <div class="section-icon">🔧</div>
+
+    <div class="detail-stack">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Gamma Connector — Processing</div><div class="card-badge">async</div></div>
+        <div class="card-body">
+          <div class="gamma-processing">
+            <div class="gamma-proc-title">Creating presentation in Gamma</div>
+            <div class="gamma-proc-sub">Importing approved outline · Applying HOCK theme · Building deck · Preparing export…</div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+          </div>
+          <div class="slide-grid">
+            <div class="gslide"><div class="gslide-bar"></div><div class="gslide-line"></div><div class="gslide-line"></div><div class="gslide-line short"></div></div>
+            <div class="gslide"><div class="gslide-bar" style="width:55%;background:rgba(13,148,136,.2)"></div><div class="gslide-line"></div><div class="gslide-line"></div><div class="gslide-line short"></div></div>
+            <div class="gslide"><div class="gslide-bar" style="width:40%;background:rgba(124,58,237,.2)"></div><div class="gslide-line"></div><div class="gslide-line short"></div></div>
+            <div class="gslide"><div class="gslide-bar" style="width:60%"></div><div class="gslide-line"></div><div class="gslide-line"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">monday.com — Presentation State</div><div class="card-badge">Phase 4 result</div></div>
+        <div class="card-body">
+          <div class="board">
+            <div class="board-head" style="grid-template-columns:1.4fr 1fr .8fr .8fr"><div>Task</div><div>Status</div><div>Link</div><div>File</div></div>
+            <div class="board-row-data" style="grid-template-columns:1.4fr 1fr .8fr .8fr">
+              <div style="font-size:11px;color:var(--muted)">CIA P2 · SU5 · 3c — Cybersecurity Risks</div>
+              <div><span class="status-pill s-purple">Presentation Ready</span></div>
+              <div style="color:#5eead4;font-size:11px">Gamma URL ✓</div>
+              <div style="color:#5eead4;font-size:11px">PPTX ✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-box">
+        <div class="rule-box-title">⚠ Gamma Rules</div>
+        <ul>
+          <li>Do NOT use connector to edit after creation</li>
+          <li>All post-creation edits made by user at Gamma URL</li>
+          <li>Wait for completed status — initial response is NOT final</li>
+          <li>Download PPTX only after user confirms finalized</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PHASE 5: SCRIPT ── -->
+<div class="section" id="section-script">
+  <div class="section-header">
+    <div class="phase-eyebrow"><span class="phase-chip">Phase 5</span><span class="skills-chip">slide-script-skill → token-optimization</span></div>
+    <div class="section-title">Slide Script</div>
+    <div class="section-desc">Narration script generated from the finalized Gamma presentation. The presentation must be added to the project before script generation begins. Script is mapped slide-by-slide with timing cues and transitions at 120-150 words per minute.</div>
+  </div>
+  <div class="skills-row">
+    <span class="skill-badge required">slide-script-skill</span>
+    <span class="skill-badge required">token-optimization</span>
+    <span class="skill-badge optional">monday-workflow-skill (on approval)</span>
+    <span class="skill-badge optional">Gamma connector (speaker notes)</span>
   </div>
 
-  <div class="card card-orange">
-    <div class="card-title">🔗 When Webhook URLs Change</div>
-    <ul class="step-list">
-      <li class="step-item"><div class="step-num orange">1</div><div class="step-content"><div class="step-title">Update HOCK_Core_Operations.md</div><div class="step-desc">Find the Connector Rules section. Update the <span class="inline-code">Webhook:</span> line for Save File and/or Get File. Do not change the Method or Inputs unless those also changed.</div></div></li>
-      <li class="step-item"><div class="step-num orange">2</div><div class="step-content"><div class="step-title">Replace the file in Project Knowledge</div><div class="step-desc">Delete the old version of HOCK_Core_Operations.md from the project. Upload the updated file. Confirm the filename is unchanged.</div></div></li>
-      <li class="step-item"><div class="step-num orange">3</div><div class="step-content"><div class="step-title">Update this doc's changelog</div><div class="step-desc">Log the change in the changelog table below with date and description.</div></div></li>
-    </ul>
+  <div class="demo-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Claude Project Chat — Phase 5: Slide Script</div><div class="card-badge">Exact conversation flow</div></div>
+      <div class="card-body chat-messages">
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Has the presentation been added to the project?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">I'll use the Gamma presentation as the primary base, map narration to each slide, apply timing calibration, and output the script in Markdown with cues and transitions.
+
+Depth: Comprehensive → Estimated total time: 15–25 min · 120-150 words/min. Confirm to proceed?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Confirmed.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">The script is ready. Do you want revisions, or is it approved?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">It's approved.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Are you ready to turn the slide script into a doc?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Would you like to add the script to Monday and update the task?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="connector">
+          <div class="connector-header">
+            <div class="connector-name"><div class="connector-dot"></div>Claude Connector → Monday Workflow Skill</div>
+            <div class="connector-tag">Slide Script Column</div>
+          </div>
+          <div class="connector-payload"><span class="key">action</span>  <span class="arrow">→</span> <span class="val">Attach doc → Slide Script Column</span>
+<span class="key">status</span>  <span class="arrow">→</span> <span class="val">"Slide Script Ready for Review"</span>
+<span class="key">assign</span>  <span class="arrow">→</span> <span class="val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a0c2d2c9c1cee0c8cfc3cbc9ced4c5d2cec1d4c9cfcec1cc8ec3cfcd">[email&#160;protected]</a></span>
+<span class="key">due</span>     <span class="arrow">→</span> <span class="val">today + 2</span>
+<span class="key">desc</span>    <span class="arrow">→</span> <span class="val">append slide script update note</span></div>
+        </div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Would you like me to add the script to the Gamma presentation as speaker notes?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
+
+        <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">Gamma</div><div class="connector-tool-sub">Add Speaker Notes</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>Optional step</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">action</span><span class="conn-arrow">→</span><span class="conn-val">Add approved script as speaker notes</span></div>
+<div class="conn-row"><span class="conn-key">target</span><span class="conn-arrow">→</span><span class="conn-val blue">Finalized Gamma presentation</span></div>
+</div>
+          </div>
+      </div>
+      <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
+    </div>
+
+    <div class="detail-stack">
+      <div class="card">
+        <div class="card-header"><div class="card-title">monday.com — Slide Script State</div><div class="card-badge">Phase 5 result</div></div>
+        <div class="card-body">
+          <div class="board">
+            <div class="board-head" style="grid-template-columns:1.4fr 1fr .8fr .8fr"><div>Task</div><div>Status</div><div>Assignee</div><div>File</div></div>
+            <div class="board-row-data" style="grid-template-columns:1.4fr 1fr .8fr .8fr">
+              <div style="font-size:11px;color:var(--muted)">CIA P2 · SU5 · 3c — Cybersecurity Risks</div>
+              <div><span class="status-pill s-amber">Slide Script Ready for Review</span></div>
+              <div style="color:var(--muted);font-size:11px">Brian</div>
+              <div style="color:#5eead4;font-size:11px">Doc ✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">Exact Script Prompt</div><button class="prompt-box-copy" onclick="copyPrompt(this,'Task: Create a slide narration script for the presentation in project resources.\n\nProcess:\n1. Confirm prerequisites: Textbook, MCQs, and Gamma presentation for this section are in project resources or chat history.\n2. Source: Use the Gamma presentation file/link as primary base.\n3. Apply Depth Calibration Skill: Recommend total timing (Basic: 5-8 min, Medium: 10-15 min, Comprehensive: 15-25 min). Present quick table and wait for YES or override.\n4. Follow Slide_Script_Skills and Slide_Script_Guide:\n   - Format per slide: Slide X + spoken text + cues [Pause 2s], [Emphasize: key term], [Transition: \"Next...\"]\n   - 120-150 words/min pacing\n   - Tie narration to visuals\n5. Apply Token Optimization Skill.\n6. Output: Markdown format only with total estimated time.\n\nAfter script is complete, ask: \"Script ready. Want to create a doc/attach to Monday? Or revise first?\"\nExecute now.')">Copy</button></div>
+        <div class="prompt-code">Task: Create a slide narration script for the presentation
+in project resources.
+
+Process:
+<span class="kw">1.</span> Confirm prerequisites: Textbook, MCQs, and Gamma
+   presentation in project resources or chat history.
+<span class="kw">2.</span> Source: Use Gamma presentation file/link as primary base.
+<span class="kw">3.</span> Apply Depth Calibration Skill: Recommend total timing
+   (Basic: 5-8 min · Medium: 10-15 · Comprehensive: 15-25).
+   Present quick table and wait for YES or override.
+<span class="kw">4.</span> Follow Slide_Script_Skills:
+   - Format per slide: Slide X + spoken text + cues
+     <span class="ph">[Pause 2s]</span>, <span class="ph">[Emphasize: key term]</span>, <span class="ph">[Transition: "Next..."]</span>
+   - 120-150 words/min pacing
+   - Tie narration to visuals
+<span class="kw">5.</span> Apply Token Optimization Skill.
+<span class="kw">6.</span> Output: Markdown format only + total estimated time.
+
+<span class="cm">"Script ready. Want to create a doc/attach to Monday?
+Or revise first?"</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PHASE 6: VIDEO ── -->
+<div class="section" id="section-video">
+  <div class="section-header">
+    <div class="phase-eyebrow"><span class="phase-chip">Phase 6</span><span class="skills-chip">Manual in HeyGen — no automation</span></div>
+    <div class="section-title">Video (HeyGen)</div>
+    <div class="section-desc">Video is created manually by the user in HeyGen. No content generation skills are invoked in this phase. Claude waits for user confirmation that the video is complete, then updates Monday if directed.</div>
   </div>
 
-  <div class="card card-blue">
-    <div class="card-title">📊 When Monday Column Names Change</div>
-    <ul class="step-list">
-      <li class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Update HOCK_Core_Operations.md — Phase Behavior section</div><div class="step-desc">Find the affected phase (e.g., Phase 2 — Textbook Creation). Update every reference to the old column name. Column names must match Monday exactly — Claude uses them verbatim when calling the connector.</div></div></li>
-      <li class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Update monday-workflow-SKILL.md</div><div class="step-desc">Find references to the old column name in the Process Steps tables. Update to match.</div></div></li>
-      <li class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Replace both files in Project Knowledge</div><div class="step-desc">Upload updated versions. Verify filenames match exactly.</div></div></li>
-    </ul>
+  <div class="demo-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Claude Project Chat — Phase 6: Video</div><div class="card-badge">Manual phase</div></div>
+      <div class="card-body chat-messages">
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Video is created manually in HeyGen using the approved script and finalized presentation.
+
+Do you want me to update Monday once the video is complete?</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes, once it is complete.</div></div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Got it. Once you confirm the video is complete, I'll update the Monday workflow state to "Video is Ready for Review".</div></div>
+
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Video is done.</div></div>
+
+        <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">monday.com</div><div class="connector-tool-sub">Monday Workflow Skill</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>On confirmation only</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">status</span><span class="conn-arrow">→</span><span class="conn-val">"Video is Ready for Review"</span></div>
+</div>
+          </div>
+      </div>
+      <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
+    </div>
+
+    <div class="detail-stack">
+      <div class="card">
+        <div class="card-header"><div class="card-title">monday.com — Video State</div><div class="card-badge">Phase 6 result</div></div>
+        <div class="card-body">
+          <div class="board">
+            <div class="board-head" style="grid-template-columns:1.4fr 1fr .8fr .8fr"><div>Task</div><div>Status</div><div>Owner</div><div>Note</div></div>
+            <div class="board-row-data" style="grid-template-columns:1.4fr 1fr .8fr .8fr">
+              <div style="font-size:11px;color:var(--muted)">CIA P2 · SU5 · 3c — Cybersecurity Risks</div>
+              <div><span class="status-pill s-amber">Video is Ready for Review</span></div>
+              <div style="color:var(--muted);font-size:11px">User</div>
+              <div style="color:var(--muted);font-size:11px">Manual · HeyGen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-box">
+        <div class="rule-box-title">⚠ Phase 6 Rules</div>
+        <ul>
+          <li>Video is created manually by the user in HeyGen</li>
+          <li>Do not automate video creation</li>
+          <li>No content generation skills invoked</li>
+          <li>Update Monday only after user confirms video is complete</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PHASE 7: CLOSE-OUT ── -->
+<div class="section" id="section-closeout">
+  <div class="section-header">
+    <div class="phase-eyebrow"><span class="phase-chip">Phase 7</span><span class="skills-chip">Final verification</span></div>
+    <div class="section-title">Close-Out</div>
+    <div class="section-desc">Claude confirms all artifacts exist and are saved to the project or Monday as appropriate, then updates Monday status to Complete.</div>
   </div>
 
-  <div class="card card-blue">
-    <div class="card-title">➕ When Adding a New Phase</div>
-    <ul class="step-list">
-      <li class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Update HOCK_System_Prompt.md — Production Order</div><div class="step-desc">Add the new phase to the numbered list. Update the phase numbers of any phases that come after it.</div></div></li>
-      <li class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Update HOCK_Core_Operations.md — Workflow State Table + Phase Behavior</div><div class="step-desc">Add a new row to the Workflow State Table. Add a new Phase Behavior section with skills, prerequisites, steps, and Monday fields.</div></div></li>
-      <li class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Create or update the skill file if needed</div><div class="step-desc">If the new phase needs a dedicated skill, create the skill file with correct frontmatter. Add it to the Skills Reference table in HOCK_System_Prompt.md.</div></div></li>
-      <li class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Upload all changed files to Project Knowledge</div><div class="step-desc">Replace system prompt in Project Instructions field. Replace knowledge files. Upload new skill file.</div></div></li>
-    </ul>
-  </div>
+  <div class="demo-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Claude Project Chat — Phase 7: Close-Out</div><div class="card-badge">Final verification</div></div>
+      <div class="card-body chat-messages">
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">All artifacts are complete. Running final verification:
 
-  <div class="card card-amber">
-    <div class="card-title">🔄 When Updating a Skill File</div>
-    <ul class="step-list">
-      <li class="step-item"><div class="step-num orange">1</div><div class="step-content"><div class="step-title">Never change the frontmatter name field</div><div class="step-desc">The <span class="inline-code">name:</span> in the frontmatter must match exactly what the system prompt references. Changing it breaks skill invocation silently — Claude won't error, it just won't apply the skill.</div></div></li>
-      <li class="step-item"><div class="step-num orange">2</div><div class="step-content"><div class="step-title">Delete the old version before uploading the new one</div><div class="step-desc">Claude Projects don't version-control files. If you upload without deleting, both versions may exist and cause conflicts.</div></div></li>
-      <li class="step-item"><div class="step-num orange">3</div><div class="step-content"><div class="step-title">Test the updated skill with a verification prompt</div><div class="step-desc">Open a new conversation in the project. Trigger the phase that uses the updated skill and confirm it behaves as expected before using in production.</div></div></li>
-    </ul>
-  </div>
+✓ Textbook — Word Doc attached to Monday Textbook File Column
+✓ MCQs — Excel attached to Monday MCQ File Column
+✓ Presentation — Gamma URL + PPTX attached to Monday
+✓ Slide Script — Doc attached to Monday Slide Script Column
+✓ Video — Confirmed complete in HeyGen
 
-  <div class="card">
-    <div class="card-title">📁 File Map — What Lives Where</div>
-    <table class="data-table">
-      <thead><tr><th>File</th><th>Location</th><th>Update Frequency</th></tr></thead>
-      <tbody>
-        <tr><td><span class="inline-code">HOCK_System_Prompt.md</span></td><td>Project Instructions field (pasted as text)</td><td>When phases, skills, or tool references change</td></tr>
-        <tr><td><span class="inline-code">HOCK_Core_Operations.md</span></td><td>Project Knowledge</td><td>When webhooks, Monday fields, or phase logic change</td></tr>
-        <tr><td><span class="inline-code">HOCK_Content_Standards.md</span></td><td>Project Knowledge</td><td>When depth rules or style standards change</td></tr>
-        <tr><td><span class="inline-code">HOCK_Revision_Prompts.md</span></td><td>Project Knowledge</td><td>When revision prompt templates change</td></tr>
-        <tr><td>All 7 skill files</td><td>Project Knowledge</td><td>When skill behavior or rules change</td></tr>
-      </tbody>
-    </table>
-  </div>
+All items saved to project. Would you like to close the workflow and mark this as Complete?</div></div>
 
-  <!-- Changelog -->
-  <div class="card" style="margin-top:8px">
-    <div class="card-title">📝 Changelog</div>
-    <table class="data-table changelog-row">
-      <thead><tr><th>Date</th><th>Version</th><th>Changed By</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>2026-03-17</td><td>1.0</td><td>Plus 1 Technology</td><td>Initial build — 8-phase workflow, 7 skills, Monday integration, n8n webhooks, Gamma connector, full documentation</td></tr>
-        <tr><td>2026-03-17</td><td>1.1</td><td>Plus 1 Technology</td><td>Webhook URLs updated: hock-save-dropbox-file · hock-get-dropbox-file. Both confirmed POST.</td></tr>
-        <tr><td>2026-03-17</td><td>1.2</td><td>Plus 1 Technology</td><td>Phase 1 Monday update changed from optional to always required. Textbook goes to Textbook File Column (Word Doc). Dropbox removed for textbook artifacts.</td></tr>
-        <tr><td>2026-03-17</td><td>1.3</td><td>Plus 1 Technology</td><td>Production order updated to 8 phases. Presentation Outline and Gamma Creation split into separate phases (4 and 5). Slide Script moved to Phase 6. Video to Phase 7.</td></tr>
-        <tr style="background: var(--orange-light)"><td>—</td><td>—</td><td>—</td><td><em style="color:var(--text-muted)">Add future changes here</em></td></tr>
-      </tbody>
-    </table>
-  </div>
+        <div class="msg-wrap user-wrap"><div class="msg-label you">You</div>
+        <div class="msg user">Yes.</div></div>
 
-  <div class="nav-buttons">
-    <button class="btn btn-ghost" onclick="showSection('skills',document.querySelectorAll('.nav-item')[4])">← Skill Reference</button>
-    <button class="btn btn-primary" onclick="showSection('overview',document.querySelectorAll('.nav-item')[0])">↑ Back to Top</button>
+        <div class="connector">
+            <div class="connector-header">
+              <div class="connector-tool-left">
+                <div class="connector-tool-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/></svg></div>
+                <div><div class="connector-tool-name">monday.com</div><div class="connector-tool-sub">Monday Workflow Skill</div></div>
+              </div>
+              <div class="connector-status"><div class="connector-dot orange"></div>Close-Out</div>
+            </div>
+            <div class="connector-payload">
+<div class="conn-row"><span class="conn-key">status</span><span class="conn-arrow">→</span><span class="conn-val">"Complete"</span></div>
+</div>
+          </div>
+
+        <div class="msg-wrap agent-wrap"><div class="msg-label ai">HOCK Agent</div>
+        <div class="msg agent">Done. The workflow is complete. CIA Part 2 · SU5 · 3c is closed.</div></div>
+      </div>
+      <div class="chat-input"><div class="chat-input-pill">Message HOCK AI Agent…</div><div class="chat-send">Send ↗</div></div>
+    </div>
+
+    <div class="detail-stack">
+      <div class="card">
+        <div class="card-header"><div class="card-title">monday.com — Final State</div><div class="card-badge">Complete</div></div>
+        <div class="card-body">
+          <div class="board">
+            <div class="board-head" style="grid-template-columns:1fr 1fr 1fr"><div>Task</div><div>Status</div><div>All Artifacts</div></div>
+            <div class="board-row-data" style="grid-template-columns:1fr 1fr 1fr">
+              <div style="font-size:11px;color:var(--muted)">CIA P2 · SU5 · 3c — Cybersecurity Risks</div>
+              <div><span class="status-pill s-green">Complete</span></div>
+              <div style="color:#86efac;font-size:11px">All 5 saved ✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-box-header"><div class="prompt-box-title">Artifact Naming Standard</div></div>
+        <div class="prompt-code"><span class="kw">Textbook Draft</span>   <span class="ph">{Name}_{SectionId}_Draft_V1</span>
+<span class="kw">Textbook Final</span>   <span class="ph">{Name}_{SectionId}_Final_Secure</span>
+<span class="kw">MCQ Draft</span>        <span class="ph">{Name}_{SectionId}_MCQ_Draft_V1</span>
+<span class="kw">MCQ Final</span>        <span class="ph">{Name}_{SectionId}_MCQ_Final</span>
+<span class="kw">Slides Draft</span>     <span class="ph">{Name}_{SectionId}_Slides_Draft_V1</span>
+<span class="kw">Slides Final</span>     <span class="ph">{Name}_{SectionId}_Slides_Final</span>
+<span class="kw">Script Draft</span>     <span class="ph">{Name}_{SectionId}_Script_Draft_V1</span>
+<span class="kw">Script Final</span>     <span class="ph">{Name}_{SectionId}_Script_Final</span>
+<span class="kw">Video</span>            <span class="ph">{Name}_VoiceOver</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
 </main>
 </div>
 
-<script>
-function showSection(id, navEl) {
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const sectionOrder = ['overview','textbook','revision','mcq','outline','gamma','script','video','closeout'];
+
+function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('section-' + id).classList.add('active');
-  if (navEl) navEl.classList.add('active');
-  window.scrollTo(0, 0);
-}
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const sec = document.getElementById('section-' + id);
+  if (sec) sec.classList.add('active');
+  if (btn) btn.classList.add('active');
 
-function showPhase(id, tabEl) {
-  document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('phase-' + id).classList.add('active');
-  tabEl.classList.add('active');
-}
+  // Update progress
+  const idx = sectionOrder.indexOf(id);
+  const pct = Math.round((idx / (sectionOrder.length - 1)) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = idx + ' / ' + (sectionOrder.length - 1);
 
-function showSkill(id, cardEl) {
-  document.querySelectorAll('.skill-detail').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.skill-card').forEach(c => c.classList.remove('active'));
-  document.getElementById('skill-' + id).classList.add('active');
-  cardEl.classList.add('active');
+  const labels = {
+    overview:'Overview', textbook:'Phase 1 — Textbook', revision:'Phase 1b — Revision',
+    mcq:'Phase 2 — MCQs', outline:'Phase 3 — Outline', gamma:'Phase 4 — Gamma',
+    script:'Phase 5 — Script', video:'Phase 6 — Video', closeout:'Phase 7 — Close-Out'
+  };
+  document.getElementById('progress-label-text').textContent = labels[id] || id;
+
+  if (sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
 }
-</script>
-</body>
-</html>
