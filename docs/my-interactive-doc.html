@@ -1,1 +1,300 @@
-docs/my-interactive-doc.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HOCK AI Agent Demo Walkthrough</title>
+
+<style>
+
+:root{
+--primary:#0F766E;
+--info:#2563EB;
+--success:#16A34A;
+--warning:#F59E0B;
+--danger:#DC2626;
+--bg:#F8FAFC;
+--card:#FFFFFF;
+--text:#1F2937;
+}
+
+body{
+font-family:Arial, sans-serif;
+background:var(--bg);
+margin:0;
+padding:0;
+}
+
+.header{
+background:var(--primary);
+color:white;
+padding:20px;
+font-size:22px;
+font-weight:bold;
+}
+
+.container{
+display:flex;
+}
+
+.sidebar{
+width:250px;
+background:#111827;
+color:white;
+height:100vh;
+padding:20px;
+}
+
+.sidebar div{
+margin-bottom:15px;
+cursor:pointer;
+padding:10px;
+border-radius:6px;
+}
+
+.sidebar div:hover{
+background:#374151;
+}
+
+.content{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+margin-bottom:20px;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+.phase{
+font-size:20px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.demo-box{
+background:#F1F5F9;
+padding:15px;
+border-radius:6px;
+margin-top:10px;
+font-family:Courier New;
+}
+
+button{
+background:var(--primary);
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#115e59;
+}
+
+.hidden{
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+HOCK AI Agent – Training Demo Walkthrough
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div onclick="show('intro')">Overview</div>
+<div onclick="show('textbook')">1. Textbook Creation</div>
+<div onclick="show('mcq')">2. MCQ Creation</div>
+<div onclick="show('slides')">3. Slide Creation</div>
+<div onclick="show('script')">4. Script Creation</div>
+<div onclick="show('video')">5. Video Phase</div>
+<div onclick="show('tips')">Trainer Tips</div>
+
+</div>
+
+<div class="content">
+
+<div id="intro" class="card">
+
+<div class="phase">Demo Overview</div>
+
+<p>This demo shows how a user works with the HOCK AI Agent to create training materials.</p>
+
+<p>The AI guides the process through structured phases:</p>
+
+<ul>
+<li>Textbook Creation</li>
+<li>MCQ Creation</li>
+<li>Slides / Presentation</li>
+<li>Script Creation</li>
+<li>Video Production</li>
+</ul>
+
+<p>The trainer should demonstrate each phase using a real example.</p>
+
+</div>
+
+
+<div id="textbook" class="card hidden">
+
+<div class="phase">Phase 1 – Textbook Creation</div>
+
+<p>Trainer Prompt Example:</p>
+
+<div class="demo-box">
+Create a textbook for CIA Part 2 – Study Unit 5: Risk Factor Identification and Evaluation.
+</div>
+
+<p>The AI generates a textbook draft.</p>
+
+<p>Trainer demonstrates revision request:</p>
+
+<div class="demo-box">
+Revise section 3 and add a real-world example.
+</div>
+
+<p>Once satisfied:</p>
+
+<div class="demo-box">
+Approve the textbook.
+</div>
+
+</div>
+
+
+<div id="mcq" class="card hidden">
+
+<div class="phase">Phase 2 – MCQ Creation</div>
+
+<p>The AI automatically creates multiple choice questions.</p>
+
+<p>Trainer demo prompt:</p>
+
+<div class="demo-box">
+Make the questions slightly harder and add explanations.
+</div>
+
+<p>Optional request:</p>
+
+<div class="demo-box">
+Convert the MCQs to Excel.
+</div>
+
+<p>Final approval:</p>
+
+<div class="demo-box">
+Approve MCQs.
+</div>
+
+</div>
+
+
+<div id="slides" class="card hidden">
+
+<div class="phase">Phase 3 – Slide / Presentation Creation</div>
+
+<p>The AI generates a structured slide deck outline.</p>
+
+<p>Trainer prompt:</p>
+
+<div class="demo-box">
+Reduce text on the slides and add one summary slide.
+</div>
+
+<p>When approved the presentation is created.</p>
+
+<div class="demo-box">
+Approve slides.
+</div>
+
+</div>
+
+
+<div id="script" class="card hidden">
+
+<div class="phase">Phase 4 – Script Creation</div>
+
+<p>The AI generates instructor narration for each slide.</p>
+
+<p>Trainer prompt:</p>
+
+<div class="demo-box">
+Make the script more conversational.
+</div>
+
+<p>Optional request:</p>
+
+<div class="demo-box">
+Add teaching examples for difficult topics.
+</div>
+
+<p>Final approval:</p>
+
+<div class="demo-box">
+Approve script.
+</div>
+
+</div>
+
+
+<div id="video" class="card hidden">
+
+<div class="phase">Phase 5 – Video Creation</div>
+
+<p>The script and slides move into production.</p>
+
+<p>Trainer explains that video creation may occur in tools such as:</p>
+
+<ul>
+<li>HeyGen</li>
+<li>Internal video production tools</li>
+</ul>
+
+<p>The agent then updates the project to complete.</p>
+
+</div>
+
+
+<div id="tips" class="card hidden">
+
+<div class="phase">Trainer Tips</div>
+
+<ul>
+<li>Always show one real revision during demo</li>
+<li>Explain that approvals control progress</li>
+<li>Keep the demo under 10 minutes</li>
+<li>Highlight that users can ask natural questions</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function show(id){
+
+let sections=document.querySelectorAll(".content .card")
+
+sections.forEach(s=>s.classList.add("hidden"))
+
+document.getElementById(id).classList.remove("hidden")
+
+}
+
+</script>
+
+</body>
+</html>
