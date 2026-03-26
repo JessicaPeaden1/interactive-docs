@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhaseAlpha — Technical Assessment & Project Estimates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   RESET
+══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ══════════════════════════════════════════
+   SHELL
+══════════════════════════════════════════ */
+.shell-bar{
+  position:sticky;top:0;z-index:300;
+  background:#0f1829;
+  display:flex;align-items:stretch;
+  border-bottom:2px solid rgba(201,153,58,0.35);
+}
+.tab-group{display:flex;align-items:stretch;flex:1;}
+.tab-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.81rem;font-weight:600;
+  padding:0 24px;height:48px;border:none;
+  background:transparent;color:#8fa3be;cursor:pointer;
+  letter-spacing:0.03em;border-bottom:3px solid transparent;
+  transition:color .15s,border-color .15s;white-space:nowrap;
+}
+.tab-btn:hover{color:#fff;}
+.tab-btn.active{color:#fff;border-bottom-color:#c9993a;}
+.tab-badge{
+  display:inline-block;font-size:0.64rem;font-weight:700;
+  padding:1px 6px;border-radius:8px;margin-left:6px;
+  vertical-align:middle;letter-spacing:0.06em;
+}
+.badge-assess{background:rgba(201,153,58,0.15);color:#c9993a;}
+.badge-est{background:rgba(74,179,244,0.15);color:#4ab3f4;}
+.pdf-btn-wrap{
+  display:flex;align-items:center;padding:0 20px;
+  border-left:1px solid rgba(255,255,255,0.08);
+}
+.pdf-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  background:#c9993a;color:#0f1829;
+  font-family:'DM Sans',sans-serif;font-size:0.79rem;font-weight:700;
+  padding:7px 16px;border:none;border-radius:6px;
+  cursor:pointer;letter-spacing:0.03em;transition:background .15s;
+  white-space:nowrap;
+}
+.pdf-btn:hover{background:#e8b85a;}
+
+/* ══════════════════════════════════════════
+   TAB PANELS
+══════════════════════════════════════════ */
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ══════════════════════════════════════════
+   SHARED VARIABLES
+══════════════════════════════════════════ */
+:root{
+  --navy:#0f1829; --navy-mid:#1a2740; --navy-light:#243352;
+  --gold:#c9993a; --gold-light:#e8b85a; --gold-pale:#fdf3e0;
+  --slate:#8fa3be; --white:#fff; --off:#f7f9fc;
+  --text:#1e2d42; --muted:#6b7f96; --border:#dde6f0;
+  --green:#1e7a52; --green-bg:#e8f5ee;
+  --amber:#b06800; --amber-bg:#fff4e0;
+  --red:#991b1b; --red-bg:#fef2f2;
+  --purple:#5b21b6; --purple-bg:#ede9fe;
+  --blue:#1e5fa8; --blue-bg:#e8f0fd;
+}
+
+/* ══════════════════════════════════════════
+   TAB 1 — TECHNICAL ASSESSMENT
+══════════════════════════════════════════ */
+#tab-assess{
+  font-family:'DM Sans',sans-serif;
+  background:var(--off);color:var(--text);line-height:1.7;
+}
+
+/* Cover */
+#tab-assess .t-cover{
+  background:var(--navy);color:#fff;
+  padding:56px 64px 48px;position:relative;overflow:hidden;
+}
+#tab-assess .t-cover::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,153,58,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+#tab-assess .t-eyebrow{
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);font-weight:600;margin-bottom:12px;
+}
+#tab-assess .t-cover h1{
+  font-family:'DM Serif Display',serif;font-size:2.4rem;
+  line-height:1.18;color:#fff;max-width:700px;margin-bottom:14px;
+}
+#tab-assess .t-cover-sub{
+  font-size:.97rem;color:var(--slate);max-width:580px;
+  margin-bottom:36px;font-weight:300;
+}
+#tab-assess .t-cover-meta{
+  display:flex;gap:32px;flex-wrap:wrap;
+  border-top:1px solid rgba(255,255,255,.1);padding-top:22px;
+}
+#tab-assess .t-meta-label{
+  font-size:.67rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--slate);margin-bottom:3px;
+}
+#tab-assess .t-meta-val{font-size:.88rem;color:#fff;font-weight:500;}
+
+/* Content wrapper */
+#tab-assess .t-body{max-width:1060px;margin:0 auto;padding:52px 64px 64px;}
+
+/* Section headings */
+#tab-assess .t-section-eyebrow{
+  font-size:.67rem;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--gold);font-weight:700;margin-bottom:4px;margin-top:48px;
+}
+#tab-assess h2{
+  font-family:'DM Serif Display',serif;font-size:1.65rem;
+  color:var(--navy);margin-bottom:10px;line-height:1.2;
+}
+#tab-assess h3{
+  font-family:'DM Sans',sans-serif;font-size:1.05rem;
+  font-weight:700;color:var(--navy);margin:28px 0 8px;
+}
+#tab-assess h4{
+  font-family:'DM Sans',sans-serif;font-size:.92rem;
+  font-weight:700;color:var(--navy-mid);margin:20px 0 6px;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+#tab-assess p{font-size:.9rem;color:var(--text);margin-bottom:14px;max-width:780px;}
+#tab-assess ul,#tab-assess ol{padding-left:22px;margin-bottom:14px;}
+#tab-assess li{font-size:.88rem;color:var(--text);margin-bottom:5px;line-height:1.6;}
+
+/* Divider */
+#tab-assess .t-divider{
+  border:none;border-top:1px solid var(--border);
+  margin:40px 0;
+}
+
+/* Key constraint / callout box */
+#tab-assess .t-callout{
+  background:var(--navy);color:#fff;
+  border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0;
+  padding:16px 20px;margin:20px 0 24px;
+  font-size:.87rem;line-height:1.65;max-width:780px;
+}
+#tab-assess .t-callout strong{color:var(--gold-light);}
+#tab-assess .t-callout-amber{
+  background:var(--amber-bg);border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0;padding:14px 18px;
+  margin:18px 0 22px;font-size:.87rem;line-height:1.6;
+  color:var(--amber);max-width:780px;
+}
+#tab-assess .t-callout-green{
+  background:var(--green-bg);border-left:4px solid #22c55e;
+  border-radius:0 8px 8px 0;padding:14px 18px;
+  margin:18px 0 22px;font-size:.87rem;line-height:1.6;
+  color:var(--green);max-width:780px;
+}
+
+/* Tables */
+#tab-assess .t-table-wrap{overflow-x:auto;margin:18px 0 24px;}
+#tab-assess table{
+  width:100%;border-collapse:collapse;
+  background:#fff;border-radius:8px;overflow:hidden;
+  box-shadow:0 1px 8px rgba(15,24,41,.07);
+  font-size:.83rem;
+}
+#tab-assess thead tr{background:#f1f6fb;}
+#tab-assess th{
+  text-align:left;padding:10px 14px;
+  font-size:.67rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);
+  border-bottom:2px solid var(--border);white-space:nowrap;
+}
+#tab-assess td{
+  padding:10px 14px;border-bottom:1px solid #f0f4f8;
+  vertical-align:top;line-height:1.5;color:var(--text);
+}
+#tab-assess tr:last-child td{border-bottom:none;}
+#tab-assess tr:hover td{background:#fafcff;}
+#tab-assess .t-win{color:var(--green);font-weight:600;}
+#tab-assess .t-risk-low{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:var(--green-bg);color:var(--green);}
+#tab-assess .t-risk-med{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:var(--amber-bg);color:var(--amber);}
+#tab-assess .t-risk-high{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.72rem;font-weight:700;background:var(--red-bg);color:var(--red);}
+
+/* Layer headers */
+#tab-assess .layer-block{
+  background:#fff;border-radius:10px;
+  box-shadow:0 1px 8px rgba(15,24,41,.07);
+  margin-bottom:20px;overflow:hidden;
+}
+#tab-assess .layer-header{
+  display:flex;align-items:center;gap:14px;
+  background:var(--navy);color:#fff;
+  padding:13px 20px;
+}
+#tab-assess .layer-num-badge{
+  background:var(--gold);color:var(--navy);
+  font-size:.7rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;padding:3px 10px;border-radius:16px;
+  white-space:nowrap;
+}
+#tab-assess .layer-title{
+  font-family:'DM Serif Display',serif;font-size:1rem;color:#fff;flex:1;
+}
+#tab-assess .layer-body{padding:18px 22px;}
+
+/* Code block */
+#tab-assess .t-code{
+  background:#0f1829;color:#e2e8f0;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  padding:16px 20px;border-radius:8px;
+  margin:12px 0 16px;overflow-x:auto;line-height:1.7;
+  border-left:3px solid var(--gold);
+  white-space:pre-wrap;word-break:break-word;
+}
+
+/* Prompt cards */
+#tab-assess .prompt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:16px 0 24px;}
+#tab-assess .prompt-card{
+  background:#fff;border-radius:8px;padding:16px 18px;
+  box-shadow:0 1px 6px rgba(15,24,41,.07);
+  border-top:3px solid var(--gold);
+}
+#tab-assess .prompt-num{
+  font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--gold);font-weight:700;margin-bottom:4px;
+}
+#tab-assess .prompt-title{font-weight:700;font-size:.9rem;color:var(--navy);margin-bottom:6px;}
+#tab-assess .prompt-body{font-size:.82rem;color:var(--muted);line-height:1.55;}
+
+/* Automation list */
+#tab-assess .auto-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin:16px 0 24px;}
+#tab-assess .auto-item{
+  background:#fff;border-radius:8px;padding:14px 16px;
+  box-shadow:0 1px 6px rgba(15,24,41,.07);
+  display:flex;gap:12px;align-items:flex-start;
+}
+#tab-assess .auto-num{
+  background:var(--navy);color:var(--gold);
+  font-size:.75rem;font-weight:800;
+  padding:3px 8px;border-radius:6px;white-space:nowrap;flex-shrink:0;
+}
+#tab-assess .auto-content{}
+#tab-assess .auto-title{font-weight:700;font-size:.87rem;color:var(--navy);margin-bottom:3px;}
+#tab-assess .auto-trigger{font-size:.79rem;color:var(--muted);line-height:1.5;}
+
+/* Inline pill */
+#tab-assess .pill{
+  display:inline-block;padding:1px 8px;border-radius:10px;
+  font-size:.73rem;font-weight:600;vertical-align:middle;margin:1px;
+}
+#tab-assess .pill-a{background:var(--purple-bg);color:var(--purple);}
+#tab-assess .pill-b{background:var(--blue-bg);color:var(--blue);}
+#tab-assess .pill-rec{background:var(--green-bg);color:var(--green);}
+
+/* Stack option cards */
+#tab-assess .stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin:16px 0 24px;}
+#tab-assess .stack-card{
+  background:#fff;border-radius:8px;padding:18px 20px;
+  box-shadow:0 1px 6px rgba(15,24,41,.07);
+  border-left:4px solid var(--navy);
+}
+#tab-assess .stack-card.rec{border-left-color:var(--gold);}
+#tab-assess .stack-label{
+  font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);margin-bottom:4px;
+}
+#tab-assess .stack-name{font-weight:700;font-size:.95rem;color:var(--navy);margin-bottom:8px;}
+#tab-assess .stack-items{padding-left:16px;}
+#tab-assess .stack-items li{font-size:.81rem;color:var(--text);margin-bottom:3px;}
+#tab-assess .stack-best{
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--border);
+  font-size:.79rem;color:var(--amber);font-style:italic;
+}
+
+/* Schema field list */
+#tab-assess .schema-group{margin-bottom:18px;}
+#tab-assess .schema-group-title{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--gold);font-weight:700;margin-bottom:8px;
+}
+#tab-assess .schema-fields{display:flex;flex-wrap:wrap;gap:6px;}
+#tab-assess .field-tag{
+  background:var(--navy);color:#e2e8f0;
+  font-family:'JetBrains Mono',monospace;font-size:.74rem;
+  padding:3px 10px;border-radius:5px;
+}
+
+/* Competitor cards */
+#tab-assess .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0;}
+#tab-assess .comp-card{
+  background:#fff;border-radius:8px;padding:16px 18px;
+  box-shadow:0 1px 6px rgba(15,24,41,.07);
+}
+#tab-assess .comp-name{font-weight:700;font-size:.92rem;color:var(--navy);margin-bottom:5px;}
+#tab-assess .comp-body{font-size:.82rem;color:var(--muted);line-height:1.55;}
+
+/* Footer */
+#tab-assess footer{
+  background:var(--navy);color:var(--slate);
+  text-align:center;padding:20px;font-size:.75rem;letter-spacing:.04em;
+}
+#tab-assess footer strong{color:var(--gold);}
+
+/* ══════════════════════════════════════════
+   TAB 2 — CLIENT TIME ESTIMATES
+══════════════════════════════════════════ */
+#tab-est{
+  font-family:'DM Sans',sans-serif;
+  background:var(--off);color:var(--text);line-height:1.6;
+}
+#tab-est .e-cover{
+  background:var(--navy);color:#fff;
+  padding:56px 64px 48px;position:relative;overflow:hidden;
+}
+#tab-est .e-cover::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,153,58,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+#tab-est .e-eyebrow{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:12px;}
+#tab-est .e-cover h1{font-family:'DM Serif Display',serif;font-size:2.4rem;line-height:1.18;color:#fff;max-width:680px;margin-bottom:14px;}
+#tab-est .e-cover-sub{font-size:.97rem;color:var(--slate);max-width:560px;margin-bottom:36px;font-weight:300;}
+#tab-est .e-cover-meta{display:flex;gap:32px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.1);padding-top:22px;}
+#tab-est .e-meta-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.12em;color:var(--slate);margin-bottom:3px;}
+#tab-est .e-meta-val{font-size:.88rem;color:#fff;font-weight:500;}
+
+#tab-est .e-summary{background:#fff;border-bottom:1px solid var(--border);padding:26px 64px;display:flex;flex-wrap:wrap;}
+#tab-est .e-sum-card{flex:1;min-width:155px;padding:0 28px 0 0;margin-right:28px;border-right:1px solid var(--border);}
+#tab-est .e-sum-card:last-child{border-right:none;margin-right:0;padding-right:0;}
+#tab-est .e-sum-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px;}
+#tab-est .e-sum-val{font-family:'DM Serif Display',serif;font-size:1.75rem;color:var(--navy);line-height:1;margin-bottom:3px;}
+#tab-est .e-sum-note{font-size:.75rem;color:var(--muted);}
+
+#tab-est .e-content{max-width:1140px;margin:0 auto;padding:44px 64px 64px;}
+#tab-est .e-section-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-weight:700;margin-bottom:5px;}
+#tab-est .e-section-title{font-family:'DM Serif Display',serif;font-size:1.45rem;color:var(--navy);margin-bottom:6px;}
+#tab-est .e-section-desc{font-size:.87rem;color:var(--muted);margin-bottom:26px;max-width:680px;}
+
+#tab-est .e-assumptions{background:var(--amber-bg);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:16px 22px;margin-bottom:40px;}
+#tab-est .e-assumptions-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--amber);font-weight:700;margin-bottom:8px;}
+#tab-est .e-assumptions ul{padding-left:18px;}
+#tab-est .e-assumptions li{font-size:.84rem;color:var(--amber);margin-bottom:4px;line-height:1.55;}
+
+#tab-est .e-roadmap{background:#fff;border-radius:10px;padding:26px 30px;box-shadow:0 2px 10px rgba(15,24,41,.07);margin-bottom:40px;}
+#tab-est .e-roadmap-row{display:flex;}
+#tab-est .e-rp{flex:1;min-width:120px;position:relative;padding:0 12px 0 0;}
+#tab-est .e-rp::after{content:'→';position:absolute;right:-4px;top:16px;color:var(--border);font-size:1rem;}
+#tab-est .e-rp:last-child::after{display:none;}
+#tab-est .e-rp-bar{height:5px;border-radius:3px;margin-bottom:9px;}
+#tab-est .e-rp-label{font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:3px;}
+#tab-est .e-rp-name{font-weight:700;font-size:.82rem;color:var(--navy);margin-bottom:2px;}
+#tab-est .e-rp-dur{font-size:.76rem;color:var(--muted);}
+
+#tab-est .e-phase-block{margin-bottom:48px;}
+#tab-est .e-phase-header{display:flex;align-items:center;gap:14px;background:var(--navy);color:#fff;padding:15px 22px;border-radius:10px 10px 0 0;}
+#tab-est .e-phase-header.p1{background:var(--navy-mid);}
+#tab-est .e-phase-pill{background:var(--gold);color:var(--navy);font-size:.69rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:16px;white-space:nowrap;}
+#tab-est .e-phase-pill.p1{background:#4ab3f4;}
+#tab-est .e-phase-title{font-family:'DM Serif Display',serif;font-size:1.05rem;color:#fff;flex:1;}
+#tab-est .e-phase-dur{font-size:.78rem;background:rgba(255,255,255,.12);padding:3px 12px;border-radius:16px;white-space:nowrap;color:#fff;}
+
+#tab-est .e-table-wrap{overflow-x:auto;background:#fff;border-radius:0 0 10px 10px;box-shadow:0 2px 10px rgba(15,24,41,.07);}
+#tab-est table{width:100%;border-collapse:collapse;}
+#tab-est thead tr{background:#f1f6fb;}
+#tab-est th{text-align:left;padding:10px 15px;font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;}
+#tab-est td{padding:12px 15px;font-size:.84rem;border-bottom:1px solid #f0f4f8;vertical-align:top;line-height:1.55;}
+#tab-est tr:last-child td{border-bottom:none;}
+#tab-est .e-total-row td{background:#f8fbff;font-weight:700;border-top:2px solid var(--border);}
+
+#tab-est .e-layer-num{font-weight:700;color:var(--navy);font-size:.87rem;}
+#tab-est .e-layer-name{font-weight:600;color:var(--text);}
+#tab-est .e-sub{font-size:.75rem;color:var(--muted);margin-top:2px;}
+#tab-est .e-est{font-weight:700;color:var(--navy);white-space:nowrap;font-size:.88rem;}
+
+#tab-est .e-risk{display:inline-block;padding:2px 9px;border-radius:11px;font-size:.71rem;font-weight:700;white-space:nowrap;}
+#tab-est .e-risk-low{background:var(--green-bg);color:var(--green);}
+#tab-est .e-risk-med{background:var(--amber-bg);color:var(--amber);}
+#tab-est .e-risk-high{background:var(--red-bg);color:var(--red);}
+
+#tab-est .e-tag{display:inline-block;padding:2px 7px;border-radius:9px;font-size:.7rem;font-weight:600;margin:2px 2px 0 0;line-height:1.6;}
+#tab-est .e-tag-a{background:var(--purple-bg);color:var(--purple);}
+#tab-est .e-tag-b{background:var(--blue-bg);color:var(--blue);}
+#tab-est .e-tag-c{background:#fce7f3;color:#9d174d;}
+#tab-est .e-tag-req{background:var(--red-bg);color:var(--red);}
+#tab-est .e-tag-opt{background:var(--green-bg);color:var(--green);}
+
+#tab-est .e-callout{border-radius:0 8px 8px 0;padding:11px 15px;margin-top:11px;font-size:.81rem;line-height:1.6;}
+#tab-est .e-callout-green{background:var(--green-bg);border-left:3px solid #22c55e;color:var(--green);}
+#tab-est .e-callout-amber{background:var(--amber-bg);border-left:3px solid var(--gold);color:var(--amber);}
+
+#tab-est .e-scenario-header{background:var(--navy);color:#fff;padding:15px 22px;border-radius:10px 10px 0 0;display:flex;align-items:center;gap:12px;}
+#tab-est .e-scenario-title{font-family:'DM Serif Display',serif;font-size:1.05rem;color:#fff;}
+
+#tab-est footer{background:var(--navy);color:var(--slate);text-align:center;padding:20px;font-size:.74rem;letter-spacing:.04em;}
+#tab-est footer strong{color:var(--gold);}
+
+/* ══════════════════════════════════════════
+   PRINT
+══════════════════════════════════════════ */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .shell-bar{display:none!important;}
+
+  /* Show both panels when printing */
+  .tab-panel{display:block!important;}
+
+  /* Page break between tabs */
+  #tab-assess{page-break-after:always;}
+  #tab-est{page-break-before:always;}
+
+  /* Assessment print fixes */
+  #tab-assess .t-cover{background:#0f1829!important;padding:36px 48px 32px!important;}
+  #tab-assess .t-body{padding:32px 48px 48px!important;}
+  #tab-assess .t-callout{background:#0f1829!important;}
+  #tab-assess .t-callout-amber{background:#fff4e0!important;}
+  #tab-assess .t-callout-green{background:#e8f5ee!important;}
+  #tab-assess .layer-header{background:#0f1829!important;}
+  #tab-assess .layer-block{box-shadow:none!important;border:1px solid var(--border)!important;}
+  #tab-assess table{box-shadow:none!important;border:1px solid var(--border)!important;overflow:visible!important;}
+  #tab-assess thead tr{background:#f1f6fb!important;}
+  #tab-assess .t-code{background:#0f1829!important;}
+  #tab-assess .prompt-card,.auto-item,.stack-card,.comp-card{box-shadow:none!important;border:1px solid var(--border)!important;}
+  #tab-assess footer{background:#0f1829!important;}
+  #tab-assess .layer-num-badge{background:#c9993a!important;color:#0f1829!important;}
+  #tab-assess .t-risk-low{background:#e8f5ee!important;color:#1e7a52!important;}
+  #tab-assess .t-risk-med{background:#fff4e0!important;color:#b06800!important;}
+  #tab-assess .t-risk-high{background:#fef2f2!important;color:#991b1b!important;}
+
+  /* Estimates print fixes */
+  #tab-est .e-cover{background:#0f1829!important;padding:36px 48px 32px!important;}
+  #tab-est .e-summary{background:#fff!important;padding:18px 48px!important;}
+  #tab-est .e-content{padding:28px 48px 48px!important;}
+  #tab-est .e-roadmap{background:#fff!important;box-shadow:none!important;border:1px solid var(--border)!important;}
+  #tab-est .e-assumptions{background:#fff4e0!important;}
+  #tab-est .e-phase-header{background:#0f1829!important;}
+  #tab-est .e-phase-header.p1{background:#1a2740!important;}
+  #tab-est .e-table-wrap{box-shadow:none!important;border:1px solid var(--border)!important;overflow:visible!important;}
+  #tab-est thead tr{background:#f1f6fb!important;}
+  #tab-est .e-total-row td{background:#f8fbff!important;}
+  #tab-est .e-risk-low{background:#e8f5ee!important;color:#1e7a52!important;}
+  #tab-est .e-risk-med{background:#fff4e0!important;color:#b06800!important;}
+  #tab-est .e-risk-high{background:#fef2f2!important;color:#991b1b!important;}
+  #tab-est .e-tag-a{background:#ede9fe!important;color:#5b21b6!important;}
+  #tab-est .e-tag-b{background:#e8f0fd!important;color:#1e5fa8!important;}
+  #tab-est .e-tag-c{background:#fce7f3!important;color:#9d174d!important;}
+  #tab-est .e-tag-req{background:#fef2f2!important;color:#991b1b!important;}
+  #tab-est .e-tag-opt{background:#e8f5ee!important;color:#1e7a52!important;}
+  #tab-est .e-callout-green{background:#e8f5ee!important;color:#1e7a52!important;}
+  #tab-est .e-callout-amber{background:#fff4e0!important;color:#b06800!important;}
+  #tab-est .e-scenario-header{background:#0f1829!important;}
+  #tab-est .e-phase-pill{background:#c9993a!important;color:#0f1829!important;}
+  #tab-est .e-phase-pill.p1{background:#4ab3f4!important;}
+  #tab-est footer{background:#0f1829!important;}
+  #tab-est .e-sum-card{border-right:1px solid var(--border)!important;}
+
+  table{page-break-inside:auto;}
+  tr{page-break-inside:avoid;}
+  thead{display:table-header-group;}
+  .layer-block,.e-phase-block,.prompt-card,.auto-item{page-break-inside:avoid;}
+}
+
+@media(max-width:768px){
+  .tab-btn{padding:0 14px;font-size:.75rem;}
+  #tab-assess .t-cover,#tab-est .e-cover{padding:32px 24px 28px;}
+  #tab-assess .t-cover h1,#tab-est .e-cover h1{font-size:1.7rem;}
+  #tab-assess .t-body,#tab-est .e-content{padding:28px 20px 40px;}
+  #tab-est .e-summary{padding:20px 24px;}
+  th,td{padding:8px 10px!important;font-size:.78rem!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ SHELL BAR ═══ -->
+<div class="shell-bar">
+  <div class="tab-group">
+    <button class="tab-btn active" onclick="switchTab('assess',this)">
+      Technical Assessment
+      <span class="tab-badge badge-assess">TAB 1</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('est',this)">
+      Project Time Estimates
+      <span class="tab-badge badge-est">TAB 2</span>
+    </button>
+  </div>
+  <div class="pdf-btn-wrap">
+    <button class="pdf-btn" onclick="window.print()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Save as PDF
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 1 — TECHNICAL ASSESSMENT
+═══════════════════════════════════════ -->
+<div id="tab-assess" class="tab-panel active">
+
+  <div class="t-cover">
+    <div class="t-eyebrow">Comprehensive Technical Architecture Assessment</div>
+    <h1>PhaseAlpha HVAC Schedule Extraction System</h1>
+    <p class="t-cover-sub">Architecture, tooling, and implementation strategy for production-quality HVAC equipment schedule extraction from PDF building plan sets.</p>
+    <div class="t-cover-meta">
+      <div><div class="t-meta-label">Prepared By</div><div class="t-meta-val">Plus1 Technology</div></div>
+      <div><div class="t-meta-label">Prepared For</div><div class="t-meta-val">PhaseAlpha</div></div>
+      <div><div class="t-meta-label">Date</div><div class="t-meta-val">March 2026</div></div>
+      <div><div class="t-meta-label">Classification</div><div class="t-meta-val">Confidential</div></div>
+    </div>
+  </div>
+
+  <div class="t-body">
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="t-section-eyebrow">Overview</div>
+    <h2>Executive Summary</h2>
+    <p>PhaseAlpha is building a SaaS product that automates the extraction of HVAC equipment schedule data from PDF building plan sets. Today, HVAC contractors manually transcribe this data for pricing and configuration — a slow, error-prone process where the contractor owns all risk.</p>
+    <p>This document defines the complete technical architecture required to solve that problem at production quality. It is grounded in analysis of real engineering plan sets from three firms (Bluestone Engineering, MODUS Engineering, and Shive Hattery), hands-on extraction testing, and research into the relevant tool landscape.</p>
+    <p>The core finding: this is not just an extraction problem. It is a <strong>detection + rendering + extraction + trust</strong> problem. A naive single-pass approach will appear to work in demos but produce unreliable data in production. The architecture must be fail-safe, not merely high-accuracy.</p>
+
+    <div class="t-callout">
+      <strong>Key constraint:</strong> bad data is worse than incomplete data. Pricing or estimating off fabricated values creates downstream liability risk for HVAC contractors. The system must return null for unreadable values — never infer or guess.
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- RECOMMENDED PILOT PATH -->
+    <div class="t-section-eyebrow">Strategy</div>
+    <h2>Recommended Pilot Path</h2>
+    <p>Before building on the existing .NET platform, the team should validate the extraction pipeline in a faster iteration environment.</p>
+    <h3>Phase 0 — n8n Pilot (Weeks 1–3)</h3>
+    <p>Build and test the full extraction workflow in n8n. This gives the team visual workflow control, fast iteration, and built-in HTTP/API connectors without writing backend code. All seven pipeline stages can be wired up, tested against real PDFs, and tuned before any .NET work begins.</p>
+    <h3>Phase 1 — .NET Integration (Weeks 4+)</h3>
+    <p>Once the n8n pilot proves the extraction logic, the .NET platform takes over as the production orchestration owner. Python microservices handle the AI-heavy stages (crop rendering, vision extraction) and are called from .NET via REST. n8n can remain as a workflow automation layer for non-critical paths.</p>
+    <div class="t-callout-amber"><strong>Why n8n first:</strong> The pipeline has 7–10 distinct stages with conditional branching, fallback logic, and retry behavior. Wiring this directly into .NET before the extraction logic is proven wastes engineering time. n8n makes the workflow visible and testable in hours, not days.</div>
+
+    <hr class="t-divider">
+
+    <!-- WHAT THE DOCS REVEALED -->
+    <div class="t-section-eyebrow">Document Analysis</div>
+    <h2>What the Sample Documents Revealed</h2>
+    <p>Analysis of plan sets from three engineering firms surfaced several non-obvious facts that directly shape the architecture.</p>
+
+    <h3>Schedule Complexity Varies Dramatically by Firm</h3>
+    <div class="t-table-wrap">
+      <table>
+        <thead><tr><th>Firm</th><th>Project Type</th><th>PDF Type</th><th>Complexity</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Bluestone Engineering</strong></td><td>Hospital</td><td>Vector — text extractable directly</td><td>6 schedule types per page, split by AHU system, ~15 columns each</td></tr>
+          <tr><td><strong>MODUS Engineering</strong></td><td>School</td><td>Image-based</td><td>8 schedule types including a Rooftop Unit Schedule spanning the full 30"×42" sheet with 40+ columns at sub-8pt type</td></tr>
+          <tr><td><strong>Shive Hattery</strong></td><td>Storm shelter</td><td>Image-based</td><td>15 distinct schedule tables on a single page — AHU, AHU with ERW, Fin Tube Radiation, Fan, Pump, Chiller, Expansion Tank, Roof Housing, VAV Box, Louver, Diffusers, Electric Unit Heater, Air Separator, Fan Coil Unit</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Single-Pass Extraction Fails on Complex Pages</h3>
+    <p>Testing confirmed that rendering a full schedule page and sending it to a vision model in one pass produces unreliable results for dense or full-width tables. The two-pass approach — detect table regions at page scale, then crop and re-render each table at higher DPI — materially improves extraction quality.</p>
+    <div class="t-callout-green"><strong>Test result:</strong> VAV box schedule confidence improved from 0.76 to 0.91 after cropping. Full data values that were illegible at page scale became fully readable.</div>
+    <div class="t-callout"><strong>The two-pass crop pipeline is not optional.</strong> It is the difference between apparent accuracy in demos and real accuracy in production.</div>
+
+    <h3>Full-Width Schedules Are a Distinct Problem Class</h3>
+    <p>AHU and Rooftop Unit schedules spanning the full width of a 30"×42" sheet cannot be extracted from a single render at any practical DPI. These require a horizontal crop-and-stitch approach: split the table into left and right (or left/center/right) segments, extract each independently, and reassemble by matching column positions.</p>
+    <div class="t-callout-amber"><strong>Heuristic:</strong> if a detected table spans more than 80% of the page width, trigger the horizontal split pass.</div>
+
+    <hr class="t-divider">
+
+    <!-- FULL SYSTEM ARCHITECTURE -->
+    <div class="t-section-eyebrow">Architecture</div>
+    <h2>Full System Architecture</h2>
+    <p>The system requires seven distinct functional layers. Each layer has a specific job and should not be collapsed with adjacent layers.</p>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 1</span><span class="layer-title">Document Ingestion &amp; Routing</span></div>
+      <div class="layer-body">
+        <p>Accepts uploaded plan PDFs, stores originals, splits into pages, detects vector vs image content, and enqueues pages for classification. Lives in the existing .NET SaaS platform (or n8n during pilot).</p>
+        <ul>
+          <li>Accept multi-page plan PDFs up to several hundred pages</li>
+          <li>Detect vector PDFs (text-extractable) vs image-based/raster pages</li>
+          <li>Create processing job with source traceability — every output row links back to the source page</li>
+          <li>Enqueue pages for classification — do not process everything immediately</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 2</span><span class="layer-title">Page Classification</span></div>
+      <div class="layer-body">
+        <p>Classifies each page as schedule, legend, floor plan, detail drawing, notes, or irrelevant. Prevents expensive vision passes from being wasted on non-schedule content. A lightweight classifier is sufficient.</p>
+        <ul>
+          <li>Target types: schedule, legend, drawing/plan, notes, irrelevant</li>
+          <li>Use title/sheet number keywords as primary signal (e.g., M6.01, MECHANICAL SCHEDULES)</li>
+          <li>Fall back to visual classification for pages without clear title cues</li>
+          <li>Route schedule pages to table detection — route everything else to archive</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 3</span><span class="layer-title">Table Detection</span></div>
+      <div class="layer-body">
+        <p>Identifies every distinct equipment schedule table on a classified page, returning a bounding box (page percentage coordinates) and table type label for each. This is where Detector A and Detector B operate.</p>
+
+        <h4>Detector A — LlamaParse <span class="pill pill-rec">Recommended Primary</span></h4>
+        <p>Combines traditional text extraction with agentic LLM/VLM reasoning. Explicitly designed for complex real-world documents including messy layouts, split tables, charts, and scans.</p>
+        <ul>
+          <li>Handles messy HVAC schedules well — reconstructs reading order, preserves context across pages</li>
+          <li>Strong on vector PDFs — starts with accurate text extraction and uses LLMs to fix layout issues</li>
+          <li>Production-scale: fast, scalable, used widely in AEC/RAG contexts</li>
+        </ul>
+
+        <h4>Detector B — Docling <span class="pill pill-b">Fallback</span></h4>
+        <p>Free, MIT-licensed toolkit using computer vision (DocLayNet for layout analysis + TableFormer for table structure recognition).</p>
+        <ul>
+          <li>Excellent table structure recognition via TableFormer — handles cell spans, hierarchical headers, empty cells</li>
+          <li>Runs fully locally — self-hosted, no cloud dependency, strong data privacy story</li>
+          <li>Limitations: inconsistent on complex merged cells and irregular HVAC-specific formatting</li>
+        </ul>
+
+        <div class="t-callout-amber"><strong>Pilot strategy:</strong> run both detectors on every document and compare table counts, bounding boxes, and missed detections. In production: run Detector A first; invoke Detector B only when Detector A fails or confidence degrades.</div>
+
+        <h4>Detector Comparison</h4>
+        <div class="t-table-wrap">
+          <table>
+            <thead><tr><th>Aspect</th><th>LlamaParse</th><th>Docling</th><th>Winner</th></tr></thead>
+            <tbody>
+              <tr><td>Vector PDF schedules</td><td>Excellent — LLM context repair</td><td>Good layout, occasional table issues</td><td class="t-win">LlamaParse</td></tr>
+              <tr><td>Merged/irregular tables</td><td>Strong reconstruction</td><td>Inconsistent — merged cells problematic</td><td class="t-win">LlamaParse</td></tr>
+              <tr><td>Remarks concatenation</td><td>Built-in LLM reasoning</td><td>Requires extra LLM post-processing</td><td class="t-win">LlamaParse</td></tr>
+              <tr><td>Image-based pages</td><td>Agentic OCR + VLM</td><td>OCR + computer vision models</td><td>Comparable</td></tr>
+              <tr><td>Self-hosted / privacy</td><td>Cloud (some self-host via LlamaIndex)</td><td>Fully local, MIT licensed</td><td class="t-win">Docling</td></tr>
+              <tr><td>SaaS scalability</td><td>Production-ready, fast</td><td>Needs engineering to scale</td><td class="t-win">LlamaParse</td></tr>
+              <tr><td>Cost</td><td>Paid tier for heavy use</td><td>Free, open source</td><td class="t-win">Docling</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 4</span><span class="layer-title">Rendering &amp; Crop Orchestration</span></div>
+      <div class="layer-body">
+        <p>The operational heart of the system and the layer most commonly underbuilt in first-pass designs. Takes table bounding boxes from the detector and produces correctly-sized, high-DPI cropped images for the extraction model.</p>
+        <h4>Required Pipeline Steps</h4>
+        <ol>
+          <li><strong>Full page render at 150 DPI</strong> — fast scan only, never used for value extraction</li>
+          <li><strong>Receive bounding boxes</strong> — convert from page-percentage coordinates to pixel coordinates</li>
+          <li><strong>Crop each table region</strong> — add 5% padding on all sides to avoid edge clipping</li>
+          <li><strong>Re-render the cropped region</strong> at target DPI (see table below)</li>
+          <li><strong>Full-width split</strong> — if detected table width exceeds 80% of page width, render left and right halves separately, extract each, stitch by matching column positions</li>
+          <li><strong>Retry on low confidence</strong> — expand crop boundary by 10% and retry once; if retry fails, route to human review</li>
+        </ol>
+        <div class="t-table-wrap" style="margin-top:14px;">
+          <table>
+            <thead><tr><th>Use Case</th><th>DPI</th><th>When</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Full page detection pass</td><td>150</td><td>Fast scan for table location</td><td>Never use for value extraction</td></tr>
+              <tr><td>Standard table crop</td><td>300</td><td>Normal schedule tables</td><td>Covers 60–70% of tables reliably</td></tr>
+              <tr><td>Dense table crop</td><td>400</td><td>Smaller font, tighter columns</td><td>MODUS/Shive-Hattery style</td></tr>
+              <tr><td>Full-width schedule (split L/R)</td><td>400</td><td>AHU/RTU spanning full 30×42 sheet</td><td>Crop each half, stitch results</td></tr>
+              <tr><td>Fallback retry</td><td>500</td><td>When 400 DPI still flags low confidence</td><td>Cost vs quality tradeoff point</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 5</span><span class="layer-title">Extraction</span></div>
+      <div class="layer-body">
+        <p>Sends cropped table images to a vision model and receives raw cell-level content. This layer must operate on crops only — never on full-page images.</p>
+        <h4>Model Recommendation</h4>
+        <p><span class="pill pill-rec">Claude Opus/Sonnet 3.5/4</span> is the recommended primary extraction model based on table comprehension capability. <span class="pill pill-b">GPT-4o</span> is a valid alternative for comparison testing. Azure Document Intelligence is recommended for enterprise deployments where single-cloud compliance matters.</p>
+        <h4>Extraction Prompt Rules</h4>
+        <ul>
+          <li>Extract all visible rows and columns exactly as shown — do not infer missing values</li>
+          <li>Unreadable cell = <code>null</code> — never guess, never copy from adjacent row</li>
+          <li>Normalize multi-line column headers into a single string separated by <code>' / '</code></li>
+          <li>Prefix uncertain values with <code>'?'</code> for downstream flagging</li>
+          <li>Return structured JSON only — no markdown, no preamble</li>
+          <li>Include a confidence score 0.0–1.0 per table</li>
+        </ul>
+        <div class="t-callout"><strong>Critical failure mode:</strong> a model can produce a suspiciously complete row from an unreadable crop by inferring plausible-looking values. The extraction prompt must explicitly prohibit this. <strong>Unreadable = null, always.</strong></div>
+      </div>
+    </div>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 6a</span><span class="layer-title">Column Header Mapping Agent</span></div>
+      <div class="layer-body">
+        <p>Every engineering firm uses different language for the same data. The mapping agent uses an AI model loaded with a synonym knowledge base to resolve novel header variants gracefully.</p>
+        <h4>Header Variant Examples (from 3 sample firms)</h4>
+        <div class="t-table-wrap">
+          <table>
+            <thead><tr><th>Canonical Field</th><th>Scope</th><th>Known Raw Header Variants</th><th>Confidence</th></tr></thead>
+            <tbody>
+              <tr><td><code>equipment_id</code></td><td>All types</td><td>Unit Tag, Symbol, Mark, Equipment ID, Unit No., Tag No., Equip Tag</td><td><span class="t-risk-low">High</span></td></tr>
+              <tr><td><code>area_served</code></td><td>All types</td><td>Area Served, Service, Location, Room, Space, Zone</td><td><span class="t-risk-low">High</span></td></tr>
+              <tr><td><code>cfm_max</code></td><td>Air equipment</td><td>CFM Max, Supply CFM, Airflow Max, Design CFM, Max Airflow, Cooling Max</td><td><span class="t-risk-low">High</span></td></tr>
+              <tr><td><code>ewt_f</code></td><td>Hydronic</td><td>EWT, Entering Water Temp, HW Supply Temp, Inlet Temp, EWT °F</td><td><span class="t-risk-low">High</span></td></tr>
+              <tr><td><code>motor_hp</code></td><td>Fans, pumps</td><td>HP, Motor HP, BHP, Brake HP, Motor Size</td><td><span class="t-risk-med">Medium</span></td></tr>
+              <tr><td><code>remarks_combined</code></td><td>All types</td><td>Notes, Remarks, General Notes, Footnotes, Comments, See Notes</td><td><span class="t-risk-low">High</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Two Implementation Options</h4>
+        <div class="t-table-wrap">
+          <table>
+            <thead><tr><th>Factor</th><th>Option A — AI Project Folder</th><th>Option B — n8n Agent Node</th></tr></thead>
+            <tbody>
+              <tr><td>Setup complexity</td><td>Low — paste system prompt into Project</td><td>Medium — build HTTP node + parse response</td></tr>
+              <tr><td>Learning loop</td><td>Manual — paste corrections into project file</td><td>Automated — n8n writes back to knowledge base</td></tr>
+              <tr><td>Best for</td><td>Pilot phase — fastest to set up</td><td>Production — automated feedback loop</td></tr>
+              <tr><td>Privacy</td><td>Data goes to Claude/ChatGPT cloud</td><td>Configurable — swap endpoint to any model</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Option A — System Prompt</h4>
+        <div class="t-code">You are a column header mapping specialist for HVAC engineering documents.
+You have a knowledge base of canonical field names and their known synonyms,
+organized by equipment type. When given raw column headers and an equipment
+type, return a JSON mapping of each raw header to its canonical field name.
+
+Rules: map every header — unreadable = null, never invent canonical fields,
+use equipment type context to disambiguate. Flag confidence &lt; 0.85 as
+needs_review: true.
+
+Return JSON only:
+{ "mappings": [{ "raw_header": "Unit Tag", "canonical": "equipment_id",
+  "confidence": 0.98, "needs_review": false }] }</div>
+
+        <h4>Firm Fingerprinting <span class="pill pill-b">Optional Enhancement</span></h4>
+        <p>Once enough documents are processed, the system can identify the engineering firm by matching the header set against known firm profiles, loading firm-specific mappings first before falling back to the general knowledge base.</p>
+        <div class="t-code">Bluestone Engineering: equipment_id → 'Symbol', cfm_max → 'CFM Cooling Max'
+MODUS Engineering:     equipment_id → 'Unit Tag', motor_hp → 'HP'
+Shive Hattery:         equipment_id → 'Mark', area_served → 'Service'</div>
+      </div>
+    </div>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 6b</span><span class="layer-title">Schema Normalization</span></div>
+      <div class="layer-body">
+        <p>Once column headers are mapped, normalization slots values into the canonical schema — handling unit conversion, terminology normalization, and remarks concatenation. Column names are already resolved, so this layer focuses purely on value standardization.</p>
+        <p>OpenAI Structured Outputs is recommended as the primary normalization layer because it enforces the JSON schema at the model response layer, making schema violations impossible. Claude can be used as an optional second-pass repair tool on harder documents.</p>
+      </div>
+    </div>
+
+    <div class="layer-block">
+      <div class="layer-header"><span class="layer-num-badge">Layer 7</span><span class="layer-title">Validation, Anti-Hallucination &amp; Trust</span></div>
+      <div class="layer-body">
+        <p>Checks normalized records for integrity issues before they enter the review queue or export pipeline. This layer is what makes the system trustworthy rather than just accurate.</p>
+        <h4>Validation Checks</h4>
+        <ul>
+          <li>Reject impossible values (negative CFM, temperature outside plausible range)</li>
+          <li>Flag blank required fields (equipment_id, area_served, cfm_max)</li>
+          <li>Detect duplicate equipment tags within the same document</li>
+          <li>Identify suspiciously complete rows extracted from low-confidence crops</li>
+          <li>Optional: cross-model verification — if Claude and GPT-4o disagree on a value, flag for review</li>
+        </ul>
+        <h4>Failure Codes &amp; Routing</h4>
+        <div class="t-table-wrap">
+          <table>
+            <thead><tr><th>Failure Code</th><th>Description</th><th>Routing Action</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>VALUE_ILLEGIBLE</code></td><td>Cell unreadable at DPI</td><td>Retry at higher DPI, then null</td><td>Most common — ~15% of image cells</td></tr>
+              <tr><td><code>TABLE_BOUNDARY_MISSED</code></td><td>Detector missed a table</td><td>Fallback to Detector B</td><td>Especially multi-table pages</td></tr>
+              <tr><td><code>COLUMN_HEADER_GARBLED</code></td><td>Merged/wrapped header mangled</td><td>Flag row, human review</td><td>Multi-line headers most at risk</td></tr>
+              <tr><td><code>ROW_COUNT_MISMATCH</code></td><td>Extracted rows &lt; visual rows</td><td>Re-extract, flag discrepancy</td><td>Signals crop boundary issue</td></tr>
+              <tr><td><code>FULLWIDTH_SPLIT_FAIL</code></td><td>40+ col table not stitched</td><td>Manual horizontal crop + retry</td><td>AHU/RTU schedules specifically</td></tr>
+              <tr><td><code>DUPLICATE_EQUIPMENT_TAG</code></td><td>Same tag ID appears 2+ times</td><td>Flag both rows for review</td><td>Data integrity check</td></tr>
+              <tr><td><code>FABRICATED_COMPLETENESS</code></td><td>Suspicious complete rows from bad crop</td><td>Cross-model verify, flag</td><td class="t-risk-high" style="background:transparent;color:#991b1b;font-weight:normal;">Worst case — silent bad data</td></tr>
+              <tr><td><code>REMARKS_TRUNCATED</code></td><td>Footnotes cut off at crop edge</td><td>Expand crop boundary, retry</td><td>Notes at bottom of table</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- CANONICAL SCHEMA -->
+    <div class="t-section-eyebrow">Data Model</div>
+    <h2>Canonical Equipment Schema</h2>
+    <p>Every extracted record maps to this internal schema regardless of source document format.</p>
+
+    <h3>Document-Level Metadata</h3>
+    <div class="schema-group">
+      <div class="schema-fields">
+        <span class="field-tag">project_id</span><span class="field-tag">file_id</span><span class="field-tag">file_name</span><span class="field-tag">uploaded_at</span><span class="field-tag">pdf_type</span><span class="field-tag">page_count</span><span class="field-tag">schedule_page_numbers[]</span><span class="field-tag">processing_status</span>
+      </div>
+    </div>
+
+    <h3>Schedule-Level Metadata</h3>
+    <div class="schema-group">
+      <div class="schema-fields">
+        <span class="field-tag">schedule_id</span><span class="field-tag">page_number</span><span class="field-tag">sheet_number</span><span class="field-tag">schedule_type</span><span class="field-tag">table_bbox</span><span class="field-tag">extraction_confidence</span><span class="field-tag">detector_used</span><span class="field-tag">extraction_model</span><span class="field-tag">review_status</span>
+      </div>
+    </div>
+
+    <h3>Equipment Record (Per Row)</h3>
+    <div class="schema-group">
+      <div class="schema-group-title">Identity</div>
+      <div class="schema-fields">
+        <span class="field-tag">row_id</span><span class="field-tag">schedule_id</span><span class="field-tag">row_index</span><span class="field-tag">equipment_id</span><span class="field-tag">area_served</span><span class="field-tag">manufacturer</span><span class="field-tag">model</span><span class="field-tag">equipment_type</span>
+      </div>
+    </div>
+    <div class="schema-group">
+      <div class="schema-group-title">Technical Fields</div>
+      <div class="schema-fields">
+        <span class="field-tag">cfm_max</span><span class="field-tag">cfm_min</span><span class="field-tag">cfm_heating_max</span><span class="field-tag">coil_type</span><span class="field-tag">ewt_f</span><span class="field-tag">lwt_f</span><span class="field-tag">gpm</span><span class="field-tag">motor_hp</span><span class="field-tag">electrical_volts</span><span class="field-tag">electrical_phase</span><span class="field-tag">remarks_combined</span>
+      </div>
+    </div>
+    <div class="schema-group">
+      <div class="schema-group-title">Audit &amp; Review</div>
+      <div class="schema-fields">
+        <span class="field-tag">raw_cells</span><span class="field-tag">normalized_fields</span><span class="field-tag">field_confidence</span><span class="field-tag">flags[]</span><span class="field-tag">reviewer_edits</span><span class="field-tag">failure_type</span>
+      </div>
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- REVIEW UI -->
+    <div class="t-section-eyebrow">Product Requirements</div>
+    <h2>Review UI Requirements</h2>
+    <p>The review UI is where human judgment corrects what the AI got wrong. It must be built directly into the SaaS product — not a separate admin panel.</p>
+    <h3>Core Requirements</h3>
+    <ul>
+      <li><strong>Side-by-side view:</strong> cropped table image on the left, extracted JSON fields on the right — without the source image next to the data, review is slow and unreliable</li>
+      <li><strong>Flagged cells highlighted</strong> in the extracted view — reviewers see exactly which fields triggered a flag</li>
+      <li><strong>Inline editing:</strong> reviewer edits a field directly in the UI, change saved with reviewer ID and timestamp</li>
+      <li><strong>Row-level approve/reject</strong> — granular enough to pass clean rows while blocking uncertain ones</li>
+      <li><strong>Bulk approval</strong> for high-confidence tables — reviewers should not touch records above a confidence threshold</li>
+      <li><strong>Navigation:</strong> jump between flagged records within a document without returning to a list view</li>
+    </ul>
+    <h3>Review Queue Routing Rules</h3>
+    <div class="t-table-wrap">
+      <table>
+        <thead><tr><th>Condition</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Confidence &lt; 0.75</td><td><span class="t-risk-high">Mandatory review</span></td></tr>
+          <tr><td>Any field flagged VALUE_ILLEGIBLE</td><td><span class="t-risk-high">Mandatory review</span></td></tr>
+          <tr><td>DUPLICATE_TAG</td><td><span class="t-risk-high">Mandatory review</span></td></tr>
+          <tr><td>FABRICATED_COMPLETENESS</td><td><span class="t-risk-high">Mandatory review — extraction blocked from export</span></td></tr>
+          <tr><td>FULLWIDTH_SPLIT_FAIL</td><td>Route to manual crop rather than review queue</td></tr>
+          <tr><td>Confidence 0.75–0.90</td><td><span class="t-risk-med">Optional review (user-configurable threshold)</span></td></tr>
+          <tr><td>Confidence &gt; 0.90</td><td><span class="t-risk-low">Auto-approved, available for override</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- PLATFORM OPTIONS -->
+    <div class="t-section-eyebrow">Stack Options</div>
+    <h2>Platform &amp; Stack Options</h2>
+    <div class="stack-grid">
+      <div class="stack-card rec">
+        <div class="stack-label">Option A <span class="pill pill-rec">Recommended</span></div>
+        <div class="stack-name">Balanced Custom Stack</div>
+        <ul class="stack-items">
+          <li>Orchestration: n8n → .NET SaaS workers</li>
+          <li>Detector A: LlamaParse</li>
+          <li>Detector B fallback: Docling</li>
+          <li>Extraction: Claude vision (Opus/Sonnet)</li>
+          <li>Normalization: OpenAI Structured Outputs</li>
+          <li>Validation: rule engine + optional cross-model</li>
+        </ul>
+        <div class="stack-best">Fastest path to proven extraction logic; preserves product ownership.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-label">Option B</div>
+        <div class="stack-name">Enterprise Microsoft Stack</div>
+        <ul class="stack-items">
+          <li>Orchestration: .NET + Azure Functions</li>
+          <li>Storage: Azure Blob Storage</li>
+          <li>Detection + Extraction: Azure Document Intelligence</li>
+          <li>Normalization: OpenAI on Azure</li>
+        </ul>
+        <div class="stack-best">Single-cloud compliance; enterprise/privacy requirements.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-label">Option C</div>
+        <div class="stack-name">AWS Stack</div>
+        <ul class="stack-items">
+          <li>Orchestration: .NET + Lambda / Step Functions</li>
+          <li>Storage: S3</li>
+          <li>Detection + Extraction: Amazon Textract</li>
+          <li>Normalization: OpenAI Structured Outputs</li>
+        </ul>
+        <div class="stack-best">Teams already operating on AWS.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-label">Option D</div>
+        <div class="stack-name">Cost-Controlled / Self-Hostable</div>
+        <ul class="stack-items">
+          <li>Orchestration: n8n or .NET workers</li>
+          <li>Detector A: Docling (self-hosted, free)</li>
+          <li>Detector B: LlamaParse fallback only</li>
+          <li>Extraction: lower-cost model for standard docs</li>
+        </ul>
+        <div class="stack-best">Minimizing variable API cost; maximum data control.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-label">Option E</div>
+        <div class="stack-name">Fast MVP Stack</div>
+        <ul class="stack-items">
+          <li>Orchestration: n8n pilot</li>
+          <li>Detector A: LlamaParse</li>
+          <li>Extraction: Claude</li>
+          <li>Normalization: OpenAI Structured Outputs</li>
+        </ul>
+        <div class="stack-best">Fastest path to a real pilot within 1.5–2 weeks.</div>
+      </div>
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- COST ANALYSIS -->
+    <div class="t-section-eyebrow">Cost Analysis</div>
+    <h2>Complete Cost Analysis</h2>
+    <p>All estimates based on sample document analysis and current published pricing as of March 2026. All figures in USD.</p>
+
+    <h3>Tool-by-Tool Cost Breakdown</h3>
+    <div class="t-table-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Model</th><th>Est. Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Page classifier</td><td>Claude Haiku</td><td>~$0.0003/page</td></tr>
+          <tr><td>Table detector</td><td>LlamaParse</td><td>~$0.003/page (paid tier)</td></tr>
+          <tr><td>Table extraction</td><td>Claude Opus</td><td>~$0.05–$0.18/table</td></tr>
+          <tr><td>Normalization</td><td>GPT-4o mini</td><td>~$0.001/table</td></tr>
+          <tr><td>Validation</td><td>Rule engine</td><td>~$0 (code only)</td></tr>
+          <tr><td><strong>Est. per document</strong></td><td>Mixed (10–30 tables)</td><td><strong>~$0.50–$2.00</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Per-Document Cost by Stack</h3>
+    <div class="t-table-wrap">
+      <table>
+        <thead><tr><th>Stack</th><th>Detection</th><th>Extraction</th><th>Normalization</th><th>Total/Doc</th></tr></thead>
+        <tbody>
+          <tr><td>Option A — Balanced Custom</td><td>~$0.006</td><td>~$0.08–$0.18</td><td>~$0.002</td><td><strong>~$0.09–$0.19</strong></td></tr>
+          <tr><td>Option B — Enterprise Azure</td><td>~$0.010</td><td>~$0.03–$0.10</td><td>~$0.002</td><td><strong>~$0.04–$0.11</strong></td></tr>
+          <tr><td>Option C — AWS Textract</td><td>~$0.000</td><td>~$0.045</td><td>~$0.002</td><td><strong>~$0.05</strong></td></tr>
+          <tr><td>Option D — Self-Hosted</td><td>~$0.000</td><td>~$0.005–$0.025</td><td>~$0.001</td><td><strong>~$0.006–$0.026</strong></td></tr>
+          <tr><td>Option E — Fast MVP</td><td>~$0.006</td><td>~$0.05–$0.18</td><td>~$0.002</td><td><strong>~$0.06–$0.19</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Volume Scaling (Variable API Costs Only)</h3>
+    <div class="t-table-wrap">
+      <table>
+        <thead><tr><th>Stack</th><th>100 docs/mo</th><th>1,000 docs/mo</th><th>5,000 docs/mo</th></tr></thead>
+        <tbody>
+          <tr><td>Option A — Balanced Custom</td><td>~$9–$19</td><td>~$90–$190</td><td>~$450–$950</td></tr>
+          <tr><td>Option B — Enterprise Azure</td><td>~$4–$11</td><td>~$40–$110</td><td>~$200–$550</td></tr>
+          <tr><td>Option C — AWS Textract</td><td>~$5</td><td>~$50</td><td>~$250</td></tr>
+          <tr><td>Option D — Self-Hosted</td><td>~$0.60–$2.60</td><td>~$6–$26</td><td>~$30–$130</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Cost Reduction Levers</h3>
+    <ul>
+      <li>Use Claude Haiku for page classification — Opus/Sonnet is unnecessary for a classify/skip decision</li>
+      <li>Only run vision extraction on schedule pages — reliable classification prevents wasted API calls</li>
+      <li>Use prompt caching for repeated system prompts — Anthropic caches at 90% discount after first use</li>
+      <li>Use OpenAI Batch API for normalization — 50% discount for async non-realtime processing</li>
+      <li>Auto-approve records above 0.90 confidence — avoid re-processing clean records</li>
+      <li>Cache firm fingerprints — once a firm is identified, skip the full mapping agent call</li>
+    </ul>
+
+    <h3>Build vs. Buy</h3>
+    <div class="comp-grid">
+      <div class="comp-card"><div class="comp-name">Beam AI</div><div class="comp-body">AI takeoff software for GCs, subs, and suppliers. Estimated $200–$500/month per user. Useful for benchmarking accuracy expectations.</div></div>
+      <div class="comp-card"><div class="comp-name">Civils.ai</div><div class="comp-body">HVAC takeoff workflows that accept uploaded PDFs and a prompt to produce traceable draft quantities. $100–$300/month per user. Useful for benchmarking turnaround time.</div></div>
+      <div class="comp-card"><div class="comp-name">TaksoAi</div><div class="comp-body">Mechanical, plumbing, and HVAC takeoffs with Excel export. Similar SaaS pricing tier. Useful for benchmarking output format expectations.</div></div>
+      <div class="comp-card"><div class="comp-name">PhaseAlpha Custom Build</div><div class="comp-body">Estimated $0.50–$2.00/document variable cost at launch, declining to $0.20–$0.50 at scale. At 500+ documents/month, custom infrastructure almost certainly costs less than per-seat SaaS while retaining full schema control.</div></div>
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- PRIVACY -->
+    <div class="t-section-eyebrow">Legal &amp; Compliance</div>
+    <h2>Data Privacy &amp; Legal Framework</h2>
+
+    <h3>Data Classification</h3>
+    <ul>
+      <li><strong>Raw PDF files:</strong> third-party proprietary engineering documents. PhaseAlpha does not own these. Storage should be time-limited and access-controlled.</li>
+      <li><strong>Extracted schedule data:</strong> derived data. Ownership depends on contract terms with contractors. EULA must address this explicitly.</li>
+      <li><strong>Model training:</strong> extracted data should not be used to train third-party models without explicit contractor consent.</li>
+    </ul>
+
+    <h3>Third-Party API Data Handling</h3>
+    <div class="t-table-wrap">
+      <table>
+        <thead><tr><th>Provider</th><th>Default Training Policy</th><th>Action Required</th></tr></thead>
+        <tbody>
+          <tr><td>Anthropic</td><td>Inputs not used for training on API (non-consumer) plans</td><td>Confirm via enterprise agreement</td></tr>
+          <tr><td>OpenAI</td><td>API inputs not used for training by default on paid plans</td><td>Confirm via data processing agreement</td></tr>
+          <tr><td>Azure Document Intelligence</td><td>Data processed in selected region, not used for training</td><td>Microsoft standard DPA applies</td></tr>
+          <tr><td>LlamaParse</td><td>Not publicly specified</td><td><strong>Confirm before production use</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>EULA Requirements</h3>
+    <ul>
+      <li>Contractor retains ownership of uploaded plan documents</li>
+      <li>PhaseAlpha may process documents to provide the takeoff service</li>
+      <li>Extracted data is owned by the contractor, not PhaseAlpha</li>
+      <li>PhaseAlpha may retain anonymized, aggregate metrics for product improvement</li>
+      <li>Document retention period should be defined and contractor-configurable</li>
+      <li>Data breach notification obligations must be specified</li>
+    </ul>
+
+    <div class="t-callout-amber"><strong>Self-hosting as a privacy lever:</strong> Docling's fully self-hosted option eliminates third-party data exposure for the detection and initial parsing stage. The vision extraction API call can then be the only external touch point.</div>
+
+    <hr class="t-divider">
+
+    <!-- PROMPT STRATEGY -->
+    <div class="t-section-eyebrow">Implementation</div>
+    <h2>Prompt Strategy</h2>
+    <p>The system requires seven distinct prompt sets. These should not be collapsed — each has a specific job and different quality requirements.</p>
+    <div class="prompt-grid">
+      <div class="prompt-card"><div class="prompt-num">Prompt 1</div><div class="prompt-title">Page Classifier</div><div class="prompt-body">Classifies page type from a full-page render. Output: <code>{ page_type, confidence, reason }</code>. Keep cheap and fast — use Haiku or equivalent.</div></div>
+      <div class="prompt-card"><div class="prompt-num">Prompt 2</div><div class="prompt-title">Table Detector</div><div class="prompt-body">Identifies all schedule tables on a classified page. Output: array of <code>{ table_name, equipment_type, bbox_pct }</code>. Must detect multiple tables per page reliably.</div></div>
+      <div class="prompt-card"><div class="prompt-num">Prompt 3</div><div class="prompt-title">Raw Extraction</div><div class="prompt-body">Extracts raw cell values from a cropped table image. Hard rule: unreadable = null. No inference. No completion. This prompt is the anti-hallucination gate.</div></div>
+      <div class="prompt-card"><div class="prompt-num">Prompt 4</div><div class="prompt-title">Column Header Mapper</div><div class="prompt-body">Maps variant column headers from raw extraction to canonical field names. Input: array of raw header strings. Output: <code>{ raw_header: canonical_field }</code> mapping.</div></div>
+      <div class="prompt-card"><div class="prompt-num">Prompt 5</div><div class="prompt-title">Remarks Consolidator</div><div class="prompt-body">Combines remarks column text, numbered note fragments, and row-tied callouts into a single <code>remarks_combined</code> string. Must handle footnote references like '1, 2, 3, 4'.</div></div>
+      <div class="prompt-card"><div class="prompt-num">Prompt 6</div><div class="prompt-title">Normalization</div><div class="prompt-body">Produces normalized JSON matching the canonical schema. Uses Structured Outputs to enforce schema compliance. Never backfills unknowns — preserves null for missing values.</div></div>
+      <div class="prompt-card"><div class="prompt-num">Prompt 7</div><div class="prompt-title">Anomaly Validator</div><div class="prompt-body">Checks a normalized record for integrity issues: duplicate tags, impossible values, suspicious completeness, missing required fields. Output: array of <code>{ failure_code, field, description }</code>.</div></div>
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- AUTOMATION SEQUENCE -->
+    <h2>Automation Sequence</h2>
+    <p>Ten automations wire the system together end to end.</p>
+    <div class="auto-list">
+      <div class="auto-item"><span class="auto-num">A1</span><div class="auto-content"><div class="auto-title">File Intake</div><div class="auto-trigger">Trigger: contractor uploads plan PDF. Creates job, stores original, splits pages, detects PDF type, enqueues pages for classification.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A2</span><div class="auto-content"><div class="auto-title">Page Router</div><div class="auto-trigger">Trigger: page created. Classifies page type. Sends schedule pages to table detection. Archives non-schedule pages.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A3</span><div class="auto-content"><div class="auto-title">Detector A with Fallback to B</div><div class="auto-trigger">Trigger: schedule page ready. Runs LlamaParse. If Detector A fails or underperforms threshold, runs Docling. Persists both results during pilot.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A4</span><div class="auto-content"><div class="auto-title">Crop Orchestration</div><div class="auto-trigger">Trigger: bounding boxes available. Crops each table. Re-renders at appropriate DPI. Splits full-width tables. Retries with expanded crop on weak confidence.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A5</span><div class="auto-content"><div class="auto-title">Extraction Pipeline</div><div class="auto-trigger">Trigger: crop ready. Sends crop to vision model. Returns raw cells with null for unreadable values. Stores source-to-output traceability.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A6</span><div class="auto-content"><div class="auto-title">Normalization Pipeline</div><div class="auto-trigger">Trigger: raw extraction complete. Maps columns to canonical schema. Normalizes values. Concatenates remarks. Assigns confidence scores.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A7</span><div class="auto-content"><div class="auto-title">Validation &amp; Anti-Hallucination</div><div class="auto-trigger">Trigger: normalized record created. Runs business-rule checks. Detects suspicious patterns. Optional cross-model verification. Assigns failure codes.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A8</span><div class="auto-content"><div class="auto-title">Review Queue</div><div class="auto-trigger">Trigger: low confidence, anomaly found, or detector mismatch. Presents side-by-side crop and extracted fields to reviewer. Reviewer edits and approves inline.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A9</span><div class="auto-content"><div class="auto-title">Export to Takeoff Engine</div><div class="auto-trigger">Trigger: record approved. Writes normalized JSON. Optionally writes Excel/CSV. Attaches to project/job in .NET SaaS.</div></div></div>
+      <div class="auto-item"><span class="auto-num">A10</span><div class="auto-content"><div class="auto-title">Learning Loop</div><div class="auto-trigger">Trigger: reviewer edits output. Stores original extraction alongside corrected version. Tags failure type. Feeds evaluation set for prompt and rule tuning.</div></div></div>
+    </div>
+
+    <hr class="t-divider">
+
+    <!-- PILOT TESTING -->
+    <div class="t-section-eyebrow">Pilot Methodology</div>
+    <h2>Pilot Testing Methodology</h2>
+    <p>The 1.5–2 week pilot evaluation window must produce answers to four specific questions before the formal proposal is finalized.</p>
+    <div class="t-table-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>What to Measure</th><th>How to Answer</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Which detector performs better?</strong></td><td>Table count per page, bounding box accuracy, missed tables, false positives, time per page</td><td>Run LlamaParse and Docling on the same 10–20 sample PDFs. Compare results visually.</td></tr>
+          <tr><td><strong>2. What is the real extraction accuracy?</strong></td><td>Field-level accuracy, null rate, false completeness rate</td><td>Run two-pass pipeline on 5 representative pages. Compare against reference JSON/Excel files.</td></tr>
+          <tr><td><strong>3. Where does confidence scoring fail?</strong></td><td>Cases where model assigns high confidence to incorrect values</td><td>Identify correlations with table types, engineering firms, and DPI choices.</td></tr>
+          <tr><td><strong>4. What does the review queue look like?</strong></td><td>% records requiring review, time per record, most frequent failure codes</td><td>Run full pipeline on 10 documents. Measure queue depth and composition.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /t-body -->
+
+  <footer><strong>Plus1 Technology</strong> &nbsp;·&nbsp; Prepared for PhaseAlpha &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Confidential — Do Not Distribute</footer>
+</div><!-- /tab-assess -->
+
+<!-- ═══════════════════════════════════════
+     TAB 2 — CLIENT TIME ESTIMATES
+═══════════════════════════════════════ -->
+<div id="tab-est" class="tab-panel">
+
+  <div class="e-cover">
+    <div class="e-eyebrow">Project Timeline &amp; Estimate</div>
+    <h1>PhaseAlpha HVAC Schedule Extraction System</h1>
+    <p class="e-cover-sub">Layer-by-layer time estimates, option variances, and scenario comparisons — from n8n pilot through full .NET production deployment.</p>
+    <div class="e-cover-meta">
+      <div><div class="e-meta-label">Prepared By</div><div class="e-meta-val">Plus1 Technology</div></div>
+      <div><div class="e-meta-label">Prepared For</div><div class="e-meta-val">PhaseAlpha</div></div>
+      <div><div class="e-meta-label">Date</div><div class="e-meta-val">March 2026</div></div>
+      <div><div class="e-meta-label">Classification</div><div class="e-meta-val">Confidential</div></div>
+    </div>
+  </div>
+
+  <div class="e-summary">
+    <div class="e-sum-card"><div class="e-sum-label">Phase 0 — n8n Pilot</div><div class="e-sum-val">3–5 wks</div><div class="e-sum-note">Depends on detector + mapping options</div></div>
+    <div class="e-sum-card"><div class="e-sum-label">Phase 1 — .NET Migration</div><div class="e-sum-val">4–6 wks</div><div class="e-sum-note">After Phase 0 logic is proven</div></div>
+    <div class="e-sum-card"><div class="e-sum-label">Combined (Both Phases)</div><div class="e-sum-val">8–12 wks</div><div class="e-sum-note">Full production-ready system</div></div>
+    <div class="e-sum-card"><div class="e-sum-label">Phase 0 Only (n8n as Production)</div><div class="e-sum-val">4–6 wks</div><div class="e-sum-note">If no .NET migration is needed</div></div>
+  </div>
+
+  <div class="e-content">
+
+    <div class="e-section-label">Engagement Roadmap</div>
+    <div class="e-section-title">Two-Phase Build Path</div>
+    <p class="e-section-desc">Phase 1 does not begin until Phase 0 proves the extraction logic against real documents.</p>
+
+    <div class="e-roadmap">
+      <div class="e-roadmap-row">
+        <div class="e-rp"><div class="e-rp-bar" style="background:#c9993a;"></div><div class="e-rp-label">Phase 0</div><div class="e-rp-name">n8n Pilot</div><div class="e-rp-dur">Weeks 1–5</div></div>
+        <div class="e-rp"><div class="e-rp-bar" style="background:#4ab3f4;"></div><div class="e-rp-label">Phase 1</div><div class="e-rp-name">.NET Integration</div><div class="e-rp-dur">Weeks 4–12</div></div>
+      </div>
+    </div>
+
+    <div class="e-assumptions">
+      <div class="e-assumptions-title">📋 Estimate Assumptions</div>
+      <ul>
+        <li>10–20 sample PDFs from PhaseAlpha are available at Phase 0 kickoff.</li>
+        <li>Reference extraction files (JSON or Excel) are available for ground-truth comparison during pilot testing.</li>
+        <li>n8n is self-hosted (recommended — avoids cloud execution limits). Cloud n8n adds approximately 2 days to setup.</li>
+        <li>A Python environment for crop orchestration is available or can be stood up at project start.</li>
+        <li>All estimates are in business days unless labeled as calendar weeks.</li>
+        <li>Testing time assumes structured pass/fail criteria against reference files — not open-ended QA.</li>
+        <li>Legal and privacy review time is estimated separately and does not include outside counsel time.</li>
+      </ul>
+    </div>
+
+    <!-- PHASE 0 -->
+    <div class="e-phase-block">
+      <div class="e-phase-header">
+        <span class="e-phase-pill">Phase 0</span>
+        <span class="e-phase-title">n8n Pilot — Full Extraction Pipeline</span>
+        <span class="e-phase-dur">3–5 weeks total</span>
+      </div>
+      <div class="e-table-wrap">
+        <table>
+          <thead><tr><th style="width:15%">Workstream</th><th style="width:23%">What Gets Built</th><th style="width:27%">Options &amp; Variances</th><th style="width:13%">Estimate</th><th style="width:10%">Complexity</th><th style="width:12%">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><span class="e-layer-num">Kickoff &amp; Setup</span><div class="e-sub">Pre-build</div></td><td><span class="e-layer-name">Environment provisioning, n8n self-host setup, Python environment, sample PDF intake, reference file review, scope alignment.</span></td><td><span class="e-tag e-tag-req">Required</span><br>Cloud n8n instead of self-hosted adds ~2 days but reduces infrastructure overhead.</td><td class="e-est">2–3 days</td><td><span class="e-risk e-risk-low">Low</span></td><td>Sample PDFs and reference files are needed on day one.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 1</span><div class="e-sub">Document Ingestion &amp; Routing</div></td><td><span class="e-layer-name">File upload handling, page splitting, vector vs. image PDF detection, job creation with full source traceability, processing queue setup.</span></td><td><span class="e-tag e-tag-a">n8n native nodes</span><br>PDF splitting may require a lightweight Python helper for complex plan sets.</td><td class="e-est">2–3 days</td><td><span class="e-risk e-risk-low">Low</span></td><td>Every extracted row links back to its source page. Traceability built in from day one.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 2</span><div class="e-sub">Page Classification</div></td><td><span class="e-layer-name">Classify every page as schedule, floor plan, legend, notes, or irrelevant. Route schedule pages forward. Archive everything else.</span></td><td><span class="e-tag e-tag-a">Option A: Claude Haiku (recommended)</span> <span class="e-tag e-tag-b">Option B: Keyword-only routing</span></td><td class="e-est">Option A: 1–2 days<br>Option B: 0.5–1 day</td><td><span class="e-risk e-risk-low">Low</span></td><td>Prevents expensive AI processing from running on floor plans and cover pages.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 3</span><div class="e-sub">Table Detection</div></td><td><span class="e-layer-name">Identify every distinct schedule table on each page. Return bounding boxes and equipment type labels. Must handle up to 15 distinct tables per page.</span></td><td><span class="e-tag e-tag-a">Option A: LlamaParse only</span> <span class="e-tag e-tag-b">Option A+B: Dual parallel (recommended)</span> <span class="e-tag e-tag-c">Option D: Docling only</span></td><td class="e-est">LlamaParse: 2–3 days<br>Dual: 4–5 days<br>Docling: 3–4 + setup</td><td><span class="e-risk e-risk-med">Medium</span></td><td>Dual detector pilot produces a direct comparison dataset for all future decisions.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 4</span><div class="e-sub">Crop Orchestration</div></td><td><span class="e-layer-name">Full-page render for detection, crop at correct DPI with padding, re-render at target resolution, split full-width schedules horizontally and stitch, retry on low confidence.</span></td><td><span class="e-tag e-tag-req">Required — not optional</span><br>Requires a Python FastAPI service called from n8n. DPI routing, split-and-stitch, and retry behavior must all be built.</td><td class="e-est">5–7 days</td><td><span class="e-risk e-risk-high">High</span></td><td>Most complex workstream. Full-width AHU and RTU schedules cannot be extracted any other way.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 5</span><div class="e-sub">Extraction</div></td><td><span class="e-layer-name">Send cropped images to a vision model. Receive raw cell values. Unreadable cells return null — never inferred. Includes prompt development and tuning.</span></td><td><span class="e-tag e-tag-a">Option: Claude Sonnet/Opus (recommended)</span> <span class="e-tag e-tag-b">Option: GPT-4o (A/B comparison)</span></td><td class="e-est">Single model: 2–3 days<br>A/B: 4–5 days</td><td><span class="e-risk e-risk-high">High</span></td><td>Prompt tuning included. Expect 1–2 days of iteration before the extraction prompt is stable.</td></tr>
+            <tr><td><span class="e-layer-num">Prompt Engineering</span><div class="e-sub">All 7 prompt sets</div></td><td><span class="e-layer-name">Build and stabilize all seven production prompts: page classifier, table detector, raw extraction, column header mapper, remarks consolidator, normalization, and anomaly validator.</span></td><td><span class="e-tag e-tag-req">Required — separate workstream</span><br>Each prompt has a distinct job. Cannot be collapsed without degrading accuracy.</td><td class="e-est">3–4 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td>Extraction and anti-hallucination prompts require the most iteration.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 6a</span><div class="e-sub">Column Header Mapping</div></td><td><span class="e-layer-name">Map firm-specific column header variants to canonical field names. Different engineering firms use different words for the same data field.</span></td><td><span class="e-tag e-tag-a">Option A: Claude Project folder (fastest for pilot)</span> <span class="e-tag e-tag-b">Option B: n8n Agent Node — automated learning loop (recommended for production)</span></td><td class="e-est">Option A: 1–2 days<br>Option B: 3–4 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td>Option A for pilot, Option B for production. Knowledge base carries over — nothing rebuilt.</td></tr>
+            <tr><td><span class="e-layer-num">Knowledge Base</span><div class="e-sub">Synonym dictionary</div></td><td><span class="e-layer-name">Build and validate the starter synonym dictionary from sample firm documents. Grows automatically with every document processed after launch.</span></td><td><span class="e-tag e-tag-req">Required</span><br>Pre-populated from sample firms.</td><td class="e-est">1–2 days</td><td><span class="e-risk e-risk-low">Low</span></td><td>Build once, improve forever.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 6b</span><div class="e-sub">Schema Normalization</div></td><td><span class="e-layer-name">Slot normalized values into the canonical equipment schema. Unit conversion, value standardization, remarks concatenation. Schema compliance enforced at the model response layer.</span></td><td><span class="e-tag e-tag-a">Option: OpenAI Structured Outputs (recommended)</span> <span class="e-tag e-tag-b">Option: Claude tools</span></td><td class="e-est">1–2 days</td><td><span class="e-risk e-risk-low">Low</span></td><td>Structured Outputs makes invalid schema output impossible at the response layer.</td></tr>
+            <tr><td><span class="e-layer-num">Layer 7</span><div class="e-sub">Validation &amp; Anti-Hallucination</div></td><td><span class="e-layer-name">Rule-based checks: impossible values, blank required fields, duplicate tags, suspiciously complete rows from low-quality crops. Assigns failure codes, routes to review queue.</span></td><td><span class="e-tag e-tag-a">Option: Rule engine only</span> <span class="e-tag e-tag-b">Option: Rule engine + cross-model verification</span><br>Cross-model adds ~1 day.</td><td class="e-est">Rules: 2–3 days<br>With cross-model: 3–4 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td>Cross-model verification is the strongest defense against fabricated completeness.</td></tr>
+            <tr><td><span class="e-layer-num">Review Interface</span><div class="e-sub">Phase 0 version</div></td><td><span class="e-layer-name">Side-by-side view of cropped table image and extracted JSON. Inline editing. Row-level approve/reject. Flagged cell highlighting.</span></td><td><span class="e-tag e-tag-opt">Optional for pilot</span> JSON output only if reviewing internally.<br><span class="e-tag e-tag-b">Basic screen: side-by-side crop + edit</span></td><td class="e-est">No UI: 0 days<br>Basic screen: 3–5 days</td><td><span class="e-risk e-risk-low">Low</span></td><td>Build the basic screen if stakeholders need to review pilot output directly.</td></tr>
+            <tr><td><span class="e-layer-num">Pilot Testing</span><div class="e-sub">4-question validation</div></td><td><span class="e-layer-name">Run the full pipeline on all sample PDFs. Measure field-level accuracy, null rate, false completeness rate, review queue volume, time per record, and failure code distribution.</span></td><td><span class="e-tag e-tag-req">Required gate for Phase 1</span><br>Requires reference JSON/Excel files for comparison.</td><td class="e-est">5–7 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td>Must answer: (1) Which detector? (2) Real accuracy? (3) Where does confidence fail? (4) What does the review queue look like?</td></tr>
+            <tr><td><span class="e-layer-num">Legal &amp; Privacy Review</span><div class="e-sub">API agreements + EULA</div></td><td><span class="e-layer-name">Confirm no-training data agreements with each API provider. Draft EULA covering contractor document ownership, extracted data ownership, retention periods, and breach notification.</span></td><td><span class="e-tag e-tag-req">Required before production launch</span><br>Runs in parallel with the Phase 0 build — does not block technical work.</td><td class="e-est">2–4 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td>Runs in parallel — no delay to the build schedule.</td></tr>
+            <tr class="e-total-row"><td colspan="3"><strong>Phase 0 Total — Fast Path</strong> &nbsp;(LlamaParse only, Option A mapping, no review UI, single extraction model)</td><td class="e-est">~3 weeks</td><td colspan="2"></td></tr>
+            <tr class="e-total-row"><td colspan="3"><strong>Phase 0 Total — Full Pilot</strong> &nbsp;(dual detector, Option B mapping agent, basic review UI, A/B extraction comparison)</td><td class="e-est">~5 weeks</td><td colspan="2"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="e-callout e-callout-green">✅ <strong>If n8n remains as permanent production orchestration (no .NET migration):</strong> Add approximately 1 week to harden workflows — retry logic, job monitoring, and alerting. Total for a production-grade n8n-only system: 4–6 weeks.</div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="e-phase-block">
+      <div class="e-phase-header p1">
+        <span class="e-phase-pill p1">Phase 1</span>
+        <span class="e-phase-title">.NET Migration — Production Integration</span>
+        <span class="e-phase-dur">4–6 weeks (after Phase 0)</span>
+      </div>
+      <div class="e-table-wrap">
+        <table>
+          <thead><tr><th style="width:18%">Component</th><th style="width:25%">What Gets Built</th><th style="width:27%">Options &amp; Variances</th><th style="width:12%">Estimate</th><th style="width:10%">Complexity</th><th style="width:8%">Notes</th></tr></thead>
+          <tbody>
+            <tr><td><span class="e-layer-name">.NET Orchestration Workers</span><div class="e-sub">Replace n8n workflow logic</div></td><td>Background worker services in the existing .NET SaaS platform replicate the full 10-automation processing sequence. n8n stays as a workflow layer for monitoring and alerting.</td><td>Complexity depends on how cleanly the Phase 0 n8n workflows were structured.</td><td class="e-est">8–10 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td>n8n stays as the ops and monitoring layer.</td></tr>
+            <tr><td><span class="e-layer-name">Python Microservices</span><div class="e-sub">FastAPI — crop + extraction</div></td><td>Wrap crop orchestration and vision extraction logic as lightweight FastAPI REST services. .NET calls these via HTTP, keeping Python dependencies isolated.</td><td><span class="e-tag e-tag-a">Option: Combined service</span> <span class="e-tag e-tag-b">Option: Separate services (cleaner, +2 days)</span></td><td class="e-est">Combined: 4–5 days<br>Separate: 6–7 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td>Available .NET SDKs: Azure.AI.DocumentIntelligence, OpenAI .NET SDK, Anthropic HTTP client.</td></tr>
+            <tr><td><span class="e-layer-name">.NET → Python Integration</span><div class="e-sub">HTTP wiring + failure routing</div></td><td>Wire .NET background workers to call Python microservices via HTTP. Handle timeouts, retries, and routing failures back into the .NET job queue.</td><td>Standard HTTP client pattern. Complexity is in failure handling, not the API calls.</td><td class="e-est">3–4 days</td><td><span class="e-risk e-risk-low">Low</span></td><td></td></tr>
+            <tr><td><span class="e-layer-name">Column Mapping Agent Upgrade</span><div class="e-sub">Option A → Option B</div></td><td>Upgrade from the Phase 0 Claude Project folder to the n8n Agent Node with automated learning loop. Knowledge base carries over — nothing rebuilt.</td><td>Already built in Phase 0: integration only.<br>Starting from scratch: full Option B build.</td><td class="e-est">Already built: 1–2 days<br>New build: 3–4 days</td><td><span class="e-risk e-risk-low">Low</span></td><td>The learning loop is what separates a product that compounds from a static demo.</td></tr>
+            <tr><td><span class="e-layer-name">Full Review Interface</span><div class="e-sub">Built into SaaS product</div></td><td>Production review UI: side-by-side crop and JSON view, flagged cell highlighting, inline editing with reviewer ID and timestamp, row-level approve/reject, bulk approval, document-level navigation.</td><td><span class="e-tag e-tag-req">Required — no workaround</span><br>Scope depends on the existing SaaS frontend. Get an estimate against the current stack before locking Phase 1 scope.</td><td class="e-est">8–12 days</td><td><span class="e-risk e-risk-high">High</span></td><td>Side-by-side crop view is a hard requirement — reviewers cannot reliably correct data without seeing the source image.</td></tr>
+            <tr><td><span class="e-layer-name">Export Pipeline</span><div class="e-sub">To .NET pricing engine</div></td><td>Write approved normalized JSON to the .NET pricing engine data model. Attach to project/job record in the SaaS.</td><td><span class="e-tag e-tag-a">Option: JSON only</span> <span class="e-tag e-tag-b">Option: JSON + Excel/CSV (+1–2 days)</span></td><td class="e-est">JSON: 2–3 days<br>+ Excel/CSV: 3–5 days</td><td><span class="e-risk e-risk-low">Low</span></td><td></td></tr>
+            <tr><td><span class="e-layer-name">Learning Loop</span><div class="e-sub">Automation 10</div></td><td>When a reviewer corrects output, store original and corrected versions, tag failure type, and feed into the evaluation set for ongoing tuning.</td><td>Requires review UI to be complete first. Can be deferred to end of Phase 1.</td><td class="e-est">2–3 days</td><td><span class="e-risk e-risk-low">Low</span></td><td>Every correction makes the next document more accurate.</td></tr>
+            <tr><td><span class="e-layer-name">Migration Testing &amp; Regression</span></td><td>Run sample PDFs through the .NET pipeline. Compare output to Phase 0 baseline. Fix regressions. Load test at realistic monthly volume.</td><td>Requires Phase 0 reference output set for comparison.</td><td class="e-est">5–7 days</td><td><span class="e-risk e-risk-med">Medium</span></td><td></td></tr>
+            <tr class="e-total-row"><td colspan="3"><strong>Phase 1 Total — Lean Path</strong> &nbsp;(combined Python service, JSON only, Option B already built in Phase 0)</td><td class="e-est">~4 weeks</td><td colspan="2"></td></tr>
+            <tr class="e-total-row"><td colspan="3"><strong>Phase 1 Total — Full Build</strong> &nbsp;(separate services, Excel export, Option B from scratch, full review UI)</td><td class="e-est">~6 weeks</td><td colspan="2"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="e-callout e-callout-amber">⚠️ <strong>Review UI is the swing variable in Phase 1.</strong> It is the most time-intensive component and the most dependent on the existing SaaS frontend. Get an estimate against the current stack before locking in Phase 1 scope — this item can range from 6 days to 3 weeks.</div>
+    </div>
+
+    <!-- SCENARIO SUMMARY -->
+    <div class="e-section-label" style="margin-top:8px;">Path Comparison</div>
+    <div class="e-section-title">Engagement Scenarios</div>
+    <p class="e-section-desc">Select the scenario that best matches PhaseAlpha's current priorities and infrastructure direction. All figures are in business weeks.</p>
+
+    <div class="e-scenario-header">
+      <span class="e-phase-pill">Summary</span>
+      <span class="e-scenario-title">Phase 0 &amp; Phase 1 — Path Options</span>
+    </div>
+    <div class="e-table-wrap" style="border-radius:0 0 10px 10px;">
+      <table>
+        <thead><tr><th style="width:26%">Scenario</th><th style="width:12%">Phase 0</th><th style="width:12%">Phase 1</th><th style="width:12%">Total</th><th>Best For</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Phase 0 Only — Fast Pilot</strong><div class="e-sub">n8n, LlamaParse, Claude, no review UI</div></td><td class="e-est">3 wks</td><td>—</td><td class="e-est">3 wks</td><td>Fastest path to validated extraction output. Best when proving the concept to stakeholders quickly.</td></tr>
+          <tr><td><strong>Phase 0 Only — Production n8n</strong><div class="e-sub">Dual detector, basic review UI, hardened workflows</div></td><td class="e-est">5–6 wks</td><td>—</td><td class="e-est">5–6 wks</td><td>n8n as long-term orchestrator with no .NET migration required.</td></tr>
+          <tr><td><strong>Phase 0 + 1 — Lean</strong><div class="e-sub">Fast pilot, lean .NET migration, JSON export only</div></td><td class="e-est">3 wks</td><td class="e-est">4 wks</td><td class="e-est">7 wks</td><td>Fastest path to a .NET-integrated production system.</td></tr>
+          <tr><td><strong>Phase 0 + 1 — Full Build</strong><div class="e-sub">Dual detector, full review UI, Option B mapping, Excel export</div></td><td class="e-est">5 wks</td><td class="e-est">6 wks</td><td class="e-est">11 wks</td><td>Most complete system. Full learning loop, production review UI, all export options.</td></tr>
+          <tr><td><strong>Enterprise Azure Stack</strong><div class="e-sub">Azure Doc Intelligence replaces LlamaParse + Claude vision</div></td><td class="e-est">3–4 wks</td><td class="e-est">4–5 wks</td><td class="e-est">8–9 wks</td><td>When PhaseAlpha requires Microsoft single-cloud compliance.</td></tr>
+          <tr><td><strong>Self-Hosted / Cost-Controlled</strong><div class="e-sub">Docling primary, lower-cost models, strict human review</div></td><td class="e-est">4–5 wks</td><td class="e-est">5–6 wks</td><td class="e-est">9–11 wks</td><td>Lowest variable API cost. Maximum data privacy control. Reduces per-document cost by 5–10× at scale.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /e-content -->
+
+  <footer><strong>Plus1 Technology</strong> &nbsp;·&nbsp; Prepared for PhaseAlpha &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Confidential — Do Not Distribute</footer>
+</div><!-- /tab-est -->
+
+<script>
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
