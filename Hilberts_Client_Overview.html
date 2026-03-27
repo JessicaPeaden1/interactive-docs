@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robert M. Hilberts, Inc. — AI Implementation Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:     #1B3A8A;
+  --navy-dk:  #0f2260;
+  --navy-lt:  #2E5BC4;
+  --red:      #8B2020;
+  --bg:       #F5F4F1;
+  --white:    #ffffff;
+  --border:   #E4E0D9;
+  --ink:      #1a1a1a;
+  --ink2:     #3a3a3a;
+  --ink3:     #6b6b6b;
+  --ink4:     #9a9a9a;
+  --green:    #1a6633;
+  --green-bg: #eaf5ee;
+  --green-bd: #a0d4b0;
+  --amber:    #8a5000;
+  --amber-bg: #fef5e6;
+  --amber-bd: #f0d090;
+  --sidebar:  248px;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--ink);
+}
+
+/* ── SIDEBAR ── */
+aside {
+  width: var(--sidebar);
+  min-width: var(--sidebar);
+  background: var(--navy-dk);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.sb-logo {
+  padding: 28px 20px 24px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.sb-section {
+  padding: 16px 12px 4px;
+}
+.sb-section-label {
+  font-size: 9px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.3);
+  padding: 0 8px 8px;
+}
+nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 6px; margin-bottom: 2px;
+  cursor: pointer; text-decoration: none;
+  font-size: 12.5px; font-weight: 400;
+  color: rgba(255,255,255,.55);
+  transition: all .12s;
+  border: none; background: transparent;
+  width: 100%; text-align: left;
+  font-family: 'DM Sans', sans-serif;
+}
+nav a:hover { background: rgba(255,255,255,.08); color: rgba(255,255,255,.9); }
+nav a.active { background: rgba(255,255,255,.12); color: #fff; font-weight: 500; }
+.nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sb-footer {
+  margin-top: auto;
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: 10px; color: rgba(255,255,255,.25);
+  line-height: 1.7; font-family: 'DM Sans', sans-serif;
+}
+
+/* ── MAIN ── */
+main { flex: 1; overflow-y: auto; padding: 48px 52px 80px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── PAGE HEADER ── */
+.ph { margin-bottom: 36px; }
+.ph-eye {
+  font-size: 10px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink4); margin-bottom: 10px;
+}
+.ph-title {
+  font-family: 'Fraunces', serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--ink); line-height: 1.2; margin-bottom: 10px;
+}
+.ph-desc {
+  font-size: 14px; color: var(--ink3); line-height: 1.7; max-width: 640px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink4); margin-bottom: 16px;
+}
+
+/* ── GRID ── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+
+/* ── PAIN ITEMS ── */
+.pain-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+  border-left: 3px solid var(--border);
+}
+.pain-item.hi  { border-left-color: var(--red); }
+.pain-item.med { border-left-color: var(--amber); }
+.badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  padding: 2px 9px; border-radius: 100px; margin-bottom: 10px;
+}
+.badge-hi  { background: #fbeaea; color: var(--red); }
+.badge-med { background: var(--amber-bg); color: var(--amber); }
+.badge-ok  { background: var(--green-bg); color: var(--green); }
+.badge-blue{ background: #dbeafe; color: #1d4ed8; }
+.pain-name {
+  font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px;
+}
+.pain-desc {
+  font-size: 13px; color: var(--ink3); line-height: 1.6; margin-bottom: 12px;
+}
+.pain-stats {
+  display: flex; gap: 20px;
+  padding-top: 12px; border-top: 1px solid var(--border);
+}
+.pain-stat strong { display: block; font-size: 17px; font-weight: 700; color: var(--ink); }
+.pain-stat span { font-size: 11px; color: var(--ink4); }
+
+/* ── SUMMARY BANNER ── */
+.banner {
+  border-radius: 8px; padding: 14px 18px;
+  font-size: 13px; line-height: 1.6;
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 24px;
+}
+.banner.warn { background: #fef5e6; border: 1px solid var(--amber-bd); color: #5a3200; }
+.banner.ok   { background: var(--green-bg); border: 1px solid var(--green-bd); color: #0f3d1f; }
+.banner.info { background: #eef1f9; border: 1px solid #b0bedd; color: #0f2260; }
+.banner strong { font-weight: 600; }
+
+/* ── STAT STRIP ── */
+.stat-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 28px;
+}
+.stat-box {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 20px;
+}
+.stat-val {
+  font-family: 'Fraunces', serif;
+  font-size: 28px; font-weight: 700; line-height: 1;
+  margin-bottom: 5px;
+}
+.stat-val.red   { color: var(--red); }
+.stat-val.navy  { color: var(--navy); }
+.stat-val.green { color: var(--green); }
+.stat-lbl { font-size: 12px; color: var(--ink3); line-height: 1.4; }
+
+/* ── BEFORE / AFTER ── */
+.ba-grid {
+  display: grid; grid-template-columns: 1fr 40px 1fr; gap: 0;
+  margin-bottom: 16px; align-items: stretch;
+}
+.ba-col {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 22px;
+}
+.ba-col.after { background: var(--navy); border-color: var(--navy); }
+.ba-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; margin-bottom: 14px;
+}
+.ba-label.b { color: var(--red); }
+.ba-label.a { color: #86efac; }
+.ba-arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--ink4);
+}
+.ba-row {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 9px 0; border-bottom: 1px solid rgba(0,0,0,.06);
+  font-size: 13px; color: var(--ink2); line-height: 1.5;
+}
+.ba-row:last-child { border-bottom: none; }
+.ba-row.a-row { color: rgba(255,255,255,.8); border-bottom-color: rgba(255,255,255,.08); }
+.ba-icon { flex-shrink: 0; font-size: 13px; margin-top: 1px; }
+
+/* ── PHASE STEPS ── */
+.phase-step {
+  display: grid; grid-template-columns: 48px 1fr;
+  gap: 20px; margin-bottom: 32px; align-items: start;
+}
+.ps-num {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700;
+  background: var(--navy); color: #fff; flex-shrink: 0;
+}
+.ps-body {}
+.ps-timing {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--ink4); margin-bottom: 4px;
+}
+.ps-title {
+  font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600;
+  color: var(--ink); margin-bottom: 8px;
+}
+.ps-desc {
+  font-size: 13px; color: var(--ink3); line-height: 1.65; margin-bottom: 12px;
+  max-width: 560px;
+}
+.ps-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.ps-tag {
+  font-size: 11px; font-weight: 500; padding: 4px 11px;
+  border-radius: 100px; background: #eef1f9;
+  border: 1px solid #b0bedd; color: var(--navy);
+}
+.ps-outcome {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--green-bg); border: 1px solid var(--green-bd);
+  border-radius: 7px; padding: 9px 14px;
+  font-size: 12px; color: var(--green); font-weight: 500;
+}
+
+/* ── WORKFLOW CARDS ── */
+.wf-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px 22px; margin-bottom: 12px;
+  border-left: 3px solid var(--navy);
+}
+.wf-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.wf-num {
+  width: 24px; height: 24px; border-radius: 5px;
+  background: var(--navy); color: #fff;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.wf-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.wf-timing {
+  margin-left: auto; font-size: 10px; font-weight: 600;
+  padding: 2px 9px; border-radius: 100px;
+  background: #eef1f9; color: var(--navy); border: 1px solid #b0bedd;
+}
+.wf-flow {
+  font-size: 12px; color: var(--ink3); line-height: 1.9;
+  font-family: 'DM Sans', monospace;
+  background: #f8f7f4; border-radius: 6px; padding: 10px 14px;
+  margin-bottom: 8px;
+}
+.wf-flow span { color: var(--navy); font-weight: 600; }
+.wf-result { font-size: 12px; color: var(--green); font-weight: 500; }
+
+/* ── HUMAN OVERSIGHT ── */
+.human-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.human-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 20px;
+}
+.human-icon { font-size: 22px; margin-bottom: 10px; }
+.human-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+.human-desc { font-size: 12px; color: var(--ink3); line-height: 1.6; }
+
+/* ── TOOL STACK ── */
+.tool-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.tool-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px;
+}
+.tool-role { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--navy); margin-bottom: 5px; }
+.tool-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.tool-desc { font-size: 12px; color: var(--ink3); line-height: 1.55; }
+
+/* ── NEXT STEPS ── */
+.ns-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 20px; margin-bottom: 10px;
+}
+.ns-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ns-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.ns-who { font-size: 12px; color: var(--ink4); }
+</style>
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside>
+  <div class="sb-logo">
+    <svg viewBox="0 0 200 46" xmlns="http://www.w3.org/2000/svg" style="width:164px;display:block;margin-bottom:10px">
+      <rect x="0" y="0" width="44" height="23" rx="4" fill="#fff"/>
+      <rect x="0" y="23" width="44" height="23" rx="0" fill="#8B2020"/>
+      <rect x="0" y="40" width="44" height="6" rx="2" fill="#8B2020"/>
+      <rect x="8"  y="4"  width="7" height="35" fill="#1B3A8A"/>
+      <rect x="29" y="4"  width="7" height="35" fill="#1B3A8A"/>
+      <rect x="8"  y="17" width="28" height="9"  fill="#1B3A8A"/>
+      <text x="52" y="30" font-family="'DM Sans',sans-serif" font-weight="700" font-size="17" letter-spacing="2" fill="white">HILBERTS</text>
+    </svg>
+    <div style="font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.04em">AI Implementation Overview<br>March 2026 · Confidential</div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Where We Are</div>
+    <nav>
+      <a class="active" onclick="show('overview', this)">
+        <span class="nav-dot" style="background:#8B2020"></span>Summary
+      </a>
+      <a onclick="show('bid-intake', this)">
+        <span class="nav-dot" style="background:#8B2020"></span>Bid invitation intake <span style="font-size:9px;font-weight:700;background:#eef1f9;color:#1B3A8A;padding:1px 5px;border-radius:3px;margin-left:auto">P1</span>
+      </a>
+      <a onclick="show('proposals', this)">
+        <span class="nav-dot" style="background:#b8640a"></span>Proposal generation <span style="font-size:9px;font-weight:700;background:#eef1f9;color:#1B3A8A;padding:1px 5px;border-radius:3px;margin-left:auto">P1</span>
+      </a>
+      <a onclick="show('followup', this)">
+        <span class="nav-dot" style="background:#8B2020"></span>Quote follow-up <span style="font-size:9px;font-weight:700;background:#eef1f9;color:#1B3A8A;padding:1px 5px;border-radius:3px;margin-left:auto">P1</span>
+      </a>
+      <a onclick="show('roomsched', this)">
+        <span class="nav-dot" style="background:#b8640a"></span>Room schedule creation <span style="font-size:9px;font-weight:700;background:#eef1f9;color:#1B3A8A;padding:1px 5px;border-radius:3px;margin-left:auto">P1</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Where We're Going</div>
+    <nav>
+      <a onclick="show('phase1', this)">
+        <span class="nav-dot" style="background:#1B3A8A"></span>Phase 1 — Bid automation
+      </a>
+      <a onclick="show('workflows', this)">
+        <span class="nav-dot" style="background:#1B3A8A"></span>How it works
+      </a>
+      <a onclick="show('oversight', this)">
+        <span class="nav-dot" style="background:#1B3A8A"></span>Human oversight
+      </a>
+      <a onclick="show('stack', this)">
+        <span class="nav-dot" style="background:#1B3A8A"></span>Technology
+      </a>
+      <a onclick="show('nextsteps', this)">
+        <span class="nav-dot" style="background:#1a6633"></span>Next steps
+      </a>
+    </nav>
+  </div>
+
+  <div class="sb-footer">
+    Prepared by<br>
+    Plus 1 Technology<br>
+    Jessica Peaden · Marc Umstead
+  </div>
+</aside>
+
+<!-- ═══════ MAIN ═══════ -->
+<main>
+
+<!-- OVERVIEW -->
+<div id="overview" class="page active">
+  <div class="ph">
+    <div class="ph-eye">Current State · February 2026</div>
+    <div class="ph-title">Where the time goes today</div>
+    <div class="ph-desc">Six core processes — all manual, all disconnected, all recoverable. Together they represent an estimated 10–15 hours of avoidable work each week before a single automation is in place.</div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-box">
+      <div class="stat-val red">10–40</div>
+      <div class="stat-lbl">Bid invitation emails received per day</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val red">20 min</div>
+      <div class="stat-lbl">Average time locating drawings per job</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val red">4–6 hrs</div>
+      <div class="stat-lbl">Manual blueprint takeoff per large job</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val red">0</div>
+      <div class="stat-lbl">Structured follow-up or CRM in place</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="pain-item hi">
+      <span class="badge badge-hi">High Impact</span>
+      <div class="pain-name">Bid Invitation Intake</div>
+      <div class="pain-desc">10–40 emails daily from contractors and engineers. Each requires manually opening the email, locating HVAC drawings — which may be in a PDF, a contractor portal, or a shared Dropbox folder — and deciding whether to bid. No filtering, no structure.</div>
+      <div class="pain-stats">
+        <div class="pain-stat"><strong>20 min</strong><span>per job</span></div>
+        <div class="pain-stat"><strong>3 formats</strong><span>PDF / portal / Dropbox</span></div>
+      </div>
+    </div>
+    <div class="pain-item hi">
+      <span class="badge badge-hi">High Impact</span>
+      <div class="pain-name">Blueprint Takeoff</div>
+      <div class="pain-desc">After deciding to bid, the team manually pages through architectural drawings to find the room schedule, then records every room's equipment designation, size, CFM, and static pressure by hand — before the first quote can even be generated.</div>
+      <div class="pain-stats">
+        <div class="pain-stat"><strong>4–6 hrs</strong><span>per large job</span></div>
+        <div class="pain-stat"><strong>100%</strong><span>manual entry</span></div>
+      </div>
+    </div>
+    <div class="pain-item med">
+      <span class="badge badge-med">Risk</span>
+      <div class="pain-name">Proposal Generation</div>
+      <div class="pain-desc">Proposals are generated through an outsourced vendor and sent to customers without an internal review step. Errors in product specifications or quantities are only discovered after a customer returns to place an order.</div>
+      <div class="pain-stats">
+        <div class="pain-stat"><strong>0</strong><span>QA steps</span></div>
+        <div class="pain-stat"><strong>Errors</strong><span>at buy-time</span></div>
+      </div>
+    </div>
+    <div class="pain-item hi">
+      <span class="badge badge-hi">High Impact</span>
+      <div class="pain-name">Quote Follow-Up</div>
+      <div class="pain-desc">No CRM in place. Follow-up on sent quotes is tracked in personal spreadsheets or memory. As quote volume grows, consistent follow-up becomes impossible — opportunities are lost without knowing it.</div>
+      <div class="pain-stats">
+        <div class="pain-stat"><strong>0</strong><span>structured follow-up</span></div>
+        <div class="pain-stat"><strong>Unsustainable</strong><span>at scale</span></div>
+      </div>
+    </div>
+    <div class="pain-item med">
+      <span class="badge badge-med">Post-Award</span>
+      <div class="pain-name">Room Schedule Creation</div>
+      <div class="pain-desc">After winning a job, staff re-enter all job details room by room with product designations to build a 10–20 page document for engineer review. This is the critical path between receiving a PO and placing the order.</div>
+      <div class="pain-stats">
+        <div class="pain-stat"><strong>10–20 pg</strong><span>manual document</span></div>
+        <div class="pain-stat"><strong>Critical path</strong><span>to order</span></div>
+      </div>
+    </div>
+    <div class="pain-item med">
+      <span class="badge badge-med">Recurring</span>
+      <div class="pain-name">Floor-by-Floor Order Release</div>
+      <div class="pain-desc">When a contractor releases a floor, staff must return to the original quoted job, manually re-segment the data, and re-enter a partial order for that floor alone. This rework repeats for every floor of every multi-story project.</div>
+      <div class="pain-stats">
+        <div class="pain-stat"><strong>Re-entry</strong><span>every release</span></div>
+        <div class="pain-stat"><strong>0</strong><span>automation</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BID INTAKE CURRENT -->
+<div id="bid-intake" class="page">
+  <div class="ph">
+    <div class="ph-eye">Current State · Process 1 of 6</div>
+    <div class="ph-title">Bid Invitation Intake</div>
+    <div class="ph-desc">The daily starting point for all revenue. Ten to forty invitation-to-bid emails arrive each day from general contractors and engineers. Every one requires manual review before a bid decision can be made.</div>
+  </div>
+  <div class="banner warn">
+    <span>⚠</span>
+    <div><strong>High impact · Daily occurrence.</strong> Inconsistent drawing locations and no filtering mean significant time is spent before any productive bid evaluation begins.</div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat-box"><div class="stat-val red">10–40</div><div class="stat-lbl">ITB emails per day</div></div>
+    <div class="stat-box"><div class="stat-val red">20 min</div><div class="stat-lbl">Per job to locate drawings</div></div>
+    <div class="stat-box"><div class="stat-val red">3</div><div class="stat-lbl">Different email formats to handle</div></div>
+    <div class="stat-box"><div class="stat-val red">0</div><div class="stat-lbl">Automated filtering or classification</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Current Process</div>
+    <div class="ba-grid">
+      <div class="ba-col">
+        <div class="ba-label b">How it works today</div>
+        <div class="ba-row"><span class="ba-icon">📥</span>Email arrives — no filtering, every email opened manually</div>
+        <div class="ba-row"><span class="ba-icon">🔍</span>Locate HVAC drawings — may be a PDF attachment, a contractor portal link requiring login, or a shared Dropbox folder with inconsistent naming</div>
+        <div class="ba-row"><span class="ba-icon">🗂</span>Cross-reference contractor job names against Dropbox folder names — naming conventions rarely match</div>
+        <div class="ba-row"><span class="ba-icon">👁</span>Review drawings to assess scope and decide whether to bid</div>
+        <div class="ba-row"><span class="ba-icon">📋</span>Bid calendar maintained manually — spreadsheet or memory</div>
+        <div class="ba-row"><span class="ba-icon">🚫</span>Passed bids leave no record — no data for future decisions</div>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-col after">
+        <div class="ba-label a">After Phase 1</div>
+        <div class="ba-row a-row"><span class="ba-icon">🤖</span>AI classifies every email — ITBs identified and queued automatically</div>
+        <div class="ba-row a-row"><span class="ba-icon">🔗</span>Drawing links located and surfaced — PDF pages identified, Dropbox links resolved, portal credentials extracted</div>
+        <div class="ba-row a-row"><span class="ba-icon">✅</span>Naming mismatches resolved automatically using AI matching</div>
+        <div class="ba-row a-row"><span class="ba-icon">☕</span>Morning digest delivered at 6:45am — all bids organized, drawings ready</div>
+        <div class="ba-row a-row"><span class="ba-icon">📅</span>One click to BID, PASS, or FLAG — calendar auto-updated</div>
+        <div class="ba-row a-row"><span class="ba-icon">📊</span>Every decision recorded — analytics available from day one</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLUEPRINT CURRENT -->
+<div id="blueprint" class="page">
+  <div class="ph">
+    <div class="ph-eye">Current State · Process 2 of 6</div>
+    <div class="ph-title">Blueprint Takeoff</div>
+    <div class="ph-desc">Once a bid decision is made, the team must manually work through architectural drawings to count and categorize every HVAC unit — before the first line of a quote can be written.</div>
+  </div>
+  <div class="banner warn">
+    <span>⚠</span>
+    <div><strong>Very high labor cost per job.</strong> A single large school project requires 4–6 hours of manual drawing review and data entry — creating a hard ceiling on how many jobs can be bid each week.</div>
+  </div>
+  <div class="stat-strip">
+    <div class="stat-box"><div class="stat-val red">4–6 hrs</div><div class="stat-lbl">Per large school job</div></div>
+    <div class="stat-box"><div class="stat-val red">100%</div><div class="stat-lbl">Manual data entry</div></div>
+    <div class="stat-box"><div class="stat-val red">Limits</div><div class="stat-lbl">How many bids can be pursued</div></div>
+    <div class="stat-box"><div class="stat-val navy">Phase 2</div><div class="stat-lbl">AlphaTakeoff AI automates this</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Current Process — Manual Steps</div>
+    <div class="ba-row" style="padding:12px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">🗺</span><div><strong style="font-size:13px">Locate drawings</strong><div style="font-size:13px;color:var(--ink3);margin-top:3px">Navigate architectural drawing set to find HVAC sheets — sheets prefixed M-, H-, or HVAC-</div></div></div>
+    <div class="ba-row" style="padding:12px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">📄</span><div><strong style="font-size:13px">Find room schedule</strong><div style="font-size:13px;color:var(--ink3);margin-top:3px">Locate the equipment schedule sheet listing room designations and unit types</div></div></div>
+    <div class="ba-row" style="padding:12px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">✏️</span><div><strong style="font-size:13px">Record each room manually</strong><div style="font-size:13px;color:var(--ink3);margin-top:3px">For every room: note equipment designation (GRD, VAV, FCU), size, CFM, static pressure — room by room, floor by floor</div></div></div>
+    <div class="ba-row" style="padding:12px 0"><span class="ba-icon">📊</span><div><strong style="font-size:13px">Create room schedule document</strong><div style="font-size:13px;color:var(--ink3);margin-top:3px">Compile all data into a structured document — used to generate the quote and later the post-award room schedule</div></div></div>
+  </div>
+  <div class="banner info"><span>ℹ</span><div><strong>Phase 2 solution:</strong> AlphaTakeoff (PhaseAlpha's AI blueprint reader) reads HVAC PDFs and produces a complete, editable room schedule in minutes. This is confirmed working technology — activation depends on PhaseAlpha API availability.</div></div>
+</div>
+
+<!-- PROPOSALS CURRENT -->
+<div id="proposals" class="page">
+  <div class="ph">
+    <div class="ph-eye">Current State · Process 3 of 6</div>
+    <div class="ph-title">Proposal Generation</div>
+    <div class="ph-desc">After a bid decision is made, pricing information is sent to an outsourced vendor who generates and sends the proposal directly to the customer — without an internal review step.</div>
+  </div>
+  <div class="banner warn"><span>⚠</span><div><strong>Quality risk.</strong> The current process has no internal checkpoint between the vendor generating the proposal and the customer receiving it. Specification errors are only discovered after a customer accepts and moves to purchase.</div></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Current flow</div>
+      <div class="ba-row" style="padding:10px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">📤</span>Bid details sent to outsourced vendor (ABK)</div>
+      <div class="ba-row" style="padding:10px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">📄</span>Vendor generates proposal</div>
+      <div class="ba-row" style="padding:10px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">📧</span>Proposal sent directly to customer — no internal review</div>
+      <div class="ba-row" style="padding:10px 0"><span class="ba-icon">❌</span>Errors surface only when customer places an order</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Phase 2 — With AI QA Gate</div>
+      <div class="ba-row a-row" style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);background:transparent;color:var(--ink2)"><span class="ba-icon">📤</span>Bid details sent to vendor as today</div>
+      <div class="ba-row a-row" style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);background:transparent;color:var(--ink2)"><span class="ba-icon">🤖</span>AI reviews proposal — checks product specs, quantities, and pricing against scope</div>
+      <div class="ba-row a-row" style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);background:transparent;color:var(--ink2)"><span class="ba-icon">✋</span>Human reviews AI summary — approves or flags for correction</div>
+      <div class="ba-row a-row" style="padding:10px 0;background:transparent;color:var(--ink2)"><span class="ba-icon">✅</span>Approved proposal sent to customer</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOLLOW-UP CURRENT -->
+<div id="followup" class="page">
+  <div class="ph">
+    <div class="ph-eye">Current State · Process 4 of 6</div>
+    <div class="ph-title">Quote Follow-Up</div>
+    <div class="ph-desc">Once a proposal is sent, there is no systematic process for following up. Tracking happens in personal spreadsheets or memory — and becomes increasingly unmanageable as quote volume grows.</div>
+  </div>
+  <div class="banner warn"><span>⚠</span><div><strong>Unsustainable at scale.</strong> Manual follow-up worked when quote volume was lower. As the business sends more proposals, opportunities are lost silently — with no visibility into which quotes are pending, aging, or at risk.</div></div>
+  <div class="stat-strip">
+    <div class="stat-box"><div class="stat-val red">0</div><div class="stat-lbl">Structured CRM or follow-up system</div></div>
+    <div class="stat-box"><div class="stat-val red">Memory</div><div class="stat-lbl">Primary tracking method</div></div>
+    <div class="stat-box"><div class="stat-val red">Silent</div><div class="stat-lbl">How most opportunities are lost</div></div>
+    <div class="stat-box"><div class="stat-val navy">Phase 2</div><div class="stat-lbl">Automated sequences + dashboard</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Phase 2 — Automated Follow-Up</div>
+    <div class="ba-row" style="padding:11px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">📅</span><div><strong style="font-size:13px">Day 3 follow-up</strong><div style="font-size:12px;color:var(--ink3);margin-top:3px">Automated email confirms receipt and checks in. Sent automatically — no manual action required.</div></div></div>
+    <div class="ba-row" style="padding:11px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">📅</span><div><strong style="font-size:13px">Day 10 follow-up</strong><div style="font-size:12px;color:var(--ink3);margin-top:3px">Second touchpoint asking about project status. Keeps Hilberts top of mind through the customer's decision process.</div></div></div>
+    <div class="ba-row" style="padding:11px 0;border-bottom:1px solid var(--border)"><span class="ba-icon">🔔</span><div><strong style="font-size:13px">High-value job alerts</strong><div style="font-size:12px;color:var(--ink3);margin-top:3px">Large-dollar opportunities trigger a personal call alert — AI handles routine follow-up, people handle important relationships.</div></div></div>
+    <div class="ba-row" style="padding:11px 0"><span class="ba-icon">📊</span><div><strong style="font-size:13px">Quote dashboard</strong><div style="font-size:12px;color:var(--ink3);margin-top:3px">Real-time view of all open quotes, aging, and status — replacing spreadsheets and memory entirely.</div></div></div>
+  </div>
+</div>
+
+<!-- ROOM SCHEDULE CURRENT -->
+<div id="roomsched" class="page">
+  <div class="ph">
+    <div class="ph-eye">Current State · Process 5 of 6</div>
+    <div class="ph-title">Room Schedule Creation</div>
+    <div class="ph-desc">After a job is awarded and a purchase order received, office staff must manually re-enter all job details room by room to produce the room schedule document required for engineer review and order placement.</div>
+  </div>
+  <div class="banner warn"><span>⚠</span><div><strong>Critical path to order placement.</strong> The room schedule must be completed and approved by the engineer before the order can be placed. Any delay in this manual process directly delays revenue.</div></div>
+  <div class="g2">
+    <div class="stat-box"><div class="stat-val red">10–20 pg</div><div class="stat-lbl">Typical room schedule document length</div></div>
+    <div class="stat-box"><div class="stat-val red">100%</div><div class="stat-lbl">Manual re-entry of existing data</div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">The problem — data that already exists is entered again</div>
+    <div style="font-size:13px;color:var(--ink3);line-height:1.7">The information needed for the room schedule — room numbers, equipment designations, CFMs, static pressures — was already captured during the bid takeoff phase. The current process requires manually re-entering all of it into a new document format after the job is won. Phase 2 eliminates this duplication by connecting AlphaTakeoff output directly to the room schedule template.</div>
+  </div>
+</div>
+
+<!-- FLOOR-BY-FLOOR CURRENT -->
+<div id="floorrel" class="page">
+  <div class="ph">
+    <div class="ph-eye">Current State · Process 6 of 6</div>
+    <div class="ph-title">Floor-by-Floor Order Release</div>
+    <div class="ph-desc">On multi-story projects, contractors release one floor at a time for ordering. Each release requires staff to re-enter the original quoted job data and manually extract just the items for that floor.</div>
+  </div>
+  <div class="banner warn"><span>⚠</span><div><strong>Recurring rework on every project.</strong> For a four-story building, this process runs four times — each time requiring the same manual effort to re-segment data that was already entered during quoting.</div></div>
+  <div class="g2">
+    <div class="stat-box"><div class="stat-val red">Re-entry</div><div class="stat-lbl">Required for every floor release</div></div>
+    <div class="stat-box"><div class="stat-val red">0</div><div class="stat-lbl">Automation or segmentation in place</div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Phase 2 approach</div>
+    <div style="font-size:13px;color:var(--ink3);line-height:1.7">Once the room schedule data lives in Dragonfly (Phase 2), floor segmentation becomes a filter — not a re-entry exercise. When a contractor releases Floor 1, the system pulls just those rooms and generates the partial order automatically. No manual re-segmentation required.</div>
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div id="phase1" class="page">
+  <div class="ph">
+    <div class="ph-eye">Phase 1 · Starting Now</div>
+    <div class="ph-title">Bid Intake Automation</div>
+    <div class="ph-desc">The fastest path to recovering significant time. Phase 1 requires no new platforms and no dependency on third-party API timelines. It can be built and running within two to three weeks using tools already available.</div>
+  </div>
+  <div class="banner ok"><span>✓</span><div><strong>No PhaseAlpha dependency.</strong> Phase 1 is entirely self-contained — Outlook, Claude API, Dropbox, and Google Sheets. Dragonfly replaces the Google Sheets register in Phase 2 with zero rework to the automation logic.</div></div>
+
+  <div class="stat-strip">
+    <div class="stat-box"><div class="stat-val green">15 min</div><div class="stat-lbl">Tom's total morning review time</div></div>
+    <div class="stat-box"><div class="stat-val green">2–3 wks</div><div class="stat-lbl">Estimated build time</div></div>
+    <div class="stat-box"><div class="stat-val green">10–15 hrs</div><div class="stat-lbl">Recovered per week</div></div>
+    <div class="stat-box"><div class="stat-val green">100%</div><div class="stat-lbl">Of ITB decisions logged and tracked</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Before &amp; After — Bid Invitation Process</div>
+    <div class="ba-grid">
+      <div class="ba-col">
+        <div class="ba-label b">Today</div>
+        <div class="ba-row"><span class="ba-icon">⏱</span>Open each email manually — no filtering</div>
+        <div class="ba-row"><span class="ba-icon">🔍</span>Search for HVAC drawings — 20 min per job</div>
+        <div class="ba-row"><span class="ba-icon">😤</span>Match contractor names to Dropbox folder names manually</div>
+        <div class="ba-row"><span class="ba-icon">🧠</span>Make bid decision — no record kept</div>
+        <div class="ba-row"><span class="ba-icon">📋</span>Maintain bid calendar in spreadsheet or memory</div>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-col after">
+        <div class="ba-label a">After Phase 1</div>
+        <div class="ba-row a-row"><span class="ba-icon">🤖</span>AI identifies and classifies every ITB automatically</div>
+        <div class="ba-row a-row"><span class="ba-icon">🔗</span>Drawing links located and ready — no searching required</div>
+        <div class="ba-row a-row"><span class="ba-icon">✅</span>Name mismatches resolved automatically</div>
+        <div class="ba-row a-row"><span class="ba-icon">☕</span>Morning review in 15 minutes — Tom clicks BID, PASS, or FLAG</div>
+        <div class="ba-row a-row"><span class="ba-icon">📅</span>Bid calendar maintained automatically, sorted by due date</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div id="workflows" class="page">
+  <div class="ph">
+    <div class="ph-eye">Phase 1 · Automation Detail</div>
+    <div class="ph-title">How it works</div>
+    <div class="ph-desc">Three automation workflows run in sequence — each building on the output of the previous. Together they handle everything from email arrival to Tom's morning review queue.</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-header">
+      <div class="wf-num">1</div>
+      <div class="wf-name">Email Triage &amp; Data Extraction</div>
+      <div class="wf-timing">Days 1–5</div>
+    </div>
+    <div class="wf-flow">
+      <span>TRIGGER:</span> New email arrives in Outlook → <span>AI:</span> Is this an ITB? (classified in seconds) → If yes: <span>AI:</span> Extract project name, GC, bid due date, contact, drawing links, format type → <span>Record:</span> Structured bid entry added to register
+    </div>
+    <div class="wf-result">✓ Every ITB email captured as a structured record — no manual reading or data entry</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-header">
+      <div class="wf-num">2</div>
+      <div class="wf-name">Drawing Retrieval</div>
+      <div class="wf-timing">Days 4–12</div>
+    </div>
+    <div class="wf-flow">
+      <span>PDF attachments:</span> AI identifies HVAC drawing pages and summarizes scope →
+      <span>Dropbox packages:</span> AI matches contractor job names to Dropbox folder names, navigates to HVAC files, generates direct links →
+      <span>Portal links:</span> Credentials and project IDs extracted — flagged for manual portal access
+    </div>
+    <div class="wf-result">✓ Drawing links surfaced before Tom opens the review — no searching, no Dropbox navigation</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-header">
+      <div class="wf-num">3</div>
+      <div class="wf-name">Morning Review Digest</div>
+      <div class="wf-timing">Days 10–15</div>
+    </div>
+    <div class="wf-flow">
+      <span>TRIGGER:</span> 6:45am daily → Read all pending bids, sorted by urgency → <span>AI:</span> Assemble morning email — project cards with drawing links, scope summary, due date → Tom clicks <span>BID / PASS / FLAG</span> → Decision recorded, bid calendar updated automatically
+    </div>
+    <div class="wf-result">✓ Tom's entire bid decision workflow in one 15-minute email review — all data already organized</div>
+  </div>
+</div>
+
+<!-- HUMAN OVERSIGHT -->
+<div id="oversight" class="page">
+  <div class="ph">
+    <div class="ph-eye">Phase 1 · Design Principle</div>
+    <div class="ph-title">What stays human</div>
+    <div class="ph-desc">Automation handles the searching, sorting, and organizing. Every decision that requires judgment, experience, or a customer relationship stays with the Hilberts team. This is the design — not replacing people, relieving them.</div>
+  </div>
+
+  <div class="human-grid">
+    <div class="human-card">
+      <div class="human-icon">✋</div>
+      <div class="human-title">Bid / Pass Decision</div>
+      <div class="human-desc">AI presents every bid with drawings located and scope summarized. Tom reviews and clicks BID, PASS, or FLAG. The decision is always his — automation eliminates the search work, not the judgment.</div>
+    </div>
+    <div class="human-card">
+      <div class="human-icon">👁</div>
+      <div class="human-title">Proposal Review</div>
+      <div class="human-desc">In Phase 2, every AI-generated or vendor-generated proposal is reviewed internally before it reaches a customer. No proposal leaves without a human sign-off.</div>
+    </div>
+    <div class="human-card">
+      <div class="human-icon">📞</div>
+      <div class="human-title">High-Value Relationships</div>
+      <div class="human-desc">Large opportunities and key accounts trigger personal call alerts rather than automated emails. AI manages routine follow-up — people manage important relationships.</div>
+    </div>
+    <div class="human-card">
+      <div class="human-icon">🚩</div>
+      <div class="human-title">Flagged &amp; Uncertain Items</div>
+      <div class="human-desc">Anything the system cannot handle with high confidence — portal-only bids, unmatched Dropbox folders, low-confidence extractions — is flagged for manual review rather than processed automatically.</div>
+    </div>
+    <div class="human-card">
+      <div class="human-icon">📊</div>
+      <div class="human-title">Strategic Decisions</div>
+      <div class="human-desc">Which markets to pursue, which customers to prioritize, which products to lead with — all of this remains with Tom and the team. AI provides data to inform those decisions, not make them.</div>
+    </div>
+    <div class="human-card">
+      <div class="human-icon">🔍</div>
+      <div class="human-title">Quality Control</div>
+      <div class="human-desc">HVAC scope summaries, room schedule data, and extracted bid fields can all be reviewed and corrected by the team before acting on them. Automation is a first pass — not a final word.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div id="stack" class="page">
+  <div class="ph">
+    <div class="ph-eye">Phase 1 · Technology</div>
+    <div class="ph-title">What we're building with</div>
+    <div class="ph-desc">Phase 1 uses tools that are available today — nothing new needs to be purchased or set up beyond standard API access. Google Sheets is a temporary register that hands directly to Dragonfly in Phase 2 with no rework required.</div>
+  </div>
+  <div class="banner ok"><span>✓</span><div><strong>No new platforms required for Phase 1.</strong> Every tool below either already exists in the Hilberts environment or is standard infrastructure that can be provisioned in a day.</div></div>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-role">Automation</div>
+      <div class="tool-name">n8n</div>
+      <div class="tool-desc">Orchestrates all three workflows. Watches the Outlook inbox, calls the AI layer, writes to Google Sheets, and delivers the morning digest. No code required to configure.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-role">AI</div>
+      <div class="tool-name">Claude API</div>
+      <div class="tool-desc">Classifies emails, extracts structured bid data, identifies HVAC drawings in PDFs, resolves naming mismatches in Dropbox, and drafts the morning review digest.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-role">Email</div>
+      <div class="tool-name">Microsoft 365 / Outlook</div>
+      <div class="tool-desc">Source of all ITB emails. n8n watches the inbox via standard API connection. No changes to Tom's existing email setup or workflows.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-role">Drawing Retrieval</div>
+      <div class="tool-name">Dropbox API</div>
+      <div class="tool-name"></div>
+      <div class="tool-desc">Handles bulk bid packages. The automation navigates shared contractor folders, identifies HVAC files, and generates direct download links — resolving naming mismatches automatically.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-role">Bid Register (Phase 1)</div>
+      <div class="tool-name">Google Sheets</div>
+      <div class="tool-desc">Structured register with four tabs: Pending Review, Active Bids, Passed, and Flagged. All field names match the Dragonfly schema — swapped in Phase 2 with no automation rework.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-role">Operations Hub (Phase 2)</div>
+      <div class="tool-name">Dragonfly (PhaseAlpha)</div>
+      <div class="tool-desc">Already implemented at Hilberts. In Phase 2 it becomes the central system for projects, quotes, contacts, and orders — replacing Google Sheets as the bid register.</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEXT STEPS -->
+<div id="nextsteps" class="page">
+  <div class="ph">
+    <div class="ph-eye">Next Steps</div>
+    <div class="ph-title">What happens now</div>
+    <div class="ph-desc">Phase 1 can begin immediately. Two tracks run in parallel — the build starts this week while we confirm the Phase 2 platform details with PhaseAlpha.</div>
+  </div>
+  <div class="ns-item">
+    <div class="ns-num">1</div>
+    <div><div class="ns-title">Tom provides five real ITB email samples</div><div class="ns-who">One PDF attachment · One PipelineSuite portal · One Dropbox bulk list · Used to test and tune the classification and extraction</div></div>
+  </div>
+  <div class="ns-item">
+    <div class="ns-num">2</div>
+    <div><div class="ns-title">Workflow 1 built and tested — email triage and extraction live</div><div class="ns-who">Target: operational on real emails within 5 days of receiving samples</div></div>
+  </div>
+  <div class="ns-item">
+    <div class="ns-num">3</div>
+    <div><div class="ns-title">Workflow 2 built — drawing retrieval across all three formats</div><div class="ns-who">PDF Vision · Dropbox fuzzy matching · Portal credential extraction</div></div>
+  </div>
+  <div class="ns-item">
+    <div class="ns-num">4</div>
+    <div><div class="ns-title">First morning digest delivered to Tom for review</div><div class="ns-who">Team reviews layout, card content, and decision UX before going fully live</div></div>
+  </div>
+  <div class="ns-item">
+    <div class="ns-num">5</div>
+    <div><div class="ns-title">PhaseAlpha call to confirm Dragonfly API and AlphaTakeoff timeline</div><div class="ns-who">Runs in parallel — confirms Phase 2 scope and activates the Dragonfly handoff plan</div></div>
+  </div>
+  <div class="ns-item">
+    <div class="ns-num">6</div>
+    <div><div class="ns-title">Full team review — Tom, Belinda, Dave</div><div class="ns-who">Live demo of Phase 1 workflows · Confirm Phase 2 scope and timeline</div></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.querySelector('main').scrollTop = 0;
+}
+</script>
+</body>
+</html>
