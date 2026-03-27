@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keehn Service — Kickoff Call Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:#f5f0e8;color:#1c2333;min-height:100vh;font-size:15px}
+
+/* ── CSS-ONLY TAB SYSTEM ── */
+/* Hidden radio inputs drive everything */
+.tab-radio{display:none}
+
+/* Tab bar */
+.header{background:#fff;border-bottom:2px solid #1e5fa8;padding:0 2rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(28,35,51,0.08)}
+.logo-area{display:flex;align-items:center;gap:16px;padding:14px 0}
+.logo-img{height:48px;width:auto}
+.header-right{display:flex;align-items:center;gap:14px}
+.call-badge{background:#fee2e2;color:#dc2626;border:1px solid #fecaca;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;letter-spacing:0.05em}
+.prog-wrap{display:flex;align-items:center;gap:8px}
+.prog-label{font-size:12px;color:#6b7a8d}
+.prog-bar{width:100px;height:5px;background:rgba(28,35,51,0.12);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#1e5fa8,#2e7dd1);border-radius:3px;transition:width 0.4s;width:0%}
+.export-btn{background:#1e5fa8;color:#fff;border:none;padding:8px 16px;border-radius:6px;font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+.export-btn:hover{background:#2e7dd1}
+
+/* Tab nav */
+.tab-nav{background:#fff;border-bottom:1px solid rgba(28,35,51,0.12);display:flex;overflow-x:auto;padding:0 2rem;box-shadow:0 1px 4px rgba(28,35,51,0.05);position:sticky;top:80px;z-index:90}
+.tab-nav::-webkit-scrollbar{height:3px}
+.tab-nav::-webkit-scrollbar-thumb{background:#1e5fa8}
+.tab-label{display:block;padding:13px 18px;font-size:13px;font-weight:500;color:#6b7a8d;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:0.02em;user-select:none;transition:all 0.15s}
+.tab-label:hover{color:#1c2333;background:#f0ece4}
+
+/* Active tab states - one rule per tab */
+#t1:checked ~ .tab-nav label[for=t1],
+#t2:checked ~ .tab-nav label[for=t2],
+#t3:checked ~ .tab-nav label[for=t3],
+#t4:checked ~ .tab-nav label[for=t4],
+#t5:checked ~ .tab-nav label[for=t5],
+#t6:checked ~ .tab-nav label[for=t6],
+#t7:checked ~ .tab-nav label[for=t7],
+#t8:checked ~ .tab-nav label[for=t8],
+#t9:checked ~ .tab-nav label[for=t9],
+#t10:checked ~ .tab-nav label[for=t10],
+#t11:checked ~ .tab-nav label[for=t11]
+{color:#1e5fa8;border-bottom:2px solid #1e5fa8;font-weight:600;background:#fff}
+
+/* Panel visibility */
+.panel{display:none;max-width:960px;margin:0 auto;padding:2rem}
+
+#t1:checked ~ .panels #p1,
+#t2:checked ~ .panels #p2,
+#t3:checked ~ .panels #p3,
+#t4:checked ~ .panels #p4,
+#t5:checked ~ .panels #p5,
+#t6:checked ~ .panels #p6,
+#t7:checked ~ .panels #p7,
+#t8:checked ~ .panels #p8,
+#t9:checked ~ .panels #p9,
+#t10:checked ~ .panels #p10,
+#t11:checked ~ .panels #p11
+{display:block}
+
+/* ── COMPONENTS ── */
+.section-head{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1e5fa8;margin-bottom:1rem;margin-top:1.5rem;display:flex;align-items:center;gap:8px}
+.section-head:first-child{margin-top:0}
+.section-head::after{content:'';flex:1;height:1px;background:rgba(30,95,168,0.2)}
+
+.card{background:#fff;border:1px solid rgba(28,35,51,0.12);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:12px;box-shadow:0 1px 3px rgba(28,35,51,0.06)}
+.card:hover{background:#faf7f2}
+
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px}
+.b-info{background:#dbeafe;color:#1e40af}
+.b-warn{background:#fef3c7;color:#92400e}
+.b-success{background:#dcfce7;color:#14532d}
+.b-danger{background:#fee2e2;color:#7f1d1d}
+.b-accent{background:#e0f2fe;color:#075985}
+
+.q-text{font-size:14px;color:#1c2333;margin-bottom:5px;line-height:1.55;font-weight:500}
+.q-sub{font-size:12px;color:#6b7a8d;margin-bottom:10px;line-height:1.5}
+
+textarea{width:100%;background:#f9f6f0;border:1px solid rgba(28,35,51,0.15);border-radius:6px;padding:10px 12px;font-size:13px;font-family:'Barlow',sans-serif;color:#1c2333;resize:vertical;min-height:58px;line-height:1.5}
+textarea:focus{outline:none;border-color:#1e5fa8;background:#fff}
+textarea::placeholder{color:#a0aab5}
+
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(28,35,51,0.08)}
+.check-row:last-child{border-bottom:none}
+.check-row input[type=checkbox]{width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:#1e5fa8;cursor:pointer}
+.check-row label{font-size:13px;color:#1c2333;cursor:pointer;line-height:1.45}
+.check-note{margin-left:26px;margin-top:5px;margin-bottom:2px}
+
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.5rem}
+@media(max-width:680px){.platform-grid{grid-template-columns:1fr}}
+.platform-card{background:#fff;border:1px solid rgba(28,35,51,0.12);border-radius:12px;padding:1.5rem;position:relative;overflow:hidden;box-shadow:0 2px 6px rgba(28,35,51,0.07)}
+.platform-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1e5fa8,#2e7dd1)}
+.platform-name{font-family:'Barlow Condensed',sans-serif;font-size:23px;font-weight:700;color:#1c2333;margin-bottom:3px}
+.platform-role{font-size:11px;color:#1e5fa8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:11px;font-weight:600}
+.platform-desc{font-size:13px;color:#4b5563;line-height:1.6;margin-bottom:12px}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.feat-list li{font-size:13px;color:#1c2333;display:flex;align-items:flex-start;gap:7px;line-height:1.4}
+.feat-list li::before{content:'';width:6px;height:6px;background:#1e5fa8;border-radius:50%;flex-shrink:0;margin-top:5px}
+.why-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:11px 13px;margin-top:13px;font-size:13px;color:#1e40af;line-height:1.55}
+.why-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#1e5fa8;margin-bottom:3px}
+
+.pricing-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+.pricing-table th{text-align:left;padding:8px 12px;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#6b7a8d;border-bottom:1px solid rgba(28,35,51,0.12);font-weight:600}
+.pricing-table td{padding:10px 12px;border-bottom:1px solid rgba(28,35,51,0.08);color:#1c2333}
+.pricing-table tr.rec td{background:#eff6ff}
+.rec-tag{background:#1e5fa8;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:0.06em;margin-left:5px}
+
+.cost-box{background:#1e5fa8;border-radius:10px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;margin-top:1rem}
+.cost-lbl{font-size:13px;color:rgba(255,255,255,0.8)}
+.cost-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-top:3px}
+.cost-num{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:700;color:#fff}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.stat-card{background:#fff;border:1px solid rgba(28,35,51,0.12);border-radius:8px;padding:13px;text-align:center;box-shadow:0 1px 3px rgba(28,35,51,0.06)}
+.stat-num{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:#1e5fa8}
+.stat-lbl{font-size:10px;color:#6b7a8d;margin-top:3px;text-transform:uppercase;letter-spacing:0.06em}
+
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:1rem 0}
+.tl-week{background:#fff;border:1px solid rgba(28,35,51,0.12);border-radius:8px;padding:12px;box-shadow:0 1px 3px rgba(28,35,51,0.05)}
+.tl-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#1e5fa8;margin-bottom:5px}
+.tl-title{font-size:13px;font-weight:600;color:#1c2333;margin-bottom:5px}
+.tl-items{list-style:none;display:flex;flex-direction:column;gap:3px}
+.tl-items li{font-size:11px;color:#6b7a8d;display:flex;align-items:flex-start;gap:4px;line-height:1.4}
+.tl-items li::before{content:'›';color:#1e5fa8;flex-shrink:0}
+
+.flow-steps{display:flex;flex-direction:column;gap:8px}
+.flow-step{display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid rgba(28,35,51,0.12);border-radius:8px;padding:11px 13px;box-shadow:0 1px 3px rgba(28,35,51,0.05)}
+.step-num{background:#1e5fa8;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.step-title{font-size:13px;font-weight:600;color:#1c2333;margin-bottom:2px}
+.step-detail{font-size:12px;color:#6b7a8d;line-height:1.5}
+.step-tool{font-size:11px;font-weight:600;color:#1e5fa8;margin-top:3px;text-transform:uppercase;letter-spacing:0.05em}
+.arrow{text-align:center;color:#9ca3af;font-size:14px;margin:1px 0}
+
+.vpill{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;margin:2px;background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.vpill.match{background:#dcfce7;color:#14532d;border-color:#bbf7d0}
+.vpill.warn{background:#fef3c7;color:#92400e;border-color:#fde68a}
+
+/* n8n mockup */
+.n8n-mock{background:#fff;border-radius:8px;overflow:hidden;width:280px;border:1px solid #e5e7eb;font-family:sans-serif;flex-shrink:0}
+.n8n-head{background:#f9fafb;border-bottom:1px solid #e5e7eb;padding:9px 14px;font-size:12px;color:#6b7280;font-weight:500}
+.n8n-tabs{display:flex;border-bottom:1px solid #e5e7eb;background:#fff;padding:0 10px}
+.n8n-tab{padding:9px 10px;font-size:11px;color:#6b7280}
+.n8n-tab.act{color:#ef4444;border-bottom:2px solid #ef4444;font-weight:600}
+.n8n-body{padding:11px 14px}
+.n8n-row{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:5px;margin-bottom:5px}
+.n8n-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.n8n-name{font-size:11px;font-weight:500;flex:1}
+.n8n-status{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:500}
+
+/* Sticky notes */
+.sticky-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:13px}
+.sticky{border-radius:8px;padding:13px;min-height:130px;position:relative}
+.sticky textarea{background:transparent;border:none;padding:0;font-size:13px;min-height:88px;resize:none;width:100%;font-family:'Barlow',sans-serif}
+.sticky textarea:focus{outline:none}
+.sticky-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.add-sticky-btn{background:none;border:2px dashed rgba(28,35,51,0.2);color:#6b7a8d;border-radius:8px;padding:9px 16px;font-size:13px;font-family:'Barlow',sans-serif;cursor:pointer;font-weight:500}
+.add-sticky-btn:hover{border-color:#1e5fa8;color:#1c2333}
+.del-sticky{position:absolute;top:7px;right:9px;background:none;border:none;font-size:17px;cursor:pointer;opacity:0.3;line-height:1}
+.del-sticky:hover{opacity:0.7}
+.sticky-dots{display:flex;gap:5px;margin-bottom:9px}
+.dot{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid transparent;display:inline-block}
+.dot:hover,.dot.sel{border-color:rgba(0,0,0,0.25);transform:scale(1.2)}
+
+/* Cred block */
+.cred-block{border:1px solid rgba(28,35,51,0.1);border-radius:8px;padding:13px;margin-bottom:9px;background:#faf7f2}
+.cred-header{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.cred-icon{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.cred-title{font-size:13px;font-weight:600;color:#1c2333}
+.cred-sub{font-size:11px;color:#6b7a8d}
+.cred-added{margin-left:auto;display:flex;align-items:center;gap:5px}
+.cred-added label{font-size:12px;color:#6b7a8d}
+.cred-detail{font-size:12px;color:#4b5563;line-height:1.65}
+.cred-detail code{background:#e8f0fe;padding:1px 5px;border-radius:3px;color:#1e40af;font-family:monospace}
+
+/* Info box */
+.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:1.25rem;font-size:13px;color:#1e40af;line-height:1.65}
+.info-box .ib-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#1e5fa8;margin-bottom:4px}
+
+.warn-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:11px 14px;font-size:13px;color:#92400e;line-height:1.6;margin-bottom:12px}
+
+/* ── PRINT / SAVE AS PDF ── */
+@media print {
+  /* Hide nav and header controls */
+  .tab-nav,
+  .header-right,
+  .tab-radio,
+  .add-sticky-btn,
+  .del-sticky,
+  .sticky-dots { display: none !important; }
+
+  /* Header: logo + title only, no sticky */
+  .header { position: static !important; box-shadow: none !important; border-bottom: 2px solid #1e5fa8; margin-bottom: 0; }
+
+  /* Show ALL panels stacked */
+  .panel { display: block !important; page-break-inside: avoid; }
+
+  /* Page break between sections */
+  .panel { page-break-before: always; }
+  .panel:first-of-type { page-break-before: auto; }
+
+  /* Keep cards together */
+  .card { page-break-inside: avoid; box-shadow: none !important; border: 1px solid #ccc !important; }
+  .flow-step { page-break-inside: avoid; }
+
+  /* Section headings */
+  .section-head { page-break-after: avoid; }
+
+  /* Textarea: show as readable plain box */
+  textarea {
+    background: #f9f9f9 !important;
+    border: 1px solid #ccc !important;
+    color: #1c2333 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    min-height: 48px !important;
+    resize: none;
+  }
+
+  /* Preserve background colors on badges */
+  .badge, .vpill, .rec-tag, .cost-box, .info-box, .warn-box, .stat-card, .tl-week, .platform-card {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Section label before each panel */
+  .panel::before {
+    content: attr(data-title);
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e5fa8;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #1e5fa8;
+  }
+
+  body { background: #fff !important; font-size: 13px; }
+  .content { padding: 0.5rem 1rem; }
+  a { text-decoration: none; color: inherit; }
+  .n8n-mock { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Radio inputs for CSS tab switching - MUST come BEFORE tab-nav and panels -->
+<input class="tab-radio" type="radio" name="tabs" id="t1" checked>
+<input class="tab-radio" type="radio" name="tabs" id="t2">
+<input class="tab-radio" type="radio" name="tabs" id="t3">
+<input class="tab-radio" type="radio" name="tabs" id="t4">
+<input class="tab-radio" type="radio" name="tabs" id="t5">
+<input class="tab-radio" type="radio" name="tabs" id="t6">
+<input class="tab-radio" type="radio" name="tabs" id="t7">
+<input class="tab-radio" type="radio" name="tabs" id="t8">
+<input class="tab-radio" type="radio" name="tabs" id="t9">
+<input class="tab-radio" type="radio" name="tabs" id="t10">
+<input class="tab-radio" type="radio" name="tabs" id="t11">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-area">
+    <img src="data:image/png;base64,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" class="logo-img" alt="Keehn Service Corporation">
+    <div style="width:1px;height:36px;background:rgba(28,35,51,0.15);margin:0 4px"></div>
+    <div>
+      <div style="font-size:15px;font-weight:600;color:#1c2333">Kickoff Call Guide</div>
+      <div style="font-size:12px;color:#6b7a8d">PO/Packing Slip Reconciliation · Plus 1 Technology</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <span id="save-status" style="font-size:11px;font-weight:600;opacity:0;transition:opacity 0.5s;white-space:nowrap"></span>
+    <div class="prog-wrap">
+      <span class="prog-label">Progress</span>
+      <div class="prog-bar"><div class="prog-fill" id="prog"></div></div>
+      <span class="prog-label" id="prog-pct">0%</span>
+    </div>
+    <div class="call-badge">● LIVE CALL</div>
+    <button class="export-btn" onclick="window.print()">Save as PDF</button>
+    <button class="export-btn" onclick="clearSaved()" style="background:#9ca3af;font-size:12px;padding:7px 12px" title="Clear your saved answers">Clear saved</button>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <label class="tab-label" for="t1">Platform Overview</label>
+  <label class="tab-label" for="t2">How It Works</label>
+  <label class="tab-label" for="t3">Nicole's Process</label>
+  <label class="tab-label" for="t4">File Setup</label>
+  <label class="tab-label" for="t5">Access & Credentials</label>
+  <label class="tab-label" for="t6">Tariff Handling</label>
+  <label class="tab-label" for="t7">Sample Files</label>
+  <label class="tab-label" for="t8">Pricing Decision</label>
+  <label class="tab-label" for="t9">Discovery Qs</label>
+  <label class="tab-label" for="t10">Exit Checklist</label>
+  <label class="tab-label" for="t11">Stickies</label>
+</div>
+
+<!-- ALL PANELS -->
+<div class="panels">
+
+<!-- ═══ P1: PLATFORM OVERVIEW ═══ -->
+<div id="p1" class="panel" data-title="Platform Overview">
+  <div class="section-head">What we're building & why</div>
+  <div style="margin-bottom:1.5rem;font-size:14px;color:#4b5563;line-height:1.65">
+    After researching Vision ERP's integration capabilities, we confirmed there is no REST API, no CSV import for receiving, and no third-party connector available. This means we can't write directly into Vision. Instead we're building a two-tool automation that handles the heavy lifting — leaving Nicole with a clean report and a much faster entry task.
+  </div>
+
+  <div class="platform-grid">
+    <div class="platform-card">
+      <div class="platform-name">Koncile</div>
+      <div class="platform-role">AI Document Extraction Engine</div>
+      <div class="platform-desc">Koncile uses AI-powered OCR combined with large language models to read and understand packing slips — regardless of vendor format, layout, handwritten notes, or complexity. Unlike template-based OCR that breaks when a vendor changes their form, Koncile understands context.</div>
+      <ul class="feat-list">
+        <li>Handles any vendor format — zero templates or training required</li>
+        <li>Extracts PO numbers, line items, quantities, prices, tariff lines</li>
+        <li>95%+ accuracy on complex multi-page documents</li>
+        <li>Confidence scoring flags low-quality extractions for review</li>
+        <li>Reads handwritten notes and poor-quality scans</li>
+        <li>REST API — connects directly into n8n workflow</li>
+      </ul>
+      <div class="why-box">
+        <div class="why-label">Why Koncile over alternatives</div>
+        We evaluated Klippa DocHorizon and Nanonets. Klippa requires template setup per vendor. Nanonets requires training data. Koncile requires zero setup for new vendors — critical with 6+ suppliers including complex tariff-per-line formats.
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-name">n8n</div>
+      <div class="platform-role">Workflow Automation Backbone</div>
+      <div class="platform-desc">n8n is the orchestration layer that connects everything. It watches OneDrive for new packing slips, sends them to Koncile, retrieves the matching PO, runs reconciliation logic, and emails the report to Nicole — automatically within 2–5 minutes of upload.</div>
+      <ul class="feat-list">
+        <li>OneDrive trigger watches folder for new PDF uploads</li>
+        <li>Calls Koncile API and parses extracted JSON</li>
+        <li>Matches PO number → retrieves correct PO from OneDrive</li>
+        <li>Line-by-line reconciliation: received vs ordered vs outstanding</li>
+        <li>Tariff line detection and per-job summing logic</li>
+        <li>Generates report and emails to Nicole via Outlook</li>
+      </ul>
+      <div class="why-box">
+        <div class="why-label">Why n8n over Make.com or Power Automate</div>
+        n8n's code nodes give us the custom reconciliation logic needed (fuzzy matching, tariff aggregation, partial receipt tracking). Make.com has limited code support. Power Automate doesn't support Koncile natively.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">How they connect</div>
+  <div class="card" style="font-size:13px;color:#4b5563;line-height:1.75">
+    <strong style="color:#1c2333">Warehouse → OneDrive</strong> uploads packing slip PDF &nbsp;→&nbsp;
+    <strong style="color:#1e5fa8">n8n detects</strong> new file &nbsp;→&nbsp;
+    <strong style="color:#1e5fa8">Koncile extracts</strong> all line items, quantities, prices, tariffs &nbsp;→&nbsp;
+    <strong style="color:#1e5fa8">n8n matches</strong> PO number, retrieves PO PDF, runs comparison &nbsp;→&nbsp;
+    <strong style="color:#1c2333">Nicole receives</strong> clean reconciliation report via email within 2–5 minutes.
+    <br><br>
+    Vision remains the system of record. Nicole reviews the report and enters received items faster — with a pre-checked list rather than doing line-by-line comparison from scratch.
+  </div>
+
+  <div class="section-head">4-week implementation timeline</div>
+  <div class="timeline">
+    <div class="tl-week"><div class="tl-label">Week 1</div><div class="tl-title">Discovery & Setup</div><ul class="tl-items"><li>Kickoff meeting</li><li>Collect credentials</li><li>Sample files received</li><li>Koncile workspace configured</li></ul></div>
+    <div class="tl-week"><div class="tl-label">Week 2</div><div class="tl-title">Build</div><ul class="tl-items"><li>OneDrive monitoring</li><li>Koncile API integration</li><li>PO matching logic</li><li>Reconciliation engine</li><li>Email delivery</li></ul></div>
+    <div class="tl-week"><div class="tl-label">Week 3</div><div class="tl-title">Test & Refine</div><ul class="tl-items"><li>Process all sample slips</li><li>Validate extraction accuracy</li><li>Tune for vendor quirks</li><li>Refine report format</li></ul></div>
+    <div class="tl-week"><div class="tl-label">Week 4</div><div class="tl-title">Train & Hand Off</div><ul class="tl-items"><li>Nicole training (1hr)</li><li>Steve admin walkthrough</li><li>SOP documentation</li><li>30-day support begins</li></ul></div>
+  </div>
+
+  <div class="section-head">Questions / notes from this section</div>
+  <div class="card">
+    <div class="q-text">Any questions or concerns about the platform choices?</div>
+    <textarea placeholder="Notes from Steve or Nicole's reactions…" oninput="updateProgress()">Nicole had read about Koncile but hadn't done deep research. She was very positive about the handwritten notes capability — confirmed that was a major benefit since their slips are handwritten. Steve and John were also on the call. Team agreed to pilot the solution. Nicole also raised whether there are AI-native MRP/ERP options that could do all of this seamlessly — flagged as a future conversation after the pilot.</textarea>
+  </div>
+</div>
+
+<!-- ═══ P2: HOW IT WORKS ═══ -->
+<div id="p2" class="panel" data-title="How It Works">
+  <div class="section-head">Automated workflow — step by step</div>
+  <div class="flow-steps">
+    <div class="flow-step"><div class="step-num">1</div><div><div class="step-title">Packing slip arrives & gets uploaded</div><div class="step-detail">Warehouse staff scans/photographs the packing slip and uploads the PDF to a designated OneDrive folder. This is the only manual step.</div><div class="step-tool">Warehouse staff → OneDrive</div></div></div>
+    <div class="arrow">↓</div>
+    <div class="flow-step"><div class="step-num">2</div><div><div class="step-title">n8n detects the new file</div><div class="step-detail">The n8n workflow monitors the OneDrive folder continuously. The moment a new PDF appears it triggers automatically — no button to press.</div><div class="step-tool">n8n → OneDrive trigger node</div></div></div>
+    <div class="arrow">↓</div>
+    <div class="flow-step"><div class="step-num">3</div><div><div class="step-title">Koncile extracts all data from the packing slip</div><div class="step-detail">n8n sends the PDF to Koncile's API. Koncile uses AI to extract: PO number, vendor name, all line items (part numbers, descriptions, quantities, prices), and tariff lines. Returns structured JSON with confidence scores.</div><div class="step-tool">n8n HTTP node → Koncile API</div></div></div>
+    <div class="arrow">↓</div>
+    <div class="flow-step"><div class="step-num">4</div><div><div class="step-title">Confidence check</div><div class="step-detail">If Koncile's confidence score is below threshold, the workflow flags it for manual review and emails Nicole immediately rather than proceeding with uncertain data.</div><div class="step-tool">n8n conditional logic → flag or continue</div></div></div>
+    <div class="arrow">↓</div>
+    <div class="flow-step"><div class="step-num">5</div><div><div class="step-title">Retrieve matching PO from OneDrive</div><div class="step-detail">Using the PO number extracted from the packing slip, n8n finds and downloads the corresponding PO PDF from OneDrive and parses the PO line items for comparison.</div><div class="step-tool">n8n → OneDrive + PDF parsing node</div></div></div>
+    <div class="arrow">↓</div>
+    <div class="flow-step"><div class="step-num">6</div><div><div class="step-title">Line-by-line reconciliation</div><div class="step-detail">For each line on the packing slip: match to PO line, compare quantities received vs ordered, calculate outstanding, check price variance, identify tariff lines and sum per job, flag discrepancies.</div><div class="step-tool">n8n code node — reconciliation engine</div></div></div>
+    <div class="arrow">↓</div>
+    <div class="flow-step"><div class="step-num">7</div><div><div class="step-title">Generate reconciliation report</div><div class="step-detail">Creates a clean report showing: items received ✓, items outstanding, price variances flagged, tariff totals per job. Formatted so Nicole can reference it while entering into Vision.</div><div class="step-tool">n8n → Spreadsheet/PDF generation node</div></div></div>
+    <div class="arrow">↓</div>
+    <div class="flow-step"><div class="step-num">8</div><div><div class="step-title">Email delivered to Nicole</div><div class="step-detail">Nicole receives an email with the reconciliation report attached. Subject includes PO number and vendor. She reviews and enters into Vision using the report as a guide.</div><div class="step-tool">n8n → Outlook node → Nicole's inbox</div></div></div>
+  </div>
+  <div class="section-head" style="margin-top:1rem">Workflow questions</div>
+  <div class="card"><div class="q-text">Does this workflow make sense? Any steps that don't match how they actually work?</div><textarea placeholder="Notes on workflow adjustments needed…" oninput="updateProgress()">Workflow concept confirmed and understood by Nicole. One addition: after the packing slip is scanned and reconciled, Nicole would like the PO to appear on the monitor in the warehouse so Jeff (foreman) can see which parts go where — eliminating the need for the physical paper PO on the board. The goal is no paperwork remaining in the warehouse after the scan.</textarea></div>
+  <div class="card"><div class="q-text">Who specifically should upload packing slips to OneDrive — warehouse staff or Nicole?</div><textarea placeholder="Confirmed responsible party…" oninput="updateProgress()">Jeff (warehouse foreman) currently handles the physical matching in the storeroom. The expectation is that warehouse staff will scan the packing slip. Mike suggested tablets/phones pointing to OneDrive as an option but the group agreed to start with a desktop scanner. Nicole confirmed one desk in the warehouse where everything gets checked in.</textarea></div>
+  <div class="card"><div class="q-text">What email should Nicole receive the reports on?</div><textarea placeholder="Nicole's email for report delivery…" oninput="updateProgress()">To be confirmed on credentials call. Nicole will be the contact — she confirmed it will be her and Jessica on that call.</textarea></div>
+</div>
+
+<!-- ═══ P3: NICOLE'S PROCESS ═══ -->
+<div id="p3" class="panel" data-title="Nicole's Process">
+  <div class="section-head">Current manual process — Nicole's workflow</div>
+  <div class="card"><div class="badge b-info">Process map</div><div class="q-text">Walk me through exactly what happens when a packing slip arrives. Step by step, start to finish.</div><div class="q-sub">We want Nicole to describe it in her own words — helps validate our assumptions and catch anything we missed.</div><textarea placeholder="Nicole's step-by-step description…" style="min-height:80px" oninput="updateProgress()">1. Packing slip arrives with the shipment in the box. 2. Jeff (foreman) takes the box and packing slip to the board in the storeroom which has all physical paper POs on it. 3. Jeff flips through the board, finds the associated PO, and goes line-for-line with the packing slip to verify items match. 4. Jeff brings the physical paperwork to Nicole — either a full complete shipment or a partial. 5. If partial, paperwork goes back out to the storeroom for the next shipment. 6. Nicole goes into her Excel invoice tracker, finds the associated PO, then goes into Vision and receives the items to process through inventory and accounts payable.</textarea></div>
+  <div class="card"><div class="badge b-info">Process</div><div class="q-text">Where do you find the corresponding PO to match against the packing slip?</div><div class="q-sub">Email folder? Shared drive? Print from Vision? The phantom email address Steve mentioned?</div><textarea placeholder="How POs are retrieved today…" oninput="updateProgress()">POs are generated as PDFs when sent to vendors. They reside in a SharePoint shared drive folder called 'Purchase Orders' — with subfolders by year (2021, 2026, etc.). Nicole puts the PDF in that folder and emails it out from there. Physical printed copies also go on the board in the storeroom. Multiple people are currently generating POs and not all going to the same place — Nicole will set naming convention and standardize after this meeting.</textarea></div>
+  <div class="card"><div class="badge b-info">Process</div><div class="q-text">How does the packing slip physically arrive — email attachment, comes with the box, fax?</div><textarea placeholder="Delivery method for packing slips…" oninput="updateProgress()">Arrives physically with the shipment/box. Not emailed — comes in the box with the goods.</textarea></div>
+  <div class="card"><div class="badge b-warn">Pain point</div><div class="q-text">Where do errors happen most often in this process today?</div><div class="q-sub">Wrong quantities? Missing items? Price mismatches? Items marked received when they're not? Tariff confusion?</div><textarea placeholder="Main error sources Nicole experiences…" oninput="updateProgress()">1. Checking items in — errors happen when matching line items. 2. Not having the hard copy PO out in the storeroom when a shipment arrives. 3. POs getting generated but not sent — then parts arrive with no matching PO. 4. Duplicate physical records — blank PO and marked-up PO with check marks. 5. Substitute/replacement parts from vendors (part number 1,2,3 becomes ABC) — these need to raise a flag. 6. Physical scanning is the longest and most error-prone step.</textarea></div>
+  <div class="card"><div class="badge b-warn">Pain point</div><div class="q-text">What is the single most painful part of the current reconciliation process?</div><textarea placeholder="Biggest bottleneck / most time-consuming step…" oninput="updateProgress()">Physical scanning is the biggest time consumer. Also the handoff of paper — changing hands between Jeff and Nicole. Having two sets of POs (blank + marked up) that both need to be scanned back into the share drive adds significant time.</textarea></div>
+  <div class="card"><div class="badge b-info">Process</div><div class="q-text">How do you handle partial shipments and backorders today?</div><div class="q-sub">When only some items on a PO arrive — how does Nicole track what's still outstanding?</div><textarea placeholder="Partial receipt / backorder tracking process…" oninput="updateProgress()">Jeff physically matches the packing slip against the PO in the storeroom, identifies the partial, and sends the paperwork back out to the storeroom. Nicole noted it would be ideal if after receiving a partial, the system could print/display only the remaining outstanding items rather than the full PO with 22 items marked off and 3 still open — Jeff struggles to identify what's still needed.</textarea></div>
+  <div class="card"><div class="badge b-success">Output design</div><div class="q-text">What would the perfect report look like that would make your job easier?</div><div class="q-sub">Email? PDF she prints? Excel she references while typing into Vision? What columns does she need?</div><textarea placeholder="Nicole's ideal output format and columns…" oninput="updateProgress()">Excel and PDF both acceptable. Report should show: invoice price vs part received, invoice price vs part shipped — reconciled out so she can put them in. Pricing is the main field she manipulates. Confirmed she wants pricing prominently on the report. Keep it simple — what came in vs what was ordered.</textarea></div>
+  <div class="card"><div class="badge b-success">Output design</div><div class="q-text">How comfortable is Nicole with opening email attachments and working with Excel files?</div><textarea placeholder="Tech comfort level — affects report format decision…" oninput="updateProgress()">Comfortable with email attachments and Excel. Confirmed 'yes' immediately.</textarea></div>
+  <div class="card"><div class="badge b-accent">Time savings</div><div class="q-text">How long does the current reconciliation process take per packing slip on average?</div><div class="q-sub">Helps validate the 40–60% time reduction claim in the scope of work.</div><textarea placeholder="Current time per packing slip (minutes)…" oninput="updateProgress()">Under 5 minutes per individual PO once the paper comes to Nicole. However Nicole batches them — she'll let them sit for a few days and then do 25-50 at a time. Volume is up to ~100 POs per week. The scanning and physical paperwork changing hands is what takes the most time overall.</textarea></div>
+</div>
+
+<!-- ═══ P4: FILE SETUP ═══ -->
+<div id="p4" class="panel" data-title="File Setup">
+  <div class="section-head">File storage & intake setup</div>
+  <div class="card"><div class="badge b-info">Tech</div><div class="q-text">Does Keehn currently use Microsoft 365 / OneDrive?</div><div class="q-sub">The workflow needs a OneDrive folder it can monitor. This is the core intake mechanism.</div><textarea placeholder="M365 / OneDrive status — active, inactive, not sure…" oninput="updateProgress()">Active. They use SharePoint/OneDrive already — Mike has set up shared drive folders including a 'Purchase Orders' folder with subfolders by year. POs already live there. Mike is their Plus 1 tech contact for M365 setup.</textarea></div>
+  <div class="card"><div class="badge b-info">Tech</div><div class="q-text">Who is the M365 admin? Are they on this call or reachable today?</div><div class="q-sub">May need them to grant folder permissions and authorize the OAuth connection in n8n.</div><textarea placeholder="Admin name, contact info, availability…" oninput="updateProgress()">Mike Ciano (Plus 1 Technology) is the M365/SharePoint admin. He was on this call. Nicole and Jessica will handle the credentials setup call directly — Mike can assist with folder access.</textarea></div>
+  <div class="card"><div class="badge b-warn">Hardware</div><div class="q-text">Do they have a scanner in the warehouse, or do staff photograph packing slips on a phone?</div><div class="q-sub">Critical: image quality directly affects Koncile's extraction accuracy. Phone photos of crumpled slips can cause issues.</div><textarea placeholder="Scanner brand/model or phone photo situation…" oninput="updateProgress()">No scanner currently in the warehouse — they don't do photos or scanning out there yet. Decision: desktop scanner is the right approach. Mike recommends Canon desktop scanner (Fujitsu/Ricoh are good but more expensive). Nicole confirmed one desk in the storeroom where everything gets checked in — desktop scanner fits perfectly there. Mike noted mobile/tablet photo option is viable too (auto-uploads to OneDrive/SharePoint) but agreed to start with desktop scanner and possibly add mobile later.</textarea></div>
+  <div class="card"><div class="badge b-info">Files</div><div class="q-text">Where are PO PDFs currently stored? Confirm the phantom email or directory setup.</div><div class="q-sub">Steve mentioned two options: phantom email inbox or a shared directory. Which is actually in use?</div><textarea placeholder="PO PDF storage location and naming convention…" oninput="updateProgress()">SharePoint shared drive, folder called 'Purchase Orders', subfolders by year (2021, 2026, etc.). Nicole emails POs out from that folder. Multiple people generating POs currently — not all in one place yet. Nicole will set the standard naming convention and edict after this meeting. Current convention includes vendor name and PO number. Nicole uses a three-digit convention.</textarea></div>
+  <div class="card"><div class="badge b-info">Naming</div><div class="q-text">Confirm PO naming convention — Steve said filename includes the PO number. What exactly does it look like?</div><div class="q-sub">e.g. "PO-22663.pdf" or "22663_RMI.pdf"? The workflow uses the PO# to find the right file.</div><textarea placeholder="PO filename format example…" oninput="updateProgress()">Includes vendor name and PO number — e.g. vendor name + PO number. Nicole uses three-digit convention. She will send detailed naming convention guidelines to Jessica. To be finalized.</textarea></div>
+  <div class="card"><div class="badge b-success">Action item</div><div class="q-text">Can we get 2–3 sample PO PDFs with matching packing slips confirmed during or after this call?</div><textarea placeholder="Commitment / delivery date for additional samples…" oninput="updateProgress()">Nicole will send: (1) full Excel invoice tracking template, (2) scanned samples of POs and packing slips including examples with handwritten notes and marked-up POs with check marks, (3) any keywords they want Koncile to recognize (e.g. 'partial', 'back order', '0', '1'). To be sent before the credentials setup call.</textarea></div>
+</div>
+
+<!-- ═══ P5: CREDENTIALS ═══ -->
+<div id="p5" class="panel" data-title="Access & Credentials">
+  <div class="info-box">
+    <div class="ib-label">What needs to happen on this call</div>
+    Keehn needs to set up accounts on <strong>n8n</strong> and <strong>Koncile</strong>, add Jessica Peaden (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="335943565257565d73435f4640024756505b5d5c5f5c544a1d505c5e">[email&#160;protected]</a>) as admin, and generate API keys. They also need to connect their <strong>Microsoft 365</strong> account inside n8n so the workflow can access OneDrive and send emails through Outlook.
+  </div>
+
+  <div class="section-head">Step 1 — n8n account setup</div>
+  <div class="card">
+    <div class="badge b-accent">n8n.io</div>
+    <div class="q-text" style="margin-top:4px">Create n8n account & add Jessica as admin</div>
+    <ol style="margin-left:18px;font-size:13px;color:#4b5563;line-height:1.9;margin-top:8px">
+      <li>Go to <strong style="color:#1c2333">n8n.io</strong> → Sign up (Starter plan, $20/mo)</li>
+      <li>Settings → <strong style="color:#1c2333">Users</strong> → Invite member</li>
+      <li>Enter <strong style="color:#1e5fa8"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bed4cedbdfdadbd0feced2cbcd8fcadbddd6d0d1d2d1d9c790ddd1d3">[email&#160;protected]</a></strong> → Role: <strong style="color:#1c2333">Admin</strong></li>
+      <li>Settings → <strong style="color:#1c2333">API</strong> → Create API Key → share with Jessica</li>
+    </ol>
+    <div style="margin-top:12px">
+      <div class="check-row" id="cn1"><input type="checkbox" id="cbn1" onchange="tick('cn1')"><label for="cbn1">n8n account created</label></div>
+      <div class="check-row" id="cn2"><input type="checkbox" id="cbn2" onchange="tick('cn2')"><label for="cbn2">Jessica added as admin (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5933293c383d3c371929352c2a682d3c3a31373635363e20773a3634">[email&#160;protected]</a>)</label></div>
+      <div class="check-row" id="cn3"><input type="checkbox" id="cbn3" onchange="tick('cn3')"><label for="cbn3">n8n API key generated and shared with Jessica</label></div>
+    </div>
+    <textarea class="check-note" placeholder="n8n account email / login used, any issues…" oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="section-head">Step 2 — credentials to add inside n8n</div>
+  <div class="card">
+    <div style="font-size:12px;color:#6b7a8d;margin-bottom:12px">In n8n: <strong style="color:#1c2333">Settings → Credentials → New Credential</strong></div>
+
+    <!-- n8n mockup + list side by side -->
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:8px">
+        <div class="cred-block">
+          <div class="cred-header"><div class="cred-icon" style="background:#0078d4">M</div><div><div class="cred-title">Microsoft 365 OAuth2</div><div class="cred-sub">Outlook email delivery</div></div><div class="cred-added"><input type="checkbox" id="cm1" onchange="tick('cm1')" style="width:15px;height:15px;accent-color:#1e5fa8"><label for="cm1" style="font-size:12px;color:#6b7a8d">Added</label></div></div>
+          <div class="cred-detail">Search <code>"Microsoft Outlook"</code> → OAuth2 → sign in with <strong>Keehn's M365 admin</strong> → authorize Mail + Files. Admin must be present to authorize.</div>
+        </div>
+        <div class="cred-block">
+          <div class="cred-header"><div class="cred-icon" style="background:#094ab2">OD</div><div><div class="cred-title">Microsoft OneDrive OAuth2</div><div class="cred-sub">Folder monitoring + PO retrieval</div></div><div class="cred-added"><input type="checkbox" id="cod1" onchange="tick('cod1')" style="width:15px;height:15px;accent-color:#1e5fa8"><label for="cod1" style="font-size:12px;color:#6b7a8d">Added</label></div></div>
+          <div class="cred-detail">Search <code>"Microsoft OneDrive"</code> → OAuth2 → same M365 admin login. Create as separate credential so nodes are clearly labeled.</div>
+        </div>
+        <div class="cred-block">
+          <div class="cred-header"><div class="cred-icon" style="background:#7c3aed">K</div><div><div class="cred-title">Koncile API Key (Header Auth)</div><div class="cred-sub">Packing slip AI extraction</div></div><div class="cred-added"><input type="checkbox" id="ck1" onchange="tick('ck1')" style="width:15px;height:15px;accent-color:#1e5fa8"><label for="ck1" style="font-size:12px;color:#6b7a8d">Added</label></div></div>
+          <div class="cred-detail">New Credential → <code>Header Auth</code> → Header Name: <code>Authorization</code> → Value: <code>Bearer [Koncile API Key]</code>. Plus 1 sets up Koncile first and provides the key.</div>
+        </div>
+      </div>
+      <!-- n8n UI mockup -->
+      <div class="n8n-mock">
+        <div class="n8n-head">n8n — Credentials</div>
+        <div class="n8n-tabs"><div class="n8n-tab">Workflows</div><div class="n8n-tab act">Credentials</div><div class="n8n-tab">Executions</div></div>
+        <div class="n8n-body">
+          <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:7px">Saved credentials</div>
+          <div class="n8n-row" style="background:#f0fdf4;border:1px solid #bbf7d0"><div class="n8n-dot" style="background:#22c55e"></div><div class="n8n-name" style="color:#166534">Microsoft 365 OAuth2</div><div class="n8n-status" style="background:#dcfce7;color:#16a34a">Connected</div></div>
+          <div class="n8n-row" style="background:#f0fdf4;border:1px solid #bbf7d0"><div class="n8n-dot" style="background:#22c55e"></div><div class="n8n-name" style="color:#166534">OneDrive OAuth2</div><div class="n8n-status" style="background:#dcfce7;color:#16a34a">Connected</div></div>
+          <div class="n8n-row" style="background:#f0fdf4;border:1px solid #bbf7d0"><div class="n8n-dot" style="background:#22c55e"></div><div class="n8n-name" style="color:#166534">Koncile API Key</div><div class="n8n-status" style="background:#dcfce7;color:#16a34a">Connected</div></div>
+          <button style="width:100%;margin-top:7px;background:#fff;border:1px dashed #d1d5db;border-radius:5px;padding:7px;font-size:11px;color:#6b7280;cursor:pointer">+ Add credential</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">Step 3 — Koncile account setup</div>
+  <div class="card">
+    <div class="badge b-accent">koncile.ai</div>
+    <ol style="margin-left:18px;font-size:13px;color:#4b5563;line-height:1.9;margin-top:8px">
+      <li>Go to <strong style="color:#1c2333">koncile.ai</strong> → Sign up → create workspace named <strong style="color:#1c2333">"Keehn Service"</strong></li>
+      <li>Settings → <strong style="color:#1c2333">Team</strong> → Invite <strong style="color:#1e5fa8"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6903190c080d0c072919051c1a581d0c0a01070605060e10470a0604">[email&#160;protected]</a></strong> as Admin</li>
+      <li>Settings → <strong style="color:#1c2333">API Keys</strong> → Generate key → save for n8n credential</li>
+      <li>Select <strong style="color:#1c2333">Starter plan ($99/mo)</strong></li>
+    </ol>
+    <div style="margin-top:12px">
+      <div class="check-row" id="ckc1"><input type="checkbox" id="cbkc1" onchange="tick('ckc1')"><label for="cbkc1">Koncile workspace created</label></div>
+      <div class="check-row" id="ckc2"><input type="checkbox" id="cbkc2" onchange="tick('ckc2')"><label for="cbkc2">Jessica added as admin (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f892889d999c9d96b888948d8bc98c9d9b90969794979f81d69b9795">[email&#160;protected]</a>)</label></div>
+      <div class="check-row" id="ckc3"><input type="checkbox" id="cbkc3" onchange="tick('ckc3')"><label for="cbkc3">Koncile API key generated and saved</label></div>
+      <div class="check-row" id="ckc4"><input type="checkbox" id="cbkc4" onchange="tick('ckc4')"><label for="cbkc4">Starter plan activated ($99/mo)</label></div>
+    </div>
+    <textarea class="check-note" placeholder="Koncile login email, workspace name, any issues…" oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="section-head">Step 4 — Microsoft 365 OneDrive folders</div>
+  <div class="card">
+    <ol style="margin-left:18px;font-size:13px;color:#4b5563;line-height:1.9">
+      <li>Open <strong style="color:#1c2333">OneDrive</strong> as M365 admin</li>
+      <li>Create folder: <strong style="color:#1e5fa8">Keehn-Automation / Packing-Slips-Inbox</strong></li>
+      <li>Create folder: <strong style="color:#1e5fa8">Keehn-Automation / PO-Archive</strong></li>
+      <li>Share both → invite <strong style="color:#1e5fa8"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6e041e0b0f0a0b002e1e021b1d5f1a0b0d06000102010917400d0103">[email&#160;protected]</a></strong> with <strong style="color:#1c2333">Edit</strong> access</li>
+      <li>Confirm Nicole can access Packing-Slips-Inbox to upload</li>
+    </ol>
+    <div style="margin-top:12px">
+      <div class="check-row" id="cms1"><input type="checkbox" id="cbms1" onchange="tick('cms1')"><label for="cbms1">Packing-Slips-Inbox folder created</label></div>
+      <div class="check-row" id="cms2"><input type="checkbox" id="cbms2" onchange="tick('cms2')"><label for="cbms2">PO-Archive folder created</label></div>
+      <div class="check-row" id="cms3"><input type="checkbox" id="cbms3" onchange="tick('cms3')"><label for="cbms3">Both folders shared with Jessica (Edit access)</label></div>
+      <div class="check-row" id="cms4"><input type="checkbox" id="cbms4" onchange="tick('cms4')"><label for="cbms4">Nicole confirmed able to access upload folder</label></div>
+      <div class="check-row" id="cms5"><input type="checkbox" id="cbms5" onchange="tick('cms5')"><label for="cbms5">M365 admin available to authorize OAuth in n8n</label></div>
+    </div>
+    <textarea class="check-note" placeholder="Admin name, folder paths confirmed, any permission issues…" oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="section-head">Remaining items</div>
+  <div class="card">
+    <div class="check-row" id="crr1"><input type="checkbox" id="cbrr1" onchange="tick('crr1')"><label for="cbrr1"><strong>Nicole's Outlook email confirmed</strong> — for reconciliation report delivery</label></div>
+    <textarea class="check-note" placeholder="Nicole's exact email address…" oninput="updateProgress()"></textarea>
+    <div class="check-row" id="crr2"><input type="checkbox" id="cbrr2" onchange="tick('crr2')"><label for="cbrr2"><strong>Sample packing slips confirmed</strong> — ClickUp attachments sufficient or more needed</label></div>
+    <div class="check-row" id="crr3"><input type="checkbox" id="cbrr3" onchange="tick('crr3')"><label for="cbrr3"><strong>PO PDF samples confirmed</strong> — at least 2–3 with matching packing slips</label></div>
+  </div>
+
+  <div class="section-head">Vision ERP — integration status</div>
+  <div class="card"><div class="badge b-warn">Confirmed limitation</div><div class="q-text">Confirm with Steve: Vision has no API / CSV import / integration path. Is he aligned on the report-only approach?</div><div class="q-sub">This is why Nicole still enters into Vision manually — but using the report instead of comparing from scratch.</div><textarea placeholder="Steve's reaction / confirmation…" oninput="updateProgress()">Confirmed. Jessica had reached out to Vision's tech team who confirmed no API, no CSV import for receiving, no third-party connector, and not in their roadmap. Nicole confirmed Vision 'can barely talk to itself' and acknowledged it's outdated. Team aligned that the automation is a supplementary tool, not a replacement. Nicole opened the door to eventually researching AI-native MRP/ERP alternatives.</textarea></div>
+  <div class="card"><div class="badge b-info">Vision</div><div class="q-text">Any update from Lisa at PLUSS — CSV template, MMI app, or bulk import option?</div><textarea placeholder="PLUSS response status…" oninput="updateProgress()">Vision tech team confirmed to Jessica: no REST API, no receiving import, no third-party connector, not in any roadmap plans. They plan to keep it as-is.</textarea></div>
+</div>
+
+<!-- ═══ P6: TARIFF HANDLING ═══ -->
+<div id="p6" class="panel" data-title="Tariff Handling">
+  <div class="section-head">Tariff handling — critical for reconciliation logic</div>
+  <div class="card"><div class="badge b-danger">Critical — affects build</div><div class="q-text">Confirm the tariff part number convention — Steve said "we've come up with a part number for the tariff." What is it exactly?</div><div class="q-sub">Is there a single tariff part number across all jobs, or does it vary by vendor / job type?</div><textarea placeholder="Tariff part number(s) — exact value(s)…" oninput="updateProgress()">KSCTARF (Nicole said: KSC T-A-R-F). They break down tariff charges as a new part number in inventory. It costs nothing different — it's just a placeholder part number. Freight has a different part number and different GL account in Vision.</textarea></div>
+  <div class="card"><div class="badge b-info">Logic</div><div class="q-text">Does the report need to show each individual tariff line, or just the summed total per job?</div><div class="q-sub">Steve said they add up individual tariff lines into one number. Should the report show both detail and sum?</div><textarea placeholder="Tariff display: line detail, sum only, or both…" oninput="updateProgress()">Lump them together — just add them all up per job. Nicole said 'I don't care, we could lump some, it's not a big deal.' One line on the report for the tariff charge total per job is sufficient.</textarea></div>
+  <div class="card"><div class="badge b-info">Logic</div><div class="q-text">How is freight handled vs tariff — same part number or separate?</div><div class="q-sub">Steve mentioned both freight and tariff end up on the job. Are these recorded the same way or do they need different treatment?</div><textarea placeholder="Freight vs tariff — same or separate part numbers…" oninput="updateProgress()">Different part numbers AND different GL accounts in Vision. Freight and tariff are treated completely separately.</textarea></div>
+  <div class="card"><div class="badge b-warn">Vendor specific</div><div class="q-text">Which vendor has the tariff-on-every-line format? Are there others with unusual tariff patterns?</div><div class="q-sub">Steve described: "it's the part, tariff underneath it, next part, tariff." Which vendor is this?</div><textarea placeholder="Vendor name(s) with complex tariff patterns…" oninput="updateProgress()">Jessica asked about the tariff-on-every-line vendor and Nicole responded 'we're not going to do that one at all' — meaning they decided to exclude that vendor's complex tariff format for now or it was a non-issue. To be clarified on credentials call.</textarea></div>
+  <div class="card"><div class="badge b-info">Cost passthrough</div><div class="q-text">Confirm: tariffs are passed through to the customer at no markup as a separate invoice line. Is this consistent across all vendors?</div><textarea placeholder="Tariff passthrough confirmation and any exceptions…" oninput="updateProgress()">Confirmed — one line on the report for the tariff charge. Tariffs are passed through to the customer at no markup as a separate invoice line. Consistent across vendors.</textarea></div>
+</div>
+
+<!-- ═══ P7: SAMPLE FILES ═══ -->
+<div id="p7" class="panel" data-title="Sample Files">
+  <div class="section-head">Sample files — found in ClickUp task</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.25rem">
+    <div class="card"><div class="badge b-success">Packing slips (9)</div><div style="margin-top:8px"><span class="vpill match">RMI 22663 PS111725</span><span class="vpill match">RMI 22663 PS111725 v2</span><span class="vpill">BQI 22679 w/ notes</span><span class="vpill match">LCI 22515</span><span class="vpill match">RMI 22663 PINK</span><span class="vpill warn">ZDL 22667</span><span class="vpill warn">SIGNATURE 22428</span><span class="vpill warn">BEILER 22711</span><span class="vpill warn">BASE 22678</span></div><div style="font-size:11px;color:#6b7a8d;margin-top:8px"><span class="vpill match" style="font-size:10px">green</span> = has PO &nbsp;<span class="vpill warn" style="font-size:10px">yellow</span> = no matching PO</div></div>
+    <div class="card"><div class="badge b-info">Purchase orders (4)</div><div style="margin-top:8px"><span class="vpill match">LCI 553509 / 22515</span><span class="vpill match">RMI 3334890 / 22663</span><span class="vpill match">RMI 3336936 / 22663</span><span class="vpill match">RMI 3336937 / 22663</span></div><div style="font-size:11px;color:#6b7a8d;margin-top:8px">Note: 3 separate POs for RMI / job 22663</div></div>
+  </div>
+  <div class="card"><div class="badge b-warn">Gap — discuss with Steve</div><div class="q-text">BQI, ZDL, SIGNATURE, BEILER, and BASE packing slips have no matching PO. What happened to those POs?</div><textarea placeholder="Steve's explanation…" oninput="updateProgress()">Nicole confirmed the samples intentionally show a wide variety — the ones without matching POs were sent that way on purpose to provide variety for Koncile training, not because POs are missing. Nicole will send additional samples including marked-up POs with check marks and handwritten notes.</textarea></div>
+  <div class="card"><div class="badge b-accent">Interesting case</div><div class="q-text">3 separate POs for RMI / job 22663 — one job with multiple shipments, or separate jobs?</div><div class="q-sub">Great partial receipt / backorder test case if it's multiple shipments.</div><textarea placeholder="Clarification from Steve…" oninput="updateProgress()">To be clarified — Nicole referenced the samples represent different vendors and scenarios for training purposes. The RMI multi-PO situation likely reflects multiple shipments or releases on one job.</textarea></div>
+  <div class="card"><div class="badge b-warn">Tariff test</div><div class="q-text">Which of these vendors has the tariff-on-every-line format Steve described?</div><textarea placeholder="Vendor identified from samples…" oninput="updateProgress()">Jessica referenced the tariff-on-every-line vendor during the call and Nicole indicated they're not going to handle that one (at least not in the initial phase). Vendor name not explicitly stated.</textarea></div>
+  <div class="card"><div class="badge b-info">Format notes</div><div class="q-text">Any observations on scan quality, handwritten notes, unusual formats, or OCR challenges?</div><textarea placeholder="Format observations after reviewing samples…" oninput="updateProgress()">Packing slips are handwritten notes in many cases — this was a key driver for choosing Koncile (98% accuracy on handwritten content). Marked-up POs include check marks next to received items, handwritten notes for partial/backorder, and sometimes substitute part numbers from vendors.</textarea></div>
+  <div class="card"><div class="badge b-info">Completeness</div><div class="q-text">Are these samples representative of all vendors and formats? Any others we should add?</div><textarea placeholder="Missing vendors or format types…" oninput="updateProgress()">Nicole will send additional samples including: marked-up POs with check marks, handwritten partial/backorder notes, any one-off formats. She mentioned getting a 'wide variety' for training purposes.</textarea></div>
+</div>
+
+<!-- ═══ P8: PRICING ═══ -->
+<div id="p8" class="panel" data-title="Pricing Decision">
+  <div class="section-head">Pricing options — recommendation & decision</div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">$119</div><div class="stat-lbl">Recommended /mo</div></div>
+    <div class="stat-card"><div class="stat-num">4 wks</div><div class="stat-lbl">Implementation</div></div>
+    <div class="stat-card"><div class="stat-num">200</div><div class="stat-lbl">Docs/month cap</div></div>
+    <div class="stat-card"><div class="stat-num">40–60%</div><div class="stat-lbl">Time savings target</div></div>
+  </div>
+  <div class="section-head">Koncile pricing</div>
+  <div class="card">
+    <table class="pricing-table"><thead><tr><th>Plan</th><th>Monthly</th><th>Documents/Month</th><th>Best for</th><th></th></tr></thead>
+    <tbody>
+      <tr class="rec"><td><strong>Starter</strong></td><td><strong>$99/mo</strong></td><td>200 documents</td><td>Keehn's current volume</td><td><span class="rec-tag">Recommended</span></td></tr>
+      <tr><td>Professional</td><td>$299/mo</td><td>1,000 documents</td><td>High volume operations</td><td></td></tr>
+      <tr><td>Enterprise</td><td>Custom</td><td>Unlimited</td><td>Large-scale deployments</td><td></td></tr>
+    </tbody></table>
+    <div style="font-size:12px;color:#6b7a8d;margin-top:10px;padding-top:10px;border-top:1px solid rgba(28,35,51,0.08)">At 5–30 slips/day × 22 working days = 110–660 docs/month. Starter handles the low end well. Recommend starting on Starter and upgrading if volume increases.</div>
+  </div>
+  <div class="section-head">n8n pricing</div>
+  <div class="card">
+    <table class="pricing-table"><thead><tr><th>Plan</th><th>Monthly</th><th>Executions/Month</th><th>Best for</th><th></th></tr></thead>
+    <tbody>
+      <tr class="rec"><td><strong>Starter</strong></td><td><strong>$20/mo</strong></td><td>2,500</td><td>Keehn's workflow volume</td><td><span class="rec-tag">Recommended</span></td></tr>
+      <tr><td>Pro</td><td>$50/mo</td><td>10,000</td><td>Growing operations</td><td></td></tr>
+      <tr><td>Self-Hosted</td><td>Free (hosting)</td><td>Unlimited</td><td>Technical teams</td><td></td></tr>
+    </tbody></table>
+    <div style="font-size:12px;color:#6b7a8d;margin-top:10px;padding-top:10px;border-top:1px solid rgba(28,35,51,0.08)">Each packing slip = 1 execution. At 200 slips/month = 8% of allowance. Plenty of headroom for additional automations.</div>
+  </div>
+  <div class="cost-box"><div><div class="cost-lbl">Recommended configuration</div><div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:3px">Koncile Starter $99 + n8n Starter $20 · scales without rebuild</div></div><div style="text-align:right"><div class="cost-num">$119<span style="font-size:18px;font-weight:400">/mo</span></div><div class="cost-sub">+ Plus 1 implementation fee (separate)</div></div></div>
+  <div class="section-head" style="margin-top:1.25rem">Pricing discussion</div>
+  <div class="card"><div class="q-text">Does the $119/month total fit within their budget?</div><div class="q-sub">If Nicole spends 30+ min/day on reconciliation at $25/hr, that's ~$275/month in labor cost alone. $119/mo delivers strong ROI.</div><textarea placeholder="Budget reaction / approval…" oninput="updateProgress()"></textarea></div>
+  <div class="card"><div class="q-text">Any questions about pricing tiers or the upgrade path?</div><textarea placeholder="Concerns or questions about pricing…" oninput="updateProgress()"></textarea></div>
+  <div class="card"><div class="q-text">Confirmed plan selection</div><textarea placeholder="Final decision: Starter / Professional / other notes…" oninput="updateProgress()"></textarea></div>
+</div>
+
+<!-- ═══ P9: DISCOVERY QUESTIONS ═══ -->
+<div id="p9" class="panel" data-title="Discovery Questions">
+  <div class="section-head">Intake process — future state</div>
+  <div class="card"><div class="badge b-info">Future state</div><div class="q-text">Where should packing slips be uploaded going forward?</div><div class="q-sub">OneDrive folder, shared email inbox, mobile scan app? We need to confirm the intake method before building the trigger.</div><textarea placeholder="Confirmed upload location…" oninput="updateProgress()">OneDrive / SharePoint shared drive. The existing Purchase Orders folder structure is already in SharePoint. New intake folder to be created for packing slips.</textarea></div>
+  <div class="card"><div class="badge b-info">Responsibility</div><div class="q-text">Who will be responsible for uploading packing slips?</div><div class="q-sub">Warehouse staff when goods arrive? Nicole after the fact? This affects training and the SOP.</div><textarea placeholder="Responsible person / role…" oninput="updateProgress()">Jeff (warehouse foreman) will scan the packing slips. Desktop scanner to be placed on the one desk in the storeroom where everything gets checked in.</textarea></div>
+  <div class="card"><div class="badge b-warn">Format</div><div class="q-text">Do packing slips ever come in as phone photos vs scanned PDFs?</div><div class="q-sub">Photos (JPG/PNG) vs PDFs affect Koncile's processing. We can handle both but want to know what to expect.</div><textarea placeholder="Photo vs PDF split, typical scan quality…" oninput="updateProgress()">Currently no scanning or photos in the warehouse — this is new. Decision: desktop Canon scanner. PDF output from scanner going to OneDrive/SharePoint. Mike noted mobile photo option is viable for future but starting with desktop.</textarea></div>
+
+  <div class="section-head">Data & reconciliation logic</div>
+  <div class="card"><div class="badge b-danger">Critical — build logic</div><div class="q-text">What fields do you actually care about comparing?</div><div class="q-sub">Quantity received vs ordered? Unit price? Part number? Description? Knowing the priority fields shapes the reconciliation engine.</div><textarea placeholder="Priority fields: qty, price, part number, other…" oninput="updateProgress()">Pricing is the primary field Nicole manipulates. Also: invoice price vs part received, invoice price vs part shipped. Part numbers need to reconcile. Flagging substitute/replacement parts (different part number from vendor) is important.</textarea></div>
+  <div class="card"><div class="badge b-danger">Critical — build logic</div><div class="q-text">Which field should be the "source of truth" for matching — PO part number or packing slip part number?</div><div class="q-sub">Vendors sometimes use different part numbers than what's on the PO. Do we match on PO#, vendor part#, description, or a combination?</div><textarea placeholder="Source of truth field for matching…" oninput="updateProgress()">Not explicitly confirmed — needs to be clarified on credentials call. Vendor part numbers sometimes differ from PO part numbers (substitute parts). These need to be flagged as exceptions rather than failed matches.</textarea></div>
+  <div class="card"><div class="badge b-info">Logic</div><div class="q-text">How should we handle partial shipments in the report?</div><div class="q-sub">Show qty received vs qty ordered, flag the gap, mark items as "partial"? What does Nicole need to see to enter correctly in Vision?</div><textarea placeholder="Partial shipment reporting preference…" oninput="updateProgress()">Show outstanding items clearly. Key insight: after a partial receipt, Jeff needs to see ONLY the remaining open items on the PO — not the full list with the received items marked off. This causes confusion currently (22 items marked off, 3 remaining — Jeff struggles to identify the 3).</textarea></div>
+  <div class="card"><div class="badge b-info">Logic</div><div class="q-text">How should we identify and report backordered items?</div><div class="q-sub">Items on the PO that didn't appear on the packing slip at all — how should these be flagged? Separate section? Color-coded row?</div><textarea placeholder="Backorder reporting preference…" oninput="updateProgress()">Items marked as 0, 1, or 'back order' (handwritten) on the packing slip. Nicole wants these flagged. Ideally the system would generate a clean list of only outstanding items for Jeff's use in the storeroom.</textarea></div>
+
+  <div class="section-head">Tariffs & edge cases</div>
+  <div class="card"><div class="badge b-warn">Edge case</div><div class="q-text">Do tariffs always appear as separate line items, or only on certain vendors?</div><textarea placeholder="Which vendors have tariff lines, always vs sometimes…" oninput="updateProgress()">One vendor has tariffs on every line (name not stated, excluded from initial phase). Other vendors have tariff as a separate line item at the bottom. Confirmed tariff is consistent across other vendors.</textarea></div>
+  <div class="card"><div class="badge b-warn">Logic</div><div class="q-text">Should tariffs always be grouped into a single summed line per job on the report?</div><div class="q-sub">Or do you sometimes need individual tariff amounts per line? Confirm the grouping rule.</div><textarea placeholder="Tariff grouping rule: always sum, always detail, or both…" oninput="updateProgress()">Sum only — lump them together per job. Nicole: 'I don't care, we could lump some, it's not a big deal.'</textarea></div>
+  <div class="card"><div class="badge b-warn">Edge case</div><div class="q-text">Are there vendors with especially unusual formats we should plan for upfront?</div><div class="q-sub">Handwritten slips, multi-page docs, non-English text, carbon copy paper, very small fonts?</div><textarea placeholder="Vendor names + unusual format notes…" oninput="updateProgress()">Handwritten notes are the main unusual format — check marks on received items, 'partial' written by hand, backorder notations. Substitute parts from vendors (different part number than PO) need to raise a flag. Nicole to send samples with these edge cases.</textarea></div>
+
+  <div class="section-head">Output & reporting</div>
+  <div class="card"><div class="badge b-success">Output design</div><div class="q-text">What format is most useful for Nicole — email summary, Excel attachment, PDF, or all three?</div><div class="q-sub">Does she print it? Reference it on screen while typing into Vision? Keep it for records?</div><textarea placeholder="Preferred output format(s)…" oninput="updateProgress()">Excel and PDF both. Nicole confirmed comfortable with both. Email delivery to Nicole with attachment.</textarea></div>
+  <div class="card"><div class="badge b-success">Output design</div><div class="q-text">What specifically should the report show?</div><div class="q-sub">Suggested columns: PO#, Vendor, Part#, Description, Qty Ordered, Qty Received, Outstanding, Price (PO), Price (Slip), Variance, Tariff Total, Job#. Which are required vs nice-to-have?</div><textarea placeholder="Required columns and any additional fields…" oninput="updateProgress()">Invoice price vs part received / invoice price vs part shipped — reconciled. Pricing is the main manipulation field. Keep it simple. Nicole will send her Excel template which Koncile will be trained on to learn her exact format.</textarea></div>
+  <div class="card"><div class="badge b-success">Output design</div><div class="q-text">Do you want only exceptions highlighted, or a full reconciliation every time?</div><div class="q-sub">"Exceptions only" = just mismatches, price variances, backorders. "Full" = every line even if it matched perfectly. Which is more useful?</div><textarea placeholder="Exceptions only vs full list preference…" oninput="updateProgress()">Full reconciliation — show everything. Nicole reviews each one to enter into Vision. She also wants exceptions flagged (substitute parts, mismatches) but needs the full list to do her Vision entry.</textarea></div>
+
+  <div class="section-head">Vision ERP — Nicole's entry process</div>
+  <div class="card"><div class="badge b-info">Vision</div><div class="q-text">What is the exact process Nicole follows to receive items in Vision today?</div><div class="q-sub">Screen path: which menu, which screens, which fields? Walk through it step by step. Helps us design the report to match her entry workflow exactly.</div><textarea placeholder="Vision receiving screen path and steps…" oninput="updateProgress()">Nicole opens Excel invoice tracker → finds the associated PO → opens Vision → receives the shipment to process through inventory and accounts payable. Pricing is the main field she manually adjusts.</textarea></div>
+  <div class="card"><div class="badge b-info">Vision</div><div class="q-text">What fields does Nicole have to enter manually when receiving in Vision?</div><div class="q-sub">Quantity received, part number, job number, invoice number, cost? Knowing the fields helps us format the report as a "fill in these boxes" guide.</div><textarea placeholder="Manual entry fields in Vision…" oninput="updateProgress()">Primarily pricing. Everything else is 'pretty standard.' Nicole said pricing is the only thing she manipulates the most. She also noted pricing should be on the report (confirmed: 'you should have the pricing on the GEOs').</textarea></div>
+  <div class="card"><div class="badge b-success">Design input</div><div class="q-text">Since we can't integrate with Vision directly, what would make Nicole's manual entry job as easy as possible?</div><div class="q-sub">Ordered in the same sequence as Vision's screens? Print-ready? Pre-filled fields she just confirms?</div><textarea placeholder="Nicole's wishlist for making Vision entry faster…" oninput="updateProgress()">Report should match Vision's entry flow. Pricing prominently displayed. Eventually Nicole's vision (pun intended): scan packing slip → PO appears on monitor in warehouse → Jeff sees which parts go where → Nicole receives clean reconciliation → no paper needed. For now: report that makes Vision entry as fast as possible.</textarea></div>
+
+  <div class="section-head">Volume & operations</div>
+  <div class="card"><div class="badge b-accent">Volume</div><div class="q-text">Roughly how many packing slips per day and per week?</div><div class="q-sub">Steve said 5–30/day. Confirm with Nicole — are there heavy days (e.g. Mondays)? Helps validate Starter plan capacity.</div><textarea placeholder="Average and peak daily/weekly volume…" oninput="updateProgress()">Up to 100 POs per week. Nicole batches them — lets them sit for a few days then processes 25-50 at a time. Individual processing time: under 5 minutes per PO once paper is in her hands.</textarea></div>
+  <div class="card"><div class="badge b-accent">Volume</div><div class="q-text">What's the typical PO size — how many line items? What's the largest you regularly see?</div><div class="q-sub">Steve mentioned POs with up to 50–100 items. What's the average?</div><textarea placeholder="Typical PO size (line items), max seen…" oninput="updateProgress()">Not explicitly stated in this call — to be confirmed. Nicole referenced POs with 25 items, some with 22 marked off and 3 remaining as an example of complexity.</textarea></div>
+  <div class="card"><div class="badge b-accent">Operations</div><div class="q-text">Are there peak times or batch processing needs?</div><div class="q-sub">Do deliveries cluster at certain times of day or week? Does Nicole process them in batches or one at a time?</div><textarea placeholder="Peak times, batch vs real-time preference…" oninput="updateProgress()">Batch processing — Nicole lets packing slips accumulate for a few days then processes 25-50 at a time. Not real-time.</textarea></div>
+
+  <div class="section-head">Close — lock next steps</div>
+  <div class="card"><div class="badge b-danger">Risk check</div><div class="q-text">Are there any edge cases we haven't covered that cause real problems today?</div><div class="q-sub">Think about the messiest, most frustrating packing slips or vendors.</div><textarea placeholder="Edge cases not yet discussed…" oninput="updateProgress()">1. Substitute/replacement parts — vendor ships a different part number than what was ordered. Need to flag these, not fail. 2. POs generated but not sent to vendor — parts arrive with no matching PO. 3. Physical PO not in the storeroom when shipment arrives. 4. Two sets of POs (blank + marked-up) currently causing duplicate scanning work.</textarea></div>
+  <div class="card"><div class="badge b-danger">Risk check</div><div class="q-text">Is there anything that would make this system fail for you if we got it wrong?</div><div class="q-sub">What's the one thing that absolutely must work? What would cause Nicole or Steve to stop using it?</div><textarea placeholder="Deal-breaker requirements…" oninput="updateProgress()">Must handle handwritten notes accurately (98% Koncile accuracy was key selling point). Must flag substitute parts. Must work with their existing SharePoint/OneDrive structure. Nicole wants it intuitive enough that she can add a new packing slip template or keyword herself without needing Jessica.</textarea></div>
+  <div class="card"><div class="badge b-info">Access</div><div class="q-text">Who is the best contact for Vision system questions going forward?</div><div class="q-sub">Steve, Nicole, or Lisa at PLUSS?</div><textarea placeholder="Primary Vision contact name and role…" oninput="updateProgress()">Nicole Kovacic — she handles all Vision receiving. For credentials: Jessica and Nicole will handle the setup call directly. Mike Ciano (Plus 1) handles M365/SharePoint access.</textarea></div>
+</div>
+
+<!-- ═══ P10: EXIT CHECKLIST ═══ -->
+<div id="p10" class="panel" data-title="Exit Checklist">
+  <div class="section-head">Must have before ending the call</div>
+  <div class="card">
+    <div class="check-row" id="ex1"><input type="checkbox" id="e1" onchange="tick('ex1')" checked><label for="e1">Nicole's exact current process documented step-by-step</label></div>
+    <div class="check-row" id="ex2"><input type="checkbox" id="e2" onchange="tick('ex2')"><label for="e2">OneDrive folder location confirmed or creation plan agreed</label></div>
+    <div class="check-row" id="ex3"><input type="checkbox" id="e3" onchange="tick('ex3')" checked><label for="e3">Packing slip samples confirmed (ClickUp files or more coming)</label></div>
+    <div class="check-row" id="ex4"><input type="checkbox" id="e4" onchange="tick('ex4')"><label for="e4">PO PDF samples confirmed with matching packing slips</label></div>
+    <div class="check-row" id="ex5"><input type="checkbox" id="e5" onchange="tick('ex5')" checked><label for="e5">Tariff part number(s) confirmed</label></div>
+    <div class="check-row" id="ex6"><input type="checkbox" id="e6" onchange="tick('ex6')"><label for="e6">M365 admin contact identified and reachable</label></div>
+    <div class="check-row" id="ex7"><input type="checkbox" id="e7" onchange="tick('ex7')"><label for="e7">Nicole's Outlook email confirmed for report delivery</label></div>
+    <div class="check-row" id="ex8"><input type="checkbox" id="e8" onchange="tick('ex8')"><label for="e8">Pricing plan confirmed ($119/mo Starter recommended)</label></div>
+    <div class="check-row" id="ex9"><input type="checkbox" id="e9" onchange="tick('ex9')" checked><label for="e9">Nicole's preferred report format captured</label></div>
+    <div class="check-row" id="ex10"><input type="checkbox" id="e10" onchange="tick('ex10')"><label for="e10">Source-of-truth field for part number matching confirmed</label></div>
+    <div class="check-row" id="ex11"><input type="checkbox" id="e11" onchange="tick('ex11')"><label for="e11">Build start date agreed — Week 1 begins when?</label></div>
+    <div class="check-row" id="ex12"><input type="checkbox" id="e12" onchange="tick('ex12')" checked><label for="e12">BQI/ZDL/SIGNATURE/BEILER/BASE PO gaps explained</label></div>
+    <div class="check-row" id="ex13"><input type="checkbox" id="e13" onchange="tick('ex13')"><label for="e13">RMI triple-PO situation clarified (partial receipts or separate jobs)</label></div>
+    <div class="check-row" id="ex14"><input type="checkbox" id="e14" onchange="tick('ex14')"><label for="e14">n8n account created and Jessica added as admin</label></div>
+    <div class="check-row" id="ex15"><input type="checkbox" id="e15" onchange="tick('ex15')"><label for="e15">Koncile account created and Jessica added as admin</label></div>
+  </div>
+  <div class="section-head">Next steps & commitments</div>
+  <div class="card"><div class="q-text">Agreed next steps — who does what, by when</div><textarea placeholder="Action items and owners…" style="min-height:80px" oninput="updateProgress()">1. Jessica: Email Nicole on Monday to schedule credentials setup call (for Vision access, OneDrive/SharePoint, Koncile and n8n accounts). 2. Nicole: Send Jessica the Excel invoice tracking template. 3. Nicole: Send scanned samples of POs and packing slips including handwritten/marked-up examples. 4. Nicole: Confirm standardized naming convention for all POs and packing slips. 5. Nicole: Send list of keywords for Koncile to recognize (partial, back order, 0, 1, etc.). 6. To be assigned: Finalize desktop scanner selection and purchase (Canon recommended by Mike). 7. Jessica: Configure Koncile and n8n using provided training data to initiate pilot.</textarea></div>
+  <div class="card"><div class="q-text">Any scope additions, changes, or new concerns raised during this call</div><textarea placeholder="Anything outside the original scope…" style="min-height:65px" oninput="updateProgress()">Nicole raised the question of whether to look at an AI-native MRP/ERP system instead of (or after) this pilot — one that could integrate seamlessly rather than working around Vision. Group agreed to proceed with the pilot first, then use the experience to define requirements for a future ERP evaluation. Jessica offered to do a deep research on AI-native MRP options if they decide to pursue.</textarea></div>
+  <div class="card"><div class="q-text">General notes / anything else worth capturing</div><textarea placeholder="Miscellaneous notes…" oninput="updateProgress()">Attendees: Jessica Peaden (Plus 1 AI Implementation Engineer), Mike Ciano (Plus 1 technical support), Nicole Kovacic (Keehn subject matter expert), Steve Kovacic (owner, brief attendance), John (also present). Meeting date: 03/19/2026. Vision has been in use since approximately 2017 — last ERP evaluation was at that time. Nicole mentioned wireless router Mike sent for the other building is working great.</textarea></div>
+</div>
+
+<!-- ═══ P11: STICKIES ═══ -->
+<div id="p11" class="panel" data-title="Stickies">
+  <div class="sticky-toolbar">
+    <div style="font-size:13px;color:#6b7a8d">Capture anything that comes up mid-call. Click a color dot to change the sticky.</div>
+    <button class="add-sticky-btn" onclick="addSticky()">+ Add sticky</button>
+  </div>
+  <div class="sticky-grid" id="sgrid"></div>
+</div>
+
+</div><!-- /panels -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function tick(rowId){
+  var row=document.getElementById(rowId);
+  if(!row) return;
+  var cb=row.querySelector('input[type=checkbox]');
+  if(cb && cb.checked) row.style.opacity='0.55';
+  else row.style.opacity='1';
+  updateProgress();
+}
+
+function updateProgress(){
+  var tas=document.querySelectorAll('.panels textarea');
+  var cbs=document.querySelectorAll('.panels input[type=checkbox]');
+  var filled=0,total=0;
+  tas.forEach(function(t){total++;if(t.value.trim().length>4)filled++;});
+  cbs.forEach(function(c){total+=0.5;if(c.checked)filled+=0.5;});
+  var pct=total?Math.round((filled/total)*100):0;
+  var p=document.getElementById('prog');
+  var pp=document.getElementById('prog-pct');
+  if(p) p.style.width=pct+'%';
+  if(pp) pp.textContent=pct+'%';
+}
+
+var SC={
+  yellow:{bg:'#fef9c3',tc:'#4a3f00',dc:'#f5e663'},
+  blue:{bg:'#dbeafe',tc:'#1e3a5f',dc:'#93c5fd'},
+  green:{bg:'#dcfce7',tc:'#14532d',dc:'#86efac'},
+  pink:{bg:'#fce7f3',tc:'#831843',dc:'#f9a8d4'},
+  orange:{bg:'#ffedd5',tc:'#7c2d12',dc:'#fed7aa'},
+  lavender:{bg:'#ede9fe',tc:'#4c1d95',dc:'#c4b5fd'}
+};
+
+function addSticky(txt,col){
+  var c=col||'yellow';
+  var id='sk'+Date.now()+Math.random().toString(36).slice(2,7);
+  var grid=document.getElementById('sgrid');
+  if(!grid) return;
+  var d=document.createElement('div');
+  d.className='sticky';
+  d.id=id;
+  d.style.background=SC[c].bg;
+  d.style.border='1px solid '+SC[c].dc;
+  var dots=Object.keys(SC).map(function(k){
+    return '<span class="dot'+(k===c?' sel':'')+'" style="background:'+SC[k].bg+';border-color:'+SC[k].dc+'" onclick="chgCol(''+id+'',''+k+'')" title="'+k+'"></span>';
+  }).join('');
+  d.innerHTML='<button class="del-sticky" onclick="this.parentElement.remove()" title="Remove">×</button><div class="sticky-dots">'+dots+'</div><textarea placeholder="Type a note…" style="color:'+SC[c].tc+';background:transparent;border:none;padding:0;width:100%;min-height:88px;resize:none;font-family:Barlow,sans-serif;font-size:13px">'+(txt||'')+'</textarea>';
+  grid.appendChild(d);
+}
+
+function chgCol(id,c){
+  var d=document.getElementById(id);
+  if(!d) return;
+  d.style.background=SC[c].bg;
+  d.style.borderColor=SC[c].dc;
+  d.querySelector('textarea').style.color=SC[c].tc;
+  d.querySelectorAll('.dot').forEach(function(dot,i){
+    dot.classList.toggle('sel',Object.keys(SC)[i]===c);
+    dot.style.borderColor=Object.keys(SC)[i]===c?'rgba(0,0,0,0.25)':'transparent';
+  });
+}
+
+function exportAll(){
+  var lines=['KEEHN SERVICE — KICKOFF CALL NOTES','Plus 1 Technology','='.repeat(50),'Date: '+new Date().toLocaleDateString(),'',''];
+  var panels={
+    p1:'Platform Overview',p2:'Workflow Notes',p3:"Nicole's Process",
+    p4:'File Setup',p5:'Access & Credentials',p6:'Tariff Handling',
+    p7:'Sample Files',p8:'Pricing',p9:'Discovery Questions',p10:'Exit Checklist'
+  };
+  Object.keys(panels).forEach(function(pid){
+    var panel=document.getElementById(pid);
+    if(!panel) return;
+    lines.push(panels[pid].toUpperCase());
+    lines.push('-'.repeat(35));
+    var items=panel.querySelectorAll('.q-text');
+    var tas=panel.querySelectorAll('textarea');
+    items.forEach(function(q,i){
+      var ta=tas[i];
+      if(ta&&ta.value.trim()){
+        lines.push('Q: '+q.textContent.trim());
+        lines.push('A: '+ta.value.trim());
+        lines.push('');
+      }
+    });
+    panel.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+      var lbl=cb.parentElement.querySelector('label');
+      if(lbl) lines.push((cb.checked?'[x] ':'[ ] ')+lbl.textContent.trim());
+    });
+    lines.push('');
+  });
+  var snotes=document.querySelectorAll('#sgrid textarea');
+  if(snotes.length){
+    lines.push('STICKY NOTES');
+    lines.push('-'.repeat(35));
+    snotes.forEach(function(s,i){if(s.value.trim()) lines.push('Note '+(i+1)+': '+s.value.trim());});
+  }
+  var blob=new Blob([lines.join('\n')],{type:'text/plain'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='keehn_kickoff_notes_'+new Date().toISOString().slice(0,10)+'.txt';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+// ── AUTO-SAVE TO LOCALSTORAGE ──
+var SAVE_KEY = 'keehn_kickoff_v1';
+var saveTimer = null;
+
+function saveAll() {
+  var data = {};
+  document.querySelectorAll('.panels textarea').forEach(function(ta, i) {
+    data['ta_' + i] = ta.value;
+  });
+  document.querySelectorAll('.panels input[type=checkbox]').forEach(function(cb) {
+    if (cb.id) data['cb_' + cb.id] = cb.checked;
+  });
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    showSaveStatus('saved');
+  } catch(e) { showSaveStatus('fail'); }
+}
+
+function loadAll() {
+  try {
+    var raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    document.querySelectorAll('.panels textarea').forEach(function(ta, i) {
+      if (data['ta_' + i] !== undefined && data['ta_' + i] !== '') ta.value = data['ta_' + i];
+    });
+    document.querySelectorAll('.panels input[type=checkbox]').forEach(function(cb) {
+      if (cb.id && data['cb_' + cb.id] !== undefined) {
+        cb.checked = data['cb_' + cb.id];
+        var row = cb.closest('.check-row');
+        if (row && cb.checked) row.style.opacity = '0.55';
+      }
+    });
+    updateProgress();
+    showSaveStatus('restored');
+  } catch(e) {}
+}
+
+function clearSaved() {
+  if (!confirm('Clear all your saved answers? The pre-filled transcript answers will remain but anything you typed will be lost.')) return;
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+  showSaveStatus('cleared');
+}
+
+function showSaveStatus(type) {
+  var el = document.getElementById('save-status');
+  if (!el) return;
+  var msgs = {saved:'✓ Auto-saved', restored:'↺ Restored from last session', fail:'⚠ Save failed', cleared:'✕ Cleared'};
+  var colors = {saved:'#16a34a', restored:'#1e5fa8', fail:'#dc2626', cleared:'#6b7a8d'};
+  el.textContent = msgs[type] || type;
+  el.style.color = colors[type] || '#1c2333';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(function(){ el.style.opacity = '0'; }, 3000);
+}
+
+// Debounced save on textarea input
+document.addEventListener('input', function(e) {
+  if (e.target.tagName === 'TEXTAREA') {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveAll, 800);
+  }
+});
+
+// Save on checkbox change
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'checkbox') saveAll();
+});
+
+// Load saved answers on startup
+loadAll();
+
+// Init stickies
+addSticky('','yellow');
+addSticky('','blue');
+addSticky('','green');
+addSticky('','pink');
+addSticky('','orange');
+addSticky('','lavender');
+</script>
+</body>
+</html>
