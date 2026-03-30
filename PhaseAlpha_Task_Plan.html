@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhaseAlpha — Execution Task Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0f2545;
+  --navy2: #162d52;
+  --blue: #1a4fad;
+  --blue-mid: #2563eb;
+  --blue-light: #dbeafe;
+  --blue-pale: #f0f6ff;
+  --accent: #f97316;
+  --accent-light: #fff7ed;
+  --green: #166534;
+  --green-light: #dcfce7;
+  --green-mid: #16a34a;
+  --red: #991b1b;
+  --red-light: #fee2e2;
+  --amber: #92400e;
+  --amber-light: #fef3c7;
+  --purple: #5b21b6;
+  --purple-light: #ede9fe;
+  --gray1: #f8fafc;
+  --gray2: #e2e8f0;
+  --gray3: #94a3b8;
+  --gray4: #475569;
+  --gray5: #1e293b;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --sidebar: 260px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--gray1); color: var(--gray5); font-size: 14px; line-height: 1.6; overflow-x: hidden; }
+
+/* ── LAYOUT ── */
+.layout { display: flex; min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar);
+  background: var(--navy);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+
+.sb-brand {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.sb-badge {
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+.sb-title { color: #fff; font-weight: 700; font-size: 14px; line-height: 1.3; }
+.sb-sub { color: #64748b; font-family: var(--mono); font-size: 10px; margin-top: 3px; }
+
+.sb-section { padding: 12px 18px 4px; }
+.sb-section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.sb-phase-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-bottom: 2px;
+  transition: background .15s;
+  text-align: left;
+}
+.sb-phase-btn:hover { background: rgba(255,255,255,.06); }
+.sb-phase-btn.active { background: rgba(37,99,235,.25); }
+.sb-phase-num {
+  width: 24px; height: 24px;
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sb-phase-text { flex: 1; }
+.sb-phase-name { color: #e2e8f0; font-size: 12px; font-weight: 600; line-height: 1.2; }
+.sb-phase-count { color: #64748b; font-family: var(--mono); font-size: 10px; }
+.sb-phase-check { color: var(--green-mid); font-size: 12px; }
+
+.sb-divider { height: 1px; background: rgba(255,255,255,.06); margin: 8px 18px; }
+
+.sb-stats { padding: 12px 18px; }
+.sb-stat { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.sb-stat-label { color: #64748b; font-family: var(--mono); font-size: 10px; }
+.sb-stat-val { color: #e2e8f0; font-family: var(--mono); font-size: 11px; font-weight: 700; }
+
+/* ── MAIN ── */
+.main { margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid var(--gray2);
+  padding: 12px 28px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.search-wrap { position: relative; flex: 1; max-width: 360px; }
+.search-wrap input {
+  width: 100%;
+  padding: 8px 12px 8px 34px;
+  border: 1px solid var(--gray2);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--gray1);
+  outline: none;
+  transition: border-color .15s;
+}
+.search-wrap input:focus { border-color: var(--blue-mid); background: #fff; }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gray3); font-size: 14px; pointer-events: none; }
+
+.filter-select {
+  padding: 7px 10px;
+  border: 1px solid var(--gray2);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--gray1);
+  color: var(--gray5);
+  outline: none;
+  cursor: pointer;
+}
+.filter-select:focus { border-color: var(--blue-mid); }
+
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.progress-wrap { display: flex; align-items: center; gap: 8px; }
+.progress-label { font-family: var(--mono); font-size: 11px; color: var(--gray4); white-space: nowrap; }
+.progress-bar-outer { width: 120px; height: 6px; background: var(--gray2); border-radius: 3px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: var(--green-mid); border-radius: 3px; transition: width .4s ease; }
+.complete-count { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--green-mid); }
+
+/* ── CONTENT ── */
+.content { padding: 28px; flex: 1; }
+
+/* ── MISSING INPUTS BANNER ── */
+.mi-banner {
+  background: var(--red-light);
+  border: 1px solid #fca5a5;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.mi-icon { font-size: 20px; flex-shrink: 0; }
+.mi-body h3 { font-weight: 700; color: var(--red); margin-bottom: 6px; font-size: 13px; }
+.mi-items { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.mi-chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--red-light);
+  border: 1px solid #fca5a5;
+  color: var(--red);
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.mi-chip:hover { background: #fecaca; }
+
+/* ── PHASE HEADER ── */
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--gray2);
+}
+.phase-num-large {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+.phase-header-text h2 { font-size: 18px; font-weight: 700; color: var(--navy); }
+.phase-header-text p { font-size: 13px; color: var(--gray4); margin-top: 2px; }
+.phase-header-meta { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+.phase-progress-mini { display: flex; align-items: center; gap: 6px; }
+.phase-progress-bar { width: 80px; height: 5px; background: var(--gray2); border-radius: 3px; overflow: hidden; }
+.phase-progress-fill { height: 100%; border-radius: 3px; transition: width .4s; }
+
+.phase-section { margin-bottom: 40px; }
+.phase-section.hidden { display: none; }
+
+/* ── MILESTONE HEADER ── */
+.ms-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+.ms-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--navy);
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+.ms-name { font-size: 14px; font-weight: 700; color: var(--gray5); }
+.ms-count { font-family: var(--mono); font-size: 11px; color: var(--gray3); margin-left: auto; }
+
+/* ── TASK CARD ── */
+.task-card {
+  background: #fff;
+  border: 1px solid var(--gray2);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: box-shadow .2s, border-color .2s;
+}
+.task-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.task-card.expanded { border-color: var(--blue-mid); box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+.task-card.completed { opacity: .65; }
+.task-card.blocking { border-left: 4px solid var(--red); }
+.task-card.hidden-task { display: none; }
+
+.task-header {
+  display: grid;
+  grid-template-columns: 40px 1fr 100px 90px 80px 36px;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  gap: 12px;
+  user-select: none;
+}
+.task-header:hover { background: var(--blue-pale); }
+
+.task-checkbox {
+  width: 18px; height: 18px;
+  border: 2px solid var(--gray3);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.task-checkbox.checked { background: var(--green-mid); border-color: var(--green-mid); }
+.task-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+
+.task-id-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--navy);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-right: 6px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.task-blocking-flag {
+  font-family: var(--mono);
+  font-size: 9px;
+  background: var(--red-light);
+  color: var(--red);
+  border: 1px solid #fca5a5;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 6px;
+  display: inline-block;
+}
+.task-name { font-weight: 600; font-size: 13px; color: var(--gray5); }
+.task-owner-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gray4);
+  background: var(--gray1);
+  border: 1px solid var(--gray2);
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.task-est {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gray4);
+  text-align: right;
+}
+.task-due {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gray3);
+  text-align: right;
+}
+.task-chevron {
+  color: var(--gray3);
+  font-size: 14px;
+  transition: transform .2s;
+  text-align: center;
+}
+.task-card.expanded .task-chevron { transform: rotate(180deg); }
+
+/* ── TASK BODY ── */
+.task-body {
+  display: none;
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--gray2);
+  animation: slideDown .18s ease;
+}
+.task-card.expanded .task-body { display: block; }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.task-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+.tb-section { }
+.tb-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--blue-mid);
+  margin-bottom: 6px;
+  margin-top: 14px;
+}
+.tb-label:first-child { margin-top: 0; }
+.tb-desc { font-size: 13px; color: var(--gray5); line-height: 1.6; }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--gray5);
+  padding: 3px 0;
+  line-height: 1.5;
+}
+.checklist li::before {
+  content: '□';
+  font-family: var(--mono);
+  color: var(--gray3);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.tag-blue { background: var(--blue-light); color: var(--blue); }
+.tag-green { background: var(--green-light); color: var(--green); }
+.tag-red { background: var(--red-light); color: var(--red); }
+.tag-amber { background: var(--amber-light); color: var(--amber); }
+.tag-purple { background: var(--purple-light); color: var(--purple); }
+.tag-navy { background: var(--navy); color: #fff; }
+
+.task-meta-strip {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--gray1);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-top: 14px;
+  border: 1px solid var(--gray2);
+}
+.tms-item { }
+.tms-label { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--gray3); }
+.tms-val { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--gray5); }
+
+/* ── QA CARD ── */
+.qa-card {
+  background: linear-gradient(135deg, #0f2545 0%, #1a4fad 100%);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.qa-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.qa-badge { background: var(--accent); color: #fff; font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 4px; }
+.qa-title { font-weight: 700; font-size: 14px; }
+.qa-body { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+.qa-criteria { margin-top: 8px; }
+.qa-criteria li { font-size: 12px; color: #cbd5e1; padding: 2px 0; }
+.qa-criteria li::before { content: '✓ '; color: var(--accent); font-weight: 700; }
+
+/* ── MI TABLE ── */
+.mi-table-wrap { overflow-x: auto; margin-bottom: 24px; }
+.mi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.mi-table th { background: var(--navy); color: #fff; font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 9px 12px; text-align: left; }
+.mi-table td { padding: 9px 12px; border-bottom: 1px solid var(--gray2); }
+.mi-table tr:nth-child(even) td { background: #f8fafc; }
+.mi-table .mi-id { font-family: var(--mono); font-weight: 700; color: var(--red); }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--gray3); }
+.empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-family: var(--mono); font-size: 13px; }
+
+/* ── PILL STYLES ── */
+.pill { font-family: var(--mono); font-size: 10px; padding: 3px 9px; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+.pill::before { content: '●'; font-size: 6px; }
+.pill-amber { background: var(--amber-light); color: var(--amber); }
+.pill-blue { background: var(--blue-light); color: var(--blue); }
+.pill-green { background: var(--green-light); color: var(--green); }
+.pill-red { background: var(--red-light); color: var(--red); }
+
+/* ── FOOTER ── */
+.doc-footer {
+  background: var(--navy);
+  color: #475569;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .task-header { grid-template-columns: 36px 1fr 60px; }
+  .task-owner-pill, .task-est, .task-due { display: none; }
+  .task-body-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-badge">Task Plan</div>
+    <div class="sb-title">PhaseAlpha<br>HVAC Extraction</div>
+    <div class="sb-sub">Plus1 Technology · 2026</div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">All Tasks</div>
+    <button class="sb-phase-btn active" onclick="filterPhase('all')" id="btn-all">
+      <div class="sb-phase-num" style="background:#475569">≡</div>
+      <div class="sb-phase-text">
+        <div class="sb-phase-name">All Phases</div>
+        <div class="sb-phase-count" id="count-all">56 tasks</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Phases</div>
+    <button class="sb-phase-btn" onclick="filterPhase('0A')" id="btn-0A">
+      <div class="sb-phase-num" style="background:#2563eb">0A</div>
+      <div class="sb-phase-text">
+        <div class="sb-phase-name">Fast Path Pilot</div>
+        <div class="sb-phase-count" id="count-0A">31 tasks</div>
+      </div>
+    </button>
+    <button class="sb-phase-btn" onclick="filterPhase('0B')" id="btn-0B">
+      <div class="sb-phase-num" style="background:#d97706">0B</div>
+      <div class="sb-phase-text">
+        <div class="sb-phase-name">Dual Detector</div>
+        <div class="sb-phase-count" id="count-0B">4 tasks</div>
+      </div>
+    </button>
+    <button class="sb-phase-btn" onclick="filterPhase('1')" id="btn-1">
+      <div class="sb-phase-num" style="background:#5b21b6">1</div>
+      <div class="sb-phase-text">
+        <div class="sb-phase-name">API Hardening</div>
+        <div class="sb-phase-count" id="count-1">7 tasks</div>
+      </div>
+    </button>
+    <button class="sb-phase-btn" onclick="filterPhase('2')" id="btn-2">
+      <div class="sb-phase-num" style="background:#166534">2</div>
+      <div class="sb-phase-text">
+        <div class="sb-phase-name">.NET Integration</div>
+        <div class="sb-phase-count" id="count-2">7 tasks</div>
+      </div>
+    </button>
+    <button class="sb-phase-btn" onclick="filterPhase('3')" id="btn-3">
+      <div class="sb-phase-num" style="background:#0f2545">3</div>
+      <div class="sb-phase-text">
+        <div class="sb-phase-name">Prod Hardening</div>
+        <div class="sb-phase-count" id="count-3">5 tasks</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="sb-divider"></div>
+  <div class="sb-stats">
+    <div class="sb-section-label">Progress</div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Completed</span>
+      <span class="sb-stat-val" id="sb-completed">0 / 56</span>
+    </div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Blocking</span>
+      <span class="sb-stat-val" style="color:#fca5a5">2</span>
+    </div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Missing Inputs</span>
+      <span class="sb-stat-val" style="color:#fcd34d">6</span>
+    </div>
+    <div class="sb-stat">
+      <span class="sb-stat-label">Total Est. Hrs</span>
+      <span class="sb-stat-val">135–183h</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search tasks..." oninput="filterTasks()">
+    </div>
+    <select class="filter-select" id="ownerFilter" onchange="filterTasks()">
+      <option value="all">All Owners</option>
+      <option value="Marc">Marc Umstead</option>
+      <option value="Jessica">Jessica Peaden</option>
+      <option value="PhaseAlpha">PhaseAlpha</option>
+    </select>
+    <select class="filter-select" id="statusFilter" onchange="filterTasks()">
+      <option value="all">All Statuses</option>
+      <option value="blocking">⛔ Build-Blocking</option>
+      <option value="incomplete">Incomplete</option>
+      <option value="complete">Complete</option>
+    </select>
+    <button onclick="expandAll()" style="padding:7px 12px;border:1px solid var(--gray2);border-radius:6px;background:var(--gray1);font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--gray4)">Expand All</button>
+    <button onclick="collapseAll()" style="padding:7px 12px;border:1px solid var(--gray2);border-radius:6px;background:var(--gray1);font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--gray4)">Collapse</button>
+    <div class="topbar-right">
+      <div class="progress-wrap">
+        <span class="progress-label">Progress</span>
+        <div class="progress-bar-outer"><div class="progress-bar-inner" id="topProgressBar" style="width:0%"></div></div>
+        <span class="complete-count" id="topProgressLabel">0/56</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- MISSING INPUTS BANNER -->
+    <div class="mi-banner">
+      <div class="mi-icon">⛔</div>
+      <div class="mi-body">
+        <h3>6 Missing Inputs — Flagged Before Task Finalization</h3>
+        <p style="font-size:12px;color:var(--red);margin-bottom:8px">The following inputs have not been received. Tasks dependent on them cannot be fully scheduled until resolved.</p>
+        <div class="mi-items">
+          <span class="mi-chip">MI-1 Option A/B Selection</span>
+          <span class="mi-chip">MI-2 Reference File Delivery Date</span>
+          <span class="mi-chip">MI-3 Payload Schema Format</span>
+          <span class="mi-chip">MI-4 n8n Hosting Decision</span>
+          <span class="mi-chip">MI-5 Cost Budget Per Execution</span>
+          <span class="mi-chip">MI-6 LlamaParse/Docling Findings Call</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mi-table-wrap">
+      <table class="mi-table">
+        <thead><tr><th>#</th><th>Missing Input</th><th>Impact</th><th>Owner</th><th>Required By</th></tr></thead>
+        <tbody>
+          <tr><td class="mi-id">MI-1</td><td><strong>Option A or Option B formally selected</strong></td><td>Detector layer cannot be tasked</td><td>Joe Lewis</td><td>Before Apr 2 kickoff</td></tr>
+          <tr><td class="mi-id">MI-2</td><td><strong>Reference extraction file delivery date</strong></td><td>M5 accuracy measurement cannot schedule</td><td>PhaseAlpha dev</td><td>End of Week 1</td></tr>
+          <tr><td class="mi-id">MI-3</td><td><strong>Exact payload schema format</strong></td><td>API contract content cannot finalize</td><td>Brian Knapp</td><td>Week 1, Day 1–2</td></tr>
+          <tr><td class="mi-id">MI-4</td><td><strong>n8n hosting decision</strong></td><td>Environment provisioning scope differs ~2 days</td><td>Marc Umstead</td><td>Before Apr 2</td></tr>
+          <tr><td class="mi-id">MI-5</td><td><strong>Per-execution cost budget target</strong></td><td>Model tier selections unconfirmed</td><td>Joe Lewis</td><td>Week 1</td></tr>
+          <tr><td class="mi-id">MI-6</td><td><strong>LlamaParse/Docling findings call not scheduled</strong></td><td>May duplicate PhaseAlpha's prior testing</td><td>Joe Lewis → PA team</td><td>Week 1, ASAP</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ══════ TASK SECTIONS (rendered by JS) ══════ -->
+    <div id="taskContainer"></div>
+
+    <div class="empty-state hidden" id="emptyState">
+      <div class="empty-icon">🔍</div>
+      <p>No tasks match your filter.</p>
+    </div>
+
+  </div><!-- /content -->
+
+  <div class="doc-footer">Plus1 Technology · PhaseAlpha Task Plan · March 2026 · Confidential — Do Not Distribute</div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+// ══════════════════════════════════════════════════════════
+// TASK DATA
+// ══════════════════════════════════════════════════════════
+const TASKS = [
+  // ─── PHASE 0A ───
+  {id:"0A.1.1",phase:"0A",milestone:"M1",name:"Facilitate and Document Option A/B Selection",owner:"Marc",est:"1h",start:"2026-03-30",due:"2026-04-01",blocking:true,
+   desc:"The formal option selection is a build-blocking decision that must be documented before detector-layer work begins. Marc leads the conversation with Joe Lewis to receive written confirmation.",
+   checklist:["Send summary email to Joe Lewis outlining Option A vs. Option B trade-offs with recommendation","Reference the accuracy risk language from the technical assessment","Recommend Option B as planning assumption; offer Option A as the starting point","Receive written confirmation of selection (email acceptable)","Document selection decision and date in project log","If Option B selected from the start: add Option B tasks to plan immediately"],
+   inputs:["Technical assessment option comparison (already drafted ✅)","Signed quote confirming fixed-bid engagement ✅"],
+   outputs:["Written confirmation from Joe Lewis (email) selecting Option A or Option B","Decision logged in project notes"],
+   deps:["None — Day 1 action"],
+   tags:["Scope","Build-Blocking","Joe Lewis"],
+   notes:"Build-blocking. Do not start detector-layer tasks without this confirmed."},
+
+  {id:"0A.1.2",phase:"0A",milestone:"M1",name:"Create Shared Teams Channel and Send Kickoff Meeting Invite",owner:"Marc",est:"1h",start:"2026-03-30",due:"2026-04-01",blocking:false,
+   desc:"Joe Lewis explicitly requested a shared Teams channel in his March 28 email. This is the communication infrastructure for the entire engagement.",
+   checklist:["Create Microsoft Teams channel — invite all 6 stakeholders (PhaseAlpha + Plus1)","Post welcome message pinning technical assessment URL and roadmap document","Send kickoff meeting calendar invite for April 2, 2026 (30–45 min)","Attach agenda: (1) option selection, (2) payload schema, (3) reference file ETA, (4) sample PDF handoff, (5) pass/fail criteria, (6) communication cadence","Confirm all parties accepted the invite before April 2"],
+   inputs:["Contact emails for all PhaseAlpha stakeholders (available from email thread ✅)","Kickoff agenda"],
+   outputs:["Active Teams channel with all stakeholders","Kickoff meeting calendar invite accepted by all parties","Pinned reference documents in channel"],
+   deps:["Task 0A.1.1 (option selection status to finalize agenda)"],
+   tags:["Coordination"],
+   notes:"Teams channel is primary comms for rapid Q&A during the 2-week active build."},
+
+  {id:"0A.1.3",phase:"0A",milestone:"M1",name:"Kickoff Meeting — Run and Document",owner:"Marc+Jessica",est:"2h",start:"2026-04-02",due:"2026-04-03",blocking:false,
+   desc:"The April 2 kickoff call must resolve all remaining pre-build open items and produce a written summary that both teams confirm. Unresolved items become tracked blockers.",
+   checklist:["Confirm Option A/B selection","Confirm payload format: separate PDF per schedule page","Confirm payload schema: project ID, page reference, additional metadata","Confirm push vs. pull architecture — get PhaseAlpha endpoint documentation if push-back","Confirm reference file delivery date (exact date from PhaseAlpha developer)","Collect or set sample PDF transfer method","Agree on pass/fail acceptance criteria (fields measured, null scoring, row count)","Confirm n8n hosting decision","Agree on per-execution cost budget target","Write and distribute kickoff summary within 24 hours"],
+   inputs:["All pre-kickoff open items resolved or noted","Technical assessment doc accessible to all participants"],
+   outputs:["Kickoff meeting summary document (distributed via Teams)","All 6 missing inputs either resolved or assigned with resolution dates","Written confirmation of payload schema, reference file ETA, and sample PDF handoff method"],
+   deps:["0A.1.1 — option selection","0A.1.2 — Teams channel and invite"],
+   tags:["Coordination","Decision"],
+   notes:"If Joe cannot attend April 2, reschedule to April 3 maximum — do not start build without kickoff outcomes documented."},
+
+  {id:"0A.1.4",phase:"0A",milestone:"M1",name:"Provision n8n Self-Hosted Environment",owner:"Jessica",est:"3–4h",start:"2026-04-02",due:"2026-04-02",blocking:false,
+   desc:"Set up the n8n orchestration environment. Self-hosted is strongly recommended to avoid cloud execution time limits that affect the multi-pass crop pipeline on dense documents.",
+   checklist:["Confirm hosting decision: self-hosted (recommended) vs. cloud n8n","If self-hosted: provision Linux server, install Docker, pull n8n image, configure persistent volume, expose on HTTPS, set admin credentials","If cloud n8n: create account, configure workspace, note execution time limits","Create test webhook to confirm inbound POST requests received and logged","Verify n8n can make outbound HTTP calls to LlamaParse, Anthropic, OpenAI APIs","Document n8n instance URL and admin credentials (in secure vault)","Test with a simple two-node workflow before proceeding"],
+   inputs:["n8n hosting decision (MI-4 — must resolve before this task)","Server provisioning credentials or cloud account"],
+   outputs:["n8n instance live, accessible, and passing connectivity test","Test webhook confirmed functional","Credentials in secure vault"],
+   deps:["MI-4 must be resolved at kickoff","0A.1.3 kickoff — hosting decision"],
+   tags:["Infrastructure","Technical"],
+   notes:"⚠️ MI-4 must resolve at kickoff. Cloud n8n acceptable to unblock Day 1 with migration planned if limits hit."},
+
+  {id:"0A.1.5",phase:"0A",milestone:"M1",name:"Provision Python Environment with PyMuPDF",owner:"Jessica",est:"2–3h",start:"2026-04-02",due:"2026-04-02",blocking:false,
+   desc:"The crop orchestration layer (Layer 4) runs in Python using PyMuPDF (fitz). This environment must be accessible from n8n either as a local process or FastAPI microservice.",
+   checklist:["Create Python 3.10+ virtual environment or Docker container","Install: pymupdf, fastapi, uvicorn, pillow, requests","Verify fitz.open() works on a sample PDF at 150 DPI","Verify percentage-based fitz.Rect coordinate cropping produces correct dimensions","If cloud n8n: stand up FastAPI service with /crop POST endpoint","Document Python service URL and startup command"],
+   inputs:["Server or container environment decision","Sample PDF (needed for full validation — can partially test with any PDF)"],
+   outputs:["Python environment with PyMuPDF installed and verified","FastAPI crop service reachable from n8n (if cloud path)","Test crop image output confirmed"],
+   deps:["0A.1.4 — n8n environment must be up to test connectivity"],
+   tags:["Infrastructure","Technical"],
+   notes:"Use PyMuPDF only — do NOT use pdftotext or pdfinfo, which fail on real HVAC documents due to xref errors."},
+
+  {id:"0A.1.6",phase:"0A",milestone:"M1",name:"Provision API Keys and Confirm Billing Tiers",owner:"Marc+Jessica",est:"2h",start:"2026-04-02",due:"2026-04-02",blocking:false,
+   desc:"Three external API services are required: Anthropic (Claude), OpenAI (normalization), LlamaParse. All must be provisioned before pipeline development begins.",
+   checklist:["Create/confirm Anthropic API account — provision key — confirm Sonnet/Opus tier accessible","Create/confirm OpenAI API account — provision key — confirm GPT-4o mini Structured Outputs accessible","Create/confirm LlamaIndex/LlamaParse account — provision key","Store all 3 keys in n8n credentials vault (not in Teams or email)","Run test API call to each service from n8n","Note billing thresholds and set up cost alerts","Confirm model tier choices are within PhaseAlpha's cost budget (MI-5)","Document which Claude model selected (Sonnet vs. Opus)"],
+   inputs:["Billing information for each platform","PhaseAlpha cost budget target per execution (MI-5)"],
+   outputs:["3 API keys provisioned, stored, and confirmed functional","Model tier selection documented","Cost alert thresholds set"],
+   deps:["0A.1.4 — n8n credentials vault must exist"],
+   tags:["Infrastructure"],
+   notes:"⚠️ LlamaParse training data policy must be confirmed before production use. Test-phase use is acceptable."},
+
+  {id:"0A.1.7",phase:"0A",milestone:"M1",name:"Receive, Inventory, and Classify Sample Schedule Page PDFs",owner:"Jessica",est:"2h",start:"2026-04-02",due:"2026-04-03",blocking:false,
+   desc:"PhaseAlpha delivers 10–20 pre-split schedule page PDFs. Each must be inventoried and classified to ensure coverage of all critical document types.",
+   checklist:["Receive sample PDFs from PhaseAlpha (confirm transfer method at kickoff)","Inventory all files: filename, source firm, project type, PDF type (vector vs. image)","Open each PDF: count tables per page, note full-width AHU/RTU schedules, flag dense pages","Categorize: (a) standard vector 1–5 tables, (b) image moderate, (c) image high complexity 8+ tables, (d) full-width present","Confirm at least one file from each of 3 firm types: Bluestone, MODUS, Shive Hattery","If fewer than 10 files: flag in Teams channel and request more","Create inventory spreadsheet: file | firm | type | table count | full-width? | complexity","Post inventory to Teams channel for PhaseAlpha review"],
+   inputs:["Sample PDFs from PhaseAlpha (⚠️ MI-2 — delivery date not confirmed)"],
+   outputs:["Sample PDF inventory spreadsheet","At least one file per firm type confirmed","Full-width schedule pages identified","Inventory shared with PhaseAlpha"],
+   deps:["⚠️ PhaseAlpha must deliver PDFs — flagged in Teams if delayed past April 3"],
+   tags:["Client Deliverable","M1"],
+   notes:"Do not begin Layer 3 pipeline work without at least one sample from each firm type."},
+
+  {id:"0A.1.8",phase:"0A",milestone:"M1",name:"Receive or Create Reference Extraction Ground Truth Files",owner:"Jessica",est:"1–8h",start:"2026-04-02",due:"2026-04-10",blocking:false,
+   desc:"Reference extraction files (JSON or Excel) are the ground truth for M5 accuracy measurement. Joe confirmed his developer must clean up technical debt first. Manages receipt, review, and fallback if delayed.",
+   checklist:["Confirm reference file delivery date with Joe Lewis at kickoff (get an exact date)","Upon receipt: review for completeness — confirm equipment_id, area_served, cfm_max, motor_hp, remarks_combined at minimum","Validate file-to-page traceability (rows correspond to correct PDF pages)","Flag any fields that appear inferred or estimated","Post reviewed files to Teams channel","FALLBACK (if not received by April 8): manually create reference extractions by visual inspection — ~3h per complex page","Document which reference methodology was used in pilot accuracy report"],
+   inputs:["Reference JSON/Excel files from PhaseAlpha (⚠️ MI-2)","Sample PDFs (0A.1.7) for fallback creation"],
+   outputs:["Reviewed and confirmed reference files ready for accuracy measurement","If fallback: manually created reference spreadsheets for 3–5 priority pages","Note in project log confirming ground truth method used"],
+   deps:["⚠️ PhaseAlpha developer cleanup — start fallback on April 9 if not received"],
+   tags:["Client Deliverable","M5"],
+   notes:"⚠️ Build-blocking for M5. Start fallback on April 9 if files not received. Do not wait past April 9."},
+
+  {id:"0A.1.9",phase:"0A",milestone:"M1",name:"Schedule and Conduct LlamaParse/Docling Internal Findings Call",owner:"Jessica+Marc",est:"2h",start:"2026-04-02",due:"2026-04-07",blocking:false,
+   desc:"PhaseAlpha has internal LlamaParse and Docling testing experience. A 30-minute call with their team could save 3–5 days of re-testing.",
+   checklist:["Send Teams message to Joe requesting introduction to PhaseAlpha's internal testing team","Prepare question list: image-based HVAC schedule reliability, merged cell handling, full-width AHU/RTU table failures, DPI levels tested, remarks capture","Conduct 30-minute call (or async Teams thread)","Document findings: key observations per tool, failure patterns, any effective configurations","Post findings summary to Teams channel","Update detector strategy based on findings"],
+   inputs:["PhaseAlpha internal contact (Joe Lewis to introduce)","Prepared question list"],
+   outputs:["Written findings summary in Teams channel","Updated test strategy recommendation"],
+   deps:["0A.1.2 — Teams channel preferred comms","Joe Lewis introduces Plus1 to PhaseAlpha internal team"],
+   tags:["Coordination","Technical"],
+   notes:"No hard build dependency — can run in parallel. But findings should inform detector strategy before Layer 3 development begins."},
+
+  {id:"0A.1.10",phase:"0A",milestone:"M1",name:"Define and Document Joint Pass/Fail Acceptance Criteria",owner:"Marc",est:"2h",start:"2026-04-02",due:"2026-04-07",blocking:false,
+   desc:"Before the pipeline runs against real documents, both teams must agree in writing on what constitutes a passing pilot — which fields, how nulls score, what constitutes a match. Without this, the M7 decision gate cannot be objectively evaluated.",
+   checklist:["Draft acceptance criteria covering: which fields measured, how nulls scored, value matching definition, row count methodology, accuracy threshold (≥85%), false completeness rate threshold","Share draft with Joe Lewis, Brian Knapp, Rick Jennings via Teams","Collect feedback within 1 business day","Finalize and get written confirmation from PhaseAlpha","Pin finalized criteria document in Teams channel"],
+   inputs:["Reference file field list (0A.1.8)","Sample PDF document types (0A.1.7)"],
+   outputs:["Signed-off acceptance criteria document (pinned in Teams)","Confirmed accuracy threshold","Confirmed null scoring methodology"],
+   deps:["0A.1.3 — kickoff initial discussion","0A.1.7 — know document types"],
+   tags:["Decision","Scope"],
+   notes:"Without confirmed criteria, the pilot closeout conversation will be contested."},
+
+  {id:"0A.1.11",phase:"0A",milestone:"M1",name:"M1 Milestone Review — Internal Checkpoint",owner:"Marc",est:"0.5h",start:"2026-04-04",due:"2026-04-04",blocking:false,
+   desc:"Internal checkpoint confirming all Milestone M1 deliverables are complete before beginning Layer 3–7 development work.",
+   checklist:["Verify: n8n environment live","Verify: Python environment with PyMuPDF running","Verify: All 3 API keys provisioned and tested","Verify: ≥10 sample PDFs received and inventoried","Verify: Reference file receipt confirmed or fallback plan in place","Verify: LlamaParse/Docling call completed or scheduled","Verify: Pass/fail acceptance criteria confirmed in writing","Verify: Option A/B selection documented","Post M1 completion note to Teams channel","Flag any open items with resolution plan"],
+   inputs:["All M1 tasks completed"],outputs:["M1 milestone confirmed or gaps flagged"],deps:["All tasks 0A.1.1–0A.1.10"],tags:["Milestone"],notes:""},
+
+  {id:"0A.2.1",phase:"0A",milestone:"M2",name:"Integrate LlamaParse API into n8n Pipeline (Layer 3)",owner:"Jessica",est:"3–4h",start:"2026-04-04",due:"2026-04-07",blocking:false,
+   desc:"Wire LlamaParse into the n8n workflow as the primary table detection node. Output must be structured bounding boxes per detected table, not raw markdown.",
+   checklist:["Create n8n workflow: Webhook (inbound PDF) → LlamaParse Node → Store Result","Configure LlamaParse API call: submit PDF bytes, set result_type for structured table data with bounding boxes","Configure output parsing: extract table_name, equipment_type, bbox_pct per detected table","Test on one known simple vector PDF (Bluestone Engineering)","Verify bounding box format is percentage-based (0.0–1.0) or convert","Handle LlamaParse API errors: 4xx, 5xx, timeout — add error routing","Log each detection result to structured JSON in n8n workflow"],
+   inputs:["LlamaParse API key (0A.1.6)","Sample PDF (0A.1.7)","n8n environment (0A.1.4)"],
+   outputs:["n8n workflow node: accepts PDF, calls LlamaParse, outputs table array with bounding boxes","Test result showing correct table count for Bluestone sample"],
+   deps:["0A.1.4","0A.1.6","0A.1.7"],
+   tags:["Layer 3","Technical"],
+   notes:"LlamaParse's agentic LLM reasoning must be activated — not just text extraction mode."},
+
+  {id:"0A.2.2",phase:"0A",milestone:"M2",name:"Test and Validate Detection on All Three Firm Document Types",owner:"Jessica",est:"4–6h",start:"2026-04-07",due:"2026-04-08",blocking:false,
+   desc:"Systematically test LlamaParse detection on all three HVAC firm document types. Do not declare detection working until all three pass. This is the primary gate for the Option A vs. B decision.",
+   checklist:["Bluestone Engineering (vector, ~6 schedule types/page): run detection, compare count vs. manual, verify bounding boxes are visually plausible","MODUS Engineering (image-based, 8 types including full-width RTU): run detection, check if full-width schedule detected as one table or fragmented","Shive Hattery (image-based, 15 distinct tables/page): run detection, compare count — expect possible misses on small/dense schedules","Record: detection count, missed tables, false positives, bounding box quality per firm","Identify any table spanning >80% page width for full-width split-stitch trigger","If miss rate >10% on any type: investigate and tune before proceeding","Document detection results per firm type in test log"],
+   inputs:["At least one sample PDF per firm type (0A.1.7)","LlamaParse integration node (0A.2.1)","PhaseAlpha's findings (0A.1.9)"],
+   outputs:["Detection test log: firm | page | expected | detected | miss rate | full-width flags","Confirmed LlamaParse configuration","List of pages requiring full-width treatment"],
+   deps:["0A.2.1","0A.1.7","0A.1.9"],
+   tags:["Layer 3","Testing"],
+   notes:"MODUS and Shive Hattery are image-based — LlamaParse may need different config. If image detection fails: triggers Option B evaluation."},
+
+  {id:"0A.2.3",phase:"0A",milestone:"M2",name:"Validate Bounding Box Output Format for PyMuPDF Compatibility",owner:"Jessica",est:"2–3h",start:"2026-04-07",due:"2026-04-08",blocking:false,
+   desc:"Ensure LlamaParse bounding box coordinates are in the format PyMuPDF (fitz.Rect) can consume for the crop step.",
+   checklist:["Confirm LlamaParse output coordinate system: points, pixels, or 0.0–1.0 percentages","Convert to percentage-based format if needed: x0_pct = x0 / page_width","Test conversion: compute fitz.Rect for a 300 DPI render and visually confirm crop contains expected table","Build reusable coordinate conversion utility function in Python service","Add 5% padding to all crop edges (configurable parameter)"],
+   inputs:["LlamaParse bounding box output (0A.2.1)","PyMuPDF environment (0A.1.5)","Sample PDF for visual verification"],
+   outputs:["Coordinate conversion utility function (Python)","Confirmed fitz.Rect crops contain correct table regions","Default crop padding parameter documented"],
+   deps:["0A.2.1","0A.1.5"],tags:["Layer 4","Technical"],notes:""},
+
+  {id:"0A.3.1",phase:"0A",milestone:"M3",name:"Build Full-Page Detection Pass (150 DPI Render)",owner:"Jessica",est:"2h",start:"2026-04-07",due:"2026-04-08",blocking:false,
+   desc:"The first pass renders the full page at 150 DPI for table location confirmation only — never for value extraction.",
+   checklist:["Build n8n node: receive PDF bytes + page number → call Python crop service /render-full-page","Implement render_full_page(pdf_bytes, page_num, dpi=150) using fitz.Matrix(150/72, 150/72)","Return image as base64-encoded PNG to n8n node","Confirm: 150 DPI image is NOT passed to Claude for extraction","Log render time per page (target: under 2 seconds)","Test on one page from each of the 3 firm types"],
+   inputs:["Python crop service (0A.1.5)","Sample PDFs (0A.1.7)","n8n environment (0A.1.4)"],
+   outputs:["/render-full-page Python FastAPI endpoint operational","n8n node returning base64 PNG","Test renders confirmed for all 3 firm types"],
+   deps:["0A.1.5","0A.2.3"],tags:["Layer 4","Technical"],notes:""},
+
+  {id:"0A.3.2",phase:"0A",milestone:"M3",name:"Build Standard Table Crop (300 DPI)",owner:"Jessica",est:"2–3h",start:"2026-04-08",due:"2026-04-09",blocking:false,
+   desc:"Crop and re-render each detected table at 300 DPI. Primary crop path — covers 60–70% of tables reliably.",
+   checklist:["Implement crop_table(pdf_bytes, page_num, bbox_pct, dpi=300) using percentage-based fitz.Rect","Apply 5% padding to crop boundary (configurable)","Return cropped image as base64-encoded PNG","Build n8n node: for each detected table → call /crop-table with bounding box + DPI=300","Test on Bluestone Engineering — confirm output is visually clean and column headers readable","Log crop metadata: table_id, page_num, bbox_pct, dpi_used, crop_image_url"],
+   inputs:["Bounding boxes from LlamaParse (0A.2.2)","Python crop service (0A.1.5)","Sample PDFs (0A.1.7)"],
+   outputs:["/crop-table endpoint at 300 DPI","n8n node producing standard crops","Test crops passing visual quality check","Crop metadata logged"],
+   deps:["0A.3.1","0A.2.3"],tags:["Layer 4","Technical"],notes:""},
+
+  {id:"0A.3.3",phase:"0A",milestone:"M3",name:"Build Dense Table Crop (400 DPI)",owner:"Jessica",est:"3h",start:"2026-04-09",due:"2026-04-09",blocking:false,
+   desc:"MODUS and Shive Hattery documents require 400 DPI crops for readability. Pipeline must auto-detect when to use 400 DPI based on table density indicators.",
+   checklist:["Define density detection heuristic: bounding box aspect ratio or column count from LlamaParse","Add DPI selection logic to n8n workflow: if dense → 400 DPI, else → 300 DPI","Test on MODUS Engineering school document and Shive Hattery storm shelter at both DPI levels","Document density heuristic threshold","Add dpi_used field to crop metadata log"],
+   inputs:["Dense table samples (MODUS, Shive Hattery — 0A.1.7)","/crop-table endpoint (0A.3.2)"],
+   outputs:["Density detection logic in n8n","400 DPI crop path tested and confirmed","DPI selection threshold documented"],
+   deps:["0A.3.2"],tags:["Layer 4","Technical"],notes:""},
+
+  {id:"0A.3.4",phase:"0A",milestone:"M3",name:"Build Full-Width Horizontal Split-Stitch Pipeline",owner:"Jessica",est:"4–6h",start:"2026-04-09",due:"2026-04-10",blocking:false,
+   desc:"AHU and RTU schedules span the full 30×42\" sheet with 40+ columns. Split into left/right segments, extract independently at 400 DPI, reassemble by matching column positions. Highest complexity task in Phase 0.",
+   checklist:["Implement full-width trigger: if bounding box x-span > 80% page width → flag FULLWIDTH_SPLIT_REQUIRED","Implement split_fullwidth_table(): split bounding box at midpoint horizontally (configurable ±10%)","Render left and right halves as separate 400 DPI images","Return both images with column overlap metadata for reassembly","Build two parallel extraction branches in n8n for left and right halves","Build stitch logic: merge JSON rows by matching on equipment_id (or row_index if null)","Validate stitch: merged column count = left + right - overlap","Test on MODUS RTU schedule (confirmed 40+ column full-width in samples)","Set FULLWIDTH_SPLIT_FAIL routing if stitch produces mismatched row count"],
+   inputs:["MODUS Engineering RTU schedule sample","Crop endpoint (0A.3.2)","LlamaParse bounding boxes with width percentage (0A.2.2)"],
+   outputs:["FULLWIDTH_SPLIT_REQUIRED trigger logic","split-fullwidth-table endpoint","Left + right halves at 400 DPI","Stitch logic producing merged JSON","FULLWIDTH_SPLIT_FAIL routing wired"],
+   deps:["0A.3.2"],
+   tags:["Layer 4","Technical","Complex"],
+   notes:"Budget 0.5 day buffer. Midpoint split may land mid-column — implement configurable offset."},
+
+  {id:"0A.3.5",phase:"0A",milestone:"M3",name:"Build Fallback Retry at 500 DPI",owner:"Jessica",est:"2h",start:"2026-04-10",due:"2026-04-11",blocking:false,
+   desc:"When 400 DPI crops still produce low confidence, 500 DPI retry is the final quality escalation before setting VALUE_ILLEGIBLE.",
+   checklist:["Define confidence threshold for 400→500 DPI escalation (target: if confidence < 0.70 at 400 DPI)","Add retry branch to n8n: low-confidence result → re-crop at 500 DPI → re-extract → if still < 0.70 → null + VALUE_ILLEGIBLE","Test on intentionally low-quality crop","Document confidence threshold values","Note cost implication of 500 DPI retry (larger image = higher Claude vision token cost)"],
+   inputs:["Crop pipeline (0A.3.2, 0A.3.3)","Extraction layer (0A.4.1) — partial build needed for confidence scores"],
+   outputs:["500 DPI retry branch in n8n","VALUE_ILLEGIBLE assignment confirmed","Retry threshold values documented"],
+   deps:["0A.3.3","Partial 0A.4.1 completion"],tags:["Layer 4","Technical"],notes:"Build retry node structure before extraction; connect trigger after confidence scores are available."},
+
+  {id:"0A.4.1",phase:"0A",milestone:"M4",name:"Build Claude Vision Extraction Node (Layer 5)",owner:"Jessica",est:"4–6h",start:"2026-04-08",due:"2026-04-10",blocking:false,
+   desc:"Build the n8n extraction node that sends each cropped table image to Claude and receives raw cell-level JSON. Must enforce the null rule unconditionally — the extraction prompt is the primary defense against hallucinated values.",
+   checklist:["Create n8n HTTP node: POST to Anthropic API /v1/messages with model, base64 image, extraction system prompt","Write PROMPT_5 with explicit: 'Return null for any cell not clearly readable. Do not infer or estimate. Unreadable = null, always.'","Specify JSON output schema in prompt: array of row objects with all canonical field names","Parse Claude response: extract JSON, strip markdown code fences if present","Add extraction_confidence score per row","Add raw_cells field: store Claude's raw output before normalization","Add source_traceability: crop image URL, page number, schedule ID, bounding box","Test on one Bluestone Engineering standard table crop","Handle API errors: retry on 529 with exponential backoff; log 400/401 immediately"],
+   inputs:["Anthropic API key (0A.1.6)","Cropped table images from Layer 4 (0A.3.2–0A.3.4)","Confirmed Claude model tier"],
+   outputs:["Extraction n8n node operational","PROMPT_5 written, versioned, documented","JSON output per table: row objects + raw_cells + confidence + traceability","Null enforcement tested: no inferred values returned"],
+   deps:["0A.1.6","0A.3.2"],
+   tags:["Layer 5","Technical","Critical"],
+   notes:"Can run in parallel with 0A.3.3 and 0A.3.4 using static test crops while full crop pipeline completes."},
+
+  {id:"0A.4.2",phase:"0A",milestone:"M4",name:"Extraction Prompt Tuning and Null Enforcement Validation",owner:"Jessica",est:"3–4h",start:"2026-04-10",due:"2026-04-11",blocking:false,
+   desc:"Dedicated tuning task for null enforcement — the most critical behavior in the system. Separate from integration (0A.4.1) because it requires iterative testing against real documents.",
+   checklist:["Prepare test set: 3 high-quality crops, 3 medium-quality, 3 intentionally degraded","Run extraction on all 9 crops and review each result row-by-row","For degraded crops: verify low-confidence cells return null — not inferred values","If Claude returns inferred value on degraded crop: strengthen null enforcement language","Test remarks_combined concatenation: multiple footnotes → single delimited string","Test merged cell handling: merged headers attributed to each column","Document final prompt as PROMPT_5_EXTRACTION_v1.txt — version-controlled","Final prompt must pass: 0 inferred values on degraded crops, ≤5% false null on high-quality crops"],
+   inputs:["Claude extraction node (0A.4.1)","Mix of high and low quality crop samples"],
+   outputs:["Tuned and version-controlled PROMPT_5_EXTRACTION_v1.txt","Test results log: quality tier | fields returned | null rate | fabricated values","Confirmed: 0 inferred values on degraded crops"],
+   deps:["0A.4.1"],tags:["Layer 5","Quality","Critical"],
+   notes:"Do not skip this task. Null enforcement prevents downstream contractor liability."},
+
+  {id:"0A.4.3",phase:"0A",milestone:"M4",name:"Build Column Header Mapping Agent (Layer 6a)",owner:"Jessica",est:"3–4h",start:"2026-04-10",due:"2026-04-11",blocking:false,
+   desc:"Every engineering firm uses different language for the same HVAC data fields. The mapping agent loads a synonym knowledge base and resolves raw column headers to canonical field names.",
+   checklist:["Create synonym knowledge base JSON — pre-populate from assessment: equipment_id (Unit Tag, Symbol, Mark...), area_served (Area Served, Service, Location...), cfm_max (CFM Max, Supply CFM...), motor_hp (HP, BHP, Brake HP...), remarks_combined (Notes, Remarks, Footnotes...)","Add all remaining canonical fields from the data model","Build n8n node with PROMPT_6A_HEADER_MAPPING: takes raw headers, returns canonical names with confidence","Implement exact-match lookup first — only call LLM if no exact match found","Return mapping_confidence per column: exact_match, synonym_match, llm_mapped, unmapped","Store unmapped headers in log for KB expansion","Implement firm fingerprint cache: same firm seen again → skip LLM call","Test on headers from all 3 firm types — confirm ≥80% via exact/synonym match"],
+   inputs:["Raw extracted headers from 0A.4.1","Synonym knowledge base (pre-populated per assessment)","OpenAI API key for fallback LLM mapping"],
+   outputs:["Synonym knowledge base file (JSON, version-controlled)","Column header mapping n8n node","Test results: confidence distribution for all 3 firm types","Firm fingerprint cache logic"],
+   deps:["0A.4.1"],tags:["Layer 6a","Technical"],notes:""},
+
+  {id:"0A.4.4",phase:"0A",milestone:"M4",name:"Build Schema Normalization Node (Layer 6b)",owner:"Jessica",est:"3–4h",start:"2026-04-11",due:"2026-04-14",blocking:false,
+   desc:"After column header mapping, normalization slots values into the canonical schema — unit conversion, terminology normalization, remarks concatenation. OpenAI Structured Outputs enforces the schema at model response layer.",
+   checklist:["Define canonical JSON schema using OpenAI Structured Outputs response_format — all canonical fields as required properties (nullable)","Build n8n HTTP node: POST to OpenAI with GPT-4o mini + json_schema response format","PROMPT_6B normalization rules: CFM strip units → numeric, Motor HP normalize decimal (1/2 HP → 0.5), Voltage split (208/3 → volts=208, phase=3), Remarks concatenate with | delimiter","Test on extraction output from 0A.4.1–0A.4.2","Confirm: null values from extraction remain null in normalization — not fabricated","Add normalized_fields array to each row indicating which fields were transformed"],
+   inputs:["Mapped headers from 0A.4.3","Raw extraction JSON from 0A.4.1","OpenAI API key (0A.1.6)"],
+   outputs:["Schema normalization n8n node","PROMPT_6B versioned and documented","Canonical schema definition file","Test confirms zero schema violations"],
+   deps:["0A.4.3"],tags:["Layer 6b","Technical"],notes:""},
+
+  {id:"0A.4.5",phase:"0A",milestone:"M4",name:"Build Validation Rule Engine with 8 Failure Codes (Layer 7)",owner:"Jessica",est:"4–6h",start:"2026-04-14",due:"2026-04-15",blocking:false,
+   desc:"The validation layer runs after normalization and before output reaches the review queue. Checks for integrity issues and assigns failure codes with routing actions. This is what makes the system trustworthy.",
+   checklist:["Build validation rule engine as Python function (n8n Execute Function node)","Implement all 8 failure codes: VALUE_ILLEGIBLE, TABLE_BOUNDARY_MISSED, COLUMN_HEADER_GARBLED, ROW_COUNT_MISMATCH, FULLWIDTH_SPLIT_FAIL, DUPLICATE_EQUIPMENT_TAG, FABRICATED_COMPLETENESS, REMARKS_TRUNCATED — each with routing action","Implement review queue routing: Confidence < 0.75 → Mandatory, VALUE_ILLEGIBLE → Mandatory, DUPLICATE_TAG → Mandatory, FABRICATED_COMPLETENESS → Mandatory + block export, FULLWIDTH_SPLIT_FAIL → Manual crop, Confidence 0.75–0.90 → Optional, Confidence > 0.90 → Auto-approve","Test each failure code by injecting known condition from sample set","Confirm FABRICATED_COMPLETENESS triggers on test case where Claude returns complete row from poor crop","Add flags[] array and failure_type field to each output record"],
+   inputs:["Normalized records from 0A.4.4","Test cases for each failure code"],
+   outputs:["Validation rule engine (Python) with all 8 failure codes","Review queue routing rules active in n8n","Test log confirming each failure code triggers correctly"],
+   deps:["0A.4.4"],tags:["Layer 7","Critical","Quality"],
+   notes:"Most safety-critical task in the pipeline. Do not skip any failure code."},
+
+  {id:"0A.4.6",phase:"0A",milestone:"M4",name:"Build Learning Loop (Automation Node A10)",owner:"Jessica",est:"2–3h",start:"2026-04-15",due:"2026-04-16",blocking:false,
+   desc:"When a reviewer corrects an extracted value, store the original alongside the corrected version, tag the failure type, and add to the evaluation dataset for ongoing prompt tuning.",
+   checklist:["Create n8n webhook for reviewer correction events (from PhaseAlpha's Review UI)","On correction event: store original_extraction, corrected_value, field_name, schedule_id, failure_type, reviewer_id, timestamp to persistent log","Tag correction with most likely failure code","Feed correction into running accuracy evaluation log","Define correction event schema — provide to PhaseAlpha's UI team as part of API contract","Test: simulate correction event, confirm data stored correctly"],
+   inputs:["API payload contract schema (0A.6.1 — define correction event in parallel)","Validated records from 0A.4.4–0A.4.5"],
+   outputs:["Learning loop n8n webhook active","Correction event schema defined and shared with PhaseAlpha","Evaluation log structure documented"],
+   deps:["0A.4.5","0A.6.1 (parallel)"],tags:["Learning Loop","Technical"],notes:""},
+
+  {id:"0A.5.1",phase:"0A",milestone:"M5",name:"Run End-to-End Pipeline on Full Sample Document Set",owner:"Jessica",est:"2–3h",start:"2026-04-15",due:"2026-04-15",blocking:false,
+   desc:"Run the complete pipeline (Layers 3–7) against all received sample documents. First full integration test — every node from PDF input to validated JSON output.",
+   checklist:["Confirm all pipeline nodes operational: Layers 3, 4, 5, 6a, 6b, 7","For each sample PDF: trigger n8n webhook with PDF + metadata, record execution in n8n logs","Collect all JSON outputs: one file per table per page","Review n8n execution logs for errors: failures, API errors, timeouts","Create bug note for each unexpected output: which document, which layer, what happened, what expected","Resolve critical failures (crashes, schema violations) before accuracy measurement","Confirm all 3 firm document types produced output records"],
+   inputs:["All sample PDFs (0A.1.7)","Fully operational pipeline (0A.2.x–0A.4.x)"],
+   outputs:["JSON output files for all sample documents","n8n execution log summary","Bug list from integration run"],
+   deps:["All M2, M3, M4 tasks"],tags:["Integration Testing","M5"],notes:""},
+
+  {id:"0A.5.2",phase:"0A",milestone:"M5",name:"Measure Field-Level Accuracy Against Reference Files",owner:"Jessica",est:"4–6h",start:"2026-04-15",due:"2026-04-16",blocking:false,
+   desc:"Compare pipeline output against ground truth reference files. Compute per-field accuracy, null rate, false completeness rate, and row count accuracy.",
+   checklist:["Write accuracy measurement script (Python): load reference, load output, compare field-by-field","Compute: field-level accuracy per canonical field, null rate, false completeness rate, row count accuracy, full-width stitch accuracy","Break down by firm type (Bluestone, MODUS, Shive Hattery) and PDF type (vector vs. image)","Identify lowest-performing fields and worst-performing document types","Compare results against ≥85% field accuracy threshold","Generate structured accuracy report: overall, per-field table, per-firm breakdown, null rate, fabrication rate"],
+   inputs:["Pipeline JSON output (0A.5.1)","Reference files (0A.1.8)","Confirmed acceptance criteria (0A.1.10)"],
+   outputs:["Accuracy measurement script (Python, version-controlled)","Accuracy results data (CSV or JSON)","Option A/B decision recommendation based on results"],
+   deps:["0A.5.1","0A.1.8","0A.1.10"],
+   tags:["Testing","M5","Critical"],
+   notes:"⚠️ MI-2 — if reference files not received, use manual ground truth fallback (0A.1.8 fallback path)"},
+
+  {id:"0A.5.3",phase:"0A",milestone:"M5",name:"Write and Distribute Pilot Accuracy Report",owner:"Marc+Jessica",est:"2–3h",start:"2026-04-16",due:"2026-04-17",blocking:false,
+   desc:"Produce the formal pilot results report for PhaseAlpha's review. This document is the basis for the Option A/B decision gate (M7) and must be clear for non-technical stakeholders.",
+   checklist:["Write report: (1) executive summary, (2) overall accuracy table, (3) per-firm breakdown, (4) per-field accuracy, (5) failure code distribution, (6) full-width table results, (7) Option A/B recommendation","State clearly whether ≥85% threshold was met and which types are within/outside threshold","If Option A meets threshold: recommend Phase 1 and note fields below for continued tuning","If Option A fails: explicitly recommend Option B — frame as planned path, not failure","Post to Teams channel and email Joe Lewis, Brian Knapp, Rick Jennings within 24 hours","Request written acknowledgment from PhaseAlpha within 1 business day"],
+   inputs:["Accuracy measurement results (0A.5.2)"],
+   outputs:["Pilot accuracy report document","PhaseAlpha acknowledgment received"],
+   deps:["0A.5.2"],tags:["Reporting","M5"],notes:""},
+
+  {id:"0A.6.1",phase:"0A",milestone:"M6",name:"Draft API Payload Contract for PhaseAlpha Review UI Team",owner:"Marc+Jessica",est:"3–4h",start:"2026-04-15",due:"2026-04-17",blocking:false,
+   desc:"The formal specification for the JSON output Plus1 delivers to PhaseAlpha's Review UI. Must be complete enough for PhaseAlpha's devs to build the UI without Plus1 present.",
+   checklist:["Draft contract with: endpoint/delivery method, authentication, request schema, response schema (all metadata + equipment fields + confidence + failure codes + crop image URL + traceability)","Include example payload (full JSON with real values and nulls)","Define all 8 failure codes with routing behavior","Include learning loop event schema (reviewer correction event format)","Include review queue routing rules (confidence thresholds)","Version as Contract v1.0 with publication date"],
+   inputs:["Confirmed payload schema from PhaseAlpha (MI-3)","Push vs. pull architecture decision (MI-3)","Validation output structure (0A.4.5)","Learning loop event schema (0A.4.6)"],
+   outputs:["API Payload Contract v1.0","Example JSON payload","Published to Teams channel"],
+   deps:["0A.4.5","0A.4.6","MI-3 must resolve at kickoff"],tags:["API Contract","M6"],notes:"Can draft while pipeline integration run is in progress."},
+
+  {id:"0A.6.2",phase:"0A",milestone:"M6",name:"PhaseAlpha Review and Confirmation of API Contract",owner:"Marc",est:"1h",start:"2026-04-17",due:"2026-04-21",blocking:false,
+   desc:"PhaseAlpha's development team must confirm the contract is sufficient to begin Review UI development.",
+   checklist:["Distribute contract via Teams with note: 'Please confirm it contains everything your developers need, or flag gaps within 1 business day'","Follow up if no response within 1 business day","Collect and resolve feedback — update to v1.1 if needed","Receive written confirmation from Brian Knapp or Rick Jennings","Log confirmation date in project notes"],
+   inputs:["API Payload Contract v1.0 (0A.6.1)"],
+   outputs:["Written confirmation from PhaseAlpha that contract is sufficient","Contract revision if needed (v1.1)"],
+   deps:["0A.6.1"],tags:["Client Sign-Off","M6"],notes:""},
+
+  {id:"0A.7.1",phase:"0A",milestone:"M7",name:"Facilitate Option A/B Decision Gate Review",owner:"Marc",est:"1.5h",start:"2026-04-18",due:"2026-04-18",blocking:false,
+   desc:"Using the pilot accuracy report, jointly decide with PhaseAlpha whether Option A results meet threshold or Option B escalation is required.",
+   checklist:["Schedule 30-min review call with Joe Lewis, Brian Knapp, Rick Jennings","Present pilot accuracy report — walk through overall, per-firm, and recommendation","State decision clearly: Option A accepted → proceed to Phase 1 OR Option B triggered","If Option B: confirm it's the planned next step, not a redesign — +1 week, all code carries forward","Document decision in writing (Teams post from Joe Lewis)","If Option A accepted: close Phase 0A → Phase 1 planning","If Option B triggered: add Phase 0B tasks immediately"],
+   inputs:["Pilot accuracy report (0A.5.3)","PhaseAlpha availability"],
+   outputs:["Written decision from Joe Lewis: Option A accepted OR Option B triggered","Phase 0A formally closed (or 0B initiated)"],
+   deps:["0A.5.3"],tags:["Decision Gate","M7"],notes:""},
+
+  // ─── PHASE 0A QA ───
+  {id:"0A.QA.1",phase:"0A",milestone:"Phase QA",name:"Phase 0A Pipeline End-to-End QA",owner:"Jessica+Marc",est:"3–4h",start:"2026-04-16",due:"2026-04-18",blocking:false,isQA:true,
+   desc:"Dedicated QA for Phase 0A covering full pipeline from PDF input to validated JSON output. Tests the complete system as an integrated whole against the agreed acceptance criteria.",
+   checklist:["Re-run full pipeline on all sample documents, compare against reference using accuracy script","Inject all 8 failure conditions and confirm correct routing for each","Parse output JSON against contract schema — confirm zero schema violations","Confirm null returned for every cell tested at degraded DPI","Confirm row count accuracy ≥95% on full-width tables","Confirm confidence tier routing (mandatory vs. optional vs. auto-approve)"],
+   inputs:["Complete pipeline","Reference files","Acceptance criteria document"],
+   outputs:["QA pass/fail result","Bug list (if any) with rework plan"],
+   deps:["All Phase 0A build tasks"],tags:["QA"],
+   notes:"If failures: identify layer → rework specific nodes → re-run. If detection fails on image-based docs: trigger Option B."},
+
+  // ─── PHASE 0B ───
+  {id:"0B.1.1",phase:"0B",milestone:"M7",name:"Install and Configure Docling Self-Hosted",owner:"Jessica",est:"3–4h",start:"~2026-04-21",due:"+1d from trigger",blocking:false,
+   desc:"Docling is free, MIT-licensed, runs fully locally using DocLayNet and TableFormer. Installing self-hosted eliminates all third-party data exposure for the detection stage.",
+   checklist:["pip install docling in the Python environment","Download DocLayNet model weights (first run triggers download — ensure Hugging Face access)","Verify installation: from docling.document_converter import DocumentConverter — run test","Test Docling detection on one Bluestone Engineering sample: confirm bounding boxes returned","Benchmark Docling speed vs. LlamaParse: note time per page","Document installation path, model weights location, startup requirements"],
+   inputs:["Python environment (0A.1.5)","Sample PDFs (0A.1.7)"],
+   outputs:["Docling installed and operational","Test bounding box output confirmed","Speed benchmark noted"],
+   deps:["Option B triggered at 0A.7.1"],tags:["Layer 3","Docling","Option B"],
+   notes:"Model weights download requires internet access and ~500MB storage."},
+
+  {id:"0B.1.2",phase:"0B",milestone:"M7",name:"Build Dual-Detector Orchestration Logic in n8n",owner:"Jessica",est:"3–4h",start:"+1d from 0B.1.1",due:"+3d from trigger",blocking:false,
+   desc:"Wire the dual-detector fallback: LlamaParse primary, Docling automatic fallback on TABLE_BOUNDARY_MISSED or low table count.",
+   checklist:["Add Docling detection node to n8n: call Python /detect-docling endpoint","Build conditional routing: if TABLE_BOUNDARY_MISSED OR count < minimum → run Docling → use Docling result","Add detector_used metadata: tag each table with llamaparse or docling","Run both detectors in comparison mode for A/B report","Test fallback trigger: inject TABLE_BOUNDARY_MISSED → confirm Docling called","Log dual-detector runs in evaluation log"],
+   inputs:["Docling operational (0B.1.1)","LlamaParse integration (0A.2.1)","Existing Phase 0A pipeline"],
+   outputs:["Dual-detector routing in n8n","detector_used field on all tables","Fallback trigger confirmed"],
+   deps:["0B.1.1"],tags:["Layer 3","Docling","Option B"],notes:""},
+
+  {id:"0B.1.3",phase:"0B",milestone:"M7",name:"Run A/B Extraction Comparison Report",owner:"Jessica+Marc",est:"3–4h",start:"+3d from trigger",due:"+5d from trigger",blocking:false,
+   desc:"Run full sample set through both detectors and compare results. Validates Option B produces measurably better results on the document types that failed Option A.",
+   checklist:["Run all sample documents in comparison mode","Record LlamaParse vs. Docling: table count, bounding box accuracy, downstream extraction accuracy","Focus comparison on specific types that failed Option A (image-based MODUS/Shive Hattery)","Measure accuracy against reference files for both paths — confirm Docling fallback improves accuracy above threshold","Write 1-page comparison summary: LlamaParse-only vs. dual-detector per firm type, accuracy delta, recommendation","Distribute to PhaseAlpha and confirm Option B accepted"],
+   inputs:["Dual-detector pipeline (0B.1.2)","Reference files (0A.1.8)","Phase 0A accuracy report (0A.5.3)"],
+   outputs:["A/B comparison report (1-page)","Confirmed accuracy improvement for previously failing types","PhaseAlpha written confirmation of Option B acceptance"],
+   deps:["0B.1.2"],tags:["Testing","Option B","Reporting"],notes:""},
+
+  {id:"0B.QA.1",phase:"0B",milestone:"Phase QA",name:"Phase 0B Validation QA",owner:"Jessica+Marc",est:"2h",start:"+5d from trigger",due:"+6d from trigger",blocking:false,isQA:true,
+   desc:"Validate that Docling fallback triggers correctly and improves accuracy on the specific document types that failed Option A.",
+   checklist:["Docling fallback triggers correctly on TABLE_BOUNDARY_MISSED injected test cases","Option B accuracy meets ≥85% on all firm types that failed Option A","No regression: Option A types still pass","All Phase 0A QA criteria still met"],
+   inputs:["Complete 0B pipeline","Reference files"],outputs:["0B QA pass/fail result"],deps:["0B.1.3"],tags:["QA","Option B"],notes:""},
+
+  // ─── PHASE 1 ───
+  {id:"1.1.1",phase:"1",milestone:"M8",name:"Harden n8n Webhook as Production API Endpoint",owner:"Jessica",est:"2–3h",start:"Phase 1 Day 1",due:"Phase 1 +1d",blocking:false,
+   desc:"Expose the validated n8n extraction pipeline as a formally documented, authentication-protected API endpoint callable from PhaseAlpha's .NET platform.",
+   checklist:["Add API key authentication to n8n webhook (Header Auth or Basic Auth — confirm preference)","Add request validation: confirm required fields; return structured 400 error if missing","Add response envelope: {status: success|error, data: {...}, error: {...}}","Test: PhaseAlpha .NET team sends request and receives valid JSON matching contract","Document authentication method and endpoint URL in API contract addendum"],
+   inputs:["Validated n8n pipeline (Phase 0 complete)","API contract v1.0 (0A.6.1)"],
+   outputs:["Authenticated production API endpoint","Validated end-to-end from .NET"],
+   deps:["Phase 0 QA complete","PhaseAlpha .NET team ready"],tags:["Phase 1","API"],notes:""},
+
+  {id:"1.1.2",phase:"1",milestone:"M8",name:"Implement Job Retry Logic with Exponential Backoff",owner:"Jessica",est:"3h",start:"Phase 1 Day 1",due:"Phase 1 +2d",blocking:false,
+   desc:"API failures and rate limits should not permanently fail a job. Implement automatic retry with exponential backoff for all external API calls.",
+   checklist:["Add retry to all 3 API call nodes: LlamaParse, Anthropic, OpenAI","Configure: max 3 retries, initial 5s, exponential (5s → 15s → 45s)","On rate limit (429): respect Retry-After header if present","On final retry failure: return structured error with failure_stage and error_code","Add dead letter queue: failed jobs stored in n8n data store for manual reprocessing","Test: inject API failure at each layer — confirm retry fires, backoff respected, dead letter recorded"],
+   inputs:["Production API endpoint (1.1.1)"],
+   outputs:["Retry logic on all 3 API nodes","Dead letter queue operational","Test log confirming retry behavior"],
+   deps:["1.1.1"],tags:["Phase 1","Resilience"],notes:""},
+
+  {id:"1.1.3",phase:"1",milestone:"M8",name:"Add Job Monitoring and Alerting",owner:"Jessica",est:"3h",start:"Phase 1 Day 2",due:"Phase 1 +3d",blocking:false,
+   desc:"Provide observability into pipeline health during production operation.",
+   checklist:["Configure n8n execution logging: status, duration, stage, document ID per run","Set up execution history retention: 1,000 executions or 30 days","Create n8n error workflow: on failed execution → Teams notification with failure details","Define alerting thresholds: failure rate > 5% in 1 hour, processing time 3x baseline","Document how PhaseAlpha can view job status (read-only dashboard access or status webhook)"],
+   inputs:["n8n production endpoint","Teams channel"],
+   outputs:["Execution logging configured","Error notification workflow active","Alerting thresholds documented"],
+   deps:["1.1.1"],tags:["Phase 1","Monitoring"],notes:""},
+
+  {id:"1.1.4",phase:"1",milestone:"M8",name:"Implement Rate Limiting and Queue Management",owner:"Jessica",est:"3–4h",start:"Phase 1 Day 3",due:"Phase 1 +4d",blocking:false,
+   desc:"Prevent the pipeline from being overwhelmed by concurrent requests. Manage queue depth and concurrency to stay within external API rate limits.",
+   checklist:["Determine target concurrency based on server specs and API rate limits","Implement n8n queue mode or semaphore approach with n8n variables","Add request queuing: if concurrent jobs > threshold, queue and process in order","Configure Anthropic API concurrency to stay within Claude rate limits (tokens per minute)","Load test: simulate 10 concurrent submissions — confirm queue management holds","Document rate limits and queue behavior for PhaseAlpha"],
+   inputs:["Production endpoint with retry logic"],
+   outputs:["Queue management implemented","Load test passed","Rate limit documentation"],
+   deps:["1.1.2"],tags:["Phase 1","Scale"],notes:""},
+
+  {id:"1.1.5",phase:"1",milestone:"M8",name:"Publish Final API Contract v2.0 + Integration Guide",owner:"Marc+Jessica",est:"2–3h",start:"Phase 1 Day 4",due:"Phase 1 +5d",blocking:false,
+   desc:"Final version of the API contract incorporating Phase 1 hardening changes, plus a short integration guide for PhaseAlpha's .NET development team.",
+   checklist:["Update contract with Phase 1 changes: authentication, error response format, retry documentation","Write integration guide: .NET example HTTP request, authentication, response parsing, failure code handling, sending correction events to learning loop","Publish as Contract v2.0 with integration guide appendix","Distribute to Brian Knapp and PhaseAlpha dev team","Confirm receipt and note any questions"],
+   inputs:["API contract v1.0","Phase 1 hardening complete"],
+   outputs:["API Payload Contract v2.0 with integration guide","Distributed to PhaseAlpha dev team"],
+   deps:["1.1.3","1.1.4"],tags:["Phase 1","Documentation"],notes:""},
+
+  {id:"1.1.6",phase:"1",milestone:"M8",name:"PhaseAlpha .NET Integration Validation Test",owner:"Marc",est:"2h",start:"Phase 1 Day 5",due:"Phase 1 +6d",blocking:false,
+   desc:"PhaseAlpha's .NET team makes a live test call to the hardened n8n endpoint and confirms the response meets the contract.",
+   checklist:["Coordinate with Brian Knapp / PhaseAlpha dev to schedule test window","PhaseAlpha .NET code makes authenticated POST request with test PDF + metadata","Confirm: valid JSON response received, matches contract schema","Confirm: authentication works (reject unauthorized call test)","Confirm: error response format correct (send malformed request)","Collect integration feedback from PhaseAlpha dev team","Document test result and PhaseAlpha sign-off"],
+   inputs:["Contract v2.0 + integration guide","PhaseAlpha .NET test code"],
+   outputs:["PhaseAlpha integration test passed","Written sign-off from Brian Knapp or Rick Jennings"],
+   deps:["1.1.5"],tags:["Phase 1","Acceptance"],notes:""},
+
+  {id:"1.QA.1",phase:"1",milestone:"Phase QA",name:"Phase 1 API Hardening QA",owner:"Jessica+Marc",est:"3h",start:"Phase 1 Day 6",due:"Phase 1 +7d",blocking:false,isQA:true,
+   desc:"Validate complete Phase 1 hardening — authentication, retry, monitoring, rate limiting, and .NET integration.",
+   checklist:["PhaseAlpha .NET integration test call succeeds","Retry fires on injected failure at each layer","Queue management holds under 10-concurrent load test","Monitoring alerts fire correctly on injected failure spike","API contract v2.0 confirmed by PhaseAlpha"],
+   inputs:["Phase 1 complete"],outputs:["Phase 1 QA pass/fail"],deps:["1.1.6"],tags:["QA"],notes:""},
+
+  // ─── PHASE 2 ───
+  {id:"2.1.1",phase:"2",milestone:"M9",name:"Port Extraction Prompts to .NET Context and Version-Control",owner:"Jessica",est:"3–4h",start:"Phase 2 Day 1",due:"Phase 2 +2d",blocking:false,
+   desc:"All 7 production prompt sets must be extracted from n8n nodes, documented, and handed off to PhaseAlpha's .NET team for embedding in .NET service classes.",
+   checklist:["Extract all 7 prompt texts from n8n nodes: P1 Page Classifier (reference only), P2 Table Detector, P3 Crop Orchestrator, P4 Full-Width Split, P5 Extraction, P6a Header Mapping, P6b Normalization, P7 Validation","Format each as versioned text file: name, version, model target, input schema, output schema, prompt text, known limitations","Commit all prompts to shared repository (GitHub or PhaseAlpha's VCS)","Brief PhaseAlpha dev team on each prompt's purpose and tuning history"],
+   inputs:["n8n workflows with all nodes","PhaseAlpha's VCS access"],
+   outputs:["7 versioned prompt files in shared repo","Knowledge transfer briefing completed"],
+   deps:["Phase 1 QA complete","PhaseAlpha .NET dev resources allocated"],tags:["Phase 2","Handoff"],notes:""},
+
+  {id:"2.1.2",phase:"2",milestone:"M9",name:"Port Canonical Data Model and Synonym Knowledge Base",owner:"Jessica",est:"3h",start:"Phase 2 Day 2",due:"Phase 2 +4d",blocking:false,
+   desc:"The canonical equipment schema and column header synonym knowledge base must be ported to PhaseAlpha's .NET data structures and database schema.",
+   checklist:["Export canonical data model: all field names, types, nullable flags, descriptions","Export synonym KB JSON to PhaseAlpha's VCS","Map canonical fields to PhaseAlpha database schema with .NET team","Confirm: all equipment record fields (identity, technical, audit groups) mapped to .NET model properties","Confirm: KB can be loaded and queried in .NET header mapping service"],
+   inputs:["Canonical data model spec","Synonym KB JSON","PhaseAlpha database schema access"],
+   outputs:["Canonical data model document in shared repo","KB file in PhaseAlpha's repo","Field-to-.NET-model mapping confirmed"],
+   deps:["2.1.1"],tags:["Phase 2","Handoff"],notes:""},
+
+  {id:"2.1.3",phase:"2",milestone:"M9",name:"Port Validation Rule Engine to .NET",owner:"Jessica",est:"4h",start:"Phase 2 Day 3",due:"Phase 2 +7d",blocking:false,
+   desc:"The 8-failure-code validation rule engine and routing logic must be implemented as .NET service methods.",
+   checklist:["Export Python validation rule engine as fully commented source code","Provide spec document: trigger condition, routing action, confidence threshold per failure code in plain English","Support PhaseAlpha dev in implementing equivalent C#/.NET logic","Review .NET implementation: confirm all 8 failure codes present and routing matches spec","Test .NET engine against same injected test cases used in Phase 0A QA"],
+   inputs:["Python validation engine (0A.4.5)","PhaseAlpha .NET dev team"],
+   outputs:["Validation engine spec document",".NET implementation reviewed and confirmed","Test against injected cases passes"],
+   deps:["2.1.2"],tags:["Phase 2","Technical"],notes:"Plus1 is advisory here; PhaseAlpha dev team implements."},
+
+  {id:"2.1.4",phase:"2",milestone:"M9",name:"Stand Up Python FastAPI Crop Orchestration as Sidecar Service",owner:"Jessica",est:"4–6h",start:"Phase 2 Day 4",due:"Phase 2 +8d",blocking:false,
+   desc:"The PyMuPDF crop orchestration layer cannot be natively ported to .NET. It remains as a Python FastAPI service callable from .NET via HTTP — the one permanent Python dependency in production.",
+   checklist:["Package crop orchestration service as production Docker container: Dockerfile, requirements.txt, startup script","Document all API endpoints: /render-full-page, /crop-table, /split-fullwidth-table with request/response schemas","Configure: HTTPS, authentication (API key), health check endpoint","Deploy to PhaseAlpha's infrastructure (or PhaseAlpha-controlled hosting)","Test: .NET service makes call to crop service and confirms 300 DPI crop returned correctly","Document: service URL, authentication, startup requirements, expected latency"],
+   inputs:["Python crop service code","PhaseAlpha's infrastructure access"],
+   outputs:["Production Docker container for crop service","Documentation of all endpoints","Deployed and callable from .NET"],
+   deps:["2.1.3"],tags:["Phase 2","Infrastructure"],notes:"One permanent Python dependency — sidecar callable from .NET, not in .NET."},
+
+  {id:"2.1.5",phase:"2",milestone:"M9",name:"Integration Testing — .NET Pipeline End-to-End",owner:"Jessica",est:"4h",start:"Phase 2 Day 10",due:"Phase 2 +12d",blocking:false,
+   desc:"Run complete extraction pipeline natively through PhaseAlpha's .NET platform and validate output against Phase 0 baseline.",
+   checklist:["Run 10 test documents through .NET pipeline","Compare .NET output JSON against Phase 0A/B output for same documents — field accuracy within ±2% tolerance","Confirm: n8n no longer in critical path for any test runs","Confirm: Python crop sidecar called correctly from .NET","Log discrepancies vs. Phase 0 baseline and resolve","Acceptable causes: minor normalization differences. Unacceptable: accuracy regression."],
+   inputs:["Complete .NET pipeline","Phase 0A/B output files for baseline comparison"],
+   outputs:["Integration test results","Discrepancy log (if any)","n8n-free path confirmed"],
+   deps:["2.1.4"],tags:["Phase 2","Testing"],notes:""},
+
+  {id:"2.1.6",phase:"2",milestone:"M9",name:"Knowledge Transfer and .NET Independence Confirmation",owner:"Marc+Jessica",est:"3–4h",start:"Phase 2 Day 12",due:"Phase 2 +14d",blocking:false,
+   desc:"PhaseAlpha's team must be able to deploy updates to the extraction logic without Plus1 involvement. This task confirms operational independence.",
+   checklist:["Run knowledge transfer session: all pipeline layers, prompt files, data model, validation engine with PhaseAlpha's dev team","Ask PhaseAlpha dev to deploy a minor prompt update independently — confirm they can do this","Confirm PhaseAlpha has all source code, prompts, schema definitions, documentation in their own repo","Document Plus1's post-handoff support scope (if any)"],
+   inputs:["Complete .NET pipeline","PhaseAlpha dev team availability"],
+   outputs:["Knowledge transfer session completed","PhaseAlpha dev deploys independent update (confirmed)","All assets in PhaseAlpha's repo confirmed"],
+   deps:["2.1.5"],tags:["Phase 2","Handoff","Independence"],notes:""},
+
+  {id:"2.QA.1",phase:"2",milestone:"Phase QA",name:"Phase 2 .NET Integration QA",owner:"Jessica+Marc",est:"3h",start:"Phase 2 Day 14",due:"Phase 2 +15d",blocking:false,isQA:true,
+   desc:"Validate full .NET pipeline, Python sidecar integration, and operational independence.",
+   checklist:["10 test documents match Phase 0 baseline within ±2%","n8n no longer in critical path for any test","PhaseAlpha deploys a prompt update independently","Python crop sidecar callable from .NET and returning correct crops","All source code in PhaseAlpha's repository"],
+   inputs:["Phase 2 complete"],outputs:["Phase 2 QA pass/fail","PhaseAlpha independence confirmed"],deps:["2.1.6"],tags:["QA"],notes:""},
+
+  // ─── PHASE 3 ───
+  {id:"3.1.1",phase:"3",milestone:"Production",name:"Load Testing at Production Volume",owner:"Jessica",est:"4–6h",start:"Phase 3 Day 1",due:"Phase 3 +3d",blocking:false,
+   desc:"Test the production system at the target concurrent load to identify and resolve bottlenecks before go-live.",
+   checklist:["Define production volume target: expected pages/month at launch (use 1,000 pages/month as default if not specified)","Simulate production load: submit concurrent requests matching peak rate","Monitor: processing time per page, error rate, API rate limit hits, queue depth","Identify bottlenecks: crop service throughput, Claude API rate limits, normalization throughput","Resolve bottlenecks before declaring production-ready"],
+   inputs:["Production .NET pipeline","Target volume from PhaseAlpha (MI-5)"],
+   outputs:["Load test results","Bottleneck analysis and resolution","Production-ready certification"],
+   deps:["Phase 2 QA complete"],tags:["Phase 3","Performance"],notes:""},
+
+  {id:"3.1.2",phase:"3",milestone:"Production",name:"Calibrate Confidence Thresholds at Production Scale",owner:"Jessica",est:"3–4h",start:"Phase 3 Day 2",due:"Phase 3 +5d",blocking:false,
+   desc:"Run 50+ production documents to see actual confidence score distribution and calibrate the 0.75/0.90 thresholds appropriately.",
+   checklist:["Run 50+ production documents through pipeline","Measure actual confidence score distribution","Calibrate 0.75 (mandatory review) and 0.90 (auto-approve) thresholds against actual distribution","If review queue >40% mandatory: adjust thresholds OR improve extraction — do not simply raise threshold without understanding why","Document final threshold values and supporting data"],
+   inputs:["Production pipeline","50+ representative documents from PhaseAlpha"],
+   outputs:["Calibrated confidence thresholds","Supporting data for threshold decisions","Threshold configuration deployed"],
+   deps:["3.1.1"],tags:["Phase 3","Quality"],notes:""},
+
+  {id:"3.1.3",phase:"3",milestone:"Production",name:"Implement Production Monitoring and Alerting in .NET Context",owner:"Jessica",est:"4h",start:"Phase 3 Day 3",due:"Phase 3 +6d",blocking:false,
+   desc:"Set up monitoring dashboards and alerting within PhaseAlpha's platform for ongoing production operation.",
+   checklist:["Set up dashboards: job success rate, avg processing time, review queue depth, confidence score distribution","Configure alerts: failure spike >5% in 1hr, processing time runaway, API error rate spike","Test alert triggers","Document monitoring setup for PhaseAlpha's ops team"],
+   inputs:["Production .NET pipeline","PhaseAlpha's monitoring infrastructure"],
+   outputs:["Monitoring dashboards live","Alert configurations active","Monitoring runbook documented"],
+   deps:["3.1.2"],tags:["Phase 3","Monitoring"],notes:""},
+
+  {id:"3.1.4",phase:"3",milestone:"Production",name:"Activate Learning Loop and Confirm Evaluation Dataset Building",owner:"Jessica",est:"2h",start:"Phase 3 Day 5",due:"Phase 3 +7d",blocking:false,
+   desc:"Confirm PhaseAlpha's Review UI sends correction events to the learning loop and the evaluation dataset is accumulating correctly.",
+   checklist:["Confirm PhaseAlpha's Review UI sends correction events to learning loop endpoint (0A.4.6)","Process first batch of reviewer corrections — confirm evaluation dataset accumulating","Verify evaluation dataset format compatible with accuracy measurement script (0A.5.2)","Establish cadence for prompt review against growing evaluation set (recommended: monthly)","Document learning loop activation and first dataset entry"],
+   inputs:["Learning loop endpoint (0A.4.6)","PhaseAlpha Review UI (PhaseAlpha-built)"],
+   outputs:["Learning loop active and receiving corrections","Evaluation dataset building confirmed","Monthly review cadence documented"],
+   deps:["3.1.3"],tags:["Phase 3","Learning Loop"],notes:""},
+
+  {id:"3.1.5",phase:"3",milestone:"Production",name:"Final Documentation and Handoff Package",owner:"Marc+Jessica",est:"4–6h",start:"Phase 3 Day 7",due:"Phase 3 +9d",blocking:false,
+   desc:"Produce and deliver the complete final documentation package. Confirm all assets are in PhaseAlpha's repository.",
+   checklist:["Produce final package: (a) architecture diagram (all 7 layers), (b) 7 versioned prompt files, (c) canonical data model spec, (d) synonym KB, (e) validation rule engine spec, (f) failure code reference guide, (g) API contract v2.0, (h) monitoring runbook","Confirm all source code and config in PhaseAlpha's repository","Run final knowledge transfer session with all PhaseAlpha stakeholders","Confirm Marc and PhaseAlpha aligned on any remaining support scope"],
+   inputs:["All project artifacts"],
+   outputs:["Final documentation package in PhaseAlpha's repo","All assets confirmed delivered"],
+   deps:["3.1.4"],tags:["Phase 3","Documentation","Handoff"],notes:""},
+
+  {id:"3.QA.1",phase:"3",milestone:"Phase QA",name:"Final UAT — Production Readiness Sign-Off",owner:"Marc+Jessica",est:"3h",start:"Phase 3 Day 9",due:"Phase 3 +10d",blocking:false,isQA:true,
+   desc:"Final UAT confirming complete production system readiness across all dimensions — load, monitoring, learning loop, .NET pipeline, and PhaseAlpha operational independence.",
+   checklist:["Load test passes at target production volume with <5% error rate","Confidence thresholds calibrated and documented","Learning loop receiving and storing correction events","All documentation delivered and in PhaseAlpha's repository","PhaseAlpha team confirms operational independence","Written sign-off from Joe Lewis received"],
+   inputs:["All Phase 3 complete"],outputs:["Production readiness confirmed","Joe Lewis written sign-off"],deps:["3.1.5"],tags:["QA","Final"],notes:""}
+];
+
+// ══════════════════════════════════════════════════════════
+// RENDER ENGINE
+// ══════════════════════════════════════════════════════════
+
+const PHASES = [
+  {id:'0A', label:'Phase 0A — n8n Pilot: Option A Fast Path', color:'#2563eb', summary:'Build and validate the full extraction pipeline (Layers 3–7) in n8n. Option A uses LlamaParse as the single detector. ~2 calendar weeks.', duration:'~2 weeks', status:'Pending kickoff ~Apr 2'},
+  {id:'0B', label:'Phase 0B — Option B: Dual Detector Escalation', color:'#d97706', summary:'Add Docling as automatic fallback detector. Triggered if Option A accuracy falls below ≥85% threshold. +1 week. All Phase 0A code carries forward.', duration:'+1 week (if triggered)', status:'Contingent on M7'},
+  {id:'1',  label:'Phase 1 — API Hardening', color:'#5b21b6', summary:'Expose validated n8n pipeline as production-grade API endpoint callable from PhaseAlpha\'s .NET platform. Add retry, monitoring, rate limiting.', duration:'1–2 weeks', status:'Post Phase 0'},
+  {id:'2',  label:'Phase 2 — .NET Integration', color:'#166534', summary:'Migrate extraction pipeline logic into PhaseAlpha\'s .NET platform. Python FastAPI sidecar for crop orchestration. n8n retired from critical path.', duration:'3–5 weeks', status:'Post Phase 1'},
+  {id:'3',  label:'Phase 3 — Production Hardening', color:'#0f2545', summary:'Load testing, confidence calibration, production monitoring, learning loop activation, final documentation and handoff.', duration:'2–3 weeks', status:'Post Phase 2'}
+];
+
+const MILESTONES = {
+  'M1':'Environment Provisioned & Sample Data Received',
+  'M2':'Table Detector Operational on All Sample Types',
+  'M3':'Two-Pass Crop Pipeline Functional',
+  'M4':'Extraction Returns Valid Structured JSON',
+  'M5':'Accuracy Measured Against Reference Ground Truth',
+  'M6':'API Payload Contract Published',
+  'M7':'Option A/B Decision Gate',
+  'M8':'n8n Pipeline Production-Grade API',
+  'M9':'Pipeline Running Natively in .NET',
+  'Production':'Production Readiness',
+  'Phase QA':'Phase Quality Assurance'
+};
+
+let currentPhase = 'all';
+let completedTasks = new Set();
+
+function getPhaseColor(phase) {
+  const p = PHASES.find(x => x.id === phase);
+  return p ? p.color : '#475569';
+}
+
+function renderAll() {
+  const container = document.getElementById('taskContainer');
+  container.innerHTML = '';
+
+  PHASES.forEach(phase => {
+    const phaseTasks = TASKS.filter(t => t.phase === phase.id);
+    const milestoneGroups = {};
+    phaseTasks.forEach(t => {
+      if (!milestoneGroups[t.milestone]) milestoneGroups[t.milestone] = [];
+      milestoneGroups[t.milestone].push(t);
+    });
+
+    const sec = document.createElement('div');
+    sec.className = 'phase-section';
+    sec.dataset.phase = phase.id;
+
+    const completedInPhase = phaseTasks.filter(t => completedTasks.has(t.id)).length;
+    const pct = phaseTasks.length ? Math.round(completedInPhase / phaseTasks.length * 100) : 0;
+
+    sec.innerHTML = `
+      <div class="phase-header">
+        <div class="phase-num-large" style="background:${phase.color}">${phase.id}</div>
+        <div class="phase-header-text">
+          <h2>${phase.label}</h2>
+          <p>${phase.summary}</p>
+        </div>
+        <div class="phase-header-meta">
+          <span class="pill pill-blue">${phase.duration}</span>
+          <span class="pill pill-amber">${phase.status}</span>
+          <div class="phase-progress-mini">
+            <div class="phase-progress-bar"><div class="phase-progress-fill" style="width:${pct}%;background:${phase.color}"></div></div>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--gray4)">${completedInPhase}/${phaseTasks.length}</span>
+          </div>
+        </div>
+      </div>`;
+
+    Object.entries(milestoneGroups).forEach(([ms, tasks]) => {
+      const msDiv = document.createElement('div');
+      msDiv.innerHTML = `
+        <div class="ms-header">
+          <span class="ms-badge">${ms}</span>
+          <span class="ms-name">${MILESTONES[ms] || ms}</span>
+          <span class="ms-count">${tasks.length} task${tasks.length !== 1 ? 's' : ''}</span>
+        </div>`;
+
+      tasks.forEach(task => {
+        if (task.isQA) {
+          msDiv.appendChild(renderQACard(task));
+        } else {
+          msDiv.appendChild(renderTaskCard(task));
+        }
+      });
+
+      sec.appendChild(msDiv);
+    });
+
+    container.appendChild(sec);
+  });
+
+  updateProgress();
+}
+
+function renderTaskCard(task) {
+  const card = document.createElement('div');
+  card.className = `task-card${task.blocking ? ' blocking' : ''}${completedTasks.has(task.id) ? ' completed' : ''}`;
+  card.dataset.taskId = task.id;
+  card.dataset.phase = task.phase;
+  card.dataset.owner = task.owner;
+  card.dataset.blocking = task.blocking ? 'true' : 'false';
+  card.dataset.name = task.name.toLowerCase();
+
+  const checkState = completedTasks.has(task.id);
+
+  card.innerHTML = `
+    <div class="task-header" onclick="toggleTask('${task.id}')">
+      <div class="task-checkbox ${checkState ? 'checked' : ''}" onclick="event.stopPropagation();toggleComplete('${task.id}')"></div>
+      <div style="min-width:0">
+        <span class="task-id-pill">${task.id}</span>${task.blocking ? '<span class="task-blocking-flag">⛔ BLOCKING</span>' : ''}
+        <span class="task-name">${task.name}</span>
+      </div>
+      <div class="task-owner-pill">${task.owner}</div>
+      <div class="task-est">${task.est}</div>
+      <div class="task-due">${task.due}</div>
+      <div class="task-chevron">▼</div>
+    </div>
+    <div class="task-body">
+      <div class="tb-label">Description</div>
+      <div class="tb-desc">${task.desc}</div>
+
+      <div class="task-body-grid">
+        <div>
+          <div class="tb-label">Execution Checklist</div>
+          <ul class="checklist">${task.checklist.map(c => `<li>${c}</li>`).join('')}</ul>
+        </div>
+        <div>
+          <div class="tb-label">Inputs Required</div>
+          <ul class="checklist">${task.inputs.map(i => `<li>${i}</li>`).join('')}</ul>
+
+          <div class="tb-label">Outputs / Deliverables</div>
+          <ul class="checklist">${task.outputs.map(o => `<li>${o}</li>`).join('')}</ul>
+
+          <div class="tb-label">Dependencies / Blockers</div>
+          <ul class="checklist">${task.deps.map(d => `<li>${d}</li>`).join('')}</ul>
+        </div>
+      </div>
+
+      <div class="task-meta-strip">
+        <div class="tms-item"><div class="tms-label">Phase</div><div class="tms-val">${task.phase}</div></div>
+        <div class="tms-item"><div class="tms-label">Milestone</div><div class="tms-val">${task.milestone}</div></div>
+        <div class="tms-item"><div class="tms-label">Start</div><div class="tms-val">${task.start}</div></div>
+        <div class="tms-item"><div class="tms-label">Due</div><div class="tms-val">${task.due}</div></div>
+        <div class="tms-item"><div class="tms-label">Estimate</div><div class="tms-val">${task.est}</div></div>
+        <div class="tms-item"><div class="tms-label">Owner</div><div class="tms-val">${task.owner}</div></div>
+        ${task.notes ? `<div class="tms-item" style="grid-column:span 2"><div class="tms-label">Notes</div><div class="tms-val" style="font-weight:400;color:var(--amber)">${task.notes}</div></div>` : ''}
+      </div>
+
+      <div class="tag-row" style="margin-top:10px">${task.tags.map(t => `<span class="tag tag-blue">${t}</span>`).join('')}</div>
+    </div>`;
+
+  return card;
+}
+
+function renderQACard(task) {
+  const div = document.createElement('div');
+  div.className = 'qa-card';
+  div.dataset.taskId = task.id;
+  div.dataset.phase = task.phase;
+  div.dataset.owner = task.owner;
+  div.dataset.blocking = 'false';
+  div.dataset.name = task.name.toLowerCase();
+
+  div.innerHTML = `
+    <div class="qa-header">
+      <span class="qa-badge">QA / GATE</span>
+      <span class="qa-title">${task.id} — ${task.name}</span>
+      <span style="margin-left:auto;font-family:var(--mono);font-size:11px;color:#64748b">${task.est} · ${task.owner}</span>
+    </div>
+    <div class="qa-body">${task.desc}</div>
+    <ul class="qa-criteria">${task.checklist.map(c => `<li>${c}</li>`).join('')}</ul>
+    <div style="margin-top:10px;font-family:var(--mono);font-size:10px;color:#64748b">Start: ${task.start} · Due: ${task.due} · Notes: ${task.notes || 'None'}</div>`;
+
+  return div;
+}
+
+// ══════════════════════════════════════════════════════════
+// INTERACTIONS
+// ══════════════════════════════════════════════════════════
+
+function toggleTask(id) {
+  const card = document.querySelector(`[data-task-id="${id}"].task-card`);
+  if (!card) return;
+  card.classList.toggle('expanded');
+}
+
+function toggleComplete(id) {
+  if (completedTasks.has(id)) {
+    completedTasks.delete(id);
+  } else {
+    completedTasks.add(id);
+  }
+  const card = document.querySelector(`[data-task-id="${id}"]`);
+  if (card) {
+    card.classList.toggle('completed', completedTasks.has(id));
+    const cb = card.querySelector('.task-checkbox');
+    if (cb) cb.classList.toggle('checked', completedTasks.has(id));
+  }
+  updateProgress();
+  updateSidebarCounts();
+}
+
+function filterPhase(phase) {
+  currentPhase = phase;
+  document.querySelectorAll('.sb-phase-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`btn-${phase}`)?.classList.add('active');
+
+  document.querySelectorAll('.phase-section').forEach(s => {
+    if (phase === 'all' || s.dataset.phase === phase) {
+      s.classList.remove('hidden');
+    } else {
+      s.classList.add('hidden');
+    }
+  });
+
+  filterTasks();
+}
+
+function filterTasks() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const owner = document.getElementById('ownerFilter').value;
+  const status = document.getElementById('statusFilter').value;
+
+  let visibleCount = 0;
+
+  document.querySelectorAll('[data-task-id]').forEach(el => {
+    const id = el.dataset.taskId;
+    const phase = el.dataset.phase;
+    const elOwner = el.dataset.owner || '';
+    const blocking = el.dataset.blocking === 'true';
+    const name = el.dataset.name || '';
+    const isComplete = completedTasks.has(id);
+
+    let show = true;
+
+    if (currentPhase !== 'all' && phase !== currentPhase) show = false;
+    if (search && !name.includes(search) && !id.toLowerCase().includes(search)) show = false;
+    if (owner !== 'all' && !elOwner.includes(owner)) show = false;
+    if (status === 'blocking' && !blocking) show = false;
+    if (status === 'complete' && !isComplete) show = false;
+    if (status === 'incomplete' && isComplete) show = false;
+
+    el.classList.toggle('hidden-task', !show);
+    if (show) visibleCount++;
+  });
+
+  document.getElementById('emptyState').classList.toggle('hidden', visibleCount > 0);
+}
+
+function expandAll() {
+  document.querySelectorAll('.task-card:not(.hidden-task)').forEach(c => c.classList.add('expanded'));
+}
+function collapseAll() {
+  document.querySelectorAll('.task-card').forEach(c => c.classList.remove('expanded'));
+}
+
+function updateProgress() {
+  const total = TASKS.length;
+  const done = completedTasks.size;
+  const pct = Math.round(done / total * 100);
+
+  document.getElementById('topProgressBar').style.width = pct + '%';
+  document.getElementById('topProgressLabel').textContent = `${done}/${total}`;
+  document.getElementById('sb-completed').textContent = `${done} / ${total}`;
+}
+
+function updateSidebarCounts() {
+  const phaseCounts = {};
+  TASKS.forEach(t => {
+    phaseCounts[t.phase] = (phaseCounts[t.phase] || 0) + 1;
+  });
+  const allDone = completedTasks.size;
+  document.getElementById('count-all').textContent = `${TASKS.length} tasks`;
+  Object.entries(phaseCounts).forEach(([phase, count]) => {
+    const el = document.getElementById(`count-${phase}`);
+    if (el) el.textContent = `${count} tasks`;
+  });
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  renderAll();
+  updateProgress();
+  updateSidebarCounts();
+});
+</script>
+</body>
+</html>
