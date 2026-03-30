@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Projects — Capacity Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #f5f4f0;
+  --bg2: #eeece7;
+  --bg3: #e8e6e0;
+  --card: #ffffff;
+  --border: #e0ddd5;
+  --border2: #ccc9bf;
+  --text: #1a1916;
+  --muted: #706d63;
+  --faint: #9c9890;
+  --green: #0a7c57;
+  --green-bg: #e6f5ef;
+  --green-border: #b3dece;
+  --blue: #1a5fa8;
+  --blue-bg: #e8f1fb;
+  --blue-border: #b3cff0;
+  --amber: #8a5d00;
+  --amber-bg: #fef6e4;
+  --amber-border: #f0d590;
+  --red: #b83232;
+  --red-bg: #fdf0f0;
+  --red-border: #f0b3b3;
+  --purple: #5b3fa6;
+  --purple-bg: #f0ecfd;
+  --purple-border: #c9baf0;
+  --accent: #0a7c57;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;}
+
+/* ── HEADER ── */
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;height:58px;position:sticky;top:0;z-index:200;box-shadow:var(--shadow);}
+.logo{font-family:var(--font-head);font-weight:800;font-size:16px;color:var(--text);display:flex;align-items:center;gap:9px;margin-right:24px;}
+.logo-mark{width:26px;height:26px;background:var(--text);border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.logo-mark svg{width:14px;height:14px;fill:#fff;}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.header-meta{font-size:12px;color:var(--faint);}
+.save-btn{display:flex;align-items:center;gap:6px;background:var(--text);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:12px;font-weight:500;padding:7px 14px;cursor:pointer;transition:opacity .15s;}
+.save-btn:hover{opacity:.85;}
+.save-btn.saved{background:var(--green);}
+.export-btn{display:flex;align-items:center;gap:6px;background:transparent;color:var(--muted);border:1px solid var(--border2);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:12px;font-weight:500;padding:6px 12px;cursor:pointer;transition:all .15s;}
+.export-btn:hover{border-color:var(--text);color:var(--text);}
+.unsaved-dot{width:7px;height:7px;background:#e07c3a;border-radius:50%;display:none;}
+.unsaved-dot.show{display:inline-block;}
+
+/* ── TABS ── */
+.tabs{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;display:flex;gap:2px;}
+.tab-btn{background:none;border:none;color:var(--faint);font-family:var(--font-body);font-size:13px;font-weight:500;padding:11px 18px;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ── LAYOUT ── */
+.main{padding:28px;max-width:1160px;margin:0 auto;}
+.tab-panel{display:none;animation:fadeIn .2s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ── SECTION LABEL ── */
+.section-label{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:0 0 14px;}
+.section-gap{margin-top:36px;}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:30px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
+.stat-lbl{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.stat-val{font-family:var(--font-head);font-size:26px;font-weight:800;line-height:1;margin-bottom:3px;}
+.stat-sub{font-size:11px;color:var(--muted);}
+.v-green{color:var(--green);} .v-blue{color:var(--blue);} .v-amber{color:var(--amber);} .v-red{color:var(--red);} .v-purple{color:var(--purple);}
+
+/* ── PROJECT CARDS ── */
+.proj-group-header{display:flex;align-items:center;gap:10px;margin:24px 0 10px;}
+.proj-group-header h3{font-family:var(--font-head);font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+.proj-group-header .line{flex:1;height:1px;background:var(--border);}
+
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:9px;display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:start;box-shadow:var(--shadow);transition:box-shadow .15s;position:relative;}
+.proj-card:hover{box-shadow:var(--shadow-md);}
+.proj-card.confirmed{border-left:3px solid var(--green);}
+.proj-card.pipeline{border-left:3px solid var(--blue);}
+.proj-card.complete{border-left:3px solid var(--faint);opacity:.7;}
+.proj-name{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;margin-top:3px;}
+.badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.badge.blue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);}
+.badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
+.badge.gray{background:var(--bg2);color:var(--muted);border:1px solid var(--border2);}
+.proj-desc{font-size:12.5px;color:var(--muted);line-height:1.55;margin:7px 0 9px;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 7px;}
+.hours-box{text-align:right;white-space:nowrap;min-width:80px;}
+.hours-big{font-family:var(--font-head);font-size:24px;font-weight:800;line-height:1;color:var(--text);margin-bottom:1px;}
+.hours-sub{font-size:11px;color:var(--faint);}
+.edit-btn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);border-radius:var(--radius-sm);font-size:11px;font-weight:500;padding:5px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;height:fit-content;}
+.edit-btn:hover{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+.add-proj-btn{display:flex;align-items:center;gap:7px;background:var(--bg2);border:1px dashed var(--border2);border-radius:var(--radius);padding:13px 18px;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;width:100%;transition:all .15s;margin-top:4px;}
+.add-proj-btn:hover{background:var(--bg3);color:var(--text);border-color:var(--text);}
+
+/* ── GANTT ── */
+.gantt-wrap{overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow);}
+.gantt-table{width:100%;border-collapse:collapse;min-width:700px;background:var(--card);border-radius:var(--radius);overflow:hidden;}
+.gantt-table th{font-size:11px;font-weight:600;color:var(--faint);padding:8px 10px;text-align:center;border-bottom:1px solid var(--border);background:var(--bg2);}
+.gantt-table th.ph{text-align:left;}
+.gantt-table td{padding:5px 8px;border-bottom:1px solid var(--bg2);}
+.gantt-table tr:last-child td{border-bottom:none;}
+.gantt-table td.pnc{font-size:12px;color:var(--text);white-space:nowrap;font-weight:500;padding-left:14px;}
+.bc{padding:3px 5px;}
+.gbar{height:20px;border-radius:4px;width:100%;display:flex;align-items:center;padding:0 7px;}
+.gbar span{font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;}
+.bc-conf{background:#dcf5ec;border:1px solid #99dcbc;} .bc-conf span{color:var(--green);}
+.bc-pipe{background:#dceeff;border:1px solid #99caee;} .bc-pipe span{color:var(--blue);}
+.bc-dash{background:repeating-linear-gradient(90deg,#e8f2fc 0,#e8f2fc 5px,transparent 5px,transparent 9px);border:1px dashed #99caee;} .bc-dash span{color:var(--blue);}
+.bc-new{background:#ede8fd;border:1px dashed #bdb0ee;} .bc-new span{color:var(--purple);}
+
+/* ── CHART CARD ── */
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:18px;box-shadow:var(--shadow);}
+.chart-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.chart-sub{font-size:12px;color:var(--muted);margin-bottom:18px;}
+
+/* ── WEEK BREAKDOWN TABLE ── */
+.wk-table{width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border-collapse:collapse;}
+.wk-table th{font-size:11px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;background:var(--bg2);border-bottom:1px solid var(--border);text-align:left;}
+.wk-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--bg2);}
+.wk-table tr:last-child td{border-bottom:none;}
+.load-bar-bg{width:100%;height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;}
+.load-bar-fill{height:100%;border-radius:4px;}
+
+/* ── STAFFING ── */
+.verdict-card{border-radius:var(--radius);padding:18px 22px;margin-bottom:20px;border:1px solid;}
+.verdict-card.red{background:var(--red-bg);border-color:var(--red-border);}
+.verdict-card.amber{background:var(--amber-bg);border-color:var(--amber-border);}
+.verdict-card.green{background:var(--green-bg);border-color:var(--green-border);}
+.verdict-card.purple{background:var(--purple-bg);border-color:var(--purple-border);}
+.verdict-title{font-family:var(--font-head);font-size:14px;font-weight:700;margin-bottom:5px;}
+.verdict-body{font-size:13px;color:var(--muted);line-height:1.7;}
+
+.person-timeline{padding:22px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:18px;box-shadow:var(--shadow);}
+.person-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.p-label{font-family:var(--font-head);font-size:12px;font-weight:700;width:72px;flex-shrink:0;color:var(--text);}
+.p-bars{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;flex:1;}
+.pb{height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;}
+.pb.empty{background:var(--bg2);}
+.pb.p1{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.pb.p2-ok{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
+.pb.p2-needed{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.wk-labels-row{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;flex:1;margin-left:84px;margin-bottom:5px;}
+.wk-lbl{font-size:10px;color:var(--faint);text-align:center;}
+
+.option-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.option-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);}
+.option-num{font-family:var(--font-head);font-size:26px;font-weight:800;margin-bottom:5px;}
+.option-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.option-desc{font-size:12px;color:var(--muted);line-height:1.55;}
+
+/* ── NEW PROJECTS TAB ── */
+.scenario-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+.scen-btn{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--muted);font-family:var(--font-body);font-size:12px;font-weight:500;padding:6px 13px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow);}
+.scen-btn:hover{border-color:var(--border2);color:var(--text);}
+.scen-btn.active{background:var(--purple-bg);border-color:var(--purple-border);color:var(--purple);}
+.scenario-panel{display:none;} .scenario-panel.active{display:block;}
+.impact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px;}
+
+/* ── FLAG ITEMS ── */
+.flag-item{display:flex;gap:11px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px;box-shadow:var(--shadow);}
+.flag-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.flag-text{font-size:12.5px;color:var(--muted);line-height:1.55;}
+.flag-text strong{color:var(--text);font-weight:600;}
+
+/* ── LEGEND ── */
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);}
+.legend-swatch{width:11px;height:11px;border-radius:3px;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeOverlay .15s ease;}
+@keyframes fadeOverlay{from{opacity:0}to{opacity:1}}
+.modal{background:var(--card);border-radius:14px;padding:28px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative;animation:slideUp .2s ease;}
+@keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.modal-title{font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--text);margin-bottom:22px;}
+.modal-close{position:absolute;top:16px;right:18px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{background:var(--bg3);color:var(--text);}
+.form-row{margin-bottom:16px;}
+.form-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;display:block;}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--text);padding:9px 12px;transition:border-color .15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--accent);}
+.form-textarea{resize:vertical;min-height:80px;}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.wk-input-wrap{display:flex;flex-direction:column;gap:3px;}
+.wk-input-lbl{font-size:10px;color:var(--faint);text-align:center;}
+.wk-input{text-align:center;padding:6px 4px;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:24px;padding-top:18px;border-top:1px solid var(--border);}
+.btn-primary{background:var(--text);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:600;padding:9px 20px;cursor:pointer;transition:opacity .15s;}
+.btn-primary:hover{opacity:.85;}
+.btn-secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border2);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;padding:8px 18px;cursor:pointer;transition:all .15s;}
+.btn-secondary:hover{background:var(--bg3);}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;padding:8px 18px;cursor:pointer;transition:all .15s;margin-right:auto;}
+.btn-danger:hover{background:#fce0e0;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;font-size:13px;font-weight:500;padding:11px 18px;border-radius:var(--radius-sm);box-shadow:var(--shadow-md);z-index:2000;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;}
+.toast.show{opacity:1;transform:none;}
+.toast.green{background:var(--green);}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+@media(max-width:700px){.stat-grid{grid-template-columns:repeat(2,1fr);}.option-grid{grid-template-columns:1fr;}.impact-grid{grid-template-columns:repeat(2,1fr);}.form-grid-2{grid-template-columns:1fr;}.form-grid-4{grid-template-columns:repeat(4,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-mark"><svg viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1" opacity=".4"/></svg></div>
+    AI Projects
+  </div>
+  <span class="header-meta">Plus1 Technology · Capacity Dashboard</span>
+  <div class="header-right">
+    <span class="unsaved-dot" id="unsaved-dot"></span>
+    <span class="header-meta" id="last-saved-label"></span>
+    <button class="export-btn" onclick="exportData()">↓ Export JSON</button>
+    <button class="save-btn" id="save-btn" onclick="saveData()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2h6.5L10 3.5V10H2V2z" stroke="currentColor" stroke-width="1.2"/><rect x="3.5" y="6.5" width="5" height="3" fill="currentColor" opacity=".5"/><rect x="4" y="2" width="3.5" height="2.5" fill="currentColor" opacity=".5"/></svg>
+      Save
+    </button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">Project Overview</button>
+  <button class="tab-btn" onclick="switchTab('capacity',this)">Capacity Timeline</button>
+  <button class="tab-btn" onclick="switchTab('staffing',this)">Staffing Analysis</button>
+  <button class="tab-btn" onclick="switchTab('newprojects',this)">New Projects Impact</button>
+</div>
+
+<div class="main">
+  <div class="tab-panel active" id="tab-overview"></div>
+  <div class="tab-panel" id="tab-capacity"></div>
+  <div class="tab-panel" id="tab-staffing"></div>
+  <div class="tab-panel" id="tab-newprojects"></div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="modal" style="display:none">
+  <div class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-title" id="modal-title">Edit Project</div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// DEFAULT DATA
+// ─────────────────────────────────────────────
+const DEFAULT_DATA = {
+  updatedAt: 'Mar 30, 2026',
+  capacityPerWeek: 40,
+  projects: [
+    {
+      id: 'phase-alpha',
+      name: 'Phase Alpha',
+      status: 'confirmed',
+      badge: 'Starts Wednesday',
+      hoursLow: 80, hoursHigh: 120,
+      startWeek: 1, durationWeeks: 4,
+      weeklyHours: [30,30,30,30,0,0,0,0,0,0],
+      description: 'HVAC schedule data extraction SaaS — Phase 0 proof of concept. Complex multi-layer pipeline: PDF detection, rendering, extraction, validation, and anti-hallucination. All estimates in business days (8 hrs/day).',
+      tags: 'n8n + Claude + Python FastAPI|High complexity|Kickoff & Setup: 16–24 hrs|Crop Orchestration: 40–56 hrs|Extraction Model: 16–40 hrs|7 Production Prompts: 24–32 hrs|Pilot Testing: 40–56 hrs',
+      color: 'green'
+    },
+    {
+      id: 'keehan',
+      name: 'Keehan',
+      status: 'confirmed',
+      badge: 'Likely next week',
+      hoursLow: 36, hoursHigh: 44,
+      startWeek: 2, durationWeeks: 4,
+      weeklyHours: [0,10,13,9,5,0,0,0,0,0],
+      description: 'Invoice reconciliation automation — Koncile document processing + n8n workflow. PO matching, line-item / pricing / tariff reconciliation, OneDrive monitoring, email reporting.',
+      tags: 'Wk 1: Discovery 8–10 hrs|Wk 2: Config 12–14 hrs|Wk 3: Testing 8–10 hrs|Wk 4: Training 4–6 hrs|30-day support 2–4 hrs',
+      color: 'green'
+    },
+    {
+      id: 'hilberts',
+      name: 'Hilberts',
+      status: 'pipeline',
+      badge: 'Quote Ready',
+      hoursLow: 86, hoursHigh: 86,
+      startWeek: 3, durationWeeks: 5,
+      weeklyHours: [0,0,14,20,20,20,12,0,0,0],
+      description: 'Phase 1 bid intake automation — n8n watches Outlook, Claude classifies & extracts every ITB, routes drawings across 3 portal formats, generates morning review digest.',
+      tags: 'Setup & design: 14 hrs|Email triage: 18 hrs|Drawing retrieval: 24 hrs|Morning digest: 16 hrs|Testing & training: 14 hrs|First value: Day 5',
+      color: 'blue'
+    },
+    {
+      id: 'waterlines',
+      name: 'Plastic Waterlines',
+      status: 'pipeline',
+      badge: 'Scenario Decision Needed',
+      hoursLow: 74, hoursHigh: 126,
+      startWeek: 4, durationWeeks: 5,
+      weeklyHours: [0,0,0,15,19,19,19,12,0,0],
+      description: 'PDF order automation — two scenarios pending client choice. Scenario 1 (Koncile + n8n) is more robust for handwriting. Scenario 2 (Power Automate + Copilot) is faster to deliver.',
+      tags: 'Scenario 1 (Koncile+n8n): 102–126 hrs · 5–6 wks|Scenario 2 (Power Automate): 74–94 hrs · 4–5 wks',
+      color: 'amber'
+    },
+    {
+      id: 'ep',
+      name: 'Everything Printing',
+      status: 'pipeline',
+      badge: 'Quote Ready',
+      hoursLow: 37, hoursHigh: 79,
+      startWeek: 3, durationWeeks: 4,
+      weeklyHours: [0,0,6,6,5,5,0,0,0,0],
+      description: '11 modular options — client picks any combination. 4 can start immediately. Phase 2 options pending InfoFlow API confirmation.',
+      tags: 'QB Automation: 3–5 hrs ✓|SOPs + Handbook: 8–14 hrs ✓|Prospect Agent: 6–10 hrs ✓|Marketing Agent: 20–30 hrs ✓|Email Routing: 15–25 hrs (InfoFlow TBC)',
+      color: 'blue'
+    },
+    {
+      id: 'hock',
+      name: 'HOCK International',
+      status: 'pipeline',
+      badge: 'Quote Ready',
+      hoursLow: 137, hoursHigh: 195,
+      startWeek: 3, durationWeeks: 6,
+      weeklyHours: [0,0,6,6,5,5,5,5,0,0],
+      description: '13 AI marketing options across 3 tiers. 4 quick wins start immediately. Medium builds need HubSpot + Monday access. Full systems build on mediums.',
+      tags: 'Quick Wins (4): 17–25 hrs ✓|Medium Builds (5): 40–58 hrs (HubSpot+Monday needed)|Full Systems (4): 80–112 hrs (after mediums)',
+      color: 'blue'
+    }
+  ]
+};
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+let unsaved = false;
+let charts = {};
+let activeTab = 'overview';
+
+// ─────────────────────────────────────────────
+// STORAGE
+// ─────────────────────────────────────────────
+
+async function saveData() {
+  data.savedAt = new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric', hour:'2-digit',minute:'2-digit'});
+  try {
+    await window.storage.set('ai-projects-data', JSON.stringify(data));
+    unsaved = false;
+    document.getElementById('unsaved-dot').classList.remove('show');
+    const btn = document.getElementById('save-btn');
+    btn.classList.add('saved');
+    btn.textContent = '✓ Saved';
+    document.getElementById('last-saved-label').textContent = 'Last saved: ' + data.savedAt;
+    showToast('Dashboard saved!', 'green');
+    setTimeout(() => { btn.classList.remove('saved'); btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2h6.5L10 3.5V10H2V2z" stroke="currentColor" stroke-width="1.2"/><rect x="3.5" y="6.5" width="5" height="3" fill="currentColor" opacity=".5"/><rect x="4" y="2" width="3.5" height="2.5" fill="currentColor" opacity=".5"/></svg> Save'; }, 2500);
+  } catch(e) { showToast('Save failed — check storage'); }
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'ai-projects-capacity.json'; a.click();
+  showToast('JSON exported');
+}
+
+function markUnsaved() {
+  unsaved = true;
+  document.getElementById('unsaved-dot').classList.add('show');
+}
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function getWeeklyTotals(weeks=10) {
+  const totals = Array(weeks).fill(0);
+  data.projects.filter(p=>p.status!=='complete').forEach(p => {
+    (p.weeklyHours||[]).forEach((h,i) => { if(i<weeks) totals[i]+=h; });
+  });
+  return totals;
+}
+
+function getTotalHoursLow() { return data.projects.filter(p=>p.status!=='complete').reduce((s,p)=>s+(p.hoursLow||0),0); }
+function getTotalHoursHigh() { return data.projects.filter(p=>p.status!=='complete').reduce((s,p)=>s+(p.hoursHigh||0),0); }
+function getConfirmed() { return data.projects.filter(p=>p.status==='confirmed'); }
+function getPipeline() { return data.projects.filter(p=>p.status==='pipeline'); }
+function getComplete() { return data.projects.filter(p=>p.status==='complete'); }
+
+const COLORS = {
+  green:'#0a7c57', blue:'#1a5fa8', amber:'#8a5d00', red:'#b83232', purple:'#5b3fa6',
+  'phase-alpha':'#0a7c57','keehan':'#3aab83','hilberts':'#1a5fa8','waterlines':'#6a9fd0','ep':'#d4a017','hock':'#e8c56a'
+};
+const PROJECT_COLORS = ['#0a7c57','#3aab83','#1a5fa8','#4a8fcb','#d4a017','#e8c56a','#7c4fa0','#c08cd8','#b83232','#e07070'];
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show' + (type?' '+type:'');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+const WK_NAMES = ['Wk1\nMar31','Wk2\nApr7','Wk3\nApr14','Wk4\nApr21','Wk5\nApr28','Wk6\nMay5','Wk7\nMay12','Wk8\nMay19','Wk9\nMay26','Wk10\nJun2'];
+
+// ─────────────────────────────────────────────
+// TAB SWITCHING
+// ─────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  else document.querySelectorAll('.tab-btn')[['overview','capacity','staffing','newprojects'].indexOf(name)].classList.add('active');
+  activeTab = name;
+  if(name==='capacity') setTimeout(renderCapacityCharts, 60);
+  if(name==='newprojects') setTimeout(renderScenarioCharts, 60);
+}
+
+// ─────────────────────────────────────────────
+// RENDER ALL
+// ─────────────────────────────────────────────
+function renderAll() {
+  renderOverview();
+  renderCapacityTab();
+  renderStaffingTab();
+  renderNewProjectsTab();
+  // destroy old charts before re-rendering so canvas is clean
+  Object.keys(charts).forEach(k=>{ try{charts[k].destroy();}catch(e){} delete charts[k]; });
+  charts = {};
+  if(activeTab==='capacity') setTimeout(renderCapacityCharts, 60);
+  if(activeTab==='newprojects') setTimeout(renderScenarioCharts, 60);
+}
+
+// ─────────────────────────────────────────────
+// OVERVIEW TAB
+// ─────────────────────────────────────────────
+function renderOverview() {
+  const confirmed = getConfirmed(), pipeline = getPipeline(), complete = getComplete();
+  const confirmedHrsLow = confirmed.reduce((s,p)=>s+(p.hoursLow||0),0);
+  const confirmedHrsHigh = confirmed.reduce((s,p)=>s+(p.hoursHigh||0),0);
+  const pipelineHrsLow = pipeline.reduce((s,p)=>s+(p.hoursLow||0),0);
+  const pipelineHrsHigh = pipeline.reduce((s,p)=>s+(p.hoursHigh||0),0);
+
+  let html = `
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-lbl">Confirmed projects</div><div class="stat-val v-green">${confirmed.length}</div><div class="stat-sub">Active / starting soon</div></div>
+    <div class="stat-card"><div class="stat-lbl">Pipeline projects</div><div class="stat-val v-blue">${pipeline.length}</div><div class="stat-sub">Quote / proposal ready</div></div>
+    <div class="stat-card"><div class="stat-lbl">Committed hours</div><div class="stat-val v-green">${confirmedHrsLow}–${confirmedHrsHigh}</div><div class="stat-sub">Confirmed work</div></div>
+    <div class="stat-card"><div class="stat-lbl">Pipeline hours</div><div class="stat-val v-amber">${pipelineHrsLow}–${pipelineHrsHigh}+</div><div class="stat-sub">If all proposals close</div></div>
+  </div>`;
+
+  if(confirmed.length>0) {
+    html += `<div class="proj-group-header"><div style="width:9px;height:9px;background:var(--green);border-radius:50%;flex-shrink:0"></div><h3>Confirmed / Active</h3><div class="line"></div></div>`;
+    confirmed.forEach(p => { html += projectCard(p); });
+  }
+  if(pipeline.length>0) {
+    html += `<div class="proj-group-header section-gap"><div style="width:9px;height:9px;background:var(--blue);border-radius:50%;flex-shrink:0"></div><h3>Pipeline — Quote / Proposal Ready</h3><div class="line"></div></div>`;
+    pipeline.forEach(p => { html += projectCard(p); });
+  }
+  if(complete.length>0) {
+    html += `<div class="proj-group-header section-gap"><div style="width:9px;height:9px;background:var(--faint);border-radius:50%;flex-shrink:0"></div><h3>Complete</h3><div class="line"></div></div>`;
+    complete.forEach(p => { html += projectCard(p); });
+  }
+
+  html += `<button class="add-proj-btn" onclick="openAddModal()"><span style="font-size:18px;line-height:1">+</span> Add new project</button>`;
+
+  // Gantt
+  html += `<div class="section-gap"><div class="section-label">8-week timeline</div></div>`;
+  html += `<div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#dcf5ec;border:1px solid #99dcbc"></div>Confirmed</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#dceeff;border:1px solid #99caee"></div>Pipeline / accepted</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:repeating-linear-gradient(90deg,#e8f2fc 0,#e8f2fc 5px,transparent 5px,transparent 9px);border:1px dashed #99caee"></div>Pending</div>
+  </div>`;
+  html += renderGantt();
+
+  document.getElementById('tab-overview').innerHTML = html;
+}
+
+function projectCard(p) {
+  const tags = p.tags ? p.tags.split('|').map(t=>`<span class="tag">${t}</span>`).join('') : '';
+  const hrs = p.hoursLow===p.hoursHigh ? p.hoursLow : `${p.hoursLow}–${p.hoursHigh}`;
+  const badgeClass = p.color || (p.status==='confirmed'?'green':p.status==='pipeline'?'blue':'gray');
+  return `
+  <div class="proj-card ${p.status}">
+    <div>
+      <div class="proj-name">${p.name}</div>
+      ${p.badge?`<span class="badge ${badgeClass}">${p.badge}</span>`:''}
+      <div class="proj-desc">${p.description||''}</div>
+      <div class="proj-tags">${tags}</div>
+    </div>
+    <div class="hours-box">
+      <div class="hours-big">${hrs}</div>
+      <div class="hours-sub">hours</div>
+      <div class="hours-sub" style="margin-top:2px">Wk ${p.startWeek}–${p.startWeek+p.durationWeeks-1}</div>
+    </div>
+    <div><button class="edit-btn" onclick="openEditModal('${p.id}')">✎ Edit</button></div>
+  </div>`;
+}
+
+function renderGantt() {
+  const wks = [1,2,3,4,5,6,7,8];
+  const wkHdrs = ['Mar 31','Apr 7','Apr 14','Apr 21','Apr 28','May 5','May 12','May 19'];
+  let hdrs = `<th class="ph" style="min-width:150px">Project</th>`;
+  wks.forEach((w,i)=>{ hdrs += `<th>Wk ${w}<br><span style="font-weight:400;font-size:10px">${wkHdrs[i]}</span></th>`; });
+  let rows = '';
+  data.projects.filter(p=>p.status!=='complete').forEach(p => {
+    let cells = '';
+    wks.forEach((w,i)=>{
+      const hrs = (p.weeklyHours||[])[i]||0;
+      if(hrs>0) {
+        const barClass = p.status==='confirmed'?'bc-conf':'bc-dash';
+        cells += `<td class="bc"><div class="gbar ${barClass}"><span>${hrs}h</span></div></td>`;
+      } else cells += `<td></td>`;
+    });
+    rows += `<tr><td class="pnc">${p.name}</td>${cells}</tr>`;
+  });
+  return `<div class="gantt-wrap"><table class="gantt-table"><thead><tr>${hdrs}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+// ─────────────────────────────────────────────
+// CAPACITY TAB
+// ─────────────────────────────────────────────
+function renderCapacityTab() {
+  const totals = getWeeklyTotals(8);
+  const cap = data.capacityPerWeek || 40;
+  const peakWk = totals.indexOf(Math.max(...totals));
+  const peakHrs = totals[peakWk];
+  const overWeeks = totals.filter(h=>h>cap).length;
+  const totalOverflow = totals.reduce((s,h)=>s+Math.max(0,h-cap),0);
+
+  const wkHdrs = ['Mar 31','Apr 7','Apr 14','Apr 21','Apr 28','May 5','May 12','May 19'];
+  const wkRows = totals.slice(0,8).map((hrs,i)=>{
+    const over = hrs - cap;
+    const pct = Math.min(100, (hrs/Math.max(peakHrs,cap+10))*100);
+    const color = hrs<=cap*0.8?'#0a7c57':hrs<=cap?'#8a5d00':hrs<=cap*1.3?'#d4700a':'#b83232';
+    const statusColor = hrs<=cap?'v-green':hrs<=cap*1.2?'v-amber':'v-red';
+    const statusText = over<=0?`✓ ${cap-hrs} spare`:over<=10?`△ ${over} over`:`✗ +${over} over`;
+    const activeProjs = data.projects.filter(p=>p.status!=='complete'&&((p.weeklyHours||[])[i]||0)>0).map(p=>p.name).join(', ');
+    return `<tr>
+      <td style="font-weight:600;font-family:var(--font-head)">${hrs>cap?'⚠ ':''}Wk ${i+1}</td>
+      <td style="color:var(--faint)">${wkHdrs[i]}</td>
+      <td style="color:var(--muted);font-size:12px">${activeProjs||'—'}</td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="load-bar-bg" style="width:120px"><div class="load-bar-fill" style="width:${pct}%;background:${color}"></div></div></div></td>
+      <td style="font-weight:700;font-family:var(--font-head);color:${color}">${hrs}</td>
+      <td class="${statusColor}" style="font-size:12px">${statusText}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('tab-capacity').innerHTML = `
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-lbl">Peak weekly load</div><div class="stat-val v-red">${peakHrs}</div><div class="stat-sub">hrs (week ${peakWk+1})</div></div>
+    <div class="stat-card"><div class="stat-lbl">Weeks over capacity</div><div class="stat-val v-amber">${overWeeks}</div><div class="stat-sub">Exceed ${cap}-hr limit</div></div>
+    <div class="stat-card"><div class="stat-lbl">Total overflow hrs</div><div class="stat-val v-red">~${Math.round(totalOverflow)}</div><div class="stat-sub">Across crunch weeks</div></div>
+    <div class="stat-card"><div class="stat-lbl">Capacity per week</div>
+      <div style="display:flex;align-items:baseline;gap:6px">
+        <div class="stat-val v-green">${cap}</div>
+        <button onclick="editCapacity()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:4px;font-size:11px;padding:2px 7px;cursor:pointer;color:var(--muted)">Edit</button>
+      </div>
+      <div class="stat-sub">hrs/week (1 person)</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Weekly hour load — all active projects</div>
+    <div class="chart-sub">Stacked by project. Red dashed line = ${cap}-hr single-person capacity limit.</div>
+    <div style="position:relative;width:100%;height:280px"><canvas id="cap-chart"></canvas></div>
+    <div class="legend" style="margin-top:14px;margin-bottom:0" id="cap-legend"></div>
+  </div>
+
+  <div class="section-label" style="margin-top:28px">Week-by-week breakdown</div>
+  <table class="wk-table">
+    <thead><tr>
+      <th style="width:70px">Week</th><th style="width:90px">Date</th><th>Active projects</th><th style="width:150px">Load</th><th style="width:70px">Hrs</th><th style="width:100px">vs ${cap}-hr cap</th>
+    </tr></thead>
+    <tbody>${wkRows}</tbody>
+  </table>
+
+  <div class="section-label" style="margin-top:28px">Decisions affecting this schedule</div>
+  <div class="flag-item"><div class="flag-icon">🔴</div><div class="flag-text"><strong>Plastic Waterlines scenario:</strong> Scenario 1 (Koncile + n8n) adds ~30 hrs over Scenario 2 — client decision needed.</div></div>
+  <div class="flag-item"><div class="flag-icon">🟡</div><div class="flag-text"><strong>Phase Alpha Option A vs B:</strong> Option A (~80 hrs) vs Option B (~120 hrs). Option B extends overlap with other projects.</div></div>
+  <div class="flag-item"><div class="flag-icon">🟡</div><div class="flag-text"><strong>EP & HOCK gated builds:</strong> Medium/full builds depend on InfoFlow API, HubSpot access, and Sales Nav confirmation. Quick wins can start immediately.</div></div>`;
+}
+
+// ─────────────────────────────────────────────
+// CAPACITY CHARTS
+// ─────────────────────────────────────────────
+function renderCapacityCharts() {
+  if(!document.getElementById('cap-chart')) return;
+  if(charts.cap) { charts.cap.destroy(); }
+  const cap = data.capacityPerWeek || 40;
+  const activeProjs = data.projects.filter(p=>p.status!=='complete');
+  const datasets = activeProjs.map((p,i) => ({
+    label: p.name,
+    data: (p.weeklyHours||[]).slice(0,8),
+    backgroundColor: PROJECT_COLORS[i % PROJECT_COLORS.length],
+    stack: 'a'
+  }));
+
+  const maxVal = Math.max(...getWeeklyTotals(8), cap+5);
+  charts.cap = new Chart(document.getElementById('cap-chart'), {
+    type:'bar', data:{labels:['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8'], datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{footer:(items)=>{const t=items.reduce((s,i)=>s+i.raw,0);return 'Total: '+t+' hrs'+(t>cap?'  ⚠ +'+(t-cap)+' over':'  ✓');}}}},
+      scales:{x:{stacked:true,ticks:{color:'#706d63',font:{size:11}},grid:{display:false}},
+              y:{stacked:true,min:0,max:Math.ceil(maxVal/10)*10+10,ticks:{color:'#706d63',font:{size:11},callback:v=>v+' hrs'},grid:{color:'rgba(0,0,0,0.05)'}}
+      }},
+    plugins:[{afterDraw(chart){
+      const ctx=chart.ctx,yS=chart.scales.y,xS=chart.scales.x,y=yS.getPixelForValue(cap);
+      ctx.save();ctx.strokeStyle='#b83232';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+      ctx.beginPath();ctx.moveTo(xS.left,y);ctx.lineTo(xS.right,y);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='#b83232';ctx.font='500 11px DM Sans,sans-serif';
+      ctx.fillText(cap+'-hr limit',xS.right-80,y-5);ctx.restore();
+    }}]
+  });
+
+  // Legend
+  const legendEl = document.getElementById('cap-legend');
+  if(legendEl) legendEl.innerHTML = datasets.map(d=>`<div class="legend-item"><div class="legend-swatch" style="background:${d.backgroundColor}"></div>${d.label}</div>`).join('');
+}
+
+// ─────────────────────────────────────────────
+// STAFFING TAB
+// ─────────────────────────────────────────────
+function renderStaffingTab() {
+  const totals = getWeeklyTotals(8);
+  const cap = data.capacityPerWeek || 40;
+  const totalOverflow = totals.reduce((s,h)=>s+Math.max(0,h-cap),0);
+  const overWeeks = totals.filter(h=>h>cap).length;
+
+  const wkHdrs = ['Mar 31','Apr 7','Apr 14','Apr 21','Apr 28','May 5','May 12','May 19'];
+  const tgRows = totals.slice(0,8).map((hrs,i)=>{
+    const over = hrs-cap;
+    const needsP2 = over > 0;
+    const color = !needsP2?'v-green':over>20?'v-red':'v-amber';
+    const p2txt = !needsP2?'<span class="v-green">No</span>':over>20?`<span class="v-red">Yes — ~${Math.round(over)} hrs</span>`:`<span class="v-amber">Yes — ~${Math.round(over)} hrs</span>`;
+    const p1hrs = Math.min(hrs, cap);
+    const p2hrs = Math.max(0, hrs-cap);
+    return `<tr>
+      <td style="font-weight:600;font-family:var(--font-head)">${needsP2?'⚠ ':''}Wk ${i+1}</td>
+      <td style="color:var(--faint)">${wkHdrs[i]}</td>
+      <td style="font-size:12px;color:var(--muted)">P1: ${p1hrs}h${p2hrs>0?' · P2: '+Math.round(p2hrs)+'h':''}</td>
+      <td>${p2txt}</td>
+    </tr>`;
+  }).join('');
+
+  const p1bars = totals.slice(0,8).map(h=>{
+    const v = Math.min(h,cap); const label = v+'h';
+    return `<div class="pb p1" title="${v}h person 1">${label}</div>`;
+  }).join('');
+  const p2bars = totals.slice(0,8).map(h=>{
+    const over = Math.max(0,h-cap);
+    if(over===0) return `<div class="pb empty">—</div>`;
+    const cls = over>20?'p2-needed':'p2-ok';
+    return `<div class="pb ${cls}" title="${Math.round(over)}h overflow">~${Math.round(over)}h</div>`;
+  }).join('');
+
+  document.getElementById('tab-staffing').innerHTML = `
+  <div class="verdict-card ${totalOverflow>0?'red':'green'}">
+    <div class="verdict-title" style="color:var(--${totalOverflow>0?'red':'green'})">${totalOverflow>0?'One person is not enough if all proposals close on schedule':'Workload is within one person\'s capacity'}</div>
+    <div class="verdict-body">${totalOverflow>0?`At ${cap} hours/week, a single person exceeds capacity for <strong style="color:var(--text)">${overWeeks} consecutive weeks</strong>. Total overflow across the crunch: approximately <strong style="color:var(--text)">${Math.round(totalOverflow)} hours</strong>. Use the scenarios below to plan coverage.`:`Current project load stays within the ${cap}-hr weekly limit. Monitor as new pipeline projects close.`}</div>
+  </div>
+
+  <div class="section-label">When does a second person become necessary?</div>
+  <table class="wk-table" style="margin-bottom:24px">
+    <thead><tr><th>Week</th><th>Dates</th><th>Load split</th><th>Person 2 needed?</th></tr></thead>
+    <tbody>${tgRows}</tbody>
+  </table>
+
+  <div class="section-label">Visual: Person 1 capacity vs overflow</div>
+  <div class="person-timeline">
+    <div class="wk-labels-row">${['Wk1\nMar31','Wk2\nApr7','Wk3\nApr14','Wk4\nApr21','Wk5\nApr28','Wk6\nMay5','Wk7\nMay12','Wk8\nMay19'].map(w=>`<div class="wk-lbl">${w.replace('\n','<br>')}</div>`).join('')}</div>
+    <div class="person-row"><div class="p-label" style="color:var(--green)">Person 1</div><div class="p-bars">${p1bars}</div></div>
+    <div class="person-row"><div class="p-label" style="color:var(--red)">Overflow</div><div class="p-bars">${p2bars}</div></div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.6">
+      Total overflow requiring a second person: <strong style="color:var(--text)">${Math.round(totalOverflow)} hours</strong> across ${overWeeks} weeks.
+    </div>
+  </div>
+
+  <div class="section-label">Options</div>
+  <div class="option-grid">
+    <div class="option-card"><div class="option-num v-green">01</div><div class="option-title">Stagger start dates</div><div class="option-desc">Delay pipeline projects until confirmed work wraps. No extra hires — clients wait 1–3 weeks. Best when proposals close slowly.</div></div>
+    <div class="option-card" style="border-color:var(--blue-border)"><div class="option-num v-blue">02</div><div class="option-title">Part-time contractor</div><div class="option-desc">Bring in a contractor for the crunch weeks only. Short, bounded commitment. Best if you have a trusted second resource available now.</div></div>
+    <div class="option-card"><div class="option-num v-amber">03</div><div class="option-title">Scope EP & HOCK modularly</div><div class="option-desc">Start only quick wins. Defer medium/full builds until crunch clears. Cuts peak load by ~25 hrs without missing any deadline.</div></div>
+  </div>
+  <div class="verdict-card amber" style="margin-top:18px">
+    <div class="verdict-title" style="color:var(--amber)">Recommended: Options 2 + 3 combined</div>
+    <div class="verdict-body">Start EP and HOCK quick wins only, reducing overflow by ~25 hrs. Then have a part-time contractor available for the remaining crunch weeks. Keeps every client on schedule at minimal cost.</div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────────
+// NEW PROJECTS TAB
+// ─────────────────────────────────────────────
+function renderNewProjectsTab() {
+  document.getElementById('tab-newprojects').innerHTML = `
+  <div class="verdict-card purple">
+    <div class="verdict-title" style="color:var(--purple)">New projects from discovery calls will stack on the crunch — here's by how much</div>
+    <div class="verdict-body">The baseline schedule already hits or exceeds capacity in weeks 3–5. Any new project closing and starting before week 6 stacks directly on top. Even a single 40-hour project starting in week 4 can double the overflow. Select a scenario below to see the impact.</div>
+  </div>
+  <div class="section-label">Select scenario</div>
+  <div class="scenario-tabs">
+    <button class="scen-btn active" onclick="switchScenario('s1',this)">1 project — week 4</button>
+    <button class="scen-btn" onclick="switchScenario('s2',this)">1 project — week 6</button>
+    <button class="scen-btn" onclick="switchScenario('s3',this)">2 projects — wks 4 & 6</button>
+    <button class="scen-btn" onclick="switchScenario('s4',this)">3 projects — wks 4, 6 & 8</button>
+  </div>
+  <div id="scen-s1" class="scenario-panel active"></div>
+  <div id="scen-s2" class="scenario-panel"></div>
+  <div id="scen-s3" class="scenario-panel"></div>
+  <div id="scen-s4" class="scenario-panel"></div>
+
+  <div class="section-gap"></div>
+  <div class="section-label">Rules of thumb for new projects</div>
+  <div class="flag-item"><div class="flag-icon">🟢</div><div class="flag-text"><strong>Best start time for new projects: Week 6+ (May 5 onward).</strong> Phase Alpha and Keehan are done, Hilberts is wrapping. Capacity opens to 15–25 hrs/week. New work fits cleanly.</div></div>
+  <div class="flag-item"><div class="flag-icon">🟡</div><div class="flag-text"><strong>Before week 6: offer quick wins only.</strong> If a discovery call closes before May, scope a quick win or discovery engagement (5–15 hrs). Keeps clients engaged without blowing up the schedule.</div></div>
+  <div class="flag-item"><div class="flag-icon">🟡</div><div class="flag-text"><strong>Each new 40-hr project starting in weeks 3–5 needs ~10 hrs/wk of additional capacity.</strong> One contractor at 10–20 hrs/week covers 1–2 new projects. Two new projects in the crunch = essentially a full second person.</div></div>
+  <div class="flag-item"><div class="flag-icon">🔴</div><div class="flag-text"><strong>Control intake rate in proposals.</strong> If multiple discovery calls close the same week, the hit is simultaneous. Build explicit start dates into proposals ("work begins the week of [date]") so you control the pipeline even when sales are going well.</div></div>
+
+  <div id="scen-charts-placeholder"></div>`;
+
+  renderScenarioContent('s1');
+}
+
+function renderScenarioContent(id) {
+  const scenarios = {
+    s1:{label:'1 new project (~40 hrs), starting week 4',extra:[[0,0,0,20,10,10,0,0,0,0]],peakAdd:20,verdict:'red',rec:'Do not start a new project in week 4 without a second person. If the client can wait until week 6, the load is manageable solo.'},
+    s2:{label:'1 new project (~40 hrs), starting week 6',extra:[[0,0,0,0,0,10,15,15,0,0]],peakAdd:0,verdict:'green',rec:'Week 6+ is the sweet spot. Try to cluster all new project starts here whenever possible.'},
+    s3:{label:'2 new projects — one week 4, one week 6',extra:[[0,0,0,20,10,10,0,0,0,0],[0,0,0,0,0,10,15,15,0,0]],peakAdd:20,verdict:'amber',rec:'Two new projects requires at least a part-time second person for 4–5 weeks. Consider whether a permanent second team member is the right call.'},
+    s4:{label:'3 new projects — weeks 4, 6, and 8',extra:[[0,0,0,20,10,10,0,0,0,0],[0,0,0,0,0,10,15,15,0,0],[0,0,0,0,0,0,0,10,15,15]],peakAdd:20,verdict:'red',rec:'This is a growth signal — enough billable work for 2 full-time people through September+. Plan for a permanent second hire, not patch coverage.'}
+  };
+  const scen = scenarios[id];
+  const baseTotals = getWeeklyTotals(10);
+  const scenTotals = baseTotals.map((h,i)=>h+scen.extra.reduce((s,e)=>s+(e[i]||0),0));
+  const cap = data.capacityPerWeek||40;
+  const peakHrs = Math.max(...scenTotals);
+  const overflow = scenTotals.reduce((s,h)=>s+Math.max(0,h-cap),0);
+  const overWeeks = scenTotals.filter(h=>h>cap).length;
+
+  document.getElementById('scen-'+id).innerHTML = `
+    <div class="flag-item" style="background:var(--${scen.verdict}-bg);border-color:var(--${scen.verdict}-border)">
+      <div class="flag-icon">${scen.verdict==='green'?'🟢':scen.verdict==='amber'?'🟡':'🔴'}</div>
+      <div class="flag-text"><strong>${scen.label}</strong></div>
+    </div>
+    <div class="impact-grid">
+      <div class="stat-card"><div class="stat-lbl">Peak week hrs</div><div class="stat-val ${peakHrs>cap*1.5?'v-red':peakHrs>cap?'v-amber':'v-green'}">${peakHrs}</div><div class="stat-sub">vs ${cap}-hr limit</div></div>
+      <div class="stat-card"><div class="stat-lbl">Overflow weeks</div><div class="stat-val ${overWeeks>4?'v-red':overWeeks>2?'v-amber':'v-green'}">${overWeeks}</div><div class="stat-sub">weeks over capacity</div></div>
+      <div class="stat-card"><div class="stat-lbl">Total overflow hrs</div><div class="stat-val ${overflow>100?'v-red':overflow>40?'v-amber':'v-green'}">${Math.round(overflow)}</div><div class="stat-sub">needs coverage</div></div>
+      <div class="stat-card"><div class="stat-lbl">People needed</div><div class="stat-val ${overflow>80?'v-red':overflow>20?'v-amber':'v-green'}">${overflow>80?'2 full':overflow>20?'1.5':'1'}</div><div class="stat-sub">during crunch</div></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Load with new project(s) — ${scen.label}</div>
+      <div class="chart-sub">Purple = new project hours stacking on baseline.</div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="chart-${id}"></canvas></div>
+    </div>
+    <div class="flag-item"><div class="flag-icon">💡</div><div class="flag-text"><strong>Recommendation:</strong> ${scen.rec}</div></div>`;
+}
+
+function switchScenario(id, btn) {
+  document.querySelectorAll('.scen-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.scenario-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('scen-'+id).classList.add('active');
+  btn.classList.add('active');
+  renderScenarioContent(id);
+  setTimeout(()=>renderSingleScenarioChart(id),50);
+}
+
+function renderScenarioCharts() {
+  ['s1','s2','s3','s4'].forEach(id=>{
+    renderScenarioContent(id);
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('.scenario-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('scen-s1').classList.add('active');
+    renderSingleScenarioChart('s1');
+  },50);
+}
+
+function renderSingleScenarioChart(id) {
+  if(charts[id]) { charts[id].destroy(); delete charts[id]; }
+  const canvas = document.getElementById('chart-'+id);
+  if(!canvas) return;
+  const cap = data.capacityPerWeek||40;
+  const scenarios = {
+    s1:[[0,0,0,20,10,10,0,0,0,0]],
+    s2:[[0,0,0,0,0,10,15,15,0,0]],
+    s3:[[0,0,0,20,10,10,0,0,0,0],[0,0,0,0,0,10,15,15,0,0]],
+    s4:[[0,0,0,20,10,10,0,0,0,0],[0,0,0,0,0,10,15,15,0,0],[0,0,0,0,0,0,0,10,15,15]]
+  };
+  const activeProjs = data.projects.filter(p=>p.status!=='complete');
+  const datasets = activeProjs.map((p,i)=>({
+    label:p.name, data:(p.weeklyHours||[]).slice(0,8),
+    backgroundColor:PROJECT_COLORS[i%PROJECT_COLORS.length], stack:'a'
+  }));
+  const newColors = ['#7c4fa0','#a07cc8','#c0a0e0'];
+  scenarios[id].forEach((d,i)=>{
+    datasets.push({label:'New Project '+(i+1), data:d.slice(0,8), backgroundColor:newColors[i]||'#7c4fa0', stack:'a'});
+  });
+  const allTotals = datasets.reduce((acc,ds)=>{ds.data.forEach((v,i)=>acc[i]=(acc[i]||0)+v);return acc;},[]);
+  const maxV = Math.max(...allTotals,cap+5);
+  charts[id] = new Chart(canvas,{
+    type:'bar', data:{labels:['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8'],datasets},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{footer:(items)=>{const t=items.reduce((s,i)=>s+i.raw,0);return 'Total: '+t+' hrs'+(t>cap?'  ⚠ +'+(t-cap)+' over':'  ✓');}}}},
+      scales:{x:{stacked:true,ticks:{color:'#706d63',font:{size:11}},grid:{display:false}},y:{stacked:true,min:0,max:Math.ceil(maxV/10)*10+10,ticks:{color:'#706d63',font:{size:11},callback:v=>v+' hrs'},grid:{color:'rgba(0,0,0,0.05)'}}}},
+    plugins:[{afterDraw(chart){const ctx=chart.ctx,yS=chart.scales.y,xS=chart.scales.x,y=yS.getPixelForValue(cap);ctx.save();ctx.strokeStyle='#b83232';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(xS.left,y);ctx.lineTo(xS.right,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#b83232';ctx.font='500 11px DM Sans,sans-serif';ctx.fillText(cap+'-hr limit',xS.right-75,y-5);ctx.restore();}}]
+  });
+}
+
+// ─────────────────────────────────────────────
+// EDIT MODAL
+// ─────────────────────────────────────────────
+function openEditModal(id) {
+  const p = data.projects.find(x=>x.id===id);
+  if(!p) return;
+  const wkInputs = (p.weeklyHours||Array(10).fill(0)).slice(0,10).map((h,i)=>`
+    <div class="wk-input-wrap">
+      <div class="wk-input-lbl">Wk ${i+1}</div>
+      <input class="form-input wk-input" type="number" id="wh-${i}" value="${h}" min="0" max="80" oninput="markUnsaved()">
+    </div>`).join('');
+
+  document.getElementById('modal-title').textContent = 'Edit: ' + p.name;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-row"><label class="form-label">Project Name</label>
+      <input class="form-input" id="f-name" value="${p.name}" oninput="markUnsaved()"></div>
+    <div class="form-grid-2">
+      <div class="form-row"><label class="form-label">Status</label>
+        <select class="form-select" id="f-status" onchange="markUnsaved()">
+          <option value="confirmed" ${p.status==='confirmed'?'selected':''}>Confirmed / Active</option>
+          <option value="pipeline" ${p.status==='pipeline'?'selected':''}>Pipeline</option>
+          <option value="complete" ${p.status==='complete'?'selected':''}>Complete</option>
+        </select></div>
+      <div class="form-row"><label class="form-label">Badge Label</label>
+        <input class="form-input" id="f-badge" value="${p.badge||''}" oninput="markUnsaved()"></div>
+    </div>
+    <div class="form-grid-2">
+      <div class="form-row"><label class="form-label">Hours (low)</label>
+        <input class="form-input" id="f-hrsl" type="number" value="${p.hoursLow||0}" oninput="markUnsaved()"></div>
+      <div class="form-row"><label class="form-label">Hours (high)</label>
+        <input class="form-input" id="f-hrsh" type="number" value="${p.hoursHigh||0}" oninput="markUnsaved()"></div>
+    </div>
+    <div class="form-row"><label class="form-label">Description</label>
+      <textarea class="form-textarea" id="f-desc" oninput="markUnsaved()">${p.description||''}</textarea></div>
+    <div class="form-row"><label class="form-label">Tags (pipe-separated: tag1|tag2|tag3)</label>
+      <textarea class="form-textarea" id="f-tags" style="min-height:60px" oninput="markUnsaved()">${p.tags||''}</textarea></div>
+    <div class="form-row"><label class="form-label">Weekly hours (10 weeks)</label>
+      <div class="form-grid-4" style="grid-template-columns:repeat(5,1fr);gap:6px">${wkInputs}</div>
+      <div style="font-size:11px;color:var(--faint);margin-top:5px">Tip: set 0 for weeks the project is not active</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-danger" onclick="deleteProject('${p.id}')">Delete project</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveProject('${p.id}')">Save changes</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+function openAddModal() {
+  const newId = 'proj-'+Date.now();
+  document.getElementById('modal-title').textContent = 'Add New Project';
+  const wkInputs = Array(10).fill(0).map((h,i)=>`
+    <div class="wk-input-wrap">
+      <div class="wk-input-lbl">Wk ${i+1}</div>
+      <input class="form-input wk-input" type="number" id="wh-${i}" value="0" min="0" max="80" oninput="markUnsaved()">
+    </div>`).join('');
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-row"><label class="form-label">Project Name</label><input class="form-input" id="f-name" placeholder="Client name or project title"></div>
+    <div class="form-grid-2">
+      <div class="form-row"><label class="form-label">Status</label>
+        <select class="form-select" id="f-status">
+          <option value="confirmed">Confirmed / Active</option>
+          <option value="pipeline" selected>Pipeline</option>
+        </select></div>
+      <div class="form-row"><label class="form-label">Badge Label</label><input class="form-input" id="f-badge" placeholder="e.g. Starting Monday"></div>
+    </div>
+    <div class="form-grid-2">
+      <div class="form-row"><label class="form-label">Hours (low)</label><input class="form-input" id="f-hrsl" type="number" value="0"></div>
+      <div class="form-row"><label class="form-label">Hours (high)</label><input class="form-input" id="f-hrsh" type="number" value="0"></div>
+    </div>
+    <div class="form-row"><label class="form-label">Description</label><textarea class="form-textarea" id="f-desc" placeholder="Brief project description"></textarea></div>
+    <div class="form-row"><label class="form-label">Tags (pipe-separated)</label><textarea class="form-textarea" id="f-tags" style="min-height:60px" placeholder="Tag one|Tag two|Tag three"></textarea></div>
+    <div class="form-row"><label class="form-label">Weekly hours (10 weeks)</label>
+      <div class="form-grid-4" style="grid-template-columns:repeat(5,1fr);gap:6px">${wkInputs}</div></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveProject('${newId}',true)">Add project</button>
+    </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+function saveProject(id, isNew=false) {
+  const name = document.getElementById('f-name').value.trim();
+  if(!name) { showToast('Project name is required'); return; }
+  const weeklyHours = Array(10).fill(0).map((_,i)=>parseInt(document.getElementById('wh-'+i)?.value||0,10)||0);
+  const proj = {
+    id: id,
+    name: name,
+    status: document.getElementById('f-status').value,
+    badge: document.getElementById('f-badge').value.trim(),
+    hoursLow: parseInt(document.getElementById('f-hrsl').value||0,10)||0,
+    hoursHigh: parseInt(document.getElementById('f-hrsh').value||0,10)||0,
+    startWeek: weeklyHours.findIndex(h=>h>0)+1 || 1,
+    durationWeeks: weeklyHours.filter(h=>h>0).length || 1,
+    weeklyHours: weeklyHours,
+    description: document.getElementById('f-desc').value.trim(),
+    tags: document.getElementById('f-tags').value.trim(),
+    color: document.getElementById('f-status').value==='confirmed'?'green':'blue'
+  };
+  if(isNew) {
+    data.projects.push(proj);
+    showToast('Project added!', 'green');
+  } else {
+    const idx = data.projects.findIndex(p=>p.id===id);
+    if(idx>=0) data.projects[idx]=proj;
+    showToast('Project updated!', 'green');
+  }
+  closeModal(); markUnsaved(); renderAll();
+  if(activeTab==='capacity') renderCapacityCharts();
+}
+
+function deleteProject(id) {
+  if(!confirm('Delete this project? This cannot be undone.')) return;
+  data.projects = data.projects.filter(p=>p.id!==id);
+  closeModal(); markUnsaved(); renderAll();
+  showToast('Project deleted');
+}
+
+function closeModal(e) {
+  if(e && e.target!==e.currentTarget) return;
+  document.getElementById('modal').style.display='none';
+}
+
+function editCapacity() {
+  const v = prompt('Weekly capacity in hours (per person):', data.capacityPerWeek||40);
+  if(v && !isNaN(parseInt(v))) {
+    data.capacityPerWeek = parseInt(v);
+    markUnsaved(); renderAll();
+    if(activeTab==='capacity') renderCapacityCharts();
+    showToast('Capacity updated to '+data.capacityPerWeek+' hrs/week');
+  }
+}
+
+// ─────────────────────────────────────────────
+// INIT — render immediately, then load saved data
+// ─────────────────────────────────────────────
+// Always render right away so the page is never blank
+renderAll();
+
+// Then try to load saved data and re-render if found
+async function tryLoadSaved() {
+  try {
+    if (typeof window.storage === 'undefined') return;
+    const result = await window.storage.get('ai-projects-data');
+    if (result && result.value) {
+      const saved = JSON.parse(result.value);
+      data = saved;
+      document.getElementById('last-saved-label').textContent = 'Last saved: ' + (data.savedAt || data.updatedAt || '');
+      renderAll();
+      showToast('Dashboard loaded from saved data', 'green');
+    }
+  } catch(e) {
+    // no saved data or storage unavailable — already rendered with defaults
+  }
+}
+tryLoadSaved();
+</script>
+</body>
+</html>
