@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plus 1 Technology — Capacity Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f4f8;--surface:#fff;--s2:#f8fafc;--s3:#f1f5f9;
+  --border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--text2:#334155;--muted:#64748b;--dim:#94a3b8;
+  --blue:#2563eb;--blue-l:#eff6ff;--blue-b:#bfdbfe;
+  --green:#059669;--green-l:#ecfdf5;--green-b:#a7f3d0;
+  --yellow:#d97706;--yellow-l:#fffbeb;--yellow-b:#fde68a;
+  --red:#dc2626;--red-l:#fef2f2;--red-b:#fecaca;
+  --orange:#ea580c;
+  --purple:#7c3aed;--purple-l:#f5f3ff;--purple-b:#ddd6fe;
+  --urgent:#dc2626;--high:#ea580c;--normal:#2563eb;--low:#94a3b8;--cw:#7c3aed;
+  --lt-gen:#059669;--lt-proj:#2563eb;--lt-ai:#7c3aed;--lt-road:#d97706;
+  --sans:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:10px;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --sh-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.05);
+  --sh-lg:0 10px 15px rgba(0,0,0,.08),0 4px 6px rgba(0,0,0,.05);
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:14px}
+
+/* TOPBAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
+.logo{display:flex;align-items:center;gap:10px;padding-right:20px;border-right:1px solid var(--border)}
+.logo-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#1d4ed8,#2563eb);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:#fff}
+.logo-name{font-size:14px;font-weight:700}.logo-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.topbar-mid{flex:1;padding:0 20px;display:flex;gap:6px;align-items:center}
+.src-pill{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.sp-cu{background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-b)}
+.sp-cw{background:var(--purple-l);color:var(--purple);border:1px solid var(--purple-b)}
+.sp-cw.live{background:var(--green-l);color:var(--green);border-color:var(--green-b)}
+.src-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.src-dot.pulse{animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.ts{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.icon-btn{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:15px;transition:all .15s}
+.icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+.icon-btn.spinning{animation:spin .6s linear infinite}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+/* DRAWER */
+.drawer{background:var(--surface);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .3s ease}
+.drawer.open{max-height:380px}
+.drawer-inner{padding:20px 24px}
+.drawer-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.drawer-grid{grid-template-columns:1fr}}
+.cfg-block{display:flex;flex-direction:column;gap:10px}
+.cfg-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:8px}
+.cfg-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.cfg-step{display:flex;gap:10px;font-size:12px;color:var(--muted);line-height:1.5}
+.cfg-n{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--blue);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;margin-top:1px}
+code{background:var(--s2);border:1px solid var(--border);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--purple)}
+.url-row{display:flex;gap:6px}
+.url-input{flex:1;background:var(--s2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:7px;font-family:var(--mono);font-size:11px;outline:none;transition:border-color .2s}
+.url-input:focus{border-color:var(--blue)}.url-input.ok{border-color:var(--green)}.url-input::placeholder{color:var(--dim)}
+.btn-sm{padding:8px 14px;border-radius:7px;border:none;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--sans)}
+.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{background:#1d4ed8}
+.btn-purple{background:var(--purple);color:#fff}.btn-purple:hover{background:#6d28d9}
+.btn-sm:disabled{opacity:.4;cursor:not-allowed}
+.cfg-status{font-size:11px;font-family:var(--mono);color:var(--muted);min-height:14px;margin-top:2px}
+.cfg-status.ok{color:var(--green)}.cfg-status.err{color:var(--red)}
+
+/* TABS */
+.tab-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:0}
+.tab{padding:12px 20px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* METRICS STRIP */
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:16px 24px}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
+.metric-val{font-size:28px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.metric-key{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.metric-sub{font-size:11px;color:var(--dim);margin-top:2px}
+.metric-trend{font-size:11px;font-weight:700;margin-top:4px}
+.trend-up{color:var(--red)}.trend-down{color:var(--green)}.trend-flat{color:var(--muted)}
+.c-blue{color:var(--blue)}.c-red{color:var(--red)}.c-yellow{color:var(--yellow)}.c-purple{color:var(--purple)}.c-green{color:var(--green)}
+
+/* MAIN */
+.main{padding:0 24px 40px}
+.section-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px}
+.s-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.s-line{flex:1;height:1px;background:var(--border)}
+
+/* LEGEND */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);align-items:center}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500}
+.leg-sq{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.leg-sep{width:1px;height:14px;background:var(--border);margin:0 2px}
+.leg-cat{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+/* UNASSIGNED BANNER */
+.ua-banner{display:none;background:var(--yellow-l);border:1px solid var(--yellow-b);border-radius:var(--r);padding:14px 18px;margin-bottom:14px;gap:14px;align-items:flex-start}
+.ua-banner.show{display:flex}
+.ua-n{font-size:28px;font-weight:800;color:var(--yellow);line-height:1;flex-shrink:0;font-family:var(--mono)}
+.ua-title{font-size:13px;font-weight:700;color:var(--yellow)}.ua-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.ua-list{margin-top:8px;max-height:80px;overflow-y:auto;display:flex;flex-direction:column;gap:3px}
+.ua-item{font-size:11px;color:var(--text2)}
+
+/* TEAM GRID */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:1100px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.team-grid{grid-template-columns:1fr}}
+
+/* MEMBER CARD */
+.mcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s,transform .15s}
+.mcard:hover{box-shadow:var(--sh-lg);transform:translateY(-1px)}
+.mcard-top-bar{height:4px}
+.mcard-head{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.avi{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.mcard-info{flex:1;min-width:0}
+.mcard-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcard-role{font-size:11px;color:var(--muted);margin-top:1px}
+.load-pill{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;flex-shrink:0}
+.lp-none{background:#f1f5f9;color:var(--dim)}.lp-ok{background:var(--green-l);color:var(--green)}.lp-mod{background:var(--yellow-l);color:var(--yellow)}.lp-hi{background:var(--red-l);color:var(--red)}
+.mcard-body{padding:14px 16px}
+
+/* DONUT */
+.cap-summary{display:flex;align-items:center;gap:16px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.donut-wrap{position:relative;flex-shrink:0;width:80px;height:80px}
+.donut-wrap svg{position:absolute;inset:0}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut-total{font-size:18px;font-weight:800;color:var(--text);line-height:1}
+.donut-lbl{font-size:8px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.cap-bars{flex:1;display:flex;flex-direction:column;gap:7px}
+.cap-row{display:flex;align-items:center;gap:8px}
+.cap-lbl{font-size:11px;color:var(--muted);width:68px;flex-shrink:0;font-weight:500}
+.cap-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.cap-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.cap-num{font-size:11px;font-weight:700;color:var(--text2);width:24px;text-align:right;flex-shrink:0;font-family:var(--mono)}
+
+/* UTILIZATION BAR ON CARD */
+.util-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 10px;border-radius:7px;background:var(--s3)}
+.util-pct{font-size:13px;font-weight:800;width:38px;flex-shrink:0;font-family:var(--mono)}
+.util-track{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.util-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.util-label{font-size:10px;color:var(--muted);width:50px;text-align:right;flex-shrink:0;font-family:var(--mono)}
+
+/* LIST TYPE SECTION */
+.lt-section{margin-bottom:10px;padding:10px 12px;background:var(--s2);border-radius:8px;border:1px solid var(--border)}
+.lt-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.lt-rows{display:flex;flex-direction:column;gap:5px}
+.lt-row{display:flex;align-items:center;gap:8px}
+.lt-lbl{font-size:11px;color:var(--text2);width:108px;flex-shrink:0;font-weight:500}
+.lt-track{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.lt-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.lt-num{font-size:11px;font-weight:700;color:var(--text2);width:22px;text-align:right;font-family:var(--mono)}
+
+/* CW TICKET LIST */
+.cw-section{margin-bottom:10px;padding:10px 12px;background:var(--purple-l);border-radius:8px;border:1px solid var(--purple-b)}
+.cw-sec-title{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:flex;justify-content:space-between}
+.cw-ticket{display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid rgba(124,58,237,.1);font-size:10px;color:var(--text2)}
+.cw-ticket:last-child{border-bottom:none}
+.cw-board{padding:1px 5px;border-radius:3px;font-size:8px;font-weight:700;background:rgba(124,58,237,.15);color:var(--purple);flex-shrink:0;margin-top:1px;white-space:nowrap}
+
+/* EXPAND */
+.expand-btn{width:100%;padding:7px;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-size:11px;cursor:pointer;border-radius:6px;font-family:var(--sans);font-weight:600;transition:all .15s;margin-top:4px}
+.expand-btn:hover{background:var(--border);color:var(--text)}
+.task-list{display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+.task-list.open{display:block}
+.tg-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:5px 0 3px;margin-top:4px;display:flex;align-items:center;gap:6px}
+.tg-header::after{content:'';flex:1;height:1px;background:var(--border)}
+.tg-gen{color:var(--lt-gen)}.tg-proj{color:var(--lt-proj)}.tg-ai{color:var(--lt-ai)}.tg-road{color:var(--lt-road)}.tg-cw{color:var(--cw)}
+.task-row{display:flex;gap:7px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--s2)}
+.task-row:last-child{border-bottom:none}
+.tp{padding:2px 5px;border-radius:3px;font-size:8px;font-weight:700;flex-shrink:0;margin-top:1px}
+.tpu{background:var(--red-l);color:var(--red)}.tph{background:var(--yellow-l);color:var(--orange)}.tpn{background:var(--blue-l);color:var(--blue)}.tpl{background:#f1f5f9;color:var(--dim)}
+.task-name{font-size:11px;color:var(--text2);line-height:1.4}
+
+/* ── ANALYTICS TAB ── */
+.analytics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:16px}
+.analytics-grid.wide{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.analytics-grid,.analytics-grid.wide{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh)}
+.chart-card.full{grid-column:1/-1}
+.chart-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.chart-sub{font-size:11px;color:var(--muted);margin-bottom:14px}
+.chart-wrap{position:relative}
+
+/* UTILIZATION TABLE */
+.util-table{width:100%;border-collapse:collapse;font-size:12px}
+.util-table th{text-align:left;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:6px 8px;border-bottom:2px solid var(--border)}
+.util-table td{padding:8px;border-bottom:1px solid var(--s3);vertical-align:middle}
+.util-table tr:last-child td{border-bottom:none}
+.util-table tr:hover td{background:var(--s2)}
+.util-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.u-green{background:var(--green-l);color:var(--green)}.u-yellow{background:var(--yellow-l);color:var(--yellow)}.u-red{background:var(--red-l);color:var(--red)}
+.mini-bar-wrap{display:flex;align-items:center;gap:8px}
+.mini-bar{flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden;min-width:80px}
+.mini-bar-fill{height:100%;border-radius:3px}
+.mini-pct{font-size:11px;font-weight:700;font-family:var(--mono);width:34px;text-align:right}
+
+/* BACKLOG */
+.backlog-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.backlog-row:last-child{border-bottom:none}
+.backlog-name{font-size:12px;font-weight:600;flex:1}
+.backlog-age{font-size:11px;color:var(--muted);font-family:var(--mono);width:60px;text-align:right}
+.age-pill{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700}
+.age-new{background:var(--green-l);color:var(--green)}.age-med{background:var(--yellow-l);color:var(--yellow)}.age-old{background:var(--red-l);color:var(--red)}
+
+/* RISK SIGNAL */
+.risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:800px){.risk-grid{grid-template-columns:1fr}}
+.risk-card{padding:14px 16px;border-radius:var(--r);border:1px solid;text-align:center}
+.risk-green{background:var(--green-l);border-color:var(--green-b)}.risk-yellow{background:var(--yellow-l);border-color:var(--yellow-b)}.risk-red{background:var(--red-l);border-color:var(--red-b)}
+.risk-icon{font-size:24px;margin-bottom:6px}
+.risk-label{font-size:11px;font-weight:700;color:var(--text2)}.risk-val{font-size:22px;font-weight:800;margin:2px 0}
+.risk-sub{font-size:10px;color:var(--muted)}
+
+/* SKELETONS */
+.sk{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200%;animation:sk 1.4s ease infinite;border-radius:5px}
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.error-state{grid-column:1/-1;text-align:center;padding:40px;color:var(--red);font-size:13px}
+.error-state .e-sub{color:var(--muted);font-size:11px;margin-top:8px}
+
+/* HORIZON TOGGLE */
+.horizon-toggle{display:flex;gap:4px;background:var(--s3);padding:3px;border-radius:7px;border:1px solid var(--border)}
+.h-btn{padding:4px 12px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);transition:all .15s}
+.h-btn.active{background:var(--surface);color:var(--blue);box-shadow:var(--sh)}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">P1T</div>
+    <div><div class="logo-name">Plus 1 Technology</div><div class="logo-sub">Capacity Dashboard</div></div>
+  </div>
+  <div class="topbar-mid">
+    <div class="src-pill sp-cu"><span class="src-dot pulse"></span>ClickUp Live</div>
+    <div class="src-pill sp-cw" id="cwTag"><span class="src-dot" id="cwDot"></span>ConnectWise</div>
+  </div>
+  <div class="topbar-right">
+    <span class="ts" id="tsText"></span>
+    <div class="icon-btn" title="Settings" onclick="toggleDrawer()">&#9881;</div>
+    <div class="icon-btn" id="refreshBtn" title="Refresh" onclick="loadAll()">&#8635;</div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="drawer-inner">
+    <div class="drawer-grid">
+      <div class="cfg-block">
+        <div class="cfg-title">ClickUp via n8n</div>
+        <div class="cfg-step"><div class="cfg-n">1</div><div>Activate <code>ClickUp Capacity Proxy</code> in n8n. Copy Production webhook URL.</div></div>
+        <div class="cfg-step"><div class="cfg-n">2</div><div>Paste below and click Update Data.</div></div>
+        <div class="url-row">
+          <input class="url-input" id="cuUrl" placeholder="https://plus1.app.n8n.cloud/webhook/cu-capacity"/>
+          <button class="btn-sm btn-blue" id="cuTestBtn" onclick="testCU()">Update Data</button>
+        </div>
+        <div class="cfg-status" id="cuStatus"></div>
+      </div>
+      <div class="cfg-block">
+        <div class="cfg-title">ConnectWise via n8n</div>
+        <div class="cfg-step"><div class="cfg-n">1</div><div>Activate <code>ConnectWise Capacity Proxy</code> in n8n. Copy Production webhook URL.</div></div>
+        <div class="cfg-step"><div class="cfg-n">2</div><div>Paste below and click Update Data.</div></div>
+        <div class="url-row">
+          <input class="url-input" id="cwUrl" placeholder="https://plus1.app.n8n.cloud/webhook/cw-capacity"/>
+          <button class="btn-sm btn-purple" id="cwTestBtn" onclick="testCW()">Update Data</button>
+        </div>
+        <div class="cfg-status" id="cwStatus"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('team',this)">&#128101; Team Capacity</div>
+  <div class="tab" onclick="switchTab('analytics',this)">&#128200; Company Analytics</div>
+</div>
+
+<!-- ══ TAB 1: TEAM CAPACITY ══════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-team">
+
+  <!-- KPI METRICS -->
+  <div class="metrics">
+    <div class="metric"><div class="metric-val c-blue" id="mTasks">--</div><div class="metric-key">ClickUp Tasks</div><div class="metric-sub">Open and active</div></div>
+    <div class="metric"><div class="metric-val c-red" id="mUrgent">--</div><div class="metric-key">Urgent + High</div><div class="metric-sub">Needs attention now</div></div>
+    <div class="metric"><div class="metric-val c-yellow" id="mAvg">--</div><div class="metric-key">Avg Task Load</div><div class="metric-sub">Per active member</div></div>
+    <div class="metric"><div class="metric-val c-purple" id="mCW">--</div><div class="metric-key">CW Tickets</div><div class="metric-sub" id="mCWSub">Not connected</div></div>
+    <div class="metric"><div class="metric-val c-green" id="mUnassigned">--</div><div class="metric-key">Unassigned</div><div class="metric-sub">Need an owner</div></div>
+  </div>
+
+  <div class="main">
+    <div class="ua-banner" id="uaBanner">
+      <div><div class="ua-n" id="uaN">0</div></div>
+      <div style="flex:1">
+        <div class="ua-title">&#9888; Unassigned Tasks</div>
+        <div class="ua-sub">These tasks have no owner in ClickUp</div>
+        <div class="ua-list" id="uaList"></div>
+      </div>
+    </div>
+    <div class="legend">
+      <span class="leg-cat">Priority</span>
+      <div class="leg"><div class="leg-sq" style="background:var(--urgent)"></div>Urgent</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--high)"></div>High</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--normal)"></div>Normal</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--low)"></div>Low</div>
+      <div class="leg-sep"></div>
+      <span class="leg-cat">List Type</span>
+      <div class="leg"><div class="leg-sq" style="background:var(--lt-gen)"></div>General Tasks</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--lt-proj)"></div>Project Tasks</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--lt-ai)"></div>AI Project Tasks</div>
+      <div class="leg"><div class="leg-sq" style="background:var(--lt-road)"></div>Milestones</div>
+      <div class="leg-sep"></div>
+      <div class="leg"><div class="leg-sq" style="background:var(--cw)"></div>CW Tickets</div>
+    </div>
+    <div class="section-bar">
+      <span class="s-label">Team Capacity</span>
+      <div class="s-line"></div>
+      <span style="font-size:11px;color:var(--muted)" id="memberCount">9 members</span>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+  </div>
+</div>
+
+<!-- ══ TAB 2: ANALYTICS ══════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-analytics">
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-val" id="aUtilPct" style="color:var(--green)">--</div>
+      <div class="metric-key">Team Utilization</div>
+      <div class="metric-sub">Combined workload</div>
+      <div class="metric-trend" id="aUtilSignal"></div>
+    </div>
+    <div class="metric">
+      <div class="metric-val c-red" id="aOverCap">--</div>
+      <div class="metric-key">Over Capacity</div>
+      <div class="metric-sub">Members at Heavy load</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val c-yellow" id="aUnassigned">--</div>
+      <div class="metric-key">Unassigned Items</div>
+      <div class="metric-sub">CU tasks + CW tickets</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val c-purple" id="aCWTotal">--</div>
+      <div class="metric-key">CW Ticket Load</div>
+      <div class="metric-sub">Open service tickets</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val c-blue" id="aAvailable">--</div>
+      <div class="metric-key">Available Members</div>
+      <div class="metric-sub">Light or no load</div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- RISK SIGNALS -->
+    <div class="section-bar"><span class="s-label">Load Risk Signals</span><div class="s-line"></div></div>
+    <div class="risk-grid" id="riskGrid" style="margin-bottom:16px"></div>
+
+    <!-- CHARTS ROW 1 -->
+    <div class="analytics-grid" style="margin-bottom:16px">
+      <div class="chart-card full">
+        <div class="chart-title">Per-Person Utilization</div>
+        <div class="chart-sub">Combined ClickUp tasks + CW tickets per member — color coded by risk level</div>
+        <div class="chart-wrap" style="height:240px"><canvas id="chartUtil"></canvas></div>
+      </div>
+    </div>
+
+    <!-- UTILIZATION TABLE -->
+    <div class="section-bar"><span class="s-label">Member Detail</span><div class="s-line"></div></div>
+    <div class="chart-card" style="margin-bottom:16px">
+      <div class="chart-title">Workload Breakdown by Member</div>
+      <div class="chart-sub">Priority split and utilization percentage for each team member</div>
+      <table class="util-table" id="utilTable">
+        <thead><tr><th>Member</th><th>Role</th><th>Tasks</th><th>CW Tickets</th><th>Urgent/High</th><th>Utilization</th><th>Status</th></tr></thead>
+        <tbody id="utilTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- CHARTS ROW 2 -->
+    <div class="analytics-grid" style="margin-bottom:16px">
+      <div class="chart-card">
+        <div class="chart-title">Workload by List Type</div>
+        <div class="chart-sub">Tasks distributed across list categories</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="chartListType"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Priority Distribution</div>
+        <div class="chart-sub">All open tasks split by priority level</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="chartPriority"></canvas></div>
+      </div>
+    </div>
+
+    <!-- BACKLOG HEALTH -->
+    <div class="section-bar"><span class="s-label">Backlog Health</span><div class="s-line"></div></div>
+    <div class="analytics-grid" style="margin-bottom:16px">
+      <div class="chart-card">
+        <div class="chart-title">Unassigned Tasks</div>
+        <div class="chart-sub">Tasks with no owner that need assignment</div>
+        <div id="backlogList" style="max-height:240px;overflow-y:auto"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Demand vs Supply</div>
+        <div class="chart-sub">Open work vs available team capacity (task slots)</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="chartDemand"></canvas></div>
+      </div>
+    </div>
+
+    <!-- NOTE -->
+    <div style="background:var(--blue-l);border:1px solid var(--blue-b);border-radius:var(--r);padding:14px 18px;font-size:12px;color:var(--blue)">
+      <strong>&#128161; To unlock Utilization % and Trending Over Time:</strong> Add time estimates (hours) to your ClickUp tasks and the dashboard will calculate actual hours allocated vs available. Trend charts will appear once historical data is captured across refreshes.
+    </div>
+
+  </div>
+</div>
+
+<script>
+var TEAM = [
+  {id:89298060,  name:'Brian Cerny',       initials:'BC', role:'Account Manager', color:'#1d4ed8'},
+  {id:95215340,  name:'Scott Taney',       initials:'ST', role:'Technician',      color:'#6d28d9'},
+  {id:95214039,  name:'Mike Ciano',        initials:'MC', role:'Technician',      color:'#059669'},
+  {id:95214035,  name:'John Mccloskey',    initials:'JM', role:'Technician',      color:'#b45309'},
+  {id:95214031,  name:'Alex Gordon',       initials:'AG', role:'Technician',      color:'#b91c1c'},
+  {id:95214025,  name:'Nate Herr',         initials:'NH', role:'Technician',      color:'#1e40af'},
+  {id:95213820,  name:'Charlotte Herring', initials:'CH', role:'Technician',      color:'#be185d'},
+  {id:111933449, name:'Marc Umstead',      initials:'MU', role:'Technician',      color:'#0f766e'},
+  {id:95171147,  name:'Jessica Peaden',    initials:'JP', role:'Project Manager', color:'#c2410c'},
+];
+
+var cuData = null, cwData = null, cuConnected = false, cwConnected = false;
+var charts = {};
+
+// ── URL STORAGE ───────────────────────────────────────────────────────
+function saveUrls(){
+  var cu = document.getElementById('cuUrl').value.trim();
+  var cw = document.getElementById('cwUrl').value.trim();
+  if(cu) localStorage.setItem('p1t_cu',cu);
+  if(cw) localStorage.setItem('p1t_cw',cw);
+}
+function loadUrls(){
+  document.getElementById('cuUrl').value = localStorage.getItem('p1t_cu')||'';
+  document.getElementById('cwUrl').value = localStorage.getItem('p1t_cw')||'';
+}
+
+// ── FETCH ─────────────────────────────────────────────────────────────
+async function fetchJSON(url){
+  var r = await fetch(url,{headers:{Accept:'application/json'}});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+
+async function testCU(){
+  var url = document.getElementById('cuUrl').value.trim();
+  if(!url){setStatus('cuStatus','Enter URL first','err');return;}
+  saveUrls();
+  var btn = document.getElementById('cuTestBtn');
+  btn.disabled=true; btn.textContent='...';
+  setStatus('cuStatus','Loading...','');
+  try{
+    var data = await fetchJSON(url);
+    if(!data.success) throw new Error(data.error||'Bad response');
+    cuData=data; cuConnected=true;
+    setStatus('cuStatus','Connected - '+data.totalTasks+' tasks','ok');
+    document.getElementById('cuUrl').classList.add('ok');
+    renderAll();
+  }catch(e){setStatus('cuStatus','Error: '+e.message,'err'); cuConnected=false;}
+  btn.disabled=false; btn.textContent='Update Data';
+}
+
+async function testCW(){
+  var url = document.getElementById('cwUrl').value.trim();
+  if(!url){setStatus('cwStatus','Enter URL first','err');return;}
+  saveUrls();
+  var btn = document.getElementById('cwTestBtn');
+  btn.disabled=true; btn.textContent='...';
+  setStatus('cwStatus','Loading...','');
+  try{
+    var data = await fetchJSON(url);
+    if(!data.success) throw new Error(data.error||'Bad response');
+    cwData=data; cwConnected=true;
+    setStatus('cwStatus','Connected - '+data.totalTickets+' tickets','ok');
+    document.getElementById('cwUrl').classList.add('ok');
+    document.getElementById('cwTag').classList.add('live');
+    document.getElementById('cwDot').classList.add('pulse');
+    renderAll();
+  }catch(e){setStatus('cwStatus','Error: '+e.message,'err'); cwConnected=false;}
+  btn.disabled=false; btn.textContent='Update Data';
+}
+
+function setStatus(id,msg,cls){
+  var el=document.getElementById(id);
+  el.textContent=msg;
+  el.className='cfg-status'+(cls?' '+cls:'');
+}
+
+async function loadAll(){
+  var cuUrl=document.getElementById('cuUrl').value.trim();
+  var cwUrl=document.getElementById('cwUrl').value.trim();
+  if(!cuUrl){openDrawer();renderSkeletons();return;}
+  var btn=document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  renderSkeletons();
+  await Promise.all([
+    fetchJSON(cuUrl).then(function(d){cuData=d;cuConnected=true;}).catch(function(e){console.error('CU:',e);}),
+    cwUrl?fetchJSON(cwUrl).then(function(d){cwData=d;cwConnected=true;}).catch(function(e){console.error('CW:',e);}):Promise.resolve()
+  ]);
+  renderAll();
+  btn.classList.remove('spinning');
+  document.getElementById('tsText').textContent='Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+
+// ── DONUT SVG ─────────────────────────────────────────────────────────
+function makeSVGDonut(segs,size,sw){
+  size=size||80; sw=sw||9;
+  var r=(size-sw*2)/2, cx=size/2, cy=size/2, circ=2*Math.PI*r;
+  var total=segs.reduce(function(s,g){return s+g.v;},0);
+  if(!total) return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#e2e8f0" stroke-width="'+sw+'"/></svg>';
+  var off=0, paths='';
+  for(var i=0;i<segs.length;i++){
+    if(!segs[i].v) continue;
+    var d=(segs[i].v/total)*circ, gap=circ-d;
+    paths+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+segs[i].c+'" stroke-width="'+sw+'" stroke-dasharray="'+d.toFixed(2)+' '+gap.toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'"/>';
+    off+=d;
+  }
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" style="transform:rotate(-90deg)">'+paths+'</svg>';
+}
+
+// ── LOAD COLOR BY UTILIZATION ─────────────────────────────────────────
+function utilColor(pct){
+  if(pct>=90) return '#dc2626';
+  if(pct>=80) return '#d97706';
+  return '#059669';
+}
+function utilClass(pct){
+  if(pct>=90) return 'u-red';
+  if(pct>=80) return 'u-yellow';
+  return 'u-green';
+}
+function loadCls(total){
+  return total===0?'lp-none':total<=4?'lp-ok':total<=10?'lp-mod':'lp-hi';
+}
+function loadText(total){
+  return total===0?'Available':total<=4?'Available':total<=10?'Moderate':'Heavy';
+}
+
+// ── MAIN RENDER ───────────────────────────────────────────────────────
+function renderAll(){
+  if(!cuData){
+    document.getElementById('teamGrid').innerHTML='<div class="error-state">No data.<div class="e-sub">Enter your n8n ClickUp webhook URL in Settings.</div></div>';
+    return;
+  }
+
+  var cuMap={};
+  (cuData.members||[]).forEach(function(m){cuMap[m.memberId]=m;});
+  var cwMap={};
+  if(cwConnected&&cwData)(cwData.members||[]).forEach(function(m){cwMap[m.memberId]=m;});
+
+  // Metrics
+  var urgHigh=(cuData.members||[]).reduce(function(s,m){return s+m.urgent+m.high;},0);
+  var active=(cuData.members||[]).filter(function(m){return m.taskCount>0;}).length;
+  var assigned=cuData.totalTasks-(cuData.unassignedCount||0);
+  var avg=active>0?Math.round(assigned/active):0;
+  var cwTotal=cwConnected&&cwData?cwData.totalTickets:null;
+
+  document.getElementById('mTasks').textContent=cuData.totalTasks;
+  document.getElementById('mUrgent').textContent=urgHigh;
+  document.getElementById('mAvg').textContent=avg;
+  document.getElementById('mCW').textContent=cwTotal!==null?cwTotal:'--';
+  document.getElementById('mCWSub').textContent=cwTotal!==null?'Open tickets':'Not connected';
+  document.getElementById('mUnassigned').textContent=cuData.unassignedCount||0;
+
+  // Unassigned banner
+  var uaB=document.getElementById('uaBanner');
+  if((cuData.unassignedCount||0)>0){
+    uaB.classList.add('show');
+    document.getElementById('uaN').textContent=cuData.unassignedCount;
+    document.getElementById('uaList').innerHTML=(cuData.unassigned||[]).slice(0,12).map(function(t){
+      return '<div class="ua-item">&#183; '+esc(t.name)+'</div>';
+    }).join('');
+  } else { uaB.classList.remove('show'); }
+
+  // Sort by combined load
+  var MAX=20;
+  function pct(n){return Math.min(n/MAX*100,100);}
+
+  var memberData = TEAM.map(function(m){
+    var cu=cuMap[m.id]||{taskCount:0,urgent:0,high:0,normal:0,low:0,tasks:[]};
+    var cw=cwMap[m.id]||{ticketCount:0,tickets:[]};
+    return {member:m, cu:cu, cw:cw, total:cu.taskCount+(cwConnected?cw.ticketCount:0)};
+  });
+  memberData.sort(function(a,b){return b.total-a.total;});
+
+  // ── TEAM GRID ──────────────────────────────────────────────────────
+  var grid=document.getElementById('teamGrid');
+  grid.innerHTML='';
+  document.getElementById('memberCount').textContent=(TEAM.length)+' members';
+
+  memberData.forEach(function(d){
+    var m=d.member, cu=d.cu, cw=d.cw, grandTotal=d.total;
+    var tasks=cu.tasks||[];
+    var cwCount=cwConnected?cw.ticketCount:0;
+    var cwTickets=cwConnected?(cw.tickets||[]):[];
+
+    var byL={
+      gen:  tasks.filter(function(t){return (t.list||'').toLowerCase()==='general tasks';}),
+      proj: tasks.filter(function(t){return (t.list||'').toLowerCase()==='project tasks';}),
+      ai:   tasks.filter(function(t){return (t.list||'').toLowerCase()==='ai project tasks';}),
+      road: tasks.filter(function(t){return (t.list||'').toLowerCase()==='project roadmap';})
+    };
+
+    var utilPct = Math.min(Math.round((grandTotal/MAX)*100),100);
+    var uColor = utilColor(utilPct);
+
+    var donutSegs=[
+      {v:cu.urgent,c:'#dc2626'},{v:cu.high,c:'#ea580c'},
+      {v:cu.normal,c:'#2563eb'},{v:cu.low,c:'#94a3b8'}
+    ];
+    if(cwCount) donutSegs.push({v:cwCount,c:'#7c3aed'});
+
+    // Priority bars
+    var capBars='';
+    if(cu.urgent) capBars+='<div class="cap-row"><span class="cap-lbl" style="color:var(--urgent)">Urgent</span><div class="cap-track"><div class="cap-fill" style="width:'+pct(cu.urgent)+'%;background:var(--urgent)"></div></div><span class="cap-num">'+cu.urgent+'</span></div>';
+    if(cu.high)   capBars+='<div class="cap-row"><span class="cap-lbl" style="color:var(--high)">High</span><div class="cap-track"><div class="cap-fill" style="width:'+pct(cu.high)+'%;background:var(--high)"></div></div><span class="cap-num">'+cu.high+'</span></div>';
+    if(cu.normal) capBars+='<div class="cap-row"><span class="cap-lbl" style="color:var(--normal)">Normal</span><div class="cap-track"><div class="cap-fill" style="width:'+pct(cu.normal)+'%;background:var(--normal)"></div></div><span class="cap-num">'+cu.normal+'</span></div>';
+    if(cu.low)    capBars+='<div class="cap-row"><span class="cap-lbl" style="color:var(--low)">Low/None</span><div class="cap-track"><div class="cap-fill" style="width:'+pct(cu.low)+'%;background:var(--low)"></div></div><span class="cap-num">'+cu.low+'</span></div>';
+    if(cwConnected&&cwCount) capBars+='<div class="cap-row"><span class="cap-lbl" style="color:var(--cw)">CW Tickets</span><div class="cap-track"><div class="cap-fill" style="width:'+pct(cwCount)+'%;background:var(--cw)"></div></div><span class="cap-num">'+cwCount+'</span></div>';
+    if(!grandTotal) capBars+='<div style="font-size:11px;color:var(--dim);padding:4px 0">No active tasks</div>';
+
+    // List type bars
+    var ltBars='';
+    if(byL.gen.length)  ltBars+='<div class="lt-row"><span class="lt-lbl">General Tasks</span><div class="lt-track"><div class="lt-fill" style="width:'+pct(byL.gen.length)+'%;background:var(--lt-gen)"></div></div><span class="lt-num">'+byL.gen.length+'</span></div>';
+    if(byL.proj.length) ltBars+='<div class="lt-row"><span class="lt-lbl">Project Tasks</span><div class="lt-track"><div class="lt-fill" style="width:'+pct(byL.proj.length)+'%;background:var(--lt-proj)"></div></div><span class="lt-num">'+byL.proj.length+'</span></div>';
+    if(byL.ai.length)   ltBars+='<div class="lt-row"><span class="lt-lbl">AI Project Tasks</span><div class="lt-track"><div class="lt-fill" style="width:'+pct(byL.ai.length)+'%;background:var(--lt-ai)"></div></div><span class="lt-num">'+byL.ai.length+'</span></div>';
+    if(byL.road.length) ltBars+='<div class="lt-row"><span class="lt-lbl">Milestones</span><div class="lt-track"><div class="lt-fill" style="width:'+pct(byL.road.length)+'%;background:var(--lt-road)"></div></div><span class="lt-num">'+byL.road.length+'</span></div>';
+    if(cwConnected&&cwCount) ltBars+='<div class="lt-row"><span class="lt-lbl">CW Tickets</span><div class="lt-track"><div class="lt-fill" style="width:'+pct(cwCount)+'%;background:var(--cw)"></div></div><span class="lt-num">'+cwCount+'</span></div>';
+
+    // CW ticket list
+    var cwSection='';
+    if(cwConnected&&cwCount){
+      var cwRows=cwTickets.slice(0,20).map(function(t){
+        var board=t.board||'CW';
+        var brd=board.length>12?board.slice(0,12)+'...':board;
+        return '<div class="cw-ticket"><span class="cw-board">'+esc(brd)+'</span><span class="task-name">'+esc(t.summary)+'</span></div>';
+      }).join('');
+      cwSection='<div class="cw-section"><div class="cw-sec-title"><span>CW Tickets</span><span>'+cwCount+'</span></div>'+cwRows+'</div>';
+    }
+
+    // Grouped ClickUp task rows
+    var taskRows='';
+    var listGroups=[
+      {k:'gen',cls:'gen',lbl:'General Tasks'},
+      {k:'proj',cls:'proj',lbl:'Project Tasks'},
+      {k:'ai',cls:'ai',lbl:'AI Project Tasks'},
+      {k:'road',cls:'road',lbl:'Milestones'}
+    ];
+    listGroups.forEach(function(lg){
+      var lt=byL[lg.k];
+      if(!lt.length) return;
+      taskRows+='<div class="tg-header tg-'+lg.cls+'">'+lg.lbl+' ('+lt.length+')</div>';
+      lt.forEach(function(t){
+        var p=t.priority||'low';
+        var pc={urgent:'tpu',high:'tph',normal:'tpn',low:'tpl'}[p]||'tpl';
+        taskRows+='<div class="task-row"><span class="tp '+pc+'">'+p.slice(0,1).toUpperCase()+'</span><span class="task-name">'+esc(t.name)+'</span></div>';
+      });
+    });
+    // CW tickets in task list too
+    if(cwTickets.length){
+      taskRows+='<div class="tg-header tg-cw">CW Tickets ('+cwTickets.length+')</div>';
+      cwTickets.slice(0,30).forEach(function(t){
+        taskRows+='<div class="task-row"><span class="cw-board" style="margin-top:1px;flex-shrink:0">'+(t.board||'CW').slice(0,8)+'</span><span class="task-name">'+esc(t.summary)+'</span></div>';
+      });
+    }
+
+    var expandTotal=tasks.length+cwTickets.length;
+    var card=document.createElement('div');
+    card.className='mcard';
+    card.innerHTML=
+      '<div class="mcard-top-bar" style="background:linear-gradient(90deg,'+m.color+','+m.color+'55)"></div>'+
+      '<div class="mcard-head">'+
+        '<div class="avi" style="background:'+m.color+'">'+m.initials+'</div>'+
+        '<div class="mcard-info">'+
+          '<div class="mcard-name">'+m.name+'</div>'+
+          '<div class="mcard-role">'+m.role+'</div>'+
+        '</div>'+
+        '<span class="load-pill '+loadCls(grandTotal)+'">'+loadText(grandTotal)+'</span>'+
+      '</div>'+
+      '<div class="mcard-body">'+
+        '<div class="util-row">'+
+          '<span class="util-pct" style="color:'+uColor+'">'+utilPct+'%</span>'+
+          '<div class="util-track"><div class="util-fill" style="width:'+utilPct+'%;background:'+uColor+'"></div></div>'+
+          '<span class="util-label">'+grandTotal+'/'+MAX+' slots</span>'+
+        '</div>'+
+        '<div class="cap-summary">'+
+          '<div class="donut-wrap">'+
+            makeSVGDonut(donutSegs)+
+            '<div class="donut-center">'+
+              '<div class="donut-total">'+grandTotal+'</div>'+
+              '<div class="donut-lbl">'+(cwConnected?'Combined':'Total')+'</div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="cap-bars">'+capBars+'</div>'+
+        '</div>'+
+        (ltBars?'<div class="lt-section"><div class="lt-title">By List Type</div><div class="lt-rows">'+ltBars+'</div></div>':'')+
+        (cwSection)+
+        (expandTotal?'<button class="expand-btn" onclick="toggleTasks(this,'+m.id+')">&#9660; Show '+expandTotal+' items</button><div class="task-list" id="tl-'+m.id+'">'+taskRows+'</div>':'')+
+      '</div>';
+    grid.appendChild(card);
+  });
+
+  // Render analytics tab
+  renderAnalytics(memberData, cuData, cwData);
+}
+
+// ── ANALYTICS TAB ─────────────────────────────────────────────────────
+function renderAnalytics(memberData, cu, cw){
+  if(!cu) return;
+  var MAX=20;
+  function pct(n){return Math.min(Math.round((n/MAX)*100),100);}
+
+  // KPI cards
+  var over = memberData.filter(function(d){return d.total>10;}).length;
+  var avail = memberData.filter(function(d){return d.total<=4;}).length;
+  var totalItems = memberData.reduce(function(s,d){return s+d.total;},0);
+  var teamUtil = Math.round((totalItems/(memberData.length*MAX))*100);
+  var cwTotal = cwConnected&&cw?cw.totalTickets:0;
+
+  document.getElementById('aUtilPct').textContent=teamUtil+'%';
+  document.getElementById('aUtilPct').style.color=utilColor(teamUtil);
+  document.getElementById('aUtilSignal').textContent=teamUtil>=90?'&#9888; Risk':teamUtil>=80?'&#9651; Watch':'&#9679; Healthy';
+  document.getElementById('aUtilSignal').className='metric-trend '+(teamUtil>=90?'trend-up':teamUtil>=80?'trend-up':teamUtil>=80?'trend-flat':'trend-down');
+  document.getElementById('aOverCap').textContent=over;
+  document.getElementById('aUnassigned').textContent=(cu.unassignedCount||0)+cwTotal;
+  document.getElementById('aCWTotal').textContent=cwTotal||'--';
+  document.getElementById('aAvailable').textContent=avail;
+
+  // Risk cards
+  var rg=document.getElementById('riskGrid');
+  rg.innerHTML=
+    '<div class="risk-card '+(over>0?'risk-red':'risk-green')+'">'+
+      '<div class="risk-icon">'+(over>0?'&#128308;':'&#128994;')+'</div>'+
+      '<div class="risk-label">Over Capacity</div>'+
+      '<div class="risk-val" style="color:'+(over>0?'var(--red)':'var(--green)')+'">'+over+'</div>'+
+      '<div class="risk-sub">Members at Heavy load</div>'+
+    '</div>'+
+    '<div class="risk-card '+(teamUtil>=90?'risk-red':teamUtil>=80?'risk-yellow':'risk-green')+'">'+
+      '<div class="risk-icon">'+(teamUtil>=90?'&#128308;':teamUtil>=80?'&#128993;':'&#128994;')+'</div>'+
+      '<div class="risk-label">Team Utilization</div>'+
+      '<div class="risk-val" style="color:'+utilColor(teamUtil)+'">'+teamUtil+'%</div>'+
+      '<div class="risk-sub">'+(teamUtil>=90?'Crunch risk':teamUtil>=80?'Monitor closely':'Sustainable range')+'</div>'+
+    '</div>'+
+    '<div class="risk-card '+((cu.unassignedCount||0)>5?'risk-yellow':'risk-green')+'">'+
+      '<div class="risk-icon">&#128203;</div>'+
+      '<div class="risk-label">Unassigned Backlog</div>'+
+      '<div class="risk-val" style="color:'+((cu.unassignedCount||0)>5?'var(--yellow)':'var(--green)')+'">'+((cu.unassignedCount||0))+'</div>'+
+      '<div class="risk-sub">Tasks needing an owner</div>'+
+    '</div>';
+
+  // Build chart data
+  var names=memberData.map(function(d){return d.member.name.split(' ')[0];});
+  var totals=memberData.map(function(d){return d.total;});
+  var colors=memberData.map(function(d){return utilColor(pct(d.total));});
+
+  // Utilization bar chart
+  if(charts.util) charts.util.destroy();
+  var ctx=document.getElementById('chartUtil').getContext('2d');
+  charts.util=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:names,
+      datasets:[{
+        label:'Combined Load',
+        data:totals,
+        backgroundColor:colors,
+        borderRadius:5,
+        borderSkipped:false
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:function(c){return c.raw+' items ('+pct(c.raw)+'% utilized)';}}}
+      },
+      scales:{
+        x:{max:MAX,grid:{color:'#f1f5f9'},ticks:{font:{size:10}}},
+        y:{grid:{display:false},ticks:{font:{size:11,weight:'600'}}}
+      }
+    }
+  });
+
+  // List type donut
+  var genCount=0,projCount=0,aiCount=0,roadCount=0,cwCount2=0;
+  (cu.members||[]).forEach(function(m){
+    (m.tasks||[]).forEach(function(t){
+      var l=(t.list||'').toLowerCase();
+      if(l==='general tasks') genCount++;
+      else if(l==='project tasks') projCount++;
+      else if(l==='ai project tasks') aiCount++;
+      else if(l==='project roadmap') roadCount++;
+    });
+  });
+  if(cwConnected&&cw) cwCount2=cw.totalTickets;
+
+  if(charts.listType) charts.listType.destroy();
+  var ctx2=document.getElementById('chartListType').getContext('2d');
+  charts.listType=new Chart(ctx2,{
+    type:'doughnut',
+    data:{
+      labels:['General Tasks','Project Tasks','AI Project Tasks','Milestones','CW Tickets'],
+      datasets:[{
+        data:[genCount,projCount,aiCount,roadCount,cwCount2],
+        backgroundColor:['#059669','#2563eb','#7c3aed','#d97706','#a855f7'],
+        borderWidth:2,borderColor:'#fff'
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:10,boxWidth:10}}}
+    }
+  });
+
+  // Priority donut
+  var uCount=0,hCount=0,nCount=0,lCount=0;
+  (cu.members||[]).forEach(function(m){
+    uCount+=m.urgent; hCount+=m.high; nCount+=m.normal; lCount+=m.low;
+  });
+  if(charts.priority) charts.priority.destroy();
+  var ctx3=document.getElementById('chartPriority').getContext('2d');
+  charts.priority=new Chart(ctx3,{
+    type:'doughnut',
+    data:{
+      labels:['Urgent','High','Normal','Low/None'],
+      datasets:[{
+        data:[uCount,hCount,nCount,lCount],
+        backgroundColor:['#dc2626','#ea580c','#2563eb','#94a3b8'],
+        borderWidth:2,borderColor:'#fff'
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:10,boxWidth:10}}}
+    }
+  });
+
+  // Demand vs Supply bar
+  var supply=memberData.length*MAX;
+  var demand=totalItems;
+  var gap=Math.max(0,demand-supply);
+  if(charts.demand) charts.demand.destroy();
+  var ctx4=document.getElementById('chartDemand').getContext('2d');
+  charts.demand=new Chart(ctx4,{
+    type:'bar',
+    data:{
+      labels:['Current'],
+      datasets:[
+        {label:'Available Slots',data:[supply],backgroundColor:'#a7f3d0',borderRadius:4},
+        {label:'Open Work Items',data:[demand],backgroundColor:'#2563eb',borderRadius:4},
+        {label:'Gap (if any)',data:[gap],backgroundColor:'#dc2626',borderRadius:4}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8,boxWidth:10}}},
+      scales:{y:{beginAtZero:true,grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}
+    }
+  });
+
+  // Utilization table
+  var tbody=document.getElementById('utilTableBody');
+  tbody.innerHTML='';
+  memberData.forEach(function(d){
+    var m=d.member, utilP=pct(d.total), uh=d.cu.urgent+d.cu.high;
+    var cls=utilClass(utilP);
+    var row=document.createElement('tr');
+    row.innerHTML=
+      '<td><div style="display:flex;align-items:center;gap:8px">'+
+        '<div style="width:28px;height:28px;border-radius:6px;background:'+m.color+';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0">'+m.initials+'</div>'+
+        '<span style="font-weight:600">'+m.name+'</span></div></td>'+
+      '<td style="color:var(--muted)">'+m.role+'</td>'+
+      '<td><span style="font-weight:700;font-family:var(--mono)">'+d.cu.taskCount+'</span></td>'+
+      '<td><span style="font-weight:700;font-family:var(--mono);color:var(--purple)">'+d.cw.ticketCount+'</span></td>'+
+      '<td><span style="font-weight:700;font-family:var(--mono);color:'+(uh>0?'var(--red)':'var(--muted)')+'">'+uh+'</span></td>'+
+      '<td><div class="mini-bar-wrap">'+
+        '<div class="mini-bar"><div class="mini-bar-fill" style="width:'+utilP+'%;background:'+utilColor(utilP)+'"></div></div>'+
+        '<span class="mini-pct" style="color:'+utilColor(utilP)+'">'+utilP+'%</span></div></td>'+
+      '<td><span class="util-chip '+cls+'">'+(utilP>=90?'&#9888; Heavy':utilP>=80?'&#9651; Moderate':'&#9679; Available')+'</span></td>';
+    tbody.appendChild(row);
+  });
+
+  // Backlog
+  var bl=document.getElementById('backlogList');
+  var unassigned=(cu.unassigned||[]);
+  if(!unassigned.length){
+    bl.innerHTML='<div style="padding:16px;text-align:center;color:var(--green);font-size:12px;font-weight:600">&#10003; No unassigned tasks</div>';
+  } else {
+    bl.innerHTML=unassigned.slice(0,20).map(function(t){
+      var p=t.priority||'low';
+      var pc={urgent:'tpu',high:'tph',normal:'tpn',low:'tpl'}[p]||'tpl';
+      return '<div class="backlog-row"><span class="tp '+pc+'" style="margin-top:2px">'+p.slice(0,1).toUpperCase()+'</span><span class="backlog-name">'+esc(t.name)+'</span><span style="font-size:10px;color:var(--muted)">'+esc(t.list||'')+'</span></div>';
+    }).join('');
+  }
+}
+
+// ── SKELETONS ─────────────────────────────────────────────────────────
+function renderSkeletons(){
+  var sk='';
+  for(var i=0;i<9;i++){
+    sk+='<div class="mcard">'+
+      '<div class="mcard-top-bar sk"></div>'+
+      '<div class="mcard-head">'+
+        '<div class="sk" style="width:42px;height:42px;border-radius:10px;flex-shrink:0"></div>'+
+        '<div style="flex:1"><div class="sk" style="height:14px;width:120px;margin-bottom:6px"></div><div class="sk" style="height:11px;width:80px"></div></div>'+
+      '</div>'+
+      '<div class="mcard-body">'+
+        '<div class="sk" style="height:30px;border-radius:7px;margin-bottom:12px"></div>'+
+        '<div style="display:flex;gap:16px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">'+
+          '<div class="sk" style="width:80px;height:80px;border-radius:50%;flex-shrink:0"></div>'+
+          '<div style="flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center">'+
+            '<div class="sk" style="height:7px"></div><div class="sk" style="height:7px;width:80%"></div><div class="sk" style="height:7px;width:60%"></div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="sk" style="height:60px;border-radius:8px;margin-bottom:8px"></div>'+
+      '</div>'+
+    '</div>';
+  }
+  document.getElementById('teamGrid').innerHTML=sk;
+}
+
+function toggleTasks(btn,id){
+  var l=document.getElementById('tl-'+id);
+  var open=l.classList.toggle('open');
+  var n=l.querySelectorAll('.task-row').length;
+  btn.textContent=open?'&#9650; Hide items':'&#9660; Show '+n+' items';
+}
+
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function toggleDrawer(){document.getElementById('drawer').classList.toggle('open');}
+function openDrawer(){document.getElementById('drawer').classList.add('open');}
+function esc(s){if(!s)return '';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+loadUrls();
+if(document.getElementById('cuUrl').value.trim()) loadAll();
+else{openDrawer();renderSkeletons();}
+</script>
+</body>
+</html>
