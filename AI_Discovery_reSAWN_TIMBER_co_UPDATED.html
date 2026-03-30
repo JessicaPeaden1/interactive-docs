@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Discovery & Implementation Doc — reSAWN TIMBER co.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── reSAWN TIMBER co. BRAND COLORS ── */
+  --accent1: #2B2820;    /* Dark charcoal / timber black  */
+  --accent2: #8B6B3D;    /* Warm oak / wood brown         */
+  --accent3: #4A6741;    /* Forest green / sustainability */
+
+  --rainbow: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+
+  --accent:   var(--accent2);
+  --accent-d: color-mix(in srgb, var(--accent2) 70%, black);
+  --accent-l: color-mix(in srgb, var(--accent2) 65%, white);
+  --tagbg:    color-mix(in srgb, var(--accent2) 10%, white);
+  --tagbd:    color-mix(in srgb, var(--accent2) 28%, transparent);
+  --bda:      color-mix(in srgb, var(--accent2) 38%, transparent);
+  --ifoc:     color-mix(in srgb, var(--accent2)  8%, white);
+
+  --bg:#F4F2EF; --bg2:#EDE9E3; --white:#fff; --surface:#fff;
+  --t1:#1A1714; --t2:#3D352C; --t3:#7A6E60; --t4:#ADA49A;
+  --bd:rgba(0,0,0,.08); --bd2:rgba(0,0,0,.13);
+  --inp:#FAF8F5;
+  --green:#2D6A3F; --yellow:#B07D2A; --orange:#C95F1A; --red:#B83232;
+  --sh:0 1px 3px rgba(0,0,0,.06); --sh2:0 4px 16px rgba(0,0,0,.09);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* ─ HEADER ─ */
+.hdr{background:var(--accent1);position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.hdr-rainbow{height:3px;background:var(--rainbow)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 32px;max-width:1400px;margin:0 auto}
+.hdr-left{display:flex;align-items:center;gap:14px}
+.client-logo{height:36px;width:auto;display:block}
+.logo-resawn{display:flex;flex-direction:column;align-items:flex-start;line-height:1;padding:0}
+.logo-resawn .r1{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;letter-spacing:.04em}
+.logo-resawn .r2{font-family:'DM Sans',sans-serif;font-weight:300;font-size:9px;color:rgba(255,255,255,.65);letter-spacing:.25em;text-transform:uppercase;margin-top:1px}
+.hdr-divider{width:1px;height:22px;background:rgba(255,255,255,.2);margin:0 2px}
+.hdr-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff}
+.hdr-sub{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em;font-weight:500}
+.hdr-right{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .18s}
+.btn-g{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2)}
+.btn-g:hover{background:rgba(255,255,255,.2);color:#fff}
+.btn-p{background:var(--accent2);color:#fff}
+.btn-p:hover{filter:brightness(1.1);box-shadow:0 3px 12px color-mix(in srgb,var(--accent2) 45%,transparent);transform:translateY(-1px)}
+.save-ok{font-size:11px;color:#7EC88A;font-weight:600;opacity:0;transition:opacity .3s}
+.save-ok.on{opacity:1}
+
+/* ─ HERO ─ */
+.hero{background:var(--accent1);border-bottom:3px solid var(--accent2);padding:28px 32px 0;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;right:0;width:320px;height:100%;background:linear-gradient(135deg,rgba(139,107,61,.08),rgba(74,103,65,.06));pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--rainbow)}
+.hero-inner{max-width:1400px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(139,107,61,.2);border:1px solid rgba(139,107,61,.4);border-radius:100px;padding:3px 11px;font-size:10px;color:#C49A5E;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.dot{width:5px;height:5px;background:#C49A5E;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+.hero-title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.02em;color:#fff;line-height:1.1}
+.hero-title .client-name{background:linear-gradient(90deg,#C49A5E,#8B6B3D,#7A9B70);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:16px;padding-bottom:24px}
+.m-item{display:flex;flex-direction:column;gap:1px}
+.m-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);font-weight:700}
+.m-val{font-size:13px;color:rgba(255,255,255,.8)}
+.m-val a{color:#C49A5E;text-decoration:none}
+.m-val input{background:transparent;border:none;border-bottom:1px dashed rgba(255,255,255,.2);border-radius:0;padding:0;font-size:13px;color:rgba(255,255,255,.8);width:140px;font-family:'DM Sans',sans-serif}
+.m-val input::placeholder{color:rgba(255,255,255,.3)}
+.m-val input:focus{outline:none;border-bottom-color:var(--accent2)}
+
+/* ─ TABS ─ */
+.tabs-wrap{background:var(--white);border-bottom:2px solid var(--bg2);position:sticky;top:61px;z-index:190;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.tabs{display:flex;max-width:1400px;margin:0 auto;padding:0 32px;overflow-x:auto}
+.tab{display:flex;align-items:center;gap:7px;padding:13px 18px;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .18s;user-select:none;margin-bottom:-2px}
+.tab:hover{color:var(--t1);background:var(--bg)}
+.tab.on{color:var(--accent2);border-bottom-color:var(--accent2);background:var(--tagbg)}
+.tcnt{background:var(--bg2);color:var(--t4);border-radius:9px;padding:1px 6px;font-size:9px;font-weight:700}
+.tab.on .tcnt{background:var(--tagbg);color:var(--accent2)}
+
+/* ─ LAYOUT ─ */
+.main{max-width:1400px;margin:0 auto;padding:28px 32px 80px}
+.sec{display:none}.sec.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.sh{margin-bottom:24px}
+.sh-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--t1);letter-spacing:-.01em;margin-bottom:3px}
+.sh-desc{font-size:12px;color:var(--t3)}
+
+/* ─ GRID ─ */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.span2{grid-column:span 2}
+
+/* ─ CARD ─ */
+.card{background:var(--surface);border:1px solid var(--bd);border-radius:12px;padding:20px;box-shadow:var(--sh);transition:border-color .2s,box-shadow .2s}
+.card:hover{border-color:var(--bd2);box-shadow:var(--sh2)}
+.ct{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+
+/* ─ FIELDS ─ */
+.f{margin-bottom:14px}.f:last-child{margin-bottom:0}
+label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:5px}
+input[type=text],input[type=email],input[type=tel],input[type=url],input[type=date],select,textarea{
+  width:100%;background:var(--inp);border:1px solid var(--bd2);border-radius:7px;padding:9px 12px;
+  color:var(--t1);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:all .18s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent2);background:var(--ifoc);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent2) 12%,transparent)}
+input::placeholder,textarea::placeholder{color:var(--t4)}
+textarea{resize:vertical;min-height:72px}
+select option{background:var(--white);color:var(--t1)}
+
+/* ─ MULTI-SELECT PILLS ─ */
+.pill-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:100px;border:1.5px solid var(--bd2);background:var(--inp);color:var(--t3);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.pill:hover{border-color:var(--accent-l);color:var(--accent2);background:var(--tagbg)}
+.pill.on{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:600}
+
+/* ─ RATINGS ─ */
+.rrow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bd);gap:12px}
+.rrow:last-child{border-bottom:none}
+.rlbl{font-size:13px;color:var(--t2);flex:1}
+.stars{display:flex;gap:3px}
+.star{width:26px;height:26px;border-radius:5px;background:var(--bg2);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;color:var(--t3)}
+.star:hover,.star.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+
+/* ─ SCORE BAR ─ */
+.sbar{height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:6px;border:1px solid var(--bd)}
+.sfill{height:100%;border-radius:3px;background:var(--rainbow);transition:width .5s ease}
+
+/* ─ PAIN CARDS ─ */
+.pain-item{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:10px;box-shadow:var(--sh)}
+.pain-item.high{border-left:3px solid var(--red)}
+.pain-item.med{border-left:3px solid var(--orange)}
+.pain-item.low{border-left:3px solid var(--green)}
+
+/* ─ USE CASE LOG ─ */
+.uc-entry{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:8px;box-shadow:var(--sh);position:relative}
+.uc-type{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:100px}
+.uc-type.usecase{background:rgba(139,107,61,.12);color:#6B4E1F}
+.uc-type.question{background:rgba(176,125,42,.12);color:#7A5A10}
+.uc-type.objection{background:rgba(184,50,50,.1);color:var(--red)}
+.uc-type.insight{background:rgba(45,106,63,.1);color:var(--green)}
+
+/* ─ FEATURE CARDS ─ */
+.feat-card{background:var(--surface);border:1px solid var(--bd);border-radius:12px;padding:18px;box-shadow:var(--sh);transition:all .2s}
+.feat-card:hover{box-shadow:var(--sh2);border-color:var(--bda)}
+.feat-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.feat-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.feat-desc{font-size:12px;color:var(--t3);line-height:1.5;margin-bottom:10px}
+
+/* ─ OPP CARDS ─ */
+.opp{background:var(--surface);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:12px;box-shadow:var(--sh);transition:all .2s}
+.opp:hover{border-color:var(--bd2);box-shadow:var(--sh2)}
+.opp-h{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.opp-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.opp-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.opp-desc{font-size:11px;color:var(--t3);line-height:1.5}
+.opp-body{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pri-row{display:flex;gap:6px;margin-top:6px}
+.pri{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
+.pri.h{background:rgba(184,50,50,.1);color:var(--red);border-color:rgba(184,50,50,.25)}
+.pri.m{background:rgba(176,125,42,.1);color:var(--yellow);border-color:rgba(176,125,42,.3)}
+.pri.l{background:rgba(45,106,63,.1);color:var(--green);border-color:rgba(45,106,63,.25)}
+.pri.sel{filter:brightness(.88);transform:scale(1.05);font-weight:800}
+
+/* ─ STAKEHOLDER ─ */
+.sth-card{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:10px;box-shadow:var(--sh)}
+.sth-role{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent2);margin-bottom:8px}
+
+/* ─ CRED ITEM ─ */
+.cred-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--inp);border:1px solid var(--bd2);border-radius:8px;margin-bottom:8px}
+.cred-chk{width:18px;height:18px;border-radius:4px;border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:10px;background:var(--white);transition:all .15s}
+.cred-chk.done{background:var(--green);border-color:var(--green);color:#fff}
+.cred-lbl{flex:1;font-size:13px;color:var(--t2)}
+.cred-lbl.done{text-decoration:line-through;opacity:.5}
+.cred-owner{width:160px}
+.cred-owner input{padding:5px 8px;font-size:11px}
+
+/* ─ Q LOG ─ */
+.q-entry{display:flex;gap:10px;padding:12px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;margin-bottom:8px;box-shadow:var(--sh);align-items:flex-start}
+.q-num{width:26px;height:26px;border-radius:6px;background:var(--tagbg);border:1px solid var(--tagbd);color:var(--accent2);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif}
+.q-res{width:20px;height:20px;border-radius:5px;border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:10px;background:var(--white);transition:all .15s;margin-top:3px}
+.q-res.yes{background:var(--green);border-color:var(--green);color:#fff}
+
+/* ─ RISK ─ */
+.gov-risk{background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:8px;box-shadow:var(--sh)}
+.risk-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:100px;font-size:10px;font-weight:700;margin-bottom:8px}
+.risk-badge.high{background:rgba(184,50,50,.1);color:var(--red)}
+.risk-badge.med{background:rgba(176,125,42,.1);color:var(--yellow)}
+.risk-badge.low{background:rgba(45,106,63,.1);color:var(--green)}
+
+/* ─ ACTIONS ─ */
+.action{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:9px;margin-bottom:8px;box-shadow:var(--sh)}
+.a-num{width:32px;height:32px;border-radius:7px;background:var(--bg2);border:1px solid var(--bd2);color:var(--t3);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif}
+.action.done-a .a-num{background:var(--tagbg);color:var(--accent2);border-color:var(--tagbd)}
+.action.done-a input{text-decoration:line-through;opacity:.45}
+.a-chk{width:20px;height:20px;border-radius:5px;border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:11px;background:var(--white);transition:all .15s}
+.a-chk.yes{background:var(--green);border-color:var(--green);color:#fff}
+.a-owner{width:130px}.a-owner input{padding:5px 8px;font-size:11px}
+
+/* ─ STATS ─ */
+.stats{display:flex;gap:14px;margin-bottom:24px}
+.stat{flex:1;background:var(--surface);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;text-align:center;box-shadow:var(--sh)}
+.stat .v{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent2)}
+.stat .l{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-top:1px}
+
+/* ─ INFO BOX ─ */
+.info-box{background:var(--tagbg);border:1px solid var(--tagbd);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--accent-d);margin-bottom:14px;display:flex;gap:8px;align-items:flex-start}
+
+/* ─ MISC ─ */
+.div{border:none;border-top:1px solid var(--bd);margin:18px 0}
+.tag-disp{display:inline-block;padding:2px 9px;background:var(--tagbg);border:1px solid var(--tagbd);border-radius:5px;font-size:11px;color:var(--accent2);font-weight:600;margin:2px}
+.mt12{margin-top:12px}.mb14{margin-bottom:14px}.mb20{margin-bottom:20px}.gap14{gap:14px!important}
+
+/* ─ CALL ANALYSIS STYLES ─ */
+.ca-badge{display:flex;align-items:center;gap:12px;border-radius:10px;padding:14px 20px;margin-bottom:6px;color:#fff}
+.ca-badge .ca-ico{font-size:22px;flex-shrink:0}
+.ca-badge .ca-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:.02em}
+.ca-badge .ca-desc{font-size:11px;opacity:.75;margin-top:1px}
+.ca-badge.dark{background:var(--accent1)}
+.ca-badge.oak{background:var(--accent2)}
+.ca-badge.green{background:var(--accent3)}
+.ca-badge.red{background:#B83232}
+.ca-badge.yellow{background:#B07D2A}
+.ca-badge.slate{background:#5A6475}
+
+.ca-item{display:flex;gap:12px;padding:11px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;margin-bottom:7px;box-shadow:var(--sh);align-items:flex-start;transition:border-color .15s}
+.ca-item:hover{border-color:var(--bda)}
+.ca-num{width:28px;height:28px;border-radius:7px;background:var(--tagbg);border:1px solid var(--tagbd);color:var(--accent2);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif;margin-top:1px}
+.ca-item-body{flex:1;font-size:13px;color:var(--t2);line-height:1.55}
+.ca-item-body strong{color:var(--t1);font-weight:600}
+
+.ca-quote{background:var(--bg2);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;padding:11px 16px;margin:8px 0 10px 40px;font-size:13px;color:var(--t2);font-style:italic;line-height:1.55;position:relative}
+.ca-quote::before{content:'\201C';font-family:'Syne',sans-serif;font-size:28px;color:var(--accent2);opacity:.4;position:absolute;top:-4px;left:10px;line-height:1}
+
+.ca-callout{display:flex;gap:10px;background:color-mix(in srgb,var(--accent2) 8%,white);border:1px solid var(--tagbd);border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:var(--accent-d);line-height:1.5}
+.ca-callout.warn{background:color-mix(in srgb,#C95F1A 8%,white);border-color:color-mix(in srgb,#C95F1A 25%,transparent);color:#7A3800}
+.ca-callout.info{background:color-mix(in srgb,#4A6741 8%,white);border-color:color-mix(in srgb,#4A6741 25%,transparent);color:#2D4A27}
+
+.ca-sublabel{font-family:'Syne',sans-serif;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--bd)}
+
+.ca-sys-table{width:100%;border-collapse:collapse;margin-bottom:4px}
+.ca-sys-table th{background:var(--accent1);color:#fff;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:8px 12px;text-align:left}
+.ca-sys-table td{padding:9px 12px;font-size:12px;border-bottom:1px solid var(--bd);vertical-align:top}
+.ca-sys-table tr:last-child td{border-bottom:none}
+.ca-sys-table tr:nth-child(even) td{background:var(--bg)}
+.ca-sys-table .sys-name{font-weight:700;color:var(--accent2);font-size:12px}
+.ca-sys-table .sys-quote{color:var(--t3);font-style:italic;font-size:11px}
+.ca-sys-table .sys-badge{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700}
+.sys-ok{background:rgba(45,106,63,.12);color:#1E5C2A}
+.sys-no{background:rgba(184,50,50,.1);color:#B83232}
+.sys-unk{background:rgba(176,125,42,.1);color:#7A5A10}
+
+.ca-action-card{background:var(--surface);border:1px solid var(--bd);border-radius:10px;margin-bottom:12px;overflow:hidden;box-shadow:var(--sh)}
+.ca-action-card .ac-hdr{background:var(--accent1);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.ca-action-card .ac-owner{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.07em}
+.ca-action-card .ac-task-tag{background:var(--accent2);border-radius:4px;padding:2px 8px;font-size:10px;color:#fff;font-weight:700}
+.ca-action-card .ac-body{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ca-action-card .ac-field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:3px;display:block}
+.ca-action-card .ac-field p{font-size:13px;color:var(--t2);line-height:1.5}
+.ca-action-card .ac-field.full{grid-column:span 2}
+.ac-urgent{border-left:3px solid #B83232}
+.ac-urgent .ac-hdr{background:color-mix(in srgb,#B83232 85%,black)}
+
+.ca-flow-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.ca-flow-num{width:24px;height:24px;border-radius:50%;background:var(--accent2);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:'Syne',sans-serif}
+.ca-flow-text{font-size:13px;color:var(--t2);flex:1;line-height:1.5}
+
+.ca-signal{display:flex;gap:10px;padding:9px 13px;background:var(--surface);border:1px solid var(--bd);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;margin-bottom:7px;box-shadow:var(--sh)}
+.ca-signal-tag{font-size:10px;font-weight:800;text-transform:uppercase;color:var(--accent2);width:120px;flex-shrink:0;padding-top:2px;letter-spacing:.04em;line-height:1.3}
+.ca-signal-body{font-size:13px;color:var(--t2);flex:1;line-height:1.5}
+
+.ca-process{background:var(--surface);border:1px solid var(--bd);border-radius:10px;margin-bottom:10px;overflow:hidden;box-shadow:var(--sh)}
+.ca-process .cp-hdr{background:var(--bg2);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.ca-process .cp-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--t1)}
+.ca-process .cp-sent{font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px}
+.sent-ok{background:rgba(45,106,63,.12);color:#1E5C2A}
+.sent-pain{background:rgba(184,50,50,.1);color:#B83232}
+.sent-gap{background:rgba(176,125,42,.1);color:#7A5A10}
+.sent-mixed{background:rgba(139,107,61,.12);color:#6B4E1F}
+.ca-process .cp-body{padding:12px 16px;font-size:13px;color:var(--t2);line-height:1.55}
+.cp-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.cp-meta span{font-size:11px;padding:2px 9px;background:var(--tagbg);border:1px solid var(--tagbd);border-radius:5px;color:var(--accent2);font-weight:600}
+
+/* ─ OPP CATEGORY & TIER ─ */
+.opp-cat-hdr{display:flex;align-items:center;gap:10px;margin:24px 0 12px;padding-bottom:10px;border-bottom:2px solid var(--bd)}
+.opp-cat-hdr .och-ico{font-size:20px}
+.opp-cat-hdr .och-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--t1)}
+.opp-cat-hdr .och-count{font-size:11px;color:var(--t3);font-weight:500}
+.opp-tier-row{display:flex;align-items:center;gap:8px;margin:14px 0 8px}
+.opp-tier-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:800;letter-spacing:.03em}
+.tier-qw{background:rgba(45,106,63,.12);color:#1E5C2A;border:1px solid rgba(45,106,63,.2)}
+.tier-med{background:rgba(176,125,42,.1);color:#7A5A10;border:1px solid rgba(176,125,42,.2)}
+.tier-long{background:rgba(90,100,117,.1);color:#3D4A5C;border:1px solid rgba(90,100,117,.2)}
+.opp-tier-line{flex:1;height:1px;background:var(--bd)}
+
+/* ─ WOOD GRAIN ACCENT ─ */
+.hero::before{
+  content:'';position:absolute;top:0;right:0;width:380px;height:100%;
+  background:repeating-linear-gradient(
+    170deg,
+    transparent,transparent 18px,
+    rgba(139,107,61,.04) 18px,rgba(139,107,61,.04) 19px,
+    transparent 19px,transparent 32px,
+    rgba(74,103,65,.03) 32px,rgba(74,103,65,.03) 33px
+  );
+  pointer-events:none;
+}
+
+/* ─ EXPORT BANNER ─ */
+.export-banner{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--accent1);border:2px solid var(--accent2);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:14px;font-size:13px;color:#fff;box-shadow:0 8px 40px rgba(0,0,0,.3);z-index:1000;transition:all .4s cubic-bezier(.34,1.56,.64,1);min-width:360px;max-width:500px}
+.export-banner.show{transform:translateX(-50%) translateY(0)}
+.eb-icon{font-size:24px;flex-shrink:0}
+.eb-content{flex:1}
+.eb-title{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;margin-bottom:2px}
+.eb-desc{font-size:12px;color:rgba(255,255,255,.6);line-height:1.4}
+.eb-actions{display:flex;gap:8px;margin-top:10px}
+.eb-dismiss{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.7);cursor:pointer;font-family:'DM Sans',sans-serif}
+.eb-dismiss:hover{background:rgba(255,255,255,.2)}
+.eb-export-btn{background:var(--accent2);border:none;border-radius:6px;padding:5px 14px;font-size:12px;color:#fff;cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif}
+.eb-export-btn:hover{filter:brightness(1.1)}
+.unsaved-dot{width:8px;height:8px;background:var(--orange);border-radius:50%;display:inline-block;margin-right:4px;animation:pulse 2s infinite}
+
+/* ─ TOAST ─ */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--accent1);border:1px solid var(--accent2);border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:8px;font-size:13px;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:999}
+.toast.on{transform:translateY(0);opacity:1}
+.t-icon{color:#7EC88A;font-size:16px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="hdr">
+  <div class="hdr-rainbow"></div>
+  <div class="hdr-inner">
+    <div class="hdr-left">
+      <!-- reSAWN TIMBER co. styled logo treatment -->
+      <div class="logo-resawn">
+        <span class="r1">reSAWN</span>
+        <span class="r2">TIMBER co.</span>
+      </div>
+      <div class="hdr-divider"></div>
+      <div>
+        <div class="hdr-title">AI Discovery & Implementation Doc</div>
+        <div class="hdr-sub" id="hdrSub">reSAWN TIMBER co. · Confidential</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <span class="save-ok" id="saveOk">✓ Saved</span>
+      <button class="btn btn-g" onclick="exportJSON()">⬇ Export</button>
+      <button class="btn btn-g" onclick="trigImport()">⬆ Import</button>
+      <button class="btn btn-g" onclick="window.print()">🖨 Print</button>
+      <button class="btn btn-p" onclick="saveAll()">💾 Save Progress</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="badge"><span class="dot"></span> Live Discovery Session</div>
+    <h1 class="hero-title"><span class="client-name" id="heroName">reSAWN TIMBER co.</span> AI Discovery</h1>
+    <div class="hero-meta">
+      <div class="m-item"><span class="m-lbl">Company</span><span class="m-val" id="metaCompany">reSAWN TIMBER co.</span></div>
+      <div class="m-item"><span class="m-lbl">Website</span><span class="m-val"><a id="metaWeb" href="https://resawntimberco.com" target="_blank">resawntimberco.com</a></span></div>
+      <div class="m-item"><span class="m-lbl">Industry</span><span class="m-val" id="metaInd">Architectural Wood Products</span></div>
+      <div class="m-item"><span class="m-lbl">Date</span><span class="m-val" id="sDate"></span></div>
+      <div class="m-item"><span class="m-lbl">Session</span><span class="m-val">Discovery + Demo</span></div>
+      <div class="m-item"><span class="m-lbl">Facilitator</span><span class="m-val"><input type="text" id="meta_facilitator" value="Jessica Peaden (Plus One Technology)"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <nav class="tabs">
+    <div class="tab on"  onclick="sw(this,'profile')">🏢 Client Profile <span class="tcnt">1</span></div>
+    <div class="tab" onclick="sw(this,'painpoints')">😣 Pain Points <span class="tcnt">2</span></div>
+    <div class="tab" onclick="sw(this,'dataland')">🗄 Data & AI Landscape <span class="tcnt">3</span></div>
+    <div class="tab" onclick="sw(this,'techstack')">⚙️ Tech & Integrations <span class="tcnt">4</span></div>
+    <div class="tab" onclick="sw(this,'platform')">🔴 Platform Demo <span class="tcnt">5</span></div>
+    <div class="tab" onclick="sw(this,'opps')">💡 AI Opportunities <span class="tcnt">6</span></div>
+    <div class="tab" onclick="sw(this,'usecases')">💬 Use Cases & Qs <span class="tcnt">7</span></div>
+    <div class="tab" onclick="sw(this,'governance')">🛡 Governance <span class="tcnt">8</span></div>
+    <div class="tab" onclick="sw(this,'stakeholders')">👥 Stakeholders <span class="tcnt">9</span></div>
+    <div class="tab" onclick="sw(this,'nextsteps')">🚀 Next Steps <span class="tcnt">10</span></div>
+    <div class="tab" onclick="sw(this,'callanalysis')" style="border-left:2px solid var(--bd)">📋 Call Analysis <span class="tcnt">11</span></div>
+  </nav>
+</div>
+
+<main class="main">
+
+<!-- ══════════ 1. CLIENT PROFILE ══════════ -->
+<section class="sec on" id="s-profile">
+  <div class="sh"><div class="sh-title">Client Profile</div><div class="sh-desc">Core company information — pre-filled with reSAWN TIMBER co. data. Confirm and expand during the call.</div></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">📋 Company Overview</div>
+      <div class="f"><label>Company Name</label><input type="text" id="c_name" value="reSAWN TIMBER co." oninput="syncHero()"></div>
+      <div class="f"><label>Website</label><input type="url" id="c_web" value="https://resawntimberco.com" oninput="syncHero()"></div>
+      <div class="f"><label>Main Phone</label><input type="tel" id="c_phone" value="(800) 985-5355"></div>
+      <div class="f"><label>Address</label><input type="text" id="c_addr" value="306 Keystone Drive, Telford, PA 18969"></div>
+      <div class="f"><label>Hours of Operation</label><input type="text" id="c_hours" placeholder="Confirm during call"></div>
+      <div class="f"><label>Social Profiles</label><input type="text" id="c_social" value="LinkedIn: linkedin.com/company/resawn-timber-co- | Facebook: facebook.com/reSAWNTIMBERco"></div>
+    </div>
+    <div class="card">
+      <div class="ct">👤 Primary Contact</div>
+      <div class="f"><label>Contact Name</label><input type="text" id="c_contact" value="Christina Zimmer"></div>
+      <div class="f"><label>Title / Role</label><input type="text" id="c_ctitle" value="IT Team"></div>
+      <div class="f"><label>Email</label><input type="email" id="c_cemail" value="czimmer@resawntimberco.com"></div>
+      <div class="f"><label>Direct Phone</label><input type="tel" id="c_cdirect" placeholder="Ask during call"></div>
+      <div class="f"><label>Decision Authority</label>
+        <select id="c_auth"><option value="">Select...</option><option>Final Decision Maker</option><option selected>Champion — Needs Executive Approval</option><option>Influencer Only</option><option>Technical Evaluator</option><option>Unknown</option></select>
+      </div>
+      <div class="f"><label>Secondary Contact</label><input type="text" id="c_contact2" value="David Hughes — IT Team (attended discovery call)"></div>
+      <div class="f"><label>Best Communication Method</label>
+        <select id="c_comm"><option value="">Select...</option><option>Email</option><option>Phone</option><option>Text</option><option selected>Video Call</option><option>In Person</option></select>
+      </div>
+    </div>
+  </div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">🏭 Business Details</div>
+      <div class="f"><label>Industry / Niche</label><input type="text" id="b_ind" value="Architectural Wood Products / Building Materials" oninput="syncHero()"></div>
+      <div class="f"><label>Business Type</label>
+        <select id="b_type"><option value="">Select...</option><option>Local / Independent</option><option selected>Regional</option><option>National</option><option>Franchise</option><option>Enterprise</option><option>Startup</option></select>
+      </div>
+      <div class="g2 gap14">
+        <div class="f"><label>Years in Business</label><input type="text" id="b_yrs" value="Founded 2008 (~17 yrs)"></div>
+        <div class="f"><label>Employees</label>
+          <select id="b_emp"><option value="">Select...</option><option>1–5</option><option>6–15</option><option>16–30</option><option>31–50</option><option selected>51–100</option><option>100+</option></select>
+        </div>
+      </div>
+      <div class="f"><label>Annual Revenue (approx.)</label>
+        <select id="b_rev"><option value="">Select...</option><option>Under $500K</option><option>$500K–$1M</option><option>$1M–$5M</option><option selected>$5M–$10M</option><option>$10M+</option></select>
+      </div>
+      <div class="f"><label>Approx. # Customers / Accounts</label><input type="text" id="b_custs" placeholder="Architects, designers, contractors — ask during call"></div>
+      <div class="f"><label>Geographic Reach</label>
+        <select id="b_geo"><option value="">Select...</option><option>Hyper-Local</option><option>Regional</option><option selected>National</option><option>International</option><option>Mix of local & online</option></select>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">🎯 Market & Revenue</div>
+      <div class="f"><label>Primary Customer Types</label><textarea id="b_custtype">Architects, interior designers, and contractors. B2B focus. Specifiers in commercial and high-end residential markets across the USA and Canada.</textarea></div>
+      <div class="f"><label>Top Revenue-Generating Services / Products</label><textarea id="b_toprev">Shou sugi ban (charred wood) exterior cladding, wide plank flooring, interior wall/ceiling cladding, European White Oak, Accoya/modified wood products.</textarea></div>
+      <div class="f"><label>Fastest Growing Area</label><input type="text" id="b_growing" value="Sylva™ Thermally Modified Red Oak — new product line launched 2024"></div>
+      <div class="f"><label>Key Competitive Differentiator</label><textarea id="b_diff">Premium sustainably sourced + FSC® certified wood. Award-winning shou sugi ban. AIA CES Provider. Made/finished in USA. Superior A+D specification support.</textarea></div>
+    </div>
+  </div>
+  <div class="card mb20">
+    <div class="ct">📦 Products / Services Offered</div>
+    <div class="pill-group" id="services-pills"></div>
+    <div class="f mt12"><label>Add Custom Services</label><input type="text" id="custom_services" placeholder="Type service and press Enter to add..." onkeydown="addCustomPill(event,'services-pills','services','custom_services')"></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">🗣 Call Participants</div>
+      <div class="f"><label>Client Attendees</label><textarea id="c_att_client">Christina Zimmer (IT Team), David Hughes (IT Team — has been with company longer, broader process knowledge)</textarea></div>
+      <div class="f"><label>Your Team Attendees</label><textarea id="c_att_us">Jessica Peaden — AI Implementation Engineer, Plus One Technology</textarea></div>
+      <div class="f"><label>Meeting Format</label>
+        <select id="c_format"><option value="">Select...</option><option selected>Video Call</option><option>In Person</option><option>Phone</option><option>Hybrid</option></select>
+      </div>
+      <div class="f"><label>Recording Link</label><input type="url" id="c_rec" placeholder="Link to call recording if available"></div>
+    </div>
+    <div class="card">
+      <div class="ct">💬 First Impressions</div>
+      <div class="f"><label>Client's Biggest Expressed Interest</label><textarea id="c_interest">Email chain automation (biggest pain point expressed), AI-assisted quoting/estimating to reduce multi-department back-and-forth, and an internal knowledge base / training tool for onboarding and quick Q&A. Christina also responded well to the SOP creator with clickable HTML demos.</textarea></div>
+      <div class="f"><label>Overall Energy / Vibe</label>
+        <select id="c_vibe"><option value="">Select...</option><option>🟢 Very Enthusiastic</option><option selected>🟡 Curious / Open</option><option>🟠 Cautious / Skeptical</option><option>🔴 Resistant</option></select>
+      </div>
+      <div class="f"><label>Why Are They Exploring AI Now?</label><textarea id="c_whynow">CEO-level mandate — the company has been tasked this year with implementing AI solutions to drive efficiency and process improvement. They are "casting a wide net" to evaluate options. Not a grassroots initiative — comes from the top down. Currently no company-wide AI rollout in place.</textarea></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 2. PAIN POINTS ══════════ -->
+<section class="sec" id="s-painpoints">
+  <div class="sh"><div class="sh-title">Pain Points, Operations & Goals</div><div class="sh-desc">Capture their current state, bottlenecks, and goals. Pre-loaded with industry-relevant prompts for architectural wood products.</div></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">😣 Core Pain Points & Bottlenecks</div>
+      <div class="info-box">📌 Capture every pain point raised — even casually. These become your proposal anchors.</div>
+      <div id="pain-list">
+        <div class="pain-item high">
+          <div class="f"><label>Pain Point #1 — Severity</label><select class="pain-sev" onchange="setPainClass(this)"><option value="high">🔴 High — Urgent / Daily Impact</option><option value="med">🟡 Medium</option><option value="low">🟢 Low</option></select></div>
+          <div class="f"><label>Describe the Pain</label><textarea>Email chains are the #1 most repetitive and time-consuming task. Teams use email templates but the back-and-forth is excessive — quoting, estimating, client changes, inter-departmental coordination all happen in email with no centralized tracking. Nothing is captured in Monday or HubSpot automatically.</textarea></div>
+          <div class="f"><label>Business Impact</label><textarea>Critical project information lives in scattered email threads. When changes happen mid-project (frequent), it requires manually looping in multiple departments. No visibility across teams on project status without digging through email chains. Creates bottlenecks and errors.</textarea></div>
+        </div>
+        <div class="pain-item high">
+          <div class="f"><label>Pain Point #2 — Severity</label><select class="pain-sev" onchange="setPainClass(this)"><option value="high">🔴 High — Urgent / Daily Impact</option><option value="med">🟡 Medium</option><option value="low">🟢 Low</option></select></div>
+          <div class="f"><label>Describe the Pain</label><textarea>Complex, multi-department quoting and estimating process. Standard material has a price sheet, but custom orders require looping in a separate estimating team to source non-standard sizing from suppliers, calculate build time, and generate quotes. Heavy back-and-forth with clients as specs change.</textarea></div>
+          <div class="f"><label>Business Impact</label><textarea>Sales cycles are 12–24 months long. Custom quotes require multiple internal departments and the client frequently changes scope after seeing pricing — creating compounding rounds of re-quoting. Very cumbersome and labor-intensive. All tracked in email, not a centralized system.</textarea></div>
+        </div>
+      </div>
+      <button class="btn btn-g mt12" onclick="addPain()" style="width:100%">+ Add Pain Point</button>
+    </div>
+    <div class="card">
+      <div class="ct">🔄 Current State Operations</div>
+      <div class="f"><label>Core Business Process (Inquiry → Order → Delivery)</label><textarea rows="4">Selling to architects/designers (specifiers), but the actual purchase is made by the builder — creating a dual-track sales relationship. Sales cycles run 12–24 months. Project management involvement is only triggered above a certain dollar amount. Different product categories have unique workflows with different teams.</textarea></div>
+      <div class="f"><label>Quote / Estimating Process</label><textarea>Two-tier: (1) Standard material — simple price sheet, easily quoted. (2) Custom orders — requires looping in a separate estimating team to source non-standard sizing from suppliers and calculate build/labor time. Multi-step, multi-department process. Client frequently changes scope after seeing pricing, triggering additional rounds of re-quoting. All back-and-forth currently happens via email.</textarea></div>
+      <div class="f"><label>A+D Specification Support Process</label><textarea>Clients are architects who specify the product; builders do the actual purchasing. Very technical, long-cycle relationship management. Marketing posts are highly detailed and technical (not suitable for generic AI content gen per David). Blog articles sent via HubSpot. Social posts require deep product knowledge and technical jargon.</textarea></div>
+      <div class="f"><label>Sample Request → Follow-Up Process</label><textarea>Christina has built some automations pushing data from HubSpot CRM into Monday.com via Make.com for sample tracking. Samples folder in Monday has separate boards for hand samples and large format samples, each with group-by-process flow. However, email follow-up and chain tracking is not connected to Monday boards.</textarea></div>
+      <div class="f"><label>Biggest Manual Handoffs (time sinks)</label><textarea>1. Email chains for quoting/estimating — all back-and-forth lives in email, not Monday. 2. Google Sheets — ~90% of business operations run through basic spreadsheets. 3. Inter-departmental communication during custom quote cycles. 4. No automated link between email threads and Monday project boards.</textarea></div>
+    </div>
+  </div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">🏆 Goals & Vision</div>
+      <div class="f"><label>Primary Business Goal (12 months)</label><textarea>CEO mandate: implement AI solutions across the company to drive efficiency and improve processes. Specific priority areas identified: reduce email chain dependency, streamline the quoting/estimating cycle, and build an internal AI-powered knowledge base for training and onboarding.</textarea></div>
+      <div class="f"><label>Secondary Goals</label><textarea>Explore AI for social media / content calendar (though noted as complex given technical, architect-focused audience). Better inter-departmental visibility on project status. Reduce Google Sheets dependency for core business operations.</textarea></div>
+      <div class="f"><label>What Does Success Look Like?</label><textarea>Teams spending less time on repetitive email chains. Quoting/estimating cycle is faster with fewer back-and-forth loops. New hires can onboard faster using an AI knowledge base. Information flows smoothly between HubSpot, Monday.com, and email without manual re-entry.</textarea></div>
+      <div class="f"><label>What Would Change if the Problem Was Solved?</label><textarea>Project status visible to all relevant teams without digging through email. Custom quotes generated faster with AI assistance. New employees can self-serve answers to common process/policy questions. Less time in email = more time on high-value work.</textarea></div>
+      <div class="f"><label>Cost of NOT Solving This?</label><textarea>Continued reliance on fragmented email + spreadsheet workflows limits scalability. Multi-month quoting cycles remain slow and error-prone. Onboarding remains time-consuming without centralized knowledge. CEO mandate goes unfulfilled — political risk internally.</textarea></div>
+    </div>
+    <div class="card">
+      <div class="ct">📊 Operational Metrics</div>
+      <div class="f"><label>Sample Requests / Inquiries Per Week</label><input type="text" value="Not captured — follow up in next meeting"></div>
+      <div class="f"><label>Average Project Specification Timeline</label><input type="text" value="12–24 months (confirmed by David Hughes on 03/30/2026)"></div>
+      <div class="f"><label>Spec Consultant Team Size</label><input type="text" value="Not captured — follow up (51–100 total employees confirmed)"></div>
+      <div class="f"><label>Lead-to-Project Conversion Rate</label><input type="text" value="Not captured — follow up"></div>
+      <div class="f"><label>Biggest Cost Center</label><textarea>Multi-department email-based quoting and estimating cycle — loops in sales, estimating team, and multiple other departments per custom order. Google Sheets overhead across the business. No specific $ figures shared.</textarea></div>
+      <div class="f"><label>Hours/Week on Admin / Manual Tasks</label><input type="text" value="Not captured — significant based on volume of email/spreadsheet work described across departments"></div>
+      <div class="f"><label>Top 3 Wish-List Automations</label><textarea>1. Email chains auto-logged into Monday boards — Christina: "that would free up a lot of time chunks"
+2. AI-assisted quoting/estimating: spreadsheet data → AI prompt → PDF output
+3. Internal AI knowledge base for employee Q&A, training, onboarding</textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">🗂 Workflow Data Points & Handoff Map</div>
+    <div class="g2">
+      <div>
+        <div class="f"><label>Systems That Don't Talk to Each Other</label><textarea>Email is the critical missing link — all quoting, estimating, and client back-and-forth lives in email and is NOT captured in Monday or HubSpot. ChatGPT is separate from all automated workflows. Google Sheets are siloed from HubSpot/Monday.</textarea></div>
+        <div class="f"><label>Most Error-Prone Steps</label><textarea>Custom quote cycles — frequent client scope changes after seeing pricing trigger multiple re-quoting rounds across departments. All tracked in email with no version control or centralized view. Risk of information getting lost across email chains.</textarea></div>
+      </div>
+      <div>
+        <div class="f"><label>Staff Time Distribution (approx. %)</label><textarea>Not formally captured. Based on discussion: large portion of time on email chain management (quoting, estimating, inter-dept coordination). Google Sheets management. Client-facing communications. Admin tasks related to sample tracking (Monday boards). Follow up in next session for % breakdowns.</textarea></div>
+        <div class="f"><label>Architect/Designer Communication Gaps</label><textarea>Project back-and-forth with clients (architects) happens entirely in email — no CRM or PM system captures it. When scope changes, re-looping all departments via email is manual and slow. Builder/purchaser relationship is separate from the architect relationship — dual-track creates visibility gaps.</textarea></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 3. DATA & AI LANDSCAPE ══════════ -->
+<section class="sec" id="s-dataland">
+  <div class="sh"><div class="sh-title">Data & AI Landscape</div><div class="sh-desc">Understand their data maturity, current AI usage, readiness for adoption, and budget.</div></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">🗄 Data Sources & Landscape</div>
+      <div class="f"><label>Where Does Customer / Specifier Data Live?</label><textarea>HubSpot CRM (confirmed primary source for customer/contact data). Monday.com boards are populated FROM HubSpot via Make.com. Email threads contain significant unstructured client communication data that is NOT in HubSpot or Monday.</textarea></div>
+      <div class="f"><label>Where Does Core Business / Transaction Data Live?</label><textarea>Google Sheets (confirmed — ~90% of business operations). WooCommerce/WordPress for e-commerce orders. HubSpot for CRM records. Critical gap: quoting and estimating data lives in email and Google Sheets with no structured capture into a central system.</textarea></div>
+      <div class="f"><label>Data Quality</label>
+        <select><option value="">Select...</option><option>Very clean — structured & consistent</option><option>Mostly clean — some gaps</option><option selected>Messy — inconsistent formats</option><option>Poor — scattered / incomplete</option><option>Unknown</option></select>
+      </div>
+      <div class="f"><label>Data Volume (approx. records)</label><input type="text" value="Not captured — significant given 17 years in business (founded 2008). HubSpot contact volume and Google Sheets row counts unknown. Follow up."></div>
+      <div class="f"><label>Historical Data Depth</label><input type="text" value="Founded 2008 — up to 17 years of customer and project history. Likely split across email archives, Google Sheets, and HubSpot (CRM adoption date unknown)."></div>
+      <div class="f"><label>Compliance / Regulatory Requirements</label>
+        <div class="pill-group mt12" id="compliance-pills"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">📄 Document Types in Use (select all that apply)</div>
+      <div class="pill-group" id="doc-types-pills"></div>
+      <div class="f mt12"><label>Primary File / Document Format</label><input type="text" value="Google Sheets (primary ops), PDF (quotes/specs to clients), Email (client communication). InDesign/Illustrator likely for catalog/marketing assets — confirm."></div>
+      <div class="f"><label>Document / Asset Management System</label><input type="text" value="Not confirmed — likely Google Drive given Google Workspace use. Ask in next call. No DAM system mentioned."></div>
+      <div class="f"><label>Avg. # Spec Documents / Files Processed Per Week</label><input type="text" value="Not captured — follow up. Volume implied to be significant given 12–24 month sales cycles with multiple quote revisions per project."></div>
+      <div class="f"><label>How Are Spec Documents Organized?</label><textarea>Not confirmed. Given email-centric workflow, likely organized per-email-thread or per-project folder in Google Drive. Monday.com boards track sample workflow (hand samples, large format separately). No centralized spec document system confirmed.</textarea></div>
+    </div>
+  </div>
+  <div class="card mb20">
+    <div class="ct">🤖 Current AI Usage & Tools</div>
+    <div class="g2">
+      <div>
+        <div class="f"><label>Currently Using AI Tools?</label>
+          <select id="ai_using"><option value="">Select...</option><option>Yes — Actively using daily</option><option selected>Yes — Experimenting</option><option>No — Aware but not using</option><option>No — Not familiar with AI</option></select>
+        </div>
+        <div class="f"><label>AI Tools in Use (select all)</label>
+          <div class="pill-group mt12" id="ai-tools-pills"></div>
+        </div>
+        <div class="f mt12"><label>Other AI Tools Not Listed</label><input type="text" placeholder="Any unlisted tools?"></div>
+      </div>
+      <div>
+        <div class="f"><label>Who Uses AI in the Company?</label><textarea>Each employee/department uses AI however makes sense for them individually — no company-wide standardized rollout. Christina has built some HubSpot → Monday automations via Make.com. ChatGPT is available as a company base account.</textarea></div>
+        <div class="f"><label>Primary AI Use Cases Today</label><textarea>Informal/individual use of ChatGPT. Christina has built HubSpot → Monday.com automation flows via Make.com. No structured or integrated AI workflows exist yet. No memory, no training on company-specific information.</textarea></div>
+        <div class="f"><label>Previous AI / Automation Attempts</label><textarea>Christina built Make.com automations connecting HubSpot CRM to Monday.com project boards (propagating Monday boards with HubSpot data). This is the most structured automation in place. Team has discussed other AI options but nothing deployed company-wide.</textarea></div>
+        <div class="f"><label>AI Concerns or Hesitations</label><textarea>Social media / content AI flagged as limited fit — posts are highly technical, architect-audience specific, requiring deep product knowledge (per David Hughes). Not a quick-share format. Also: no company-wide policy or structure for AI use yet — "everyone does their own thing."</textarea></div>
+      </div>
+    </div>
+    <hr class="div">
+    <div class="ct" style="margin-top:4px">⭐ AI Maturity Ratings</div>
+    <div class="rrow"><span class="rlbl">Overall AI Awareness & Literacy</span><div class="stars" id="r-aware"><div class="star" onclick="sr('r-aware',1)">1</div><div class="star" onclick="sr('r-aware',2)">2</div><div class="star" onclick="sr('r-aware',3)">3</div><div class="star" onclick="sr('r-aware',4)">4</div><div class="star" onclick="sr('r-aware',5)">5</div></div></div>
+    <div class="rrow"><span class="rlbl">Practical AI Experience</span><div class="stars" id="r-exp"><div class="star" onclick="sr('r-exp',1)">1</div><div class="star" onclick="sr('r-exp',2)">2</div><div class="star" onclick="sr('r-exp',3)">3</div><div class="star" onclick="sr('r-exp',4)">4</div><div class="star" onclick="sr('r-exp',5)">5</div></div></div>
+    <div class="rrow"><span class="rlbl">Openness to AI Adoption</span><div class="stars" id="r-open"><div class="star" onclick="sr('r-open',1)">1</div><div class="star" onclick="sr('r-open',2)">2</div><div class="star" onclick="sr('r-open',3)">3</div><div class="star" onclick="sr('r-open',4)">4</div><div class="star" onclick="sr('r-open',5)">5</div></div></div>
+    <div class="rrow"><span class="rlbl">Data Readiness / Quality</span><div class="stars" id="r-data"><div class="star" onclick="sr('r-data',1)">1</div><div class="star" onclick="sr('r-data',2)">2</div><div class="star" onclick="sr('r-data',3)">3</div><div class="star" onclick="sr('r-data',4)">4</div><div class="star" onclick="sr('r-data',5)">5</div></div></div>
+    <div class="rrow"><span class="rlbl">Budget Readiness</span><div class="stars" id="r-budget"><div class="star" onclick="sr('r-budget',1)">1</div><div class="star" onclick="sr('r-budget',2)">2</div><div class="star" onclick="sr('r-budget',3)">3</div><div class="star" onclick="sr('r-budget',4)">4</div><div class="star" onclick="sr('r-budget',5)">5</div></div></div>
+    <div class="rrow"><span class="rlbl">Change Management Readiness</span><div class="stars" id="r-chng"><div class="star" onclick="sr('r-chng',1)">1</div><div class="star" onclick="sr('r-chng',2)">2</div><div class="star" onclick="sr('r-chng',3)">3</div><div class="star" onclick="sr('r-chng',4)">4</div><div class="star" onclick="sr('r-chng',5)">5</div></div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">⚡ Automation & Integration Landscape</div>
+      <div class="f"><label>Automation Tools in Use (select all)</label>
+        <div class="pill-group mt12" id="auto-tools-pills"></div>
+      </div>
+      <div class="f mt12"><label>Other Automation Tools</label><input type="text" value="Make.com confirmed (HubSpot → Monday.com integration built by Christina)"></div>
+      <div class="f"><label>Email / Productivity Platform</label>
+        <div class="pill-group mt12" id="email-platform-pills"></div>
+      </div>
+      <div class="f mt12"><label>Existing Automations in Place</label><textarea>Make.com automations propagating Monday.com boards with data from HubSpot CRM — built by Christina Zimmer. WooCommerce e-commerce infrastructure (resawntimberco.com). No email automation or AI-triggered workflows confirmed yet.</textarea></div>
+      <div class="f"><label>Integration Pain Points</label><textarea>Email chains are NOT connected to Monday boards — all project back-and-forth lives in email. HubSpot, Monday, and Make.com are connected but email communication during project cycles falls outside this loop. Google Sheets are used heavily but are siloed from other systems.</textarea></div>
+    </div>
+    <div class="card">
+      <div class="ct">💰 Budget & Timeline</div>
+      <div class="f"><label>Budget Range</label>
+        <select id="ai_budget"><option value="">Select...</option><option>Under $500/mo</option><option>$500–$1,500/mo</option><option>$1,500–$3,000/mo</option><option>$3,000–$5,000/mo</option><option>$5,000+/mo</option><option>Project-based / One-time</option><option selected>Not disclosed</option></select>
+      </div>
+      <div class="f"><label>Decision Timeline</label>
+        <select id="ai_timeline"><option value="">Select...</option><option>Immediate (within 30 days)</option><option>Short-term (1–3 months)</option><option>Mid-term (3–6 months)</option><option selected>Exploring / No rush</option></select>
+      </div>
+      <div class="f"><label>Who Approves the Budget?</label><input type="text" value="CEO — name unknown. Christina & David are evaluators reporting back to the CEO. Budget authority not confirmed at the champion level."></div>
+      <div class="f"><label>Competing Vendors Being Evaluated?</label><textarea>Unknown — David said they're "casting a wide net" but named zero vendors. Competitive landscape entirely unassessed. Must qualify in next call.</textarea></div>
+      <div class="f"><label>Expected ROI / Success Metric</label><textarea>Not formally defined. Implied metrics from the call: reduction in email chain volume, faster quoting cycle (fewer back-and-forth rounds), time savings on onboarding/training, and demonstrable progress on the CEO's AI mandate.</textarea></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 4. TECH STACK ══════════ -->
+<section class="sec" id="s-techstack">
+  <div class="sh"><div class="sh-title">Technology Stack & Integration Landscape</div><div class="sh-desc">Map all platforms, tools, and systems — critical for scoping integrations. Pre-populated with known reSAWN tech info.</div></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">🛒 Core Business Platform</div>
+      <div class="f"><label>Primary Business / Operations Platform</label><input type="text" placeholder="" value="WooCommerce / WordPress (e-commerce) + Monday.com (project management) + HubSpot (CRM)"></div>
+      <div class="f"><label>Customer-Facing Platform / Website</label><input type="text" value="resawntimberco.com (WordPress / WooCommerce)"></div>
+      <div class="f"><label>Customer Login / Account System</label><input type="text" value="WooCommerce My Account"></div>
+      <div class="f"><label>Payment Processing</label><input type="text" value="Confirm — likely Stripe or WooCommerce Payments"></div>
+      <div class="f"><label>Scheduling / Booking Tool</label><input type="text" value="connect.resawntimberco.com (CEU scheduling) — confirm system"></div>
+    </div>
+    <div class="card">
+      <div class="ct">💼 Business Operations</div>
+      <div class="f"><label>CRM / Sales Tool</label><input type="text" value="HubSpot (✅ CONFIRMED — primary CRM)"></div>
+      <div class="f"><label>Accounting Software</label><input type="text" placeholder="QuickBooks? Xero? Ask during call"></div>
+      <div class="f"><label>Project / Job Management</label><input type="text" value="Monday.com (✅ CONFIRMED — connected to HubSpot via Make.com)"></div>
+      <div class="f"><label>Estimating / Quoting Tool</label><input type="text" value="Google Sheets (primary) — heavy use confirmed. Custom quotes require manual multi-department coordination."></div>
+      <div class="f"><label>HR / Team Management</label><input type="text" placeholder="Gusto? Rippling? Ask — 50+ employee company"></div>
+    </div>
+  </div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">🎨 Industry-Specific Tools</div>
+      <div class="f"><label>Product Catalog / Specification Tool</label><input type="text" value="Not confirmed in call — SketchUp noted in pre-call research (ZoomInfo). Confirm whether Revit plugin or product spec tools are in use by the A+D team."></div>
+      <div class="f"><label>Digital Asset Management</label><input type="text" value="Not confirmed — product photos, spec sheets, cut sheets location unknown. Likely Google Drive. Ask in next call."></div>
+      <div class="f"><label>Industry-Specific Software #3</label><input type="text" value="CEU management system — connect.resawntimberco.com exists for scheduling. Underlying platform (Calendly? HubSpot Meetings? Custom?) not confirmed."></div>
+      <div class="f"><label>File / Asset Management</label><input type="text" value="Google Drive likely (Google Workspace confirmed in use). SharePoint unknown — Microsoft tools confirmed but Copilot not licensed. Confirm in next call."></div>
+      <div class="f"><label>Collaboration Tools</label><input type="text" value="Both Microsoft and Google confirmed in use. Specific tools (Teams vs Meet, Outlook vs Gmail) not identified. No Slack or Teams explicitly mentioned during call."></div>
+    </div>
+    <div class="card">
+      <div class="ct">📣 Marketing & Customer Comms</div>
+      <div class="f"><label>Email Marketing Platform</label><input type="text" value="HubSpot (✅ CONFIRMED — used for blog/content distribution to A+D audience)"></div>
+      <div class="f"><label>Social Media Management</label><input type="text" value="LinkedIn, Instagram active — posts are highly technical/architect-focused, written manually (per David Hughes)"></div>
+      <div class="f"><label>Customer Support Channels</label>
+        <div class="pill-group mt12" id="support-ch-pills"></div>
+      </div>
+      <div class="f mt12"><label>Analytics / Reporting</label><input type="text" value="Google Analytics (pre-call research confirmed on website). HubSpot likely has CRM reporting. Monday.com has board analytics. No dedicated BI/reporting tool mentioned."></div>
+      <div class="f"><label>Review / Reputation Management</label><input type="text" value="Houzz profile (pre-call research). Google Business Profile, Archello, ArchDaily likely. No formal reputation management tool mentioned during call."></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">🔗 Integration Architecture</div>
+    <div class="g2">
+      <div>
+        <div class="f"><label>How Do Systems Currently Connect?</label><textarea>HubSpot CRM → Make.com → Monday.com (✅ CONFIRMED — Christina built this automation, propagating Monday boards with HubSpot data). ChatGPT is separate from all automated workflows — no integration. Google Sheets are siloed. Email communication is NOT integrated with Monday or HubSpot.</textarea></div>
+        <div class="f"><label>Systems That Need to Connect (Wish List)</label><textarea>1. Email chains → Monday.com boards (biggest stated desire — Christina: "that would free up a lot of time chunks"). 2. Quoting/estimating spreadsheets → AI-generated PDF output. 3. Internal knowledge base / SharePoint-equivalent → AI agent for employee Q&A. 4. Potentially ClickUp as an email-to-project bridge (Jessica mentioned ClickUp's Outlook email-add integration feature).</textarea></div>
+      </div>
+      <div>
+        <div class="f"><label>APIs or Webhooks Currently Exposed?</label><textarea>Make.com is actively used (Christina built HubSpot→Monday automation) — Make.com supports REST API connections. HubSpot has a robust API. Monday.com has API/webhook support. WooCommerce has a REST API. Whether they're using these APIs beyond Make.com's native connectors is unknown — confirm in technical scoping call.</textarea></div>
+        <div class="f"><label>Tech Stack Maturity</label>
+          <div class="rrow" style="border:0;padding:0;margin-top:4px"><span class="rlbl">Overall modernity of stack</span><div class="stars" id="r-stack"><div class="star" onclick="sr('r-stack',1)">1</div><div class="star" onclick="sr('r-stack',2)">2</div><div class="star" onclick="sr('r-stack',3)">3</div><div class="star" onclick="sr('r-stack',4)">4</div><div class="star" onclick="sr('r-stack',5)">5</div></div></div>
+          <div class="sbar"><div class="sfill" id="r-stack-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5. PLATFORM DEMO ══════════ -->
+<section class="sec" id="s-platform">
+  <div class="sh"><div class="sh-title">Platform Demo</div><div class="sh-desc">Showcase your platform — capture reactions and relevance ratings in real time.</div></div>
+  <div style="background:var(--rainbow);border-radius:12px;padding:3px;margin-bottom:20px">
+    <div style="background:var(--white);border-radius:10px;padding:22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+      <div style="width:54px;height:54px;background:var(--accent1);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:#fff">reSAWN</span>
+        <span style="font-family:'DM Sans',sans-serif;font-weight:300;font-size:6px;color:rgba(255,255,255,.6);letter-spacing:.12em">TIMBER co.</span>
+      </div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--t1);margin-bottom:2px" id="platformName">Your AI Platform</div>
+        <div style="font-size:12px;color:var(--t3)">Demo mode — showcase capabilities & capture Christina's reactions in real time.</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
+        <div class="f" style="margin:0;min-width:160px"><input type="text" id="platformNameInput" placeholder="Platform name..." oninput="document.getElementById('platformName').textContent=this.value||'Your AI Platform'"></div>
+        <div class="f" style="margin:0;min-width:160px"><select id="rh_overall_fit"><option value="">Overall Fit...</option><option>⭐⭐⭐⭐⭐ Perfect Fit</option><option>⭐⭐⭐⭐ Great Fit</option><option>⭐⭐⭐ Good Fit</option><option>⭐⭐ Weak Fit</option><option>⭐ Poor Fit</option></select></div>
+        <div class="f" style="margin:0;min-width:140px"><select id="demo_mode"><option>Showing Live Demo</option><option>Screen Share</option><option>Slide Deck</option><option>Walkthrough Only</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="g3 mb20" id="platform-features-grid"></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">💵 Pricing & Packages</div>
+      <div class="f"><label>Pricing Model</label>
+        <select><option value="">Select...</option><option>Per seat / user</option><option>Usage-based</option><option>Flat monthly</option><option>Tiered packages</option><option>Custom / Enterprise</option></select>
+      </div>
+      <div class="f"><label>Recommended Package for reSAWN</label><input type="text" placeholder="Tier / package name"></div>
+      <div class="f"><label>Monthly Investment</label><input type="text" placeholder="Pricing for recommended package"></div>
+      <div class="f"><label>Contract Terms</label><input type="text" placeholder="Monthly / annual / multi-year?"></div>
+      <div class="f"><label>Setup / Onboarding Fee</label><input type="text" placeholder="One-time costs?"></div>
+      <div class="f"><label>Implementation Timeline</label><input type="text" placeholder="How long to go live?"></div>
+    </div>
+    <div class="card">
+      <div class="ct">📝 Demo Session Notes</div>
+      <div class="f"><label>Christina's Reactions During Demo</label><textarea rows="3">No live demo was conducted in this session — this was a discovery call only. Christina was very receptive to all concepts described. Most enthusiastic response: SOP creator + HTML clickable demo concept ("Oh amazing. Yeah. That's awesome."). Email-to-Monday integration also got strong positive response ("Yeah, that would be great.").</textarea></div>
+      <div class="f"><label>Features She Responded Best To</label><textarea>1. SOP creator + interactive HTML clickable demo — immediate enthusiasm from Christina. 2. Email chains integrated into Monday boards — Christina: "that would be so helpful." 3. AI quoting/estimating (spreadsheet → AI → PDF) — David confirmed the pain; both responded well to the concept.</textarea></div>
+      <div class="f"><label>Objections Raised</label><textarea>No hard objections. One clear soft constraint: social media/content AI is NOT a fit — David was explicit: posts are too technical and architect-specific for generic AI. Do not pitch content generation as a lead capability.</textarea></div>
+      <div class="f"><label>Post-Demo Sentiment</label>
+        <select><option value="">Select...</option><option>🟢 Ready to move forward</option><option selected>🟡 Interested — needs internal discussion</option><option>🟠 Needs more info / another demo</option><option>🔴 Not convinced yet</option></select>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">⚙️ Manage Demo Capabilities</div>
+    <div class="info-box">💡 Add the specific features/capabilities of your platform below. These appear as demo cards above.</div>
+    <div id="feat-builder"></div>
+    <button class="btn btn-g mt12" onclick="addFeature()" style="width:100%">+ Add Capability</button>
+  </div>
+</section>
+
+<!-- ══════════ 6. AI OPPORTUNITIES ══════════ -->
+<section class="sec" id="s-opps">
+  <div class="sh"><div class="sh-title">AI Opportunities</div><div class="sh-desc">9 opportunities across 3 categories — organized by timeline. Quick Win = 30 days, Medium = 1–3 months, Long = 3–6+ months.</div></div>
+
+  <!-- Category legend -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;padding:8px 14px;box-shadow:var(--sh)">
+      <span style="font-size:16px">📋</span><div><div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--t1)">Project Management</div><div style="font-size:10px;color:var(--t3)">4 opportunities</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;padding:8px 14px;box-shadow:var(--sh)">
+      <span style="font-size:16px">🧠</span><div><div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--t1)">Internal Knowledge & Training</div><div style="font-size:10px;color:var(--t3)">4 opportunities</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;padding:8px 14px;box-shadow:var(--sh)">
+      <span style="font-size:16px">🔴</span><div><div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--t1)">Platform & Infrastructure — RedHatz</div><div style="font-size:10px;color:var(--t3)">1 opportunity</div></div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+      <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t3)">Timeline:</span>
+      <span style="padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;background:rgba(45,106,63,.12);color:#1E5C2A">⚡ Quick Win</span>
+      <span style="padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;background:rgba(176,125,42,.1);color:#7A5A10">🔄 Medium</span>
+      <span style="padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;background:rgba(90,100,117,.1);color:#3D4A5C">🏗 Long</span>
+    </div>
+  </div>
+
+  <div id="opps-list"></div>
+
+  <!-- Add custom -->
+  <div class="card mt12 mb20">
+    <div class="ct">➕ Add Custom Opportunity</div>
+    <div class="g2">
+      <div class="f"><label>Title</label><input type="text" id="new_opp_title" placeholder="Opportunity name"></div>
+      <div class="g2 gap14">
+        <div class="f"><label>Icon</label><input type="text" id="new_opp_ico" placeholder="💡" style="width:70px"></div>
+        <div class="f"><label>Category</label>
+          <select id="new_opp_cat">
+            <option value="pm">📋 Project Management</option>
+            <option value="kb">🧠 Internal Knowledge & Training</option>
+            <option value="rh">🔴 Platform & Infrastructure — RedHatz</option>
+            <option value="other">📌 Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="f"><label>Description</label><textarea id="new_opp_desc" rows="2" placeholder="Describe the AI use case and its business value..."></textarea></div>
+    <button class="btn btn-p" onclick="addOpp()" style="margin-top:8px">+ Add Opportunity</button>
+  </div>
+
+  <div class="card">
+    <div class="ct">💡 Additional Notes on Opportunities</div>
+    <textarea rows="4">KEY CONSTRAINT FROM CALL: Do NOT lead with social media / content generation AI. David Hughes explicitly flagged this as a poor fit: posts require "a million disclaimers and technical jargon custom to that specific piece of wood" — "it's like a copywriter that has to do it every time."
+
+LEAD WITH: Email integration → quoting automation → knowledge base. These three were explicitly confirmed as the top-priority use cases by both Christina and David.
+
+DECISION CONTEXT: These opportunities will be written up by Jessica Peaden in the 03/31 follow-up email. Christina and David will review and present findings to the CEO. Frame each opportunity in terms of CEO-level efficiency mandate fulfillment, not just tactical convenience.</textarea>
+    <div class="f mt12"><label>Biggest Single AI Quick Win for reSAWN</label><input type="text" value="Email & Communication Automation — immediately visible, directly addresses the #1 stated pain, builds on existing Monday + Make.com infrastructure. Christina: 'that would free up a lot of time chunks.'"></div>
+  </div>
+</section>
+
+<!-- ══════════ 7. USE CASES & QS ══════════ -->
+<section class="sec" id="s-usecases">
+  <div class="sh"><div class="sh-title">Use Cases, Questions & Session Log</div><div class="sh-desc">Capture everything raised during the session. This becomes your proposal intelligence and follow-up tracker.</div></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">➕ Add Entry</div>
+      <div class="f"><label>Type</label>
+        <select id="uc_type"><option value="usecase">💼 Use Case</option><option value="question">❓ Question Asked</option><option value="objection">⚠️ Objection / Concern</option><option value="insight">💡 Key Insight</option></select>
+      </div>
+      <div class="f"><label>Entry</label><textarea id="uc_text" rows="3" placeholder="Describe the use case, question, objection, or insight from the conversation..."></textarea></div>
+      <div class="f"><label>Your Response / Notes</label><textarea id="uc_resp" rows="2" placeholder="How did you respond? What needs follow-up?"></textarea></div>
+      <div class="f"><label>Follow-Up Required?</label>
+        <select id="uc_fu"><option value="none">No follow-up needed</option><option value="yes">Yes — needs follow-up</option><option value="prop">Include in proposal</option></select>
+      </div>
+      <button class="btn btn-p" onclick="addUC()" style="width:100%;margin-top:8px">+ Add to Log</button>
+    </div>
+    <div class="card">
+      <div class="ct">📊 Session Counts</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="stat" style="text-align:left;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:var(--t3);text-transform:uppercase;font-weight:700">Use Cases</span><span class="v" id="uc-cnt-uc" style="font-size:18px">0</span></div></div>
+        <div class="stat" style="text-align:left;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:var(--t3);text-transform:uppercase;font-weight:700">Questions</span><span class="v" id="uc-cnt-q" style="font-size:18px">0</span></div></div>
+        <div class="stat" style="text-align:left;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:var(--t3);text-transform:uppercase;font-weight:700">Objections</span><span class="v" id="uc-cnt-o" style="font-size:18px">0</span></div></div>
+        <div class="stat" style="text-align:left;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:var(--t3);text-transform:uppercase;font-weight:700">Follow-Ups Needed</span><span class="v" id="uc-cnt-f" style="font-size:18px">0</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">📋 Session Log</div>
+    <div id="uc-log"><div style="text-align:center;padding:32px;color:var(--t4);font-size:13px">Add your first entry using the form above ↑</div></div>
+  </div>
+</section>
+
+<!-- ══════════ 8. GOVERNANCE ══════════ -->
+<section class="sec" id="s-governance">
+  <div class="sh"><div class="sh-title">Governance, Risks & Guardrails</div><div class="sh-desc">Identify risks, compliance needs, and guardrails for responsible AI deployment at reSAWN TIMBER co.</div></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">⚠️ Risk Register</div>
+      <div id="risk-list">
+        <div class="gov-risk">
+          <div class="risk-badge high">🔴 High Risk</div>
+          <div class="f"><label>Risk Area</label><input type="text" value="CEO approval dependency — unnamed decision maker"></div>
+          <div class="f"><label>Specific Concern</label><textarea>Christina and David are champions and evaluators, NOT final decision makers. The CEO issued the AI mandate but was not on the call and has not been introduced. All vendor decisions will require his approval. He is currently unidentified by name.</textarea></div>
+          <div class="f"><label>Proposed Mitigation</label><textarea>Request CEO introduction from Christina in the 03/31 follow-up email. Ask if he can attend the next call or receive a summary deck. Tailor the opportunity email to give Christina and David talking points to brief him.</textarea></div>
+        </div>
+        <div class="gov-risk">
+          <div class="risk-badge high">🔴 High Risk</div>
+          <div class="f"><label>Risk Area</label><input type="text" value="Budget completely undisclosed — constraint level unknown"></div>
+          <div class="f"><label>Specific Concern</label><textarea>No budget discussion occurred during the call. Christina and David may not have full visibility into what the CEO has allocated. Without a budget anchor, proposal could miss high or low — wasting cycles.</textarea></div>
+          <div class="f"><label>Proposed Mitigation</label><textarea>Include a soft budget qualification in the follow-up email. Frame it as "to tailor the right solution tier for you" rather than a hard price conversation. Get a range before building a formal proposal.</textarea></div>
+        </div>
+        <div class="gov-risk">
+          <div class="risk-badge med">🟡 Medium Risk</div>
+          <div class="f"><label>Risk Area</label><input type="text" value="Competing vendors — landscape completely unknown"></div>
+          <div class="f"><label>Specific Concern</label><textarea>David said they're "casting a wide net" but named zero competing vendors. Could be early enough that Plus One is first-mover, or there could be multiple vendors already in play. No competitive intel captured.</textarea></div>
+          <div class="f"><label>Proposed Mitigation</label><textarea>Ask in follow-up email or next call: "Are you evaluating other platforms alongside us?" Understand the timeline pressure — if CEO needs a decision fast, being first with a strong proposal matters enormously.</textarea></div>
+        </div>
+        <div class="gov-risk">
+          <div class="risk-badge med">🟡 Medium Risk</div>
+          <div class="f"><label>Risk Area</label><input type="text" value="Monday.com board structure complexity — email integration not straightforward"></div>
+          <div class="f"><label>Specific Concern</label><textarea>Monday boards are organized by process/sample type (not by project or client), making email-to-board integration architecturally more complex than a simple "one board" setup. Christina acknowledged this: "we would have to build out a board that makes sense for it."</textarea></div>
+          <div class="f"><label>Proposed Mitigation</label><textarea>Research Monday.com's native email integration capabilities before the next call. If native support is limited, scope a Make.com-based email capture workflow using their existing automation infrastructure.</textarea></div>
+        </div>
+        <div class="gov-risk">
+          <div class="risk-badge low">🟢 Low Risk</div>
+          <div class="f"><label>Risk Area</label><input type="text" value="Social media AI fit — explicitly flagged as poor use case"></div>
+          <div class="f"><label>Specific Concern</label><textarea>David clearly stated social media content is too technical and architect-specific for generic AI automation. Leading with content generation AI would damage credibility and misalign with their stated needs.</textarea></div>
+          <div class="f"><label>Proposed Mitigation</label><textarea>Do NOT lead with social/content AI in any deliverable. Focus on workflow, integration, and knowledge base use cases that were explicitly validated. Social content may become relevant in a future phase after core workflows are automated.</textarea></div>
+        </div>
+      </div>
+      <button class="btn btn-g mt12" onclick="addRisk()" style="width:100%">+ Add Risk</button>
+    </div>
+    <div class="card">
+      <div class="ct">🛡 Compliance & Legal</div>
+      <div class="f"><label>Compliance Requirements (select all)</label>
+        <div class="pill-group mt12" id="gov-compliance-pills"></div>
+      </div>
+      <div class="f mt12"><label>Customer Data Sensitivity</label>
+        <select><option value="">Select...</option><option>Public — no sensitive data</option><option selected>Low — basic contact info</option><option>Medium — payment / order history</option><option>High — regulated / sensitive PII</option></select>
+      </div>
+      <div class="f"><label>FSC® Certification Data Requirements</label><textarea placeholder="Any compliance requirements around how FSC® certification claims are communicated via AI?"></textarea></div>
+      <div class="f"><label>Data Retention Requirements</label><textarea placeholder="How long must project/customer data be kept?"></textarea></div>
+      <div class="f"><label>Who Owns Data Governance?</label><input type="text" placeholder="Christina? IT? Owner?"></div>
+      <div class="f"><label>Existing AI Use Policy?</label>
+        <select><option value="">Select...</option><option>Yes — formal policy exists</option><option>Informal / ad-hoc</option><option>No — needs to be created</option></select>
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">🔐 AI Guardrails & Boundaries</div>
+      <div class="f"><label>What AI Should NEVER Do</label><textarea rows="3">Never generate custom quotes with pricing without human estimating team review. Never send client-facing communications without approval. Never replace the architect/designer relationship touchpoints that are currently handled personally by the sales team.</textarea></div>
+      <div class="f"><label>Human-in-the-Loop Requirements</label><textarea>All custom quote outputs require estimating team review before sending to clients. Any AI-generated content going to architects or builders must be reviewed by the sales rep. Internal knowledge base answers for complex process questions should flag "verify with [team]" when confidence is low.</textarea></div>
+      <div class="f"><label>Brand Voice & Content Standards</label><textarea>reSAWN content is highly technical, architecture-audience-focused, and deeply product-specific. David explicitly confirmed social media posts require "a million disclaimers and technical jargon custom to that specific piece of wood." AI must never produce generic or vague wood product descriptions.</textarea></div>
+      <div class="f"><label>Staff Training Required</label><textarea>Christina and David (IT team) are technically capable — Christina built Make.com automations. However, broader team training needed for: Red Hats AI interface, email-to-Monday workflow, and internal knowledge base usage. Scale TBD once team size per department is confirmed.</textarea></div>
+      <div class="f"><label>Rollback / Opt-Out Plan</label><textarea>If email-to-Monday integration creates noise or disrupts existing board workflows, roll back to manual capture and re-scope the board structure. Maintain email as the primary record until confidence in the integration is high.</textarea></div>
+    </div>
+    <div class="card">
+      <div class="ct">📏 SLAs & Success Criteria</div>
+      <div class="f"><label>Minimum Acceptable AI Accuracy (spec info)</label><input type="text" value="Not yet defined — establish in next call. Quote outputs must match estimating team's pricing; knowledge base answers must match documented SOPs."></div>
+      <div class="f"><label>Response Time Requirements</label><input type="text" value="Not captured — follow up. Internal knowledge base should respond instantly. Email capture into Monday should be near-real-time or same-day."></div>
+      <div class="f"><label>Sample Follow-Up Timeline</label><input type="text" value="Not discussed in this session — carry forward to next call"></div>
+      <div class="f"><label>Escalation Process (AI → Human)</label><textarea>For quoting: AI generates draft → estimating team reviews → sales rep approves before sending to client. For knowledge base: if AI confidence is low or question is process-sensitive, flag for human response. For email-in-Monday: if email is from a new/unknown contact, flag for manual review before auto-filing.</textarea></div>
+      <div class="f"><label>Reporting Cadence</label>
+        <select><option value="">Select...</option><option>Weekly</option><option selected>Monthly</option><option>Quarterly</option><option>Ad-hoc</option></select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 9. STAKEHOLDERS ══════════ -->
+<section class="sec" id="s-stakeholders">
+  <div class="sh"><div class="sh-title">Stakeholders, Authority & Credentials</div><div class="sh-desc">Map everyone involved in the AI decision at reSAWN TIMBER co.</div></div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">👥 Stakeholder Map</div>
+      <div id="sth-list">
+        <div class="sth-card">
+          <div class="sth-role">Primary Contact / Champion</div>
+          <div class="g2 gap14"><div class="f"><label>Name</label><input type="text" value="Christina Zimmer"></div><div class="f"><label>Title</label><input type="text" value="IT Team — reSAWN TIMBER co."></div></div>
+          <div class="g2 gap14"><div class="f"><label>Email</label><input type="email" value="czimmer@resawntimberco.com"></div><div class="f"><label>Phone</label><input type="tel" placeholder="Ask during next call"></div></div>
+          <div class="f"><label>Involvement Level</label><select><option value="">Select...</option><option selected>Champion</option><option>Approver</option><option>Informed only</option><option>Blocker</option></select></div>
+          <div class="f"><label>Notes</label><textarea>IT team member tasked by CEO to explore AI solutions. Has already built Make.com automations connecting HubSpot → Monday — technically capable and hands-on. Receptive and enthusiastic during the call. Responded very positively to the SOP creator / clickable HTML demo concept and email-to-Monday integration idea. "These are great ideas." Needs to report back to CEO with findings.</textarea></div>
+        </div>
+        <div class="sth-card">
+          <div class="sth-role">Co-Champion / IT Team</div>
+          <div class="g2 gap14"><div class="f"><label>Name</label><input type="text" value="David Hughes"></div><div class="f"><label>Title</label><input type="text" value="IT Team — reSAWN TIMBER co."></div></div>
+          <div class="g2 gap14"><div class="f"><label>Email</label><input type="email" placeholder="Ask in next communication"></div><div class="f"><label>Phone</label><input type="tel" placeholder="Ask in next communication"></div></div>
+          <div class="f"><label>Involvement Level</label><select><option value="">Select...</option><option selected>Champion</option><option>Approver</option><option>Informed only</option><option>Blocker</option></select></div>
+          <div class="f"><label>Notes</label><textarea>Also on the IT team, has been at reSAWN longer than Christina — broader institutional knowledge of processes. Described the Google Sheets dependency and complex quoting cycle in detail. Noted social content AI is a poor fit due to highly technical, architect-focused posts. Positive energy — "I'm looking forward to being able to see it all and evaluate it." Key co-champion alongside Christina for internal buy-in.</textarea></div>
+        </div>
+        <div class="sth-card">
+          <div class="sth-role">Executive / Budget Owner (CEO — Mandate Originator)</div>
+          <div class="g2 gap14"><div class="f"><label>Name</label><input type="text" placeholder="Not identified — ask Christina/David for name"></div><div class="f"><label>Title</label><input type="text" value="CEO — reSAWN TIMBER co."></div></div>
+          <div class="g2 gap14"><div class="f"><label>Email</label><input type="email" placeholder="TBD"></div><div class="f"><label>Phone</label><input type="tel" placeholder="TBD"></div></div>
+          <div class="f"><label>Involvement Level</label><select><option value="">Select...</option><option>Champion</option><option selected>Approver</option><option>Informed only</option><option>Blocker</option></select></div>
+          <div class="f"><label>Notes</label><textarea>The CEO issued the company-wide AI mandate that triggered this entire initiative. Christina and David are executing on his directive. Critical to understand: the CEO's definition of AI success, his budget authority, and whether he'll want to be involved in vendor evaluation. Getting a meeting with or a presentation to the CEO could accelerate the deal significantly. Ask Christina to identify the CEO by name and explore if he can be looped in.</textarea></div>
+        </div>
+      </div>
+      <button class="btn btn-g mt12" onclick="addSth()" style="width:100%">+ Add Stakeholder</button>
+    </div>
+    <div>
+      <div class="card mb20">
+        <div class="ct">📅 Next Discovery Call</div>
+        <div class="f"><label>Date & Time</label><input type="text" value="TBD — Jessica to send follow-up email by morning of 03/31/2026 first"></div>
+        <div class="f"><label>Agenda / Focus</label><textarea>Review AI opportunities outline compiled by Jessica. Demo the interactive HTML document. Discuss email-to-Monday integration options, AI quoting assistant concept, and internal knowledge base implementation path.</textarea></div>
+        <div class="f"><label>Must-Have Attendees (reSAWN)</label><textarea>Christina Zimmer + David Hughes. Ideally loop in CEO — ask Christina to facilitate introduction.</textarea></div>
+        <div class="f"><label>Must-Have Attendees (Your Team)</label><textarea>Jessica Peaden (AI Implementation Engineer, Plus One Technology)</textarea></div>
+        <div class="f"><label>Pre-Call Prep Needed</label><textarea>1. Compile full AI opportunities outline email (committed to by EOD 03/31). 2. Build interactive HTML demo document to include in email. 3. Research Monday.com email integration options (API or native). 4. Prepare AI quoting/estimating workflow concept (spreadsheet → AI prompt → PDF). 5. Prepare internal knowledge base options (Claude + stored docs vs. Copilot + SharePoint).</textarea></div>
+      </div>
+      <div class="card">
+        <div class="ct">🏆 Decision Process</div>
+        <div class="f"><label>Vendor Approval Process</label><textarea>CEO-directed initiative — Christina and David are evaluating and will present findings back to the CEO. Approval process not yet confirmed. Family-owned company — ask about formal vendor approval steps in follow-up.</textarea></div>
+        <div class="f"><label># of Vendors Being Evaluated</label><input type="text" value="Unknown — "casting a wide net" per David Hughes. Competitive landscape not yet assessed."></div>
+        <div class="f"><label>Decision Criteria</label><textarea>Fit with existing stack (HubSpot, Monday, Make.com). Ability to address email chain problem. Quoting/estimating AI utility. Internal knowledge base capability. Ease of adoption. ROI / efficiency gains to present to CEO.</textarea></div>
+        <div class="f"><label>Biggest Internal Obstacle</label><textarea>CEO must ultimately approve. Christina and David are champions but are executing on a mandate — they need strong materials to bring back to leadership. Company currently has no formal AI policy or governance structure.</textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">🔑 Credentials & Access Needed</div>
+      <div class="info-box">📌 Every credential needed for implementation. Assign owner and check off when received.</div>
+      <div id="cred-list"></div>
+      <button class="btn btn-g mt12" onclick="addCred()" style="width:100%">+ Add Credential</button>
+    </div>
+    <div class="card">
+      <div class="ct">❓ Open Questions & Follow-Ups</div>
+      <div id="q-log"></div>
+      <button class="btn btn-g mt12" onclick="addQ()" style="width:100%">+ Add Question</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 10. NEXT STEPS ══════════ -->
+<section class="sec" id="s-nextsteps">
+  <div class="sh"><div class="sh-title">Next Steps, Action Items & Client Handoff</div><div class="sh-desc">From discovery to implementation — track everything and prepare client handoff documentation for reSAWN TIMBER co.</div></div>
+  <div class="stats mb20">
+    <div class="stat"><div class="v" id="st-comp">—</div><div class="l">Doc Completion</div></div>
+    <div class="stat"><div class="v" id="st-opps">—</div><div class="l">Opps Identified</div></div>
+    <div class="stat"><div class="v" id="st-actions">—</div><div class="l">Open Actions</div></div>
+    <div class="stat"><div class="v" id="st-fit">—</div><div class="l">Platform Fit</div></div>
+    <div class="stat"><div class="v" id="st-stage">—</div><div class="l">Deal Stage</div></div>
+  </div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">🏁 Session Outcome</div>
+      <div class="f"><label>Overall Outcome</label>
+        <select id="ns_outcome"><option value="">Select...</option><option>🟢 Strong Interest — Move to Proposal</option><option selected>🟡 Moderate — Schedule Follow-up</option><option>🟠 Needs More Info</option><option>🔴 Not Ready — Nurture</option><option>❌ Not a Fit</option></select>
+      </div>
+      <div class="f"><label>Deal Stage</label>
+        <select id="ns_stage"><option value="">Select...</option><option>New Lead</option><option>Discovery</option><option selected>Qualified</option><option>Demo Complete</option><option>Proposal Sent</option><option>Negotiation</option><option>Closed Won</option><option>Closed Lost</option><option>Nurture</option></select>
+      </div>
+      <div class="f"><label>Estimated Opportunity Value</label><input type="text" value="TBD — budget not discussed. Company size (51–100 employees, $5M–$10M rev) suggests meaningful budget potential."></div>
+      <div class="f"><label>Close Probability (%)</label><input type="text" value="~45% — strong pain points, CEO mandate, and enthusiastic champions. Competing vendors unknown. CEO approval required."></div>
+      <div class="f"><label>Proposed Solution</label><textarea>Three-pillar AI solution: (1) Email-to-Monday integration for project communication tracking. (2) AI-assisted quoting/estimating — spreadsheet-to-PDF workflow with smart prompts. (3) Internal AI knowledge base for employee training, onboarding, and Q&A. Plus: Red Hats AI interface (ChatGPT + Claude unified, no memory) as a quick foundational win.</textarea></div>
+      <div class="f"><label>Top 3 Win Themes</label><textarea>1. Direct CEO mandate alignment — this is a board-level priority, not just a departmental experiment. 2. Stack-native integration — build on HubSpot + Monday + Make.com they already use and trust. 3. Immediate ROI on highest-pain problem (email chains) — visible, measurable time savings from day one.</textarea></div>
+    </div>
+    <div class="card">
+      <div class="ct">📋 Key Takeaways</div>
+      <div class="f"><label>Top 3 Discovery Insights</label><textarea rows="3">1. CEO mandate is the engine — this is top-down, giving Christina & David internal political cover to move fast. 2. Email chains are the #1 pain — getting email into Monday is the clearest, most immediate win they articulated. 3. The quoting cycle is a hidden goldmine — 12–24 month sales cycles with multi-department custom quoting loops is a massive AI automation opportunity.</textarea></div>
+      <div class="f"><label>Christina's Biggest Pain (in her words)</label><textarea>"The email chains are probably like the biggest repetitive task where we have some templates that they'll take and we email each other back and forth with it." (Christina Zimmer, 03/30/2026)</textarea></div>
+      <div class="f"><label>Primary Objection to Overcome</label><textarea>No objections raised in this session — both David and Christina were receptive. Main friction will likely be at the CEO approval level (budget, ROI proof) and the need to demonstrate integrations with their existing HubSpot/Monday/Make.com stack. David flagged social media AI as a poor fit — avoid leading with that.</textarea></div>
+      <div class="f"><label>Internal Notes (not for client)</label><textarea>Strong discovery call. Christina is technically capable (built Make.com automations) and will evaluate solutions critically — speak to integration quality, not just AI buzzwords. David is the process historian — he knows where the bodies are buried. The unnamed CEO is the real decision-maker; getting an introduction or a deck for him to review is a key next step. No budget discussion yet — needs to happen in follow-up. Competitive landscape completely unknown. Email committed to by Jessica by 03/31 morning — MUST deliver on time.</textarea></div>
+    </div>
+  </div>
+  <div class="card mb20">
+    <div class="ct">✅ Action Items</div>
+    <div id="action-list"></div>
+    <button class="btn btn-g mt12" onclick="addAction()" style="width:100%">+ Add Action Item</button>
+  </div>
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">📄 Client Handoff Documentation</div>
+      <div class="f"><label>Handoff Doc Status</label>
+        <select><option value="">Select...</option><option>Not Started</option><option>In Progress</option><option>Draft Complete</option><option>Reviewed & Approved</option><option>Delivered</option></select>
+      </div>
+      <div class="f"><label>Proposal / SOW Status</label>
+        <select><option value="">Select...</option><option>Not Started</option><option>Drafting</option><option>Sent</option><option>Signed</option></select>
+      </div>
+      <div class="f"><label>Documents to Prepare</label>
+        <div class="pill-group mt12" id="docs-to-prepare-pills"></div>
+      </div>
+      <div class="f mt12"><label>Implementation Plan Notes</label><textarea rows="3" placeholder="WooCommerce integration phase? Spec consultant training? Brand voice AI tuning?"></textarea></div>
+      <div class="f"><label>Training Plan Notes</label><textarea placeholder="Christina's team? Spec consultants? How many users need onboarding?"></textarea></div>
+    </div>
+    <div class="card">
+      <div class="ct">🏷 Tags & CRM</div>
+      <div class="f"><label>Industry Tags</label><input type="text" id="ns_tags" value="Architectural Wood, Building Materials, B2B, A+D Spec, Sustainability, Premium, National, Manufacturing"></div>
+      <div class="f"><label>Competitive Intel</label><textarea placeholder="Other wood product suppliers with AI? Generic marketing agencies? What are they comparing against?"></textarea></div>
+      <div class="f"><label>How They Heard About You</label><input type="text"></div>
+      <div class="f"><label>CRM Record Link</label><input type="url" placeholder="https://..."></div>
+      <div class="f"><label>Proposal Link</label><input type="url" placeholder="https://..."></div>
+      <div class="f"><label>Recording Link</label><input type="url" placeholder="https://..."></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">📝 General Session Notes</div>
+    <textarea rows="8" id="ns_general">Discovery call conducted 03/30/2026 by Jessica Peaden (Plus One Technology) with Christina Zimmer and David Hughes (both IT team, reSAWN TIMBER co.).
+
+KEY CONTEXT: This meeting was driven by a CEO-level mandate to implement AI across the organization. Christina and David are the evaluators — not the final decision makers. The CEO's name was not captured.
+
+TECH STACK CONFIRMED: HubSpot (CRM) + Monday.com (project mgmt) + Make.com (automation) + ChatGPT (company account, siloed) + Google Sheets (heavy use) + WooCommerce/WordPress (e-commerce).
+
+TOP 3 OPPORTUNITIES CONFIRMED IN CALL:
+1. Email-to-Monday integration — Christina explicitly said this would "free up a lot of time chunks." Jessica mentioned ClickUp's native Outlook email integration as a reference model and committed to checking if Monday has an equivalent.
+2. AI quoting/estimating — Read spreadsheet data, generate PDF quote via AI prompt. David confirmed the custom quoting cycle is multi-department, email-heavy, and extremely time-consuming.
+3. Internal AI knowledge base — Christina described wanting a "database kind of for training people, like a knowledge augmented RAG sort of database." Jessica proposed Claude for SOP creation + HTML clickable demos, and Copilot for SharePoint-based agent (noted: they use both Microsoft and Google but don't have Copilot currently — using ChatGPT).
+
+COMMITTED NEXT STEP: Jessica to send email by morning of 03/31/2026 with full AI opportunities outline + interactive HTML document demo. This is a hard commitment — do not miss.
+
+NOTABLE QUOTE — David Hughes: "I think it's going to get the ball rolling... Even just getting people excited about the ideas of cleaning this up, I think is going to be a huge help."</textarea>
+  </div>
+</section>
+
+<!-- ══════════ 11. CALL ANALYSIS ══════════ -->
+<section class="sec" id="s-callanalysis">
+  <div class="sh">
+    <div class="sh-title">Discovery Call Analysis</div>
+    <div class="sh-desc">Structured intelligence extracted from the 03/30/2026 call — Attendees: Jessica Peaden (Plus One Technology), David Hughes, Christina Zimmer. Preserved in client's own language.</div>
+  </div>
+
+  <!-- ── SECTION 1: CONFIRMED UNDERSTANDINGS ── -->
+  <div class="ca-badge dark mb20">
+    <div class="ca-ico">✅</div>
+    <div><div class="ca-title">Section 1 — Confirmed Understandings & Agreements</div><div class="ca-desc">What the client explicitly confirmed — decisions, validations, and "yes, that's how it works" moments</div></div>
+  </div>
+  <div class="g2 mb20">
+    <div>
+      <div class="ca-item"><div class="ca-num">1</div><div class="ca-item-body"><strong>CRM Confirmed:</strong> HubSpot is the primary CRM system.</div></div>
+      <div class="ca-item"><div class="ca-num">2</div><div class="ca-item-body"><strong>Project Management Confirmed:</strong> Monday.com is the project management tool.</div></div>
+      <div class="ca-item"><div class="ca-num">3</div><div class="ca-item-body"><strong>Integration Confirmed:</strong> Monday.com and HubSpot are connected via Make.com.</div></div>
+      <div class="ca-quote">We're essentially propagating Monday boards with data from HubSpot.</div>
+      <div class="ca-item"><div class="ca-num">4</div><div class="ca-item-body"><strong>AI Tool Confirmed:</strong> ChatGPT company account exists but is not connected to any automated workflows.</div></div>
+      <div class="ca-quote">They're not connected, but we do have ChatGPT as like a base account for the company. It's just separate from like the automated flows of HubSpot Monday and Make.com.</div>
+      <div class="ca-item"><div class="ca-num">5</div><div class="ca-item-body"><strong>Mandate Origin Confirmed:</strong> Initiative is CEO-driven with a company-wide scope.</div></div>
+      <div class="ca-quote">One of the initiatives that we've been tasked with this year by the CEO is to implement more AI solutions within the company.</div>
+      <div class="ca-item"><div class="ca-num">6</div><div class="ca-item-body"><strong>Current AI State Confirmed:</strong> No structured or deployed AI program exists company-wide.</div></div>
+      <div class="ca-quote">Everyone's kind of just using AI however they see fit right now, or whatever makes the most sense for them in their department.</div>
+      <div class="ca-item"><div class="ca-num">7</div><div class="ca-item-body"><strong>Evaluation Stage Confirmed:</strong> No pre-decided direction — actively exploring options.</div></div>
+      <div class="ca-quote">We're still kind of trying to figure out what's best for us.</div>
+      <div class="ca-item"><div class="ca-num">8</div><div class="ca-item-body"><strong>Pain #1 Confirmed:</strong> Email chains are the biggest and most repetitive daily task.</div></div>
+      <div class="ca-item"><div class="ca-num">9</div><div class="ca-item-body"><strong>Spreadsheet Dependency Confirmed:</strong> Google Sheets are the core operational platform.</div></div>
+      <div class="ca-quote">90% of our business through [Google Sheets]</div>
+      <div class="ca-item"><div class="ca-num">10</div><div class="ca-item-body"><strong>Quoting Structure Confirmed:</strong> Standard material = simple price sheet. Custom orders = separate estimating team required.</div></div>
+    </div>
+    <div>
+      <div class="ca-item"><div class="ca-num">11</div><div class="ca-item-body"><strong>Sales Cycle Confirmed:</strong> 12 to 24 months long — explicitly stated by David Hughes.</div></div>
+      <div class="ca-item"><div class="ca-num">12</div><div class="ca-item-body"><strong>Sales Model Confirmed:</strong> Dual-track — architects/designers specify, builders purchase. Described as "really strange how it works."</div></div>
+      <div class="ca-item"><div class="ca-num">13</div><div class="ca-item-body"><strong>PM Threshold Confirmed:</strong> Project manager only gets involved above a certain dollar amount.</div></div>
+      <div class="ca-item"><div class="ca-num">14</div><div class="ca-item-body"><strong>Email-Based Quoting Confirmed:</strong> All estimating back-and-forth happens in email — nothing captured in Monday or HubSpot.</div></div>
+      <div class="ca-quote">Right now it's all in emails.</div>
+      <div class="ca-item"><div class="ca-num">15</div><div class="ca-item-body"><strong>Sample Board Structure Confirmed:</strong> Separate Monday boards for hand samples and large format samples, each with group-by-process flow.</div></div>
+      <div class="ca-item"><div class="ca-num">16</div><div class="ca-item-body"><strong>Microsoft vs Google Confirmed:</strong> Both in use, but NO Microsoft Copilot — they use ChatGPT instead.</div></div>
+      <div class="ca-quote">We don't have Copilot here. It's ChatGPT if we're going to be using it.</div>
+      <div class="ca-item"><div class="ca-num">17</div><div class="ca-item-body"><strong>HubSpot for Content Confirmed:</strong> Blog articles are distributed through HubSpot.</div></div>
+      <div class="ca-item"><div class="ca-num">18</div><div class="ca-item-body"><strong>Social Content Nature Confirmed:</strong> Posts are highly technical, architect-focused — NOT short-form. David flagged this as a poor fit for generic AI.</div></div>
+      <div class="ca-quote">It's like a copywriter that has to do it every time.</div>
+      <div class="ca-item"><div class="ca-num">19</div><div class="ca-item-body"><strong>Commitment Confirmed:</strong> Jessica to send AI opportunities outline email to Christina & David by morning of 03/31/2026.</div></div>
+      <div class="ca-item"><div class="ca-num">20</div><div class="ca-item-body"><strong>Demo Deliverable Confirmed:</strong> Follow-up email will include an interactive HTML document demonstration.</div></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: STATED PRIORITIES ── -->
+  <div class="ca-badge green mb20">
+    <div class="ca-ico">🎯</div>
+    <div><div class="ca-title">Section 2 — Client Stated Priorities & Desired Outcomes</div><div class="ca-desc">What the client cares most about — in their own words, not consultant-speak</div></div>
+  </div>
+  <div class="g2 mb20">
+    <div>
+      <div class="ca-item"><div class="ca-num">1</div><div class="ca-item-body">Reduce or eliminate repetitive email chain work — the first and most emphatic priority raised by Christina.</div></div>
+      <div class="ca-item"><div class="ca-num">2</div><div class="ca-item-body">Streamline the quoting and estimating process — reduce the multi-department back-and-forth loop.</div></div>
+      <div class="ca-item"><div class="ca-num">3</div><div class="ca-item-body">Build an internal AI knowledge base for training and onboarding.</div></div>
+      <div class="ca-quote">A database kind of for training people, like a knowledge sort of like augmented RAG sort of database to be able to pull in information... to train new hires with where they just have a quick thing to go and like ask questions.</div>
+      <div class="ca-item"><div class="ca-num">4</div><div class="ca-item-body">Integrate email communication directly into Monday project boards.</div></div>
+      <div class="ca-quote">Being able to track stuff on an email would be so helpful and just have a column for it where the entire chain's just there.</div>
+      <div class="ca-item"><div class="ca-num">5</div><div class="ca-item-body">Fulfill the CEO's AI mandate — external pressure with an internal company-year deadline.</div></div>
+    </div>
+    <div>
+      <div class="ca-item"><div class="ca-num">6</div><div class="ca-item-body">Get internal teams excited about AI possibilities and momentum.</div></div>
+      <div class="ca-quote">Even just getting people excited about the ideas of cleaning this up, I think is going to be a huge help.</div>
+      <div class="ca-item"><div class="ca-num">7</div><div class="ca-item-body">Understand the current AI market before committing to a direction — deliberately exploratory.</div></div>
+      <div class="ca-quote">Basically what we're doing right now is just kind of casting a wide net, seeing what people are offering currently.</div>
+      <div class="ca-item"><div class="ca-num">8</div><div class="ca-item-body">Clean up Google Sheets usage — reduce the burden of running so much of the business through basic spreadsheets.</div></div>
+      <div class="ca-item"><div class="ca-num">9</div><div class="ca-item-body">Automate quote/estimate output generation — a spreadsheet-input-to-PDF-output workflow was mentioned as an appealing concept.</div></div>
+      <div class="ca-item"><div class="ca-num">10</div><div class="ca-item-body">Improve inter-departmental project status visibility — so teams aren't digging through email to find where things stand.</div></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: PAIN POINTS ── -->
+  <div class="ca-badge red mb20">
+    <div class="ca-ico">🛑</div>
+    <div><div class="ca-title">Section 3 — Pain Points, Friction & Risks</div><div class="ca-desc">Everything described as slow, manual, frustrating, risky, or broken — in client's own words</div></div>
+  </div>
+  <div class="g2 mb20">
+    <div>
+      <div class="ca-item"><div class="ca-num">1</div><div class="ca-item-body"><strong>Email chains are the dominant bottleneck:</strong></div></div>
+      <div class="ca-quote">Honestly, I think the email chains are probably like the biggest repetitive task where we have some templates that they'll take and we email each other back and forth with it.</div>
+      <div class="ca-item"><div class="ca-num">2</div><div class="ca-item-body"><strong>Custom quoting is multi-department and cumbersome:</strong></div></div>
+      <div class="ca-quote">We have to bring in a separate team to provide the custom estimates... we have to loop in a lot of different departments to get those done, which can be very cumbersome.</div>
+      <div class="ca-item"><div class="ca-num">3</div><div class="ca-item-body"><strong>Client scope changes create compounding re-work cycles:</strong></div></div>
+      <div class="ca-quote">Things change frequently throughout the process... people just seeing the price of something and then realizing, oh, that's more than I thought. Changing gears or adding more or doing something different. There's a lot of back and forth that's required.</div>
+      <div class="ca-item"><div class="ca-num">4</div><div class="ca-item-body"><strong>All quoting back-and-forth is in email, not in Monday:</strong></div></div>
+      <div class="ca-quote">Right now it's all in emails.</div>
+      <div class="ca-item"><div class="ca-num">5</div><div class="ca-item-body"><strong>Google Sheets are overloaded as the core operations platform:</strong></div></div>
+      <div class="ca-quote">There's just so much that's done in Google sheets and just very basic platforms and tools that we run like 90% of our business through.</div>
+      <div class="ca-item"><div class="ca-num">6</div><div class="ca-item-body"><strong>Different product categories have isolated, non-unified workflows:</strong></div></div>
+      <div class="ca-quote">It's a very nuanced process because we do different aspects and different teams have to communicate with each other for each of like the veins that we can go with it too.</div>
+    </div>
+    <div>
+      <div class="ca-item"><div class="ca-num">7</div><div class="ca-item-body"><strong>Monday boards are individually structured — email integration is architecturally complex:</strong></div></div>
+      <div class="ca-quote">The way our boards are set up is it's more like individual boards with group processes too.</div>
+      <div class="ca-item"><div class="ca-num">8</div><div class="ca-item-body"><strong>Social media content is too technical for generic AI — explicitly flagged as poor fit:</strong></div></div>
+      <div class="ca-quote">It's like a copywriter that has to do it every time.</div>
+      <div class="ca-item"><div class="ca-num">9</div><div class="ca-item-body"><strong>No company-wide AI policy or governance</strong> — each team acts independently with no structure.</div></div>
+      <div class="ca-item"><div class="ca-num">10</div><div class="ca-item-body"><strong>Dual sales model creates CRM complexity</strong> — architects specify, but builders purchase. "Really strange how it works."</div></div>
+      <div class="ca-item"><div class="ca-num">11</div><div class="ca-item-body"><strong>HubSpot/Monday integration stops at CRM data</strong> — quoting, estimating, and client communication loops fall outside it.</div></div>
+      <div class="ca-item"><div class="ca-num">12</div><div class="ca-item-body"><strong>Fast-changing AI landscape creating decision hesitancy:</strong></div></div>
+      <div class="ca-quote">With how much it's changing and evolving on a weekly basis, we're still kind of trying to figure out what's best for us.</div>
+      <div class="ca-item"><div class="ca-num">13</div><div class="ca-item-body"><strong>CEO approval required</strong> — Christina and David are evaluators, not final decision makers. All roads lead through the unnamed CEO.</div></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: OPEN QUESTIONS ── -->
+  <div class="ca-badge yellow mb20">
+    <div class="ca-ico">🔍</div>
+    <div><div class="ca-title">Section 4 — Open Questions & Unknowns</div><div class="ca-desc">Deferred, unclear, or missing — items that must be resolved before scoping a solution</div></div>
+  </div>
+  <div class="g2 mb20">
+    <div>
+      <div class="ca-item"><div class="ca-num">1</div><div class="ca-item-body"><strong>🔴 Critical:</strong> Who is the CEO? Name never mentioned. He issued the mandate and likely holds final budget authority.</div></div>
+      <div class="ca-item"><div class="ca-num">2</div><div class="ca-item-body"><strong>🔴 Critical:</strong> What budget has the CEO allocated for AI this year? Not discussed at all.</div></div>
+      <div class="ca-item"><div class="ca-num">3</div><div class="ca-item-body"><strong>🔴 Critical:</strong> What AI vendors are they evaluating in parallel? David said "casting a wide net" but named no competitors.</div></div>
+      <div class="ca-item"><div class="ca-num">4</div><div class="ca-item-body">What timeline has the CEO set for a vendor decision or visible AI results?</div></div>
+      <div class="ca-item"><div class="ca-num">5</div><div class="ca-item-body">Does Monday.com have a native email integration, or does it require an API/Make.com workaround? <em>Jessica committed to researching this.</em></div></div>
+      <div class="ca-item"><div class="ca-num">6</div><div class="ca-item-body">What Microsoft tools are specifically in use? Do they have SharePoint? OneDrive? Teams?</div></div>
+      <div class="ca-item"><div class="ca-num">7</div><div class="ca-item-body">What does the internal quoting/estimating spreadsheet look like? Structure? Data fields? (Critical for AI quoting workflow design.)</div></div>
+    </div>
+    <div>
+      <div class="ca-item"><div class="ca-num">8</div><div class="ca-item-body">Who beyond Christina and David would use AI tools? Which departments/roles are primary end users?</div></div>
+      <div class="ca-item"><div class="ca-num">9</div><div class="ca-item-body">What is the dollar threshold that triggers project manager involvement?</div></div>
+      <div class="ca-item"><div class="ca-num">10</div><div class="ca-item-body">How are inter-departmental handoffs during quoting currently triggered — email, verbal, Slack, other?</div></div>
+      <div class="ca-item"><div class="ca-num">11</div><div class="ca-item-body">Where are SOPs and process documentation currently stored, if anywhere?</div></div>
+      <div class="ca-item"><div class="ca-num">12</div><div class="ca-item-body">How is the marketing team currently managing the social content calendar — any tools or fully manual?</div></div>
+      <div class="ca-item"><div class="ca-num">13</div><div class="ca-item-body">What does onboarding look like today, and what information do new hires most frequently need to look up?</div></div>
+      <div class="ca-item"><div class="ca-num">14</div><div class="ca-item-body">Are there any data privacy or security constraints on using AI tools with client or business data?</div></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: NEXT STEPS ── -->
+  <div class="ca-badge green mb20">
+    <div class="ca-ico">📅</div>
+    <div><div class="ca-title">Section 5 — Next Steps & Follow-Ups</div><div class="ca-desc">All action items with owner, timing, and context</div></div>
+  </div>
+  <div class="ca-callout warn mb20">
+    ⚡ <strong>URGENT:</strong> Jessica committed on the call to delivering the AI opportunities email AND the interactive HTML demo by the morning of 03/31/2026. This is a named, hard commitment that must be met to maintain credibility with the client.
+  </div>
+
+  <div class="ca-action-card ac-urgent mb14">
+    <div class="ac-hdr"><div class="ca-num" style="background:rgba(255,255,255,.2);color:#fff;border-color:transparent">1</div><div class="ac-owner">Jessica Peaden — Plus One Technology</div><div class="ac-task-tag" style="background:rgba(255,255,255,.2)">⚡ URGENT — Due 03/31</div></div>
+    <div class="ac-body">
+      <div class="ac-field full"><label>Task</label><p>Compile and send email outlining all identified AI integration opportunities tailored to reSAWN's current tech stack and workflows.</p></div>
+      <div class="ac-field"><label>Timing</label><p style="color:#B83232;font-weight:600">By morning of 03/31/2026 — explicitly committed on the call.</p></div>
+      <div class="ac-field"><label>Context</label><p><em>This is the primary deal-moving output. Christina responded: "Amazing. Yeah. That's awesome."</em></p></div>
+    </div>
+  </div>
+
+  <div class="ca-action-card ac-urgent mb14">
+    <div class="ac-hdr"><div class="ca-num" style="background:rgba(255,255,255,.2);color:#fff;border-color:transparent">2</div><div class="ac-owner">Jessica Peaden — Plus One Technology</div><div class="ac-task-tag" style="background:rgba(255,255,255,.2)">⚡ URGENT — Due 03/31</div></div>
+    <div class="ac-body">
+      <div class="ac-field full"><label>Task</label><p>Build and include an interactive HTML document demonstration in the follow-up email — showcasing the SOP creator / clickable demo capability.</p></div>
+      <div class="ac-field"><label>Timing</label><p style="color:#B83232;font-weight:600">Included in the 03/31 email — committed on the call.</p></div>
+      <div class="ac-field"><label>Context</label><p><em>Showing this (not just describing it) differentiates Plus One from generic AI vendors. Christina was visibly enthusiastic about this concept.</em></p></div>
+    </div>
+  </div>
+
+  <div class="ca-action-card mb14">
+    <div class="ac-hdr"><div class="ca-num" style="background:rgba(255,255,255,.15);color:#fff;border-color:transparent">3</div><div class="ac-owner">Jessica Peaden — Plus One Technology</div><div class="ac-task-tag">Research</div></div>
+    <div class="ac-body">
+      <div class="ac-field full"><label>Task</label><p>Research whether Monday.com has a native email integration feature, or whether it requires an API/Make.com workaround. Reference ClickUp's Outlook email integration as a model.</p></div>
+      <div class="ac-field"><label>Timing</label><p>Before or alongside the 03/31 email.</p></div>
+      <div class="ac-field"><label>Context</label><p><em>Christina explicitly said email-in-Monday would "free up a lot of time chunks" — knowing the feasibility shapes the core solution recommendation.</em></p></div>
+    </div>
+  </div>
+
+  <div class="ca-action-card mb14">
+    <div class="ac-hdr"><div class="ca-num" style="background:rgba(255,255,255,.15);color:#fff;border-color:transparent">4</div><div class="ac-owner">Jessica Peaden — Plus One Technology</div><div class="ac-task-tag">Prep</div></div>
+    <div class="ac-body">
+      <div class="ac-field full"><label>Task</label><p>Prepare AI quoting/estimating workflow concept — spreadsheet input → AI prompt → PDF output — for inclusion in the follow-up email.</p></div>
+      <div class="ac-field"><label>Timing</label><p>03/31 email.</p></div>
+      <div class="ac-field"><label>Context</label><p><em>David described a complex custom quoting process with multi-department loops. A concrete workflow diagram will make this tangible.</em></p></div>
+    </div>
+  </div>
+
+  <div class="ca-action-card mb14">
+    <div class="ac-hdr"><div class="ca-num" style="background:rgba(255,255,255,.15);color:#fff;border-color:transparent">5</div><div class="ac-owner">Jessica Peaden — Plus One Technology</div><div class="ac-task-tag">Prep</div></div>
+    <div class="ac-body">
+      <div class="ac-field full"><label>Task</label><p>Prepare internal knowledge base options comparison: Claude + stored documents vs. Microsoft Copilot + SharePoint agent. Note they have ChatGPT (not Copilot) — solution must fit their current Microsoft/Google mix.</p></div>
+      <div class="ac-field"><label>Timing</label><p>03/31 email.</p></div>
+      <div class="ac-field"><label>Context</label><p><em>Christina specifically described wanting a RAG-style knowledge database for training/onboarding. This is a fully confirmed use case.</em></p></div>
+    </div>
+  </div>
+
+  <div class="ca-action-card mb20">
+    <div class="ac-hdr"><div class="ca-num" style="background:rgba(255,255,255,.15);color:#fff;border-color:transparent">6</div><div class="ac-owner">Shared — Request via Christina / David</div><div class="ac-task-tag">Relationship</div></div>
+    <div class="ac-body">
+      <div class="ac-field full"><label>Task</label><p>Identify the CEO by name and request an introduction or inclusion in the next call. The CEO issued the mandate and holds budget authority — getting him involved is critical to moving from evaluation to decision.</p></div>
+      <div class="ac-field"><label>Timing</label><p>To be requested in the 03/31 follow-up email.</p></div>
+      <div class="ac-field"><label>Context</label><p><em>Christina and David are champions, not approvers. The unnamed CEO is the real decision-maker and must be looped in.</em></p></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6: TOPICS COVERED ── -->
+  <div class="ca-badge slate mb20">
+    <div class="ca-ico">🧩</div>
+    <div><div class="ca-title">Section 6 — Conversation Topics Covered</div><div class="ca-desc">High-level themes from the session — tagged by type</div></div>
+  </div>
+  <div class="g3 mb20">
+    <div>
+      <div class="ca-sublabel">Discovery & Current State</div>
+      <div class="ca-item"><div class="ca-num">1</div><div class="ca-item-body">Current AI adoption status and company-wide mandate origin <span class="tag-disp">discovery</span></div></div>
+      <div class="ca-item"><div class="ca-num">2</div><div class="ca-item-body">CRM and project management tool identification <span class="tag-disp">current state</span></div></div>
+      <div class="ca-item"><div class="ca-num">3</div><div class="ca-item-body">Existing Make.com automation infrastructure <span class="tag-disp">integrations</span></div></div>
+      <div class="ca-item"><div class="ca-num">4</div><div class="ca-item-body">ChatGPT usage and isolation from automated workflows <span class="tag-disp">current state</span></div></div>
+      <div class="ca-item"><div class="ca-num">5</div><div class="ca-item-body">Email chains as the primary repetitive bottleneck <span class="tag-disp">pain points</span></div></div>
+      <div class="ca-item"><div class="ca-num">6</div><div class="ca-item-body">Google Sheets as the core operational platform <span class="tag-disp">data</span></div></div>
+      <div class="ca-item"><div class="ca-num">7</div><div class="ca-item-body">Custom quoting and estimating — multi-department, email-heavy <span class="tag-disp">pain points</span></div></div>
+    </div>
+    <div>
+      <div class="ca-sublabel">Sales Process & Operations</div>
+      <div class="ca-item"><div class="ca-num">8</div><div class="ca-item-body">12–24 month sales cycles and dual-track architect/builder model <span class="tag-disp">discovery</span></div></div>
+      <div class="ca-item"><div class="ca-num">9</div><div class="ca-item-body">PM scope threshold — when project manager gets involved <span class="tag-disp">current state</span></div></div>
+      <div class="ca-item"><div class="ca-num">10</div><div class="ca-item-body">Social media content — too technical for generic AI <span class="tag-disp">constraints</span></div></div>
+      <div class="ca-item"><div class="ca-num">11</div><div class="ca-item-body">Blog and email content distribution via HubSpot <span class="tag-disp">current state</span></div></div>
+      <div class="ca-item"><div class="ca-num">12</div><div class="ca-item-body">Monday.com board structure for sample tracking <span class="tag-disp">integrations</span></div></div>
+      <div class="ca-sublabel">Future State & Solutions</div>
+      <div class="ca-item"><div class="ca-num">13</div><div class="ca-item-body">Email-to-Monday integration concept — ClickUp as reference model <span class="tag-disp">future state</span></div></div>
+      <div class="ca-item"><div class="ca-num">14</div><div class="ca-item-body">AI quoting/estimating workflow — spreadsheet → AI → PDF <span class="tag-disp">future state</span></div></div>
+    </div>
+    <div>
+      <div class="ca-sublabel">AI Platform & Tools</div>
+      <div class="ca-item"><div class="ca-num">15</div><div class="ca-item-body">Internal knowledge base / RAG database for training & onboarding <span class="tag-disp">future state</span></div></div>
+      <div class="ca-item"><div class="ca-num">16</div><div class="ca-item-body">Red Hats AI interface — multi-chat, no memory, agent support <span class="tag-disp">future state</span></div></div>
+      <div class="ca-item"><div class="ca-num">17</div><div class="ca-item-body">SOP creator with Claude + HTML clickable documentation demos <span class="tag-disp">future state</span></div></div>
+      <div class="ca-item"><div class="ca-num">18</div><div class="ca-item-body">Microsoft Copilot + SharePoint agent — not currently available <span class="tag-disp">constraints</span></div></div>
+      <div class="ca-item"><div class="ca-num">19</div><div class="ca-item-body">Next steps commitment — email + HTML demo by 03/31 <span class="tag-disp">decision</span></div></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 7: DISCOVERY INTELLIGENCE ── -->
+  <div class="ca-badge oak mb20">
+    <div class="ca-ico">🧠</div>
+    <div><div class="ca-title">Section 7 — Discovery Intelligence</div><div class="ca-desc">Current-state processes, systems, data flows, constraints & automation signals — no solutions proposed</div></div>
+  </div>
+
+  <!-- 7A: PROCESSES -->
+  <div class="card mb20">
+    <div class="ct">7A — Current-State Processes</div>
+    <div class="ca-callout info mb14">ℹ️ Sentiment labels reflect the client's own tone — not an external assessment.</div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 1 — AI Usage (Individual / Ad Hoc)</span><span class="cp-sent sent-gap">Needs Structure</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Every employee/team independently</span><span>Frequency: Daily (informal)</span></div>
+        Each person uses AI "however they see fit" or "whatever makes the most sense for them in their department." No central governance or policy. ChatGPT company account exists but is not connected to any systems or workflows.
+      </div>
+    </div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 2 — HubSpot → Make.com → Monday.com Data Propagation</span><span class="cp-sent sent-ok">Working</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Christina Zimmer (built & manages)</span><span>Trigger: HubSpot data updates</span></div>
+        Make.com automations push data from HubSpot CRM into Monday.com boards. <em>"We're essentially propagating Monday boards with data from HubSpot."</em> Email communication is NOT part of this loop — that remains in email.
+      </div>
+    </div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 3 — Custom Quoting & Estimating</span><span class="cp-sent sent-pain">Painful — High Friction</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Sales rep initiates → Estimating team → Multiple departments</span><span>Frequency: Regular, project-driven</span><span>Trigger: Client requests custom element</span></div>
+        Sales rep coordinates with a separate estimating team to source non-standard sizing from the supplier and calculate build time. Client frequently changes scope after seeing pricing — triggering additional rounds. All communication is via email. David: <em>"We have to loop in a lot of different departments to get those done, which can be very cumbersome."</em>
+      </div>
+    </div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 4 — Standard Material Quoting</span><span class="cp-sent sent-ok">Working Fine</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Sales rep</span><span>Trigger: Standard product inquiry</span></div>
+        Simple price sheet lookup — minimal handoffs, straightforward process. Not a pain point.
+      </div>
+    </div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 5 — Sample Tracking (Hand Samples & Large Format)</span><span class="cp-sent sent-mixed">Mixed — Board OK, Email Gap</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Christina's team via Monday.com</span><span>Structure: Separate boards per sample type, group-by-process flow</span></div>
+        Separate Monday.com boards for hand samples and large format samples with intake-to-completion group flow. Email communication related to samples exists separately and is NOT connected to these boards. Christina: <em>"Being able to track stuff on an email would be so helpful and just have a column for it where the entire chain's just there."</em>
+      </div>
+    </div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 6 — Social Media Content Creation</span><span class="cp-sent sent-gap">Manual — AI Poor Fit (Flagged)</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Marketing team</span><span>Format: Long-form, technical, architecture-audience-focused</span></div>
+        Written manually — highly technical, product-specific, requiring deep product knowledge per every post. David explicitly flagged this as a poor fit for generic AI: <em>"It's like a copywriter that has to do it every time."</em>
+      </div>
+    </div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 7 — Blog & Email Distribution</span><span class="cp-sent sent-ok">Working</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Marketing team</span><span>Platform: HubSpot</span></div>
+        Blog articles published and email distributed through HubSpot. Not flagged as a pain point.
+      </div>
+    </div>
+
+    <div class="ca-process">
+      <div class="cp-hdr"><span class="cp-name">Process 8 — Onboarding & Training</span><span class="cp-sent sent-gap">Gap — No System in Place</span></div>
+      <div class="cp-body">
+        <div class="cp-meta"><span>Who: Unclear ownership</span><span>Status: No structured system confirmed</span></div>
+        Christina described needing a <em>"database kind of for training people"</em> and a <em>"quick thing to go and like ask questions."</em> No current solution — identified as a clear gap and high-interest use case.
+      </div>
+    </div>
+  </div>
+
+  <!-- 7B: SYSTEMS TABLE -->
+  <div class="card mb20">
+    <div class="ct">7B — Systems, Tools & Infrastructure</div>
+    <div class="ca-callout mb14">📌 Tool names preserved exactly as spoken. Status reflects client context from the call.</div>
+    <div style="overflow-x:auto">
+      <table class="ca-sys-table">
+        <thead><tr><th>Tool / System</th><th>Status</th><th>Role</th><th>Exact Client Context</th></tr></thead>
+        <tbody>
+          <tr><td class="sys-name">HubSpot</td><td><span class="ca-sys-badge sys-ok">✅ Active</span></td><td>CRM — primary system of record for customers</td><td class="sys-quote">"For our CRM, we're using HubSpot"</td></tr>
+          <tr><td class="sys-name">Monday.com</td><td><span class="ca-sys-badge sys-ok">✅ Active</span></td><td>Project management — populated via Make.com from HubSpot</td><td class="sys-quote">"We use Monday for project management"</td></tr>
+          <tr><td class="sys-name">Make.com</td><td><span class="ca-sys-badge sys-ok">✅ Active</span></td><td>Integration layer — HubSpot → Monday automation (built by Christina)</td><td class="sys-quote">"They're connected by make.com with automations through that"</td></tr>
+          <tr><td class="sys-name">ChatGPT</td><td><span class="ca-sys-badge sys-ok">✅ Active</span></td><td>AI tool — company account, used individually, NOT connected to any workflows</td><td class="sys-quote">"We do have ChatGPT as like a base account... It's just separate from like the automated flows"</td></tr>
+          <tr><td class="sys-name">Google Sheets</td><td><span class="ca-sys-badge sys-ok">✅ Active</span></td><td>Core operations platform — heavy use, siloed from other systems</td><td class="sys-quote">"90% of our business through [Google Sheets]"</td></tr>
+          <tr><td class="sys-name">Microsoft (general)</td><td><span class="ca-sys-badge sys-ok">✅ In Use</span></td><td>Productivity tools — used alongside Google, specific tools not named</td><td class="sys-quote">"We use both [Microsoft and Google]"</td></tr>
+          <tr><td class="sys-name">Google (general)</td><td><span class="ca-sys-badge sys-ok">✅ In Use</span></td><td>Productivity tools — used alongside Microsoft</td><td class="sys-quote">"We use both [Microsoft and Google]"</td></tr>
+          <tr><td class="sys-name">Microsoft Copilot</td><td><span class="ca-sys-badge sys-no">❌ Not in Use</span></td><td>Not licensed — would enable SharePoint-based AI agents</td><td class="sys-quote">"We don't have Copilot here. It's ChatGPT if we're going to be using it."</td></tr>
+          <tr><td class="sys-name">SharePoint</td><td><span class="ca-sys-badge sys-unk">❓ Unknown</span></td><td>Mentioned by Jessica as Copilot dependency — not confirmed as in use</td><td class="sys-quote">Not confirmed by client</td></tr>
+          <tr><td class="sys-name">ClickUp</td><td><span class="ca-sys-badge sys-no">❌ Not in Use</span></td><td>Referenced by Jessica as a model for email-to-project integration (Outlook plugin)</td><td class="sys-quote">Mentioned as comparison only — not used by reSAWN</td></tr>
+          <tr><td class="sys-name">HubSpot (Email)</td><td><span class="ca-sys-badge sys-ok">✅ Active</span></td><td>Blog and content email distribution</td><td class="sys-quote">"They do" send blog articles through HubSpot</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7C: DATA FLOWS -->
+  <div class="card mb20">
+    <div class="ct">7C — Integrations & Data Flow (As Described)</div>
+    <div class="g2">
+      <div>
+        <div class="ca-sublabel">Active Flows</div>
+        <div class="ca-flow-item"><div class="ca-flow-num">→</div><div class="ca-flow-text"><strong>HubSpot → Make.com → Monday.com:</strong> Confirmed active. Christina built this. HubSpot data propagates into Monday boards via Make.com automations.</div></div>
+        <div class="ca-flow-item"><div class="ca-flow-num">→</div><div class="ca-flow-text"><strong>HubSpot → Blog/Email distribution:</strong> Active. Marketing sends blog articles via HubSpot to subscribers.</div></div>
+        <div class="ca-flow-item"><div class="ca-flow-num">→</div><div class="ca-flow-text"><strong>Quoting flow (current):</strong> Sales rep (email) → Estimating team (email) → Client (email) → Multiple revision rounds (all in email). No data enters Monday or HubSpot in a structured way.</div></div>
+        <div class="ca-flow-item"><div class="ca-flow-num">→</div><div class="ca-flow-text"><strong>Sample tracking:</strong> Monday.com boards (hand samples + large format) track intake-to-completion. Email communication related to samples exists separately — NOT connected to boards.</div></div>
+      </div>
+      <div>
+        <div class="ca-sublabel">Missing / Broken Flows</div>
+        <div class="ca-flow-item"><div class="ca-flow-num" style="background:#B83232">✕</div><div class="ca-flow-text"><strong>Email → Monday.com:</strong> DOES NOT EXIST. All quoting, estimating, and client communication lives in email and is not captured in Monday. This is the primary integration gap.</div></div>
+        <div class="ca-flow-item"><div class="ca-flow-num" style="background:#B83232">✕</div><div class="ca-flow-text"><strong>ChatGPT → Any system:</strong> DOES NOT EXIST. ChatGPT is used individually but has no automated connection to HubSpot, Monday, or Make.com.</div></div>
+        <div class="ca-flow-item"><div class="ca-flow-num" style="background:#B83232">✕</div><div class="ca-flow-text"><strong>Google Sheets → Any system:</strong> Implied siloed. Described as heavy use but no integration mentioned.</div></div>
+        <div class="ca-flow-item"><div class="ca-flow-num" style="background:#B07D2A">?</div><div class="ca-flow-text"><strong>Quoting spreadsheet → Output:</strong> Currently manual and email-based. No automated quote generation or PDF delivery in place.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7D & 7E side by side -->
+  <div class="g2 mb20">
+    <div class="card">
+      <div class="ct">7D — Constraints & Guardrails</div>
+      <div class="ca-callout mb14">📌 Exact client phrasing preserved where applicable.</div>
+      <div class="ca-item"><div class="ca-num">1</div><div class="ca-item-body"><strong>No Copilot license</strong> — any SharePoint-based AI agent solution is off the table without a new license. <em>"We don't have Copilot here."</em></div></div>
+      <div class="ca-item"><div class="ca-num">2</div><div class="ca-item-body"><strong>Workflow complexity by product category</strong> — each product type has unique processes and team configurations. <em>"The process looks unique depending on like what product or what kind of category the product fits in."</em></div></div>
+      <div class="ca-item"><div class="ca-num">3</div><div class="ca-item-body"><strong>Social media AI explicitly flagged as poor fit</strong> — too technical, too specialist. Not a viable use case for generic AI generation.</div></div>
+      <div class="ca-item"><div class="ca-num">4</div><div class="ca-item-body"><strong>Monday boards are fragmented by process/sample type</strong> — not unified by project or client. Makes email integration architecturally more complex.</div></div>
+      <div class="ca-item"><div class="ca-num">5</div><div class="ca-item-body"><strong>Dual sales model complicates CRM</strong> — architect specifies, builder purchases. <em>"It's really strange how it works."</em></div></div>
+      <div class="ca-item"><div class="ca-num">6</div><div class="ca-item-body"><strong>AI landscape moving too fast for confident decisions</strong> — causing hesitancy. <em>"With how much it's changing and evolving on a weekly basis."</em></div></div>
+      <div class="ca-item"><div class="ca-num">7</div><div class="ca-item-body"><strong>CEO must approve</strong> — Christina and David are evaluators, not decision-makers. Final sign-off requires the unnamed CEO.</div></div>
+      <div class="ca-item"><div class="ca-num">8</div><div class="ca-item-body"><strong>Budget not disclosed</strong> — no numbers discussed. Constraint level completely unknown.</div></div>
+      <div class="ca-item"><div class="ca-num">9</div><div class="ca-item-body"><strong>Change tolerance unknown</strong> — team size, workload, and appetite for process change not assessed.</div></div>
+    </div>
+
+    <div class="card">
+      <div class="ct">7E — Automation & Improvement Signals</div>
+      <div class="ca-callout info mb14">ℹ️ Signals only — no solutions proposed here. These are raw indicators from what the client described.</div>
+      <div class="ca-signal"><div class="ca-signal-tag">REPETITION</div><div class="ca-signal-body">Email templates are copied, modified, and sent repeatedly for quoting. Same templates used across multiple team members every day.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">HIGH VOLUME</div><div class="ca-signal-body">"A lot of back and forth" in quoting/estimating. Multiple rounds per project, with scope changes triggering further rounds.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">HIGH VOLUME</div><div class="ca-signal-body">"90% of business through Google Sheets" — significant manual data entry and management across many spreadsheets.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">RULES-BASED</div><div class="ca-signal-body">Standard material = price sheet. Custom element = escalate to estimating team. Clear binary trigger point for a branching workflow.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">RULES-BASED</div><div class="ca-signal-body">Project manager involvement triggered by a dollar amount threshold. Clear conditional logic with a defined boundary.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">DELAYS</div><div class="ca-signal-body">Custom quotes require looping in "a lot of different departments" — each handoff is a waiting point with no visibility.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">DELAYS</div><div class="ca-signal-body">Client scope changes require re-looping all departments. "Things change frequently throughout the process."</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">MANUAL REVIEW</div><div class="ca-signal-body">All quoting back-and-forth is email-based — requires manual retrieval and review to get project status.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">MANUAL HANDOFF</div><div class="ca-signal-body">Quoting/estimating data is not automatically captured in Monday or HubSpot — implied manual re-entry or data loss after each cycle.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">SOMEONE OWNS IT</div><div class="ca-signal-body">Christina built and manages the Make.com automation — she is the de facto "system integrator." Any solution should account for her as an internal technical champion.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">SOMEONE LOOKS IT UP</div><div class="ca-signal-body">New hires and employees have "common questions" with no quick self-service system. <em>"Just have a quick thing to go and like ask questions."</em></div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">MANUAL OUTPUT</div><div class="ca-signal-body">Quoting outputs are generated manually — no automated PDF generation from spreadsheet data is in place today.</div></div>
+      <div class="ca-signal"><div class="ca-signal-tag">CONSOLIDATION</div><div class="ca-signal-body">HubSpot, Monday, Google Sheets, email, and ChatGPT are all operating in silos — each requiring manual context-switching and data re-entry between tasks.</div></div>
+    </div>
+  </div>
+
+</section>
+</main>
+
+<!-- EXPORT REMINDER BANNER -->
+<div class="export-banner" id="exportBanner">
+  <div class="eb-icon">💾</div>
+  <div class="eb-content">
+    <div class="eb-title"><span class="unsaved-dot"></span>Don't lose your work!</div>
+    <div class="eb-desc">You have unsaved changes. Export your session as a JSON file before closing this tab.</div>
+    <div class="eb-actions">
+      <button class="eb-dismiss" onclick="dismissBanner()">Remind me later</button>
+      <button class="eb-dismiss" onclick="dismissBannerPerm()">Already saved</button>
+      <button class="eb-export-btn" onclick="exportAndDismiss()">⬇ Export Now</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="t-icon">✓</span> Progress saved!</div>
+<input type="file" id="imp-file" accept=".json" style="display:none" onchange="doImport(event)">
+
+<script>
+// ─────────────── STATE ───────────────
+const ratings={}, PILLS={}, UC_LOG=[];
+let painCount=2,riskCount=3,sthCount=3,actIdx=0,qIdx=0,credIdx=0,ucCount=0,oppCount=0,featCount=0;
+const oppPris={};
+
+// ─────────────── INIT ───────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('sDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  buildAllPills();
+  buildDefaultPlatformFeatures();
+  buildDefaultCreds();
+  buildDefaultQs();
+  buildDefaultActions();
+  buildDefaultOpps();
+  buildDefaultUCLog();
+  loadData();
+  // Pre-set AI maturity ratings from 03/30 call assessment
+  sr('r-aware',3);  // Aware but informal — "everyone does their own thing"
+  sr('r-exp',2);    // Limited practical experience — ChatGPT only, siloed
+  sr('r-open',4);   // Very open — CEO mandate, enthusiastic champions
+  sr('r-data',2);   // Messy — 90% Google Sheets, email-centric, siloed
+  sr('r-budget',2); // Unknown — budget entirely undisclosed
+  sr('r-chng',3);   // Moderate — Christina is technically capable; broader team unknown
+  sr('r-stack',3);  // Moderate — HubSpot+Monday+Make is solid but Google Sheets heavy
+  updateStats();
+  setInterval(autoSave,30000);
+});
+
+// ─────────────── HERO SYNC ───────────────
+function syncHero(){
+  const name=document.getElementById('c_name').value||'reSAWN TIMBER co.';
+  const web=document.getElementById('c_web').value||'resawntimberco.com';
+  const ind=document.getElementById('b_ind').value||'Architectural Wood Products';
+  document.getElementById('heroName').textContent=name;
+  document.getElementById('metaCompany').textContent=name;
+  document.getElementById('hdrSub').textContent=name+' · Confidential';
+  const wa=document.getElementById('metaWeb');
+  wa.textContent=web.replace('https://','').replace('http://','');
+  wa.href=web.startsWith('http')?web:'https://'+web;
+  document.getElementById('metaInd').textContent=ind;
+}
+
+// ─────────────── TABS ───────────────
+function sw(el,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('s-'+id).classList.add('on');
+  updateStats();
+}
+
+// ─────────────── PILL DATA ───────────────
+const RESAWN_SERVICES=['Exterior Wall Cladding','Shou Sugi Ban','Wide Plank Flooring','Interior Wall Cladding','Ceiling Cladding','Exterior Decking','Custom Millwork','Stair Packages','Custom Furniture','Roofing Cladding','Reclaimed Wood','European White Oak','Accoya Modified Wood','Kebony Modified Wood','Thermally Modified Wood (Sylva™)','Alaskan Yellow Cedar','Western Red Cedar','Product Samples','CEU Presentations','A+D Specification Support'];
+const DOC_TYPES=['PDF','Word (.docx)','Excel (.xlsx)','PowerPoint','CSV','Images (JPG/PNG)','InDesign (.indd)','Illustrator (.ai)','Photoshop (.psd)','EPS / TIFF','Google Docs','Google Sheets','HTML / Web','Plain Text','Video Files'];
+const AI_TOOLS=['ChatGPT / GPT-4','Claude (Anthropic)','Microsoft Copilot','Google Gemini','Jasper','Grammarly AI','Canva AI','Adobe Firefly','Notion AI','Otter.ai'];
+const AUTO_TOOLS=['Zapier','Make (Integromat)','n8n','Power Automate','Airtable Automations','HubSpot Workflows','Mailchimp Automations','WooCommerce Automations','ActiveCampaign','IFTTT'];
+const EMAIL_PLATFORMS=['Microsoft 365 / Outlook','Google Workspace / Gmail','Both (hybrid)','Zoho Mail','Other / Self-hosted'];
+const SUPPORT_CH=['Phone','Email','Live Chat','Help Desk / Ticketing','In Person / Showroom Visit','WhatsApp','Contact Form'];
+const COMPLIANCE=['GDPR','CCPA','PCI-DSS','FSC® Chain of Custody','CAN-SPAM','None / Unknown'];
+const DOCS_PREP=['Discovery Summary','Proposal / SOW','ROI Analysis','Implementation Plan','Training Guide','Integration Spec','Onboarding Checklist','Contract / MSA','Brand Voice Guide for AI'];
+
+const DEFAULT_CREDS=['HubSpot Admin Access (CRM — confirmed primary system)','Monday.com Admin / Workspace Access','Make.com Account Access (Christina built existing automations)','ChatGPT Company Account Details (current AI tool in use)','Google Workspace / Gmail Admin (email integration target)','Google Sheets — Key Operational Spreadsheets Access','Microsoft Account Details (confirm which M365 tools are in use)','Website / WordPress Admin Access','WooCommerce Admin Login','Google Analytics Access','Social Media Accounts (LinkedIn, Instagram, Facebook)','Domain / DNS Access'];
+const DEFAULT_QS=["Who is the CEO — what is his name, and can Christina/David facilitate an introduction or a review meeting?","What is the budget range the CEO has allocated for AI initiatives this year?","Does Monday.com have a native email integration feature, or does it require API/Make.com?","What Microsoft vs. Google tools are in use — do they have SharePoint? Would Copilot be viable?","Who else on the team will be primary AI users beyond Christina and David?","What competing AI vendors are they evaluating in parallel?","What is the timeline the CEO has set for seeing AI results or a vendor decision?"];
+const DEFAULT_ACTIONS=['⚡ URGENT: Send AI opportunities outline email to Christina & David by 03/31/2026 morning (committed on the call)','Build and include interactive HTML document demo in the follow-up email (committed on the call)','Research Monday.com email integration options — native feature or API/Make.com workaround','Prepare AI quoting/estimating workflow concept: spreadsheet input → AI prompt → PDF output','Prepare internal knowledge base options write-up: Claude + stored docs vs. Copilot + SharePoint (note: they have ChatGPT, not Copilot)','Identify the CEO by name — ask Christina to introduce or loop him into the next call','Prepare Red Hats AI interface overview for the follow-up email (quick foundational win)'];
+
+function buildAllPills(){
+  mkPills('services-pills',RESAWN_SERVICES,'services',['Exterior Wall Cladding','Shou Sugi Ban','Wide Plank Flooring','Interior Wall Cladding','Thermally Modified Wood (Sylva™)','Custom Millwork','Stair Packages','Product Samples','CEU Presentations','A+D Specification Support']);
+  mkPills('doc-types-pills',DOC_TYPES,'doctypes',[]);
+  mkPills('ai-tools-pills',AI_TOOLS,'aitools',[]);
+  mkPills('auto-tools-pills',AUTO_TOOLS,'autotools',[]);
+  mkPills('email-platform-pills',EMAIL_PLATFORMS,'emailplat',[]);
+  mkPills('support-ch-pills',SUPPORT_CH,'supportch',['Phone','Email','In Person / Showroom Visit','Contact Form']);
+  mkPills('compliance-pills',COMPLIANCE,'compliance',[]);
+  mkPills('gov-compliance-pills',COMPLIANCE,'govcompliance',[]);
+  mkPills('docs-to-prepare-pills',DOCS_PREP,'docsprep',['Discovery Summary','Proposal / SOW','Brand Voice Guide for AI']);
+}
+
+function mkPills(cId,items,key,defs){
+  const el=document.getElementById(cId);if(!el)return;
+  PILLS[key]=defs.slice();
+  items.forEach(item=>{
+    const p=document.createElement('div');
+    p.className='pill'+(defs.includes(item)?' on':'');
+    p.textContent=item;
+    p.onclick=()=>{
+      p.classList.toggle('on');
+      if(p.classList.contains('on')){if(!PILLS[key].includes(item))PILLS[key].push(item);}
+      else{const i=PILLS[key].indexOf(item);if(i>-1)PILLS[key].splice(i,1);}
+    };
+    el.appendChild(p);
+  });
+}
+function addCustomPill(e,cId,key,inputId){
+  if(e.key!=='Enter')return;
+  const inp=document.getElementById(inputId);
+  const val=inp.value.trim();if(!val)return;
+  const el=document.getElementById(cId);
+  const p=document.createElement('div');p.className='pill on';p.textContent=val;
+  p.onclick=()=>{p.classList.toggle('on');if(p.classList.contains('on')){if(!PILLS[key].includes(val))PILLS[key].push(val);}else{const i=PILLS[key].indexOf(val);if(i>-1)PILLS[key].splice(i,1);}};
+  el.appendChild(p);if(!PILLS[key])PILLS[key]=[];PILLS[key].push(val);inp.value='';
+}
+
+// ─────────────── RATINGS ───────────────
+function sr(id,val){
+  ratings[id]=val;
+  document.querySelectorAll(`#${id} .star`).forEach((s,i)=>s.classList.toggle('on',i<val));
+  const fill=document.getElementById(id+'-fill');
+  if(fill)fill.style.width=(val*20)+'%';
+  updateStats();
+}
+
+// ─────────────── PLATFORM FEATURES ───────────────
+const DEFAULT_FEATURES=[
+  {ico:'📧',title:'Email-to-Monday Integration',desc:'Auto-capture email chains into Monday.com boards — every project communication visible in context, without manual copy-paste. Christina\'s #1 stated wish.'},
+  {ico:'📄',title:'AI Quoting & Estimating Assistant',desc:'AI reads Google Sheets data and generates structured PDF quote output via smart prompts — reducing multi-department email loops for custom orders.'},
+  {ico:'🧠',title:'Internal AI Knowledge Base (RAG)',desc:'AI trained on SOPs, process docs, and company knowledge — employees ask questions and get instant answers. Christina specifically described this as a "RAG sort of database."'},
+  {ico:'🤖',title:'Red Hats AI Interface',desc:'Unified AI interface (ChatGPT + Claude) with no memory — available company-wide without training on private data. Proposed by Jessica as a quick foundational win.'},
+  {ico:'📋',title:'SOP Creator + Clickable HTML Demos',desc:'Claude generates detailed SOPs and interactive HTML documentation with visual demos — ideal for onboarding and process training. Christina said "Oh amazing. Yeah. That\'s awesome."'},
+  {ico:'⚙️',title:'HubSpot / Monday / Make.com Integrations',desc:'Native connections to their confirmed stack — HubSpot CRM, Monday.com boards, and Make.com automation — no rebuilding from scratch.'},
+];
+function buildDefaultPlatformFeatures(){
+  DEFAULT_FEATURES.forEach((f,i)=>addFeatureCard(f.ico,f.title,f.desc,i));
+}
+function addFeature(){
+  const idx=featCount;
+  addFeatureCard('⭐','New Capability','Describe this platform capability...',idx);
+}
+function addFeatureCard(ico,title,desc,idx){
+  featCount++;
+  const grid=document.getElementById('platform-features-grid');
+  const d=document.createElement('div');d.className='feat-card';
+  d.innerHTML=`
+    <div class="feat-ico" style="background:color-mix(in srgb,var(--accent2) 12%,white)">${ico}</div>
+    <div class="feat-title">${title}</div>
+    <div class="feat-desc">${desc}</div>
+    <div class="f"><label>Relevance to reSAWN</label>
+      <select id="feat-rel-${idx}"><option value="">Select...</option><option>🔥 High — Must Have</option><option>✅ Medium — Nice to Have</option><option>💭 Low — Future Consider</option><option>❌ Not Relevant</option></select>
+    </div>
+    <div class="f"><label>Christina's Reaction / Notes</label><textarea id="feat-note-${idx}" rows="2" placeholder="Her reaction, questions, interest level..."></textarea></div>
+  `;
+  grid.appendChild(d);
+}
+
+// ─────────────── DEFAULT OPPORTUNITIES (reSAWN-specific) ───────────────
+function buildDefaultOpps(){
+  const categories=[
+    {
+      id:'pm', ico:'📋', name:'Project Management',
+      opps:[
+        {
+          tier:'qw', ico:'📧',
+          title:'Email & Communication Automation',
+          desc:'Auto-capture email chains into Monday.com project boards so every client and inter-department communication is visible in context — no manual copy-paste. When a project moves phase, Make.com triggers the right department automatically, replacing the manual email handoff chain entirely.',
+          confirmed:true,
+          notes:'Christina\'s #1 stated priority. "That would free up a lot of time chunks." David confirmed: "Right now it\'s all in emails." Builds on existing Monday + Make.com infrastructure.'
+        },
+        {
+          tier:'med', ico:'📄',
+          title:'AI Quoting & Estimating Suite',
+          desc:'AI reads Google Sheets project data and generates a structured PDF quote via a smart prompt — reducing the multi-department loop for custom orders. Auto-flags what changed between quote revisions so the estimating team doesn\'t re-read the whole thread. AI also estimates labor/build time on custom orders based on historical project data.',
+          confirmed:true,
+          notes:'David confirmed the custom quoting cycle is "very cumbersome" — requires "a lot of different departments." Client scope changes trigger multiple re-quoting rounds. This suite collapses all three pain points into one workflow.'
+        },
+        {
+          tier:'med', ico:'📊',
+          title:'Project Pipeline Intelligence',
+          desc:'Real-time view of all active quotes, project stages, pending revisions, and department bottlenecks — so any team member can see where a project stands without digging through email. Tracks sample-to-project conversion rates and quote cycle times to identify the biggest estimating bottlenecks.',
+          confirmed:false,
+          notes:'Directly addresses the visibility gap David described — no single source of truth for project status across the sales cycle.'
+        },
+        {
+          tier:'long', ico:'🗂',
+          title:'Google Sheets → Structured Data Migration',
+          desc:'Systematically audit and migrate the highest-value spreadsheet operations (quoting data, project tracking, sample records) into HubSpot and Monday.com — reducing the "90% of business through Google Sheets" dependency over time. Start with the quoting/estimating cycle, then expand.',
+          confirmed:false,
+          notes:'David: "90% of our business through Google Sheets." This is a phased, long-term initiative — foundational for making all other AI opportunities more powerful.'
+        },
+      ]
+    },
+    {
+      id:'kb', ico:'🧠', name:'Internal Knowledge & Training',
+      opps:[
+        {
+          tier:'qw', ico:'🧠',
+          title:'Internal Knowledge Base / RAG Agent',
+          desc:'AI trained on SOPs, process documentation, and company knowledge — employees ask questions and get instant, accurate answers drawn from real company docs. No more digging through folders or asking a manager for basic process questions.',
+          confirmed:true,
+          notes:'Christina\'s confirmed #3 priority. Her exact words: "A database kind of for training people, like a knowledge sort of like augmented RAG sort of database to be able to pull in information... to train new hires with where they just have a quick thing to go and like ask questions."'
+        },
+        {
+          tier:'qw', ico:'📋',
+          title:'SOP Creator + Interactive HTML Demos',
+          desc:'Claude generates detailed, structured SOPs and companion interactive HTML documentation with step-by-step clickable demos. New hires and existing staff can learn any process visually — not just read about it. Demos can be embedded in the knowledge base or shared directly.',
+          confirmed:true,
+          notes:'Strongest emotional reaction of the call. Christina: "Oh amazing. Yeah. That\'s awesome." Jessica committed to including an interactive HTML demo in the 03/31 follow-up email.'
+        },
+        {
+          tier:'med', ico:'🚀',
+          title:'New Hire Onboarding Accelerator',
+          desc:'AI-guided onboarding flow that walks new employees through role-specific first 30/60/90 days — checklists, process walkthroughs, product knowledge, and quizzes all powered by the knowledge base. New hires self-serve answers instead of relying on managers.',
+          confirmed:false,
+          notes:'Natural extension of the knowledge base and SOP creator. The fact that Christina specifically raised training/onboarding as a pain signals this would land well.'
+        },
+        {
+          tier:'med', ico:'💡',
+          title:'Product Knowledge & Policy Agent',
+          desc:'A single AI agent that handles two critical Q&A needs: (1) Deep product knowledge — wood species, technical specs, fire ratings, certifications, installation methods — so sales and spec staff answer architect questions instantly. (2) HR & policy questions — PTO, benefits, expense process — so employees self-serve without bothering management.',
+          confirmed:false,
+          notes:'Combines Product Knowledge Training Agent + HR Policy Q&A into one agent. Two distinct but related self-service needs, both solved by the same RAG infrastructure.'
+        },
+      ]
+    },
+    {
+      id:'rh', ico:'🔴', name:'Platform & Infrastructure — RedHatz',
+      opps:[
+        {
+          tier:'qw', ico:'🔴',
+          title:'RedHatz Unified AI Interface',
+          desc:'Company-wide structured AI platform giving all teams governed access to ChatGPT + Claude in one interface — no memory, no training on private data, no individual silos. Includes a governed prompt library (standardized, tested prompts for quoting, email drafting, customer responses), AI agents that connect workflows directly into Monday.com, and a clear migration path from their current ad-hoc individual ChatGPT usage. The infrastructure layer that makes every other AI opportunity on this list more powerful.',
+          confirmed:true,
+          notes:'Discussed on call. Jessica introduced it as a foundational platform. Covers: unified AI access ✅, prompt library ✅, agents for content/workflows → Monday ✅, ChatGPT → structured platform migration ✅, Make.com expansion ✅. This is the answer to the CEO\'s mandate — AI is being "implemented" with structure.'
+        },
+      ]
+    },
+  ];
+
+  const container=document.getElementById('opps-list');
+  container.innerHTML='';
+
+  categories.forEach(cat=>{
+    // Category header
+    const catHdr=document.createElement('div');
+    catHdr.className='opp-cat-hdr';
+    catHdr.innerHTML=`<span class="och-ico">${cat.ico}</span><span class="och-name">${cat.name}</span><span class="och-count">${cat.opps.length} opportunit${cat.opps.length===1?'y':'ies'}</span>`;
+    container.appendChild(catHdr);
+
+    let lastTier='';
+    cat.opps.forEach(o=>{
+      const tierMap={qw:['tier-qw','⚡ Quick Win — 30 days'],med:['tier-med','🔄 Medium — 1–3 months'],long:['tier-long','🏗 Long — 3–6+ months']};
+      const [tierCls,tierLabel]=tierMap[o.tier]||['tier-med','🔄 Medium'];
+
+      if(o.tier!==lastTier){
+        const tierRow=document.createElement('div');
+        tierRow.className='opp-tier-row';
+        tierRow.innerHTML=`<span class="opp-tier-badge ${tierCls}">${tierLabel}</span><div class="opp-tier-line"></div>`;
+        container.appendChild(tierRow);
+        lastTier=o.tier;
+      }
+
+      const idx=oppCount++;
+      const confirmedBadge=o.confirmed?`<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700;background:rgba(45,106,63,.12);color:#1E5C2A;margin-left:8px">⭐ Confirmed on call</span>`:'';
+      const d=document.createElement('div');
+      d.className='opp';
+      d.style.marginBottom='10px';
+      d.innerHTML=`
+        <div class="opp-h">
+          <div class="opp-ico" style="background:color-mix(in srgb,var(--accent2) 12%,white)">${o.ico}</div>
+          <div style="flex:1">
+            <div class="opp-title">${o.title}${confirmedBadge}</div>
+            <div class="opp-desc">${o.desc}</div>
+            ${o.notes?`<div style="margin-top:8px;font-size:11px;color:var(--accent-d);background:var(--tagbg);border:1px solid var(--tagbd);border-radius:6px;padding:7px 10px;line-height:1.5">📌 ${o.notes}</div>`:''}
+          </div>
+        </div>
+        <div class="opp-body" style="margin-top:12px">
+          <div class="f"><label>Relevance to reSAWN</label>
+            <select id="opp-rel-${idx}"><option value="">Select...</option><option ${o.confirmed?'selected':''}>🔥 High — Client is excited</option><option ${!o.confirmed?'selected':''}>✅ Medium — Worth exploring</option><option>💭 Low — Future</option><option>❌ Not applicable</option></select>
+          </div>
+          <div class="f"><label>Timeline</label>
+            <div class="pri-row">
+              <span class="pri h" onclick="setPri(${idx},this,'h')" ${o.tier==='qw'?'style="background:rgba(45,106,63,.15);border-color:rgba(45,106,63,.3);color:#1E5C2A"':''}>⚡ Quick</span>
+              <span class="pri m" onclick="setPri(${idx},this,'m')" ${o.tier==='med'?'style="background:rgba(176,125,42,.15);border-color:rgba(176,125,42,.3);color:#7A5A10"':''}>🔄 Med</span>
+              <span class="pri l" onclick="setPri(${idx},this,'l')" ${o.tier==='long'?'style="background:rgba(90,100,117,.12);border-color:rgba(90,100,117,.25);color:#3D4A5C"':''}>🏗 Long</span>
+            </div>
+          </div>
+          <div class="f" style="grid-column:span 2"><label>Notes & Reaction</label><textarea id="opp-note-${idx}" placeholder="Client reaction, specifics, next steps...">${o.notes||''}</textarea></div>
+        </div>
+      `;
+      container.appendChild(d);
+    });
+  });
+}
+
+// ─────────────── OPPORTUNITIES (custom add) ───────────────
+function addOpp(){
+  const title=document.getElementById('new_opp_title').value.trim();
+  const desc=document.getElementById('new_opp_desc').value.trim();
+  const ico=document.getElementById('new_opp_ico').value.trim()||'💡';
+  if(!title)return;
+  const idx=oppCount++;
+  const container=document.getElementById('opps-list');
+
+  // Add a separator if adding custom
+  const sep=document.createElement('div');
+  sep.className='opp-tier-row';
+  sep.innerHTML=`<span class="opp-tier-badge" style="background:var(--tagbg);color:var(--accent2);border:1px solid var(--tagbd)">📌 Custom</span><div class="opp-tier-line"></div>`;
+  container.appendChild(sep);
+
+  const d=document.createElement('div');d.className='opp';d.style.marginBottom='10px';
+  d.innerHTML=`
+    <div class="opp-h">
+      <div class="opp-ico" style="background:color-mix(in srgb,var(--accent2) 12%,white)">${ico}</div>
+      <div><div class="opp-title">${title}</div><div class="opp-desc">${desc}</div></div>
+    </div>
+    <div class="opp-body" style="margin-top:12px">
+      <div class="f"><label>Relevance to reSAWN</label>
+        <select id="opp-rel-${idx}"><option value="">Select...</option><option>🔥 High — Client is excited</option><option>✅ Medium — Worth exploring</option><option>💭 Low — Future</option><option>❌ Not applicable</option></select>
+      </div>
+      <div class="f"><label>Timeline</label>
+        <div class="pri-row"><span class="pri h" onclick="setPri(${idx},this,'h')">⚡ Quick</span><span class="pri m" onclick="setPri(${idx},this,'m')">🔄 Med</span><span class="pri l" onclick="setPri(${idx},this,'l')">🏗 Long</span></div>
+      </div>
+      <div class="f" style="grid-column:span 2"><label>Notes & Reaction</label><textarea id="opp-note-${idx}" placeholder="Client reaction, specifics, next steps..."></textarea></div>
+    </div>
+  `;
+  container.appendChild(d);
+  document.getElementById('new_opp_title').value='';
+  document.getElementById('new_opp_desc').value='';
+  document.getElementById('new_opp_ico').value='';
+  updateStats();
+}
+function setPri(i,el,v){
+  oppPris[i]=v;
+  el.closest('.pri-row').querySelectorAll('.pri').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// ─────────────── PAIN POINTS ───────────────
+function setPainClass(sel){sel.closest('.pain-item').className='pain-item '+sel.value;}
+function addPain(){
+  painCount++;
+  const li=document.getElementById('pain-list');
+  const d=document.createElement('div');d.className='pain-item med';
+  d.innerHTML=`<div class="f"><label>Pain Point #${painCount} — Severity</label><select class="pain-sev" onchange="setPainClass(this)"><option value="med">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🟢 Low</option></select></div><div class="f"><label>Describe the Pain</label><textarea placeholder="What exactly is broken, slow, or costing them?"></textarea></div><div class="f"><label>Business Impact</label><textarea placeholder="Lost revenue? Wasted hours? Errors?"></textarea></div>`;
+  li.appendChild(d);
+}
+
+// ─────────────── USE CASES ───────────────
+const UC_LABELS={usecase:'💼 Use Case',question:'❓ Question',objection:'⚠️ Objection',insight:'💡 Insight'};
+const FU_LABELS={yes:'🔔 Follow-Up',prop:'📄 In Proposal'};
+function addUC(){
+  const type=document.getElementById('uc_type').value;
+  const text=document.getElementById('uc_text').value.trim();
+  const resp=document.getElementById('uc_resp').value.trim();
+  const fu=document.getElementById('uc_fu').value;
+  if(!text)return;
+  ucCount++;UC_LOG.push({type,text,resp,fu,id:ucCount});
+  renderUCLog();document.getElementById('uc_text').value='';document.getElementById('uc_resp').value='';updateUCCounts();
+}
+function renderUCLog(){
+  const log=document.getElementById('uc-log');
+  if(!UC_LOG.length){log.innerHTML='<div style="text-align:center;padding:32px;color:var(--t4);font-size:13px">Add entries using the form ↑</div>';return;}
+  log.innerHTML='';
+  UC_LOG.forEach((e,idx)=>{
+    const d=document.createElement('div');d.className='uc-entry';
+    d.innerHTML=`<span class="uc-type ${e.type}">${UC_LABELS[e.type]}</span><div style="font-size:13px;color:var(--t1);margin-bottom:6px;padding-right:110px">${e.text}</div>${e.resp?`<div style="font-size:12px;color:var(--t3);background:var(--bg);border-radius:6px;padding:8px 10px;margin-bottom:6px"><strong>Response:</strong> ${e.resp}</div>`:''}<div style="display:flex;gap:8px;align-items:center">${e.fu!='none'?`<span style="font-size:10px;font-weight:700;color:var(--accent2)">${FU_LABELS[e.fu]||''}</span>`:''}<button onclick="removeUC(${idx})" style="margin-left:auto;background:none;border:none;color:var(--t4);cursor:pointer;font-size:11px">✕ Remove</button></div>`;
+    log.appendChild(d);
+  });
+}
+function removeUC(idx){UC_LOG.splice(idx,1);renderUCLog();updateUCCounts();}
+function updateUCCounts(){
+  document.getElementById('uc-cnt-uc').textContent=UC_LOG.filter(e=>e.type==='usecase').length;
+  document.getElementById('uc-cnt-q').textContent=UC_LOG.filter(e=>e.type==='question').length;
+  document.getElementById('uc-cnt-o').textContent=UC_LOG.filter(e=>e.type==='objection').length;
+  document.getElementById('uc-cnt-f').textContent=UC_LOG.filter(e=>e.fu!=='none').length;
+}
+
+// ─────────────── DEFAULT UC LOG (pre-filled from 03/30 call) ───────────────
+function buildDefaultUCLog(){
+  const entries=[
+    {type:'usecase',text:'Email chains auto-logged into Monday.com project boards — capturing all client and inter-department communication in context without manual copy-paste.',resp:'Proposed ClickUp\'s native Outlook email integration as a reference model. Committed to researching if Monday.com has an equivalent native feature or Make.com workaround.',fu:'prop'},
+    {type:'usecase',text:'AI-assisted quoting and estimating — AI reads Google Sheets data and generates a structured PDF quote output via a smart prompt, reducing the multi-department email loop for custom orders.',resp:'Confirmed this is viable. Shared a construction industry example (spreadsheet → AI prompt → PDF supply list). David responded positively.',fu:'prop'},
+    {type:'usecase',text:'Internal AI knowledge base / RAG agent — employees ask questions and get instant answers drawn from SOPs, process docs, and company knowledge. Specifically requested for training and onboarding new hires.',resp:'Proposed two paths: (1) Claude + SOP creator with clickable HTML demos; (2) Microsoft Copilot + SharePoint agent (noted: they don\'t have Copilot — using ChatGPT). Christina: "Oh amazing. Yeah. That\'s awesome."',fu:'prop'},
+    {type:'usecase',text:'SOP creator with interactive HTML clickable demos — Claude generates detailed SOPs and visual HTML documentation with step-by-step demos for training and process standardization.',resp:'Described the capability in detail. Christina responded enthusiastically. Committed to including an HTML demo in the follow-up email.',fu:'prop'},
+    {type:'usecase',text:'Red Hats AI interface — unified company-wide AI platform giving all teams access to ChatGPT + Claude without saving to memory. No training on private data, but structured and governed.',resp:'Proposed as a quick foundational win — gives the company a structured AI foundation aligned with their current ChatGPT-only setup.',fu:'prop'},
+    {type:'usecase',text:'Monday.com board structure for sample tracking — email integration within existing sample boards (hand samples, large format samples) with group-by-process flow.',resp:'Christina described the board structure in detail. Jessica suggested adding a column where the entire email chain is captured per board item.',fu:'prop'},
+    {type:'insight',text:'CEO issued a company-wide AI mandate — David and Christina are executing on it, not self-motivated champions. This means internal political cover is strong, but final decisions go up to an unnamed CEO.',resp:'Confirmed. Need to identify the CEO by name and request an introduction or inclusion in the next call.',fu:'yes'},
+    {type:'insight',text:'"90% of our business through Google Sheets" — the company is more spreadsheet-dependent than it appears from the CRM/PM tool stack. This is a hidden automation opportunity beyond the stated priorities.',resp:'Noted. Will include Google Sheets modernization as an opportunity in the follow-up email.',fu:'prop'},
+    {type:'insight',text:'Christina built the existing Make.com automations herself — she is technically capable and already an internal automation champion. She\'ll evaluate solutions critically and speak the technical language.',resp:'Confirmed. Will speak to integration quality and technical specifics in all communications, not just AI buzzwords.',fu:'none'},
+    {type:'insight',text:'Sales cycles run 12–24 months — this is an unusually long B2B cycle driven by the architect specification-to-builder purchase model. AI value must be demonstrated across a long horizon.',resp:'Noted. ROI framing must account for this timeline. Quick wins (email integration, knowledge base) are especially important to show early value.',fu:'none'},
+    {type:'question',text:'Does Monday.com have a native email integration feature? Or does it require an API/Make.com workaround?',resp:'Jessica committed to researching this before or alongside the 03/31 email. ClickUp\'s Outlook plugin was mentioned as a reference model.',fu:'yes'},
+    {type:'question',text:'Who is the CEO? He was never named during the call. He issued the mandate and is likely the budget approver.',resp:'Not answered. Will ask Christina and David to name him and ideally facilitate an introduction in the follow-up email.',fu:'yes'},
+    {type:'question',text:'What is the budget the CEO has allocated for AI initiatives this year?',resp:'Not discussed. Will soft-qualify in the follow-up email framed as "to tailor the right solution tier."',fu:'yes'},
+    {type:'objection',text:'Social media AI is a poor fit — posts are too technical, too product-specific, and require deep architectural knowledge. David explicitly flagged this: "It\'s like a copywriter that has to do it every time."',resp:'Acknowledged. Will not lead with content/social AI in any proposal. Focus exclusively on workflow, integration, and knowledge base use cases.',fu:'none'},
+    {type:'objection',text:'AI landscape is moving too fast — David: "With how much it\'s changing and evolving on a weekly basis, we\'re still kind of trying to figure out what\'s best for us." This is causing evaluation hesitancy.',resp:'Position Plus One Technology as the guide through that complexity — "you don\'t need to track the AI landscape; that\'s what we do." Framing the follow-up email this way.',fu:'prop'},
+  ];
+  entries.forEach((e,i)=>{ucCount++;UC_LOG.push({...e,id:ucCount});});
+  renderUCLog();updateUCCounts();
+}
+
+// ─────────────── RISKS ───────────────
+function addRisk(){
+  riskCount++;
+  const d=document.createElement('div');d.className='gov-risk';
+  d.innerHTML=`<div class="risk-badge med">🟡 Medium Risk</div><div class="f"><label>Risk Area</label><input type="text" placeholder="Risk category"></div><div class="f"><label>Specific Concern</label><textarea placeholder="What exactly could go wrong?"></textarea></div><div class="f"><label>Proposed Mitigation</label><textarea placeholder="How do we address this?"></textarea></div>`;
+  document.getElementById('risk-list').appendChild(d);
+}
+
+// ─────────────── STAKEHOLDERS ───────────────
+function addSth(){
+  const d=document.createElement('div');d.className='sth-card';
+  d.innerHTML=`<div class="sth-role">Additional Stakeholder</div><div class="g2 gap14"><div class="f"><label>Name</label><input type="text"></div><div class="f"><label>Title</label><input type="text"></div></div><div class="g2 gap14"><div class="f"><label>Email</label><input type="email"></div><div class="f"><label>Phone</label><input type="tel"></div></div><div class="f"><label>Involvement</label><select><option>Champion</option><option>Approver</option><option>Informed only</option><option>Blocker</option></select></div><div class="f"><label>Notes</label><textarea placeholder="Motivations, concerns..."></textarea></div>`;
+  document.getElementById('sth-list').appendChild(d);
+}
+
+// ─────────────── CREDENTIALS ───────────────
+function buildDefaultCreds(){
+  const li=document.getElementById('cred-list');if(!li)return;
+  DEFAULT_CREDS.forEach((c)=>{credIdx++;addCredItem(li,c,'cred-'+credIdx);});
+}
+function addCredItem(li,label,id){
+  const d=document.createElement('div');d.className='cred-item';d.id=id;
+  d.innerHTML=`<div class="cred-chk" onclick="toggleCred('${id}')"></div><div class="cred-lbl" id="${id}-lbl">${label}</div><div class="cred-owner"><input type="text" placeholder="Owner..."></div>`;
+  li.appendChild(d);
+}
+function addCred(){
+  credIdx++;
+  const id='cred-'+credIdx;
+  addCredItem(document.getElementById('cred-list'),`Credential #${credIdx}`,id);
+}
+function toggleCred(id){
+  const item=document.getElementById(id);
+  const chk=item.querySelector('.cred-chk');const lbl=document.getElementById(id+'-lbl');
+  chk.classList.toggle('done');lbl.classList.toggle('done');chk.textContent=chk.classList.contains('done')?'✓':'';
+}
+
+// ─────────────── OPEN QUESTIONS ───────────────
+function buildDefaultQs(){
+  const li=document.getElementById('q-log');if(!li)return;
+  DEFAULT_QS.forEach(q=>{qIdx++;addQItem(li,q,'q-'+qIdx);});
+}
+function addQItem(li,val,id){
+  const d=document.createElement('div');d.className='q-entry';d.id=id;
+  d.innerHTML=`<div class="q-num">${qIdx}</div><div style="flex:1"><input type="text" value="${val}" placeholder="Question or follow-up..." style="margin-bottom:5px"><input type="text" placeholder="Answer / notes..." style="font-size:12px"></div><div class="q-res" onclick="toggleQ('${id}')"></div>`;
+  li.appendChild(d);
+}
+function addQ(){
+  qIdx++;const id='q-'+qIdx;
+  addQItem(document.getElementById('q-log'),'',id);
+}
+function toggleQ(id){
+  const chk=document.getElementById(id).querySelector('.q-res');
+  chk.classList.toggle('yes');chk.textContent=chk.classList.contains('yes')?'✓':'';
+}
+
+// ─────────────── ACTIONS ───────────────
+function buildDefaultActions(){
+  DEFAULT_ACTIONS.forEach(a=>addActionItem(a));
+}
+function addActionItem(label){
+  actIdx++;const id='act-'+actIdx;
+  const li=document.getElementById('action-list');
+  const d=document.createElement('div');d.className='action';d.id=id;
+  d.innerHTML=`<div class="a-num">${actIdx}</div><input type="text" value="${label||''}" placeholder="Action item..." style="flex:1"><div class="a-owner"><input type="text" placeholder="Owner"></div><input type="date" style="width:130px"><div class="a-chk" onclick="toggleAct('${id}')"></div>`;
+  li.appendChild(d);
+}
+function addAction(){addActionItem('');}
+function toggleAct(id){
+  const el=document.getElementById(id);el.classList.toggle('done-a');
+  const chk=el.querySelector('.a-chk');chk.classList.toggle('yes');chk.textContent=chk.classList.contains('yes')?'✓':'';
+  updateStats();
+}
+
+// ─────────────── STATS ───────────────
+function updateStats(){
+  const all=document.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=url],select,textarea');
+  let filled=0;all.forEach(el=>{if(el.value.trim())filled++;});
+  const pct=Math.round((filled/Math.max(all.length,1))*100);
+  const sc=document.getElementById('st-comp');if(sc)sc.textContent=pct+'%';
+  const rels=document.querySelectorAll('[id^="opp-rel-"]');
+  let oc=0;rels.forEach(s=>{if(s.value&&!s.value.includes('Not'))oc++;});
+  const so=document.getElementById('st-opps');if(so)so.textContent=oc||'—';
+  const open=document.querySelectorAll('.action:not(.done-a)').length;
+  const sa=document.getElementById('st-actions');if(sa)sa.textContent=open;
+  const fitSel=document.getElementById('rh_overall_fit');
+  const sf=document.getElementById('st-fit');if(sf&&fitSel)sf.textContent=fitSel.value?fitSel.value.split(' ')[0]:'—';
+  const stageSel=document.getElementById('ns_stage');
+  const ss=document.getElementById('st-stage');if(ss&&stageSel)ss.textContent=stageSel.value||'—';
+}
+
+// ─────────────── SAVE / LOAD ───────────────
+function gatherData(){
+  const fields={};
+  document.querySelectorAll('[id]').forEach(el=>{if(['INPUT','TEXTAREA','SELECT'].includes(el.tagName)&&el.id)fields[el.id]=el.value;});
+  return{fields,ratings,PILLS,UC_LOG,oppPris,client:'reSAWN TIMBER co.',ts:Date.now()};
+}
+function applyData(data){
+  if(!data)return;
+  if(data.fields)Object.entries(data.fields).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=v;});
+  if(data.ratings)Object.entries(data.ratings).forEach(([id,v])=>sr(id,v));
+  if(data.UC_LOG){data.UC_LOG.forEach(e=>UC_LOG.push(e));renderUCLog();updateUCCounts();}
+  syncHero();updateStats();
+}
+function saveAll(){
+  try{localStorage.setItem('ai_disc_resawn_v1',JSON.stringify(gatherData()));showSaveOk();showToast();}catch(e){}
+}
+function autoSave(){try{localStorage.setItem('ai_disc_resawn_v1',JSON.stringify(gatherData()));}catch(e){}}
+function loadData(){try{const raw=localStorage.getItem('ai_disc_resawn_v1');if(raw)applyData(JSON.parse(raw));}catch(e){}}
+function showSaveOk(){const el=document.getElementById('saveOk');el.classList.add('on');setTimeout(()=>el.classList.remove('on'),2000);}
+function showToast(){const t=document.getElementById('toast');t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
+function exportJSON(){
+  const blob=new Blob([JSON.stringify(gatherData(),null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='AI_Discovery_reSAWN_TIMBER_co_'+new Date().toISOString().split('T')[0]+'.json';
+  a.click();
+}
+function trigImport(){document.getElementById('imp-file').click();}
+function doImport(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{try{applyData(JSON.parse(ev.target.result));showToast();}catch(err){alert('Invalid file');}};
+  r.readAsText(file);
+}
+
+// ─ EXPORT REMINDER ─
+let hasUnsavedChanges=false,bannerTimer=null,bannerDismissed=false;
+document.addEventListener('input',()=>{hasUnsavedChanges=true;scheduleBanner();});
+document.addEventListener('change',()=>{hasUnsavedChanges=true;scheduleBanner();});
+function scheduleBanner(){if(bannerDismissed)return;clearTimeout(bannerTimer);bannerTimer=setTimeout(()=>{if(hasUnsavedChanges&&!bannerDismissed)showExportBanner();},3*60*1000);}
+function showExportBanner(){document.getElementById('exportBanner').classList.add('show');}
+function dismissBanner(){document.getElementById('exportBanner').classList.remove('show');bannerTimer=setTimeout(()=>{if(hasUnsavedChanges)showExportBanner();},5*60*1000);}
+function dismissBannerPerm(){document.getElementById('exportBanner').classList.remove('show');bannerDismissed=true;hasUnsavedChanges=false;}
+function exportAndDismiss(){exportJSON();hasUnsavedChanges=false;bannerDismissed=false;document.getElementById('exportBanner').classList.remove('show');clearTimeout(bannerTimer);}
+window.addEventListener('load',()=>{document.querySelectorAll('.btn-p').forEach(btn=>{if(btn.textContent.includes('Save')){btn.addEventListener('click',()=>{hasUnsavedChanges=false;bannerDismissed=false;document.getElementById('exportBanner').classList.remove('show');clearTimeout(bannerTimer);});}});});
+window.addEventListener('beforeunload',(e)=>{if(hasUnsavedChanges){e.preventDefault();e.returnValue='You have unsaved changes. Export your session before leaving!';return e.returnValue;}});
+setTimeout(()=>{if(hasUnsavedChanges)showExportBanner();},10*60*1000);
+</script>
+</body>
+</html>
