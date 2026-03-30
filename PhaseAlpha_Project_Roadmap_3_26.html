@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhaseAlpha HVAC Extraction — Project Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0f2545;
+  --blue: #1a4fad;
+  --blue-mid: #2563eb;
+  --blue-light: #dbeafe;
+  --blue-pale: #f0f6ff;
+  --accent: #f97316;
+  --accent-light: #fff7ed;
+  --green: #166534;
+  --green-light: #dcfce7;
+  --red: #991b1b;
+  --red-light: #fee2e2;
+  --amber: #92400e;
+  --amber-light: #fef3c7;
+  --purple: #5b21b6;
+  --purple-light: #ede9fe;
+  --gray1: #f8fafc;
+  --gray2: #e2e8f0;
+  --gray3: #94a3b8;
+  --gray4: #475569;
+  --gray5: #1e293b;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--gray1);color:var(--gray5);font-size:15px;line-height:1.6}
+
+/* ── RADIO INPUTS ── */
+.kr{position:absolute;opacity:0;pointer-events:none}
+
+/* ── SHELL ── */
+.shell{display:flex;flex-direction:column;min-height:100vh}
+
+/* ── HEADER ── */
+.hdr{position:sticky;top:0;z-index:100;background:var(--navy);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.badge{background:var(--accent);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+.hdr-title{color:#fff;font-weight:700;font-size:16px}
+.hdr-sub{color:#94a3b8;font-family:var(--mono);font-size:11px;margin-top:1px}
+.hdr-right{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.meta-pill{background:rgba(255,255,255,.1);color:#cbd5e1;font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);white-space:nowrap}
+
+/* ── NAV ── */
+.tnav{position:sticky;top:62px;z-index:99;background:#fff;border-bottom:2px solid var(--gray2);display:flex;overflow-x:auto;scrollbar-width:none}
+.tnav::-webkit-scrollbar{display:none}
+.tnav label{display:flex;align-items:center;gap:6px;padding:13px 18px;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--gray4);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .15s}
+.tnav label:hover{color:var(--blue-mid)}
+
+/* ── PANES ── */
+.panes{flex:1}
+.slab{display:none;max-width:1120px;margin:0 auto;padding:32px 28px}
+
+/* ── ACTIVE TAB STATES ── */
+#t1:checked ~ .shell > .tnav > label[for="t1"],
+#t2:checked ~ .shell > .tnav > label[for="t2"],
+#t3:checked ~ .shell > .tnav > label[for="t3"],
+#t4:checked ~ .shell > .tnav > label[for="t4"],
+#t5:checked ~ .shell > .tnav > label[for="t5"],
+#t6:checked ~ .shell > .tnav > label[for="t6"],
+#t7:checked ~ .shell > .tnav > label[for="t7"],
+#t8:checked ~ .shell > .tnav > label[for="t8"],
+#t9:checked ~ .shell > .tnav > label[for="t9"]{color:#fff;background:var(--navy);border-bottom-color:var(--accent);font-weight:700}
+
+#t1:checked ~ .shell > .panes > #p1,
+#t2:checked ~ .shell > .panes > #p2,
+#t3:checked ~ .shell > .panes > #p3,
+#t4:checked ~ .shell > .panes > #p4,
+#t5:checked ~ .shell > .panes > #p5,
+#t6:checked ~ .shell > .panes > #p6,
+#t7:checked ~ .shell > .panes > #p7,
+#t8:checked ~ .shell > .panes > #p8,
+#t9:checked ~ .shell > .panes > #p9{display:block}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--gray2);border-radius:10px;padding:20px 24px;margin-bottom:20px}
+.card-title{font-family:var(--mono);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue-mid);margin-bottom:12px}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+/* ── CALLOUTS ── */
+.callout{display:flex;gap:14px;border-radius:8px;padding:16px 18px;margin-bottom:16px}
+.callout.success{background:var(--green-light);border:1px solid #86efac}
+.callout.warn{background:var(--amber-light);border:1px solid #fcd34d}
+.callout.risk{background:var(--red-light);border:1px solid #fca5a5}
+.callout.info{background:var(--blue-light);border:1px solid #93c5fd}
+.callout.purple{background:var(--purple-light);border:1px solid #c4b5fd}
+.callout-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.callout-title{font-weight:700;font-size:13px;margin-bottom:4px}
+.callout-body{font-size:13px;line-height:1.55}
+
+/* ── STATUS PILLS ── */
+.status{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
+.status::before{content:'●';font-size:7px}
+.s-done{background:var(--green-light);color:var(--green)}
+.s-pending{background:var(--amber-light);color:var(--amber)}
+.s-blocked{background:var(--red-light);color:var(--red)}
+.s-open{background:var(--blue-light);color:var(--blue)}
+.s-progress{background:var(--purple-light);color:var(--purple)}
+
+/* ── CHIPS ── */
+.chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:4px;display:inline-block;margin:2px}
+.chip-blue{background:var(--blue-light);color:var(--blue)}
+.chip-green{background:var(--green-light);color:var(--green)}
+.chip-red{background:var(--red-light);color:var(--red)}
+.chip-amber{background:var(--amber-light);color:var(--amber)}
+.chip-purple{background:var(--purple-light);color:var(--purple)}
+.chip-navy{background:var(--navy);color:#fff}
+
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;text-align:left}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--gray2)}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+.tbl tr:hover td{background:var(--blue-pale)}
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--gray2)}
+
+/* ── KPI TILES ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi-tile{background:#fff;border:1px solid var(--gray2);border-radius:10px;padding:20px;text-align:center}
+.kpi-num{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--blue-mid);line-height:1.1}
+.kpi-label{font-family:var(--mono);font-size:11px;color:var(--gray4);text-transform:uppercase;letter-spacing:.07em;margin-top:6px}
+.kpi-sub{font-size:11px;color:var(--gray3);font-style:italic;margin-top:3px}
+
+/* ── PHASE CARDS ── */
+.phase-card{background:#fff;border:1px solid var(--gray2);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.phase-hdr{display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid var(--gray2)}
+.phase-num{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--mono);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phase-hdr-text h3{font-size:16px;font-weight:700;margin-bottom:3px}
+.phase-hdr-text p{font-size:13px;color:var(--gray4)}
+.phase-hdr-meta{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.phase-body{padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.phase-section h4{font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue-mid);margin-bottom:8px}
+.phase-section ul{padding-left:16px;font-size:13px;color:var(--gray5);line-height:1.7}
+.phase-section li{margin-bottom:2px}
+.risk-badge{font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px}
+.rb-high{background:var(--red-light);color:var(--red)}
+.rb-med{background:var(--amber-light);color:var(--amber)}
+.rb-low{background:var(--green-light);color:var(--green)}
+
+/* ── MILESTONE ROWS ── */
+.ms-row{display:grid;grid-template-columns:48px 1fr 220px;gap:0;border-bottom:1px solid var(--gray2);align-items:start}
+.ms-row:last-child{border-bottom:none}
+.ms-row:hover{background:var(--blue-pale)}
+.ms-num{width:48px;padding:16px 0 16px 16px;display:flex;align-items:flex-start;justify-content:center;padding-top:18px}
+.ms-circle{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ms-content{padding:16px 20px}
+.ms-content h4{font-weight:700;font-size:14px;margin-bottom:4px}
+.ms-content .ms-output{font-size:12px;color:var(--blue-mid);font-family:var(--mono);margin-bottom:6px}
+.ms-criteria{font-size:12px;color:var(--gray4);line-height:1.55}
+.ms-meta{padding:16px;text-align:right;font-size:12px;color:var(--gray4);line-height:1.8}
+.ms-meta strong{display:block;font-family:var(--mono);font-size:11px;color:var(--gray5)}
+
+/* ── CRITICAL PATH ── */
+.cp-chain{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:20px;padding:16px;background:#fff;border:1px solid var(--gray2);border-radius:8px}
+.cp-node{font-family:var(--mono);font-size:11px;font-weight:600;padding:6px 12px;border-radius:4px;white-space:nowrap}
+.cp-arrow{color:var(--gray3);font-size:16px;padding:0 2px}
+.cp-node.cn-green{background:var(--green-light);color:var(--green)}
+.cp-node.cn-blue{background:var(--blue-light);color:var(--blue)}
+.cp-node.cn-amber{background:var(--amber-light);color:var(--amber)}
+.cp-node.cn-red{background:var(--red-light);color:var(--red)}
+
+/* ── RISK CARDS ── */
+.risk-card{background:#fff;border:1px solid var(--gray2);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.risk-hdr{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--gray1);border-bottom:1px solid var(--gray2)}
+.risk-title{font-weight:700;font-size:14px;flex:1}
+.risk-owner{font-family:var(--mono);font-size:11px;color:var(--gray4)}
+.risk-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.risk-col{padding:14px 18px;border-right:1px solid var(--gray2);font-size:13px}
+.risk-col:last-child{border-right:none}
+.risk-col-title{font-family:var(--mono);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--blue-mid);margin-bottom:6px}
+
+/* ── TIMELINE ── */
+.tl-wrap{position:relative;padding-left:40px}
+.tl-wrap::before{content:'';position:absolute;left:12px;top:8px;bottom:8px;width:2px;background:var(--gray2)}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-dot{width:24px;height:24px;border-radius:50%;position:absolute;left:-40px;top:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono)}
+.tl-dot.td-green{background:var(--green-light);color:var(--green);border:2px solid #86efac}
+.tl-dot.td-blue{background:var(--blue-light);color:var(--blue);border:2px solid #93c5fd}
+.tl-dot.td-amber{background:var(--amber-light);color:var(--amber);border:2px solid #fcd34d}
+.tl-dot.td-purple{background:var(--purple-light);color:var(--purple);border:2px solid #c4b5fd}
+.tl-dot.td-navy{background:var(--navy);color:#fff}
+.tl-card{background:#fff;border:1px solid var(--gray2);border-radius:8px;padding:14px 18px}
+.tl-card h4{font-weight:700;font-size:14px;margin-bottom:4px}
+.tl-card p{font-size:13px;color:var(--gray4);line-height:1.55}
+.tl-week{font-family:var(--mono);font-size:10px;color:var(--gray3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.tl-gate{background:var(--navy);color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 16px;border-radius:4px;display:inline-block;margin-bottom:12px}
+
+/* ── ACTION CARDS ── */
+.action-grid{display:grid;gap:12px}
+.action-card{background:#fff;border:1px solid var(--gray2);border-radius:10px;display:grid;grid-template-columns:48px 1fr 180px;align-items:start;overflow:hidden}
+.action-num{background:var(--accent);color:#fff;font-family:var(--mono);font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:20px 0;align-self:stretch}
+.action-body{padding:16px 18px}
+.action-body h4{font-weight:700;font-size:14px;margin-bottom:5px}
+.action-body p{font-size:13px;color:var(--gray4);line-height:1.55}
+.action-meta{padding:16px;background:var(--gray1);border-left:1px solid var(--gray2);font-size:12px;align-self:stretch}
+.action-meta strong{display:block;font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--gray3);margin-bottom:3px}
+.action-meta span{display:block;color:var(--gray5);font-weight:600;margin-bottom:10px}
+.action-risk{background:var(--red-light);color:var(--red);font-size:11px;padding:4px 8px;border-radius:4px;margin-top:6px;line-height:1.4}
+
+/* ── OPEN ITEM ROWS ── */
+.oi-row{display:grid;grid-template-columns:28px 1fr 120px 130px 100px;gap:0;border-bottom:1px solid var(--gray2);align-items:start;font-size:13px}
+.oi-row:last-child{border-bottom:none}
+.oi-row:hover{background:var(--blue-pale)}
+.oi-row > div{padding:12px 12px}
+.oi-blocking{background:var(--red-light)!important}
+
+/* ── SECTION HEADING ── */
+.sec-head{margin-bottom:24px}
+.sec-head h2{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.sec-head p{font-size:14px;color:var(--gray4)}
+
+/* ── HR ── */
+.hr{border:none;border-top:1px solid var(--gray2);margin:24px 0}
+
+/* ── SCOPE ITEMS ── */
+.scope-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray2);font-size:13px}
+.scope-item:last-child{border-bottom:none}
+.scope-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.scope-item strong{display:block;font-weight:600;margin-bottom:2px}
+.scope-item p{color:var(--gray4);font-size:12px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .g2,.g3,.g4,.kpi-grid,.phase-body,.risk-body,.action-card,.oi-row{grid-template-columns:1fr!important}
+  .ms-row{grid-template-columns:40px 1fr!important}
+  .ms-meta{display:none}
+  .action-meta{border-left:none;border-top:1px solid var(--gray2)}
+  .hdr{flex-direction:column;align-items:flex-start;gap:8px}
+  .hdr-right{margin-top:6px}
+}
+</style>
+</head>
+<body>
+
+<!-- RADIO INPUTS -->
+<input type="radio" class="kr" name="tabs" id="t1" checked>
+<input type="radio" class="kr" name="tabs" id="t2">
+<input type="radio" class="kr" name="tabs" id="t3">
+<input type="radio" class="kr" name="tabs" id="t4">
+<input type="radio" class="kr" name="tabs" id="t5">
+<input type="radio" class="kr" name="tabs" id="t6">
+<input type="radio" class="kr" name="tabs" id="t7">
+<input type="radio" class="kr" name="tabs" id="t8">
+<input type="radio" class="kr" name="tabs" id="t9">
+
+<div class="shell">
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="hdr-left">
+      <span class="badge">Roadmap v1.0</span>
+      <div>
+        <div class="hdr-title">PhaseAlpha · HVAC Schedule Extraction System</div>
+        <div class="hdr-sub">Plus1 Technology delivery roadmap — Phase 0 through production · Confidential</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <span class="meta-pill">🚀 Kickoff ~Apr 2, 2026</span>
+      <span class="meta-pill">⏱ Phase 0: 2–3 weeks</span>
+      <span class="meta-pill">🗓 Pilot → Prod: ~10–15 wks</span>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="tnav">
+    <label for="t1">📋 Summary &amp; Goals</label>
+    <label for="t2">🔲 Scope</label>
+    <label for="t3">🏗 Phased Plan</label>
+    <label for="t4">🎯 Milestones</label>
+    <label for="t5">🚧 Blockers &amp; Critical Path</label>
+    <label for="t6">⚠️ Risk Register</label>
+    <label for="t7">❓ Open Items</label>
+    <label for="t8">📅 Timeline &amp; Resources</label>
+    <label for="t9">⚡ Next Actions</label>
+  </nav>
+
+  <!-- PANES -->
+  <div class="panes">
+
+    <!-- ══════════════════════════════════════════
+         TAB 1 — SUMMARY & GOALS
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p1">
+      <div class="sec-head">
+        <h2>Project Summary &amp; Goals</h2>
+        <p>What we are building, why it matters, and what success looks like at every checkpoint.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Project Summary</div>
+        <p style="font-size:14px;line-height:1.7;margin-bottom:14px">PhaseAlpha is building a SaaS product that automates HVAC equipment schedule extraction from PDF building plan sets, replacing the manual contractor transcription process that is slow, error-prone, and puts all accuracy risk on the contractor. Plus1 Technology is engaged to design, build, and validate the AI extraction pipeline that forms the technical core of this product — specifically <strong>Layers 3–7</strong> of a seven-layer architecture (table detection, crop orchestration, extraction, normalization, validation). PhaseAlpha handles document ingestion and page classification upstream (Layers 1–2) and owns the Review UI downstream.</p>
+        <p style="font-size:14px;line-height:1.7;margin-bottom:14px">The core finding from document analysis: <strong>this is a detection + rendering + extraction + trust problem</strong>, not simply an OCR problem. A naïve single-pass approach produces unreliable results in production. The architecture is fail-safe by design — the system returns <code>null</code> for unreadable values rather than inferring or guessing, because bad data creates downstream liability for HVAC contractors.</p>
+        <p style="font-size:14px;line-height:1.7">The execution strategy is a two-phase build: an n8n pilot (Phase 0) validates the extraction logic quickly and cheaply before any .NET development commitment, then proven logic migrates into PhaseAlpha's .NET platform for production. Fixed-bid engagement. Quote signed March 28, 2026. Kickoff target: ~April 2, 2026.</p>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-tile">
+          <div class="kpi-num">2 wks</div>
+          <div class="kpi-label">Option A Pilot</div>
+          <div class="kpi-sub">LlamaParse fast path</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-num">~$0.10–$0.35</div>
+          <div class="kpi-label">Per Schedule Page</div>
+          <div class="kpi-sub">Typical 2–5 table pages</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-num">&gt;0.90</div>
+          <div class="kpi-label">Confidence Target</div>
+          <div class="kpi-sub">Auto-approve threshold</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-num">10–15 wks</div>
+          <div class="kpi-label">Pilot → Production</div>
+          <div class="kpi-sub">Full migration timeline</div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="card">
+          <div class="card-title">Business Goals</div>
+          <div class="scope-item">
+            <span class="scope-icon">⚡</span>
+            <div><strong>Eliminate manual transcription</strong><p>HVAC contractors currently transcribe all schedule data by hand — a process that takes hours per project and puts 100% of accuracy risk on the contractor.</p></div>
+          </div>
+          <div class="scope-item">
+            <span class="scope-icon">💰</span>
+            <div><strong>Reduce contractor liability exposure</strong><p>Fabricated or inferred data downstream of this pipeline creates real pricing and configuration liability. The system's null-first policy directly reduces this risk for PhaseAlpha's customers.</p></div>
+          </div>
+          <div class="scope-item">
+            <span class="scope-icon">🚀</span>
+            <div><strong>Faster time-to-quote</strong><p>Once extraction is reliable, contractors can produce equipment takeoffs in minutes rather than hours, dramatically increasing the volume of projects PhaseAlpha's platform can process per user.</p></div>
+          </div>
+          <div class="scope-item">
+            <span class="scope-icon">📦</span>
+            <div><strong>PhaseAlpha owns all IP</strong><p>All code, workflows, prompts, and data models built in this engagement are owned entirely by PhaseAlpha. No vendor lock-in — built on independent APIs that can be swapped at any time.</p></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Technical Goals</div>
+          <div class="scope-item">
+            <span class="scope-icon">🔍</span>
+            <div><strong>Two-pass table detection</strong><p>Detect table regions at page scale (150 DPI), then crop and re-render at 300–500 DPI per table. VAV box confidence: 0.76 → 0.91 after cropping in documented testing.</p></div>
+          </div>
+          <div class="scope-item">
+            <span class="scope-icon">🤖</span>
+            <div><strong>LlamaParse + Claude extraction pipeline</strong><p>LlamaParse as primary detector (Option A) with Docling fallback (Option B). Claude Sonnet/Opus for vision extraction. OpenAI Structured Outputs for schema normalization.</p></div>
+          </div>
+          <div class="scope-item">
+            <span class="scope-icon">🗺</span>
+            <div><strong>Canonical data model + synonym mapping</strong><p>Seven canonical fields mapped from hundreds of header variants across engineering firms. Column header mapping agent resolves novel variants gracefully.</p></div>
+          </div>
+          <div class="scope-item">
+            <span class="scope-icon">🛡</span>
+            <div><strong>Validation and anti-hallucination layer</strong><p>Eight failure codes (VALUE_ILLEGIBLE, FABRICATED_COMPLETENESS, DUPLICATE_TAG, etc.) with defined routing actions. Cross-model verification for worst-case fabrication detection.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Success Metrics — Baseline vs. Target</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Metric</th><th>Baseline (Today)</th><th>Phase 0 Target</th><th>Production Target</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Field-level extraction accuracy</strong></td><td>Manual transcription — error-prone, no measurement</td><td>≥85% field accuracy on pilot document set</td><td>≥95% field accuracy across all schedule types</td></tr>
+              <tr><td><strong>Auto-approve rate</strong></td><td>0% — all records reviewed manually</td><td>Measured baseline; threshold calibrated</td><td>≥60% records above 0.90 confidence (auto-approve)</td></tr>
+              <tr><td><strong>Null rate (unreadable fields)</strong></td><td>Not measured — values inferred or guessed</td><td>Null returned for every unreadable cell</td><td>Null rate &lt;15% on typical schedule pages</td></tr>
+              <tr><td><strong>Full-width table success</strong></td><td>Fails single-pass extraction reliably</td><td>AHU/RTU split-stitch pipeline functional</td><td>≥90% of 40-col full-width tables extracted cleanly</td></tr>
+              <tr><td><strong>Per-page processing cost</strong></td><td>N/A (no automated pipeline)</td><td>Measured within $0.05–$0.95/page range</td><td>≤$0.35/page for typical 2–5 table pages</td></tr>
+              <tr><td><strong>Time from PDF in to JSON out</strong></td><td>Hours (manual)</td><td>Under 90 seconds per schedule page</td><td>Under 30 seconds per schedule page</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="g3">
+        <div class="card">
+          <div class="card-title">📍 30-Day Checkpoint</div>
+          <p style="font-size:13px;color:var(--gray4);margin-bottom:10px"><em>"Working" means:</em></p>
+          <ul style="font-size:13px;padding-left:18px;line-height:1.8;color:var(--gray5)">
+            <li>n8n pilot environment running</li>
+            <li>LlamaParse detecting tables on all 3 sample firm types</li>
+            <li>Two-pass crop pipeline producing clean crops</li>
+            <li>Claude returning structured JSON with null for unreadable cells</li>
+            <li>Validation rule engine assigning failure codes</li>
+            <li>Option A vs B decision made from real test data</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📍 60-Day Checkpoint</div>
+          <p style="font-size:13px;color:var(--gray4);margin-bottom:10px"><em>"Working" means:</em></p>
+          <ul style="font-size:13px;padding-left:18px;line-height:1.8;color:var(--gray5)">
+            <li>Full pipeline tested on 10+ real PhaseAlpha documents</li>
+            <li>Accuracy measured against reference files (ground truth)</li>
+            <li>API payload contract defined and published to PhaseAlpha UI team</li>
+            <li>n8n pipeline hardened as production-grade API endpoint</li>
+            <li>PhaseAlpha .NET integration work underway or planned</li>
+            <li>Learning loop collecting reviewer corrections</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📍 90-Day Checkpoint</div>
+          <p style="font-size:13px;color:var(--gray4);margin-bottom:10px"><em>"Working" means:</em></p>
+          <ul style="font-size:13px;padding-left:18px;line-height:1.8;color:var(--gray5)">
+            <li>Extraction pipeline running natively in PhaseAlpha's .NET platform</li>
+            <li>n8n no longer required for production processing</li>
+            <li>Load testing complete at production volume</li>
+            <li>Monitoring, alerting, and retry logic operational</li>
+            <li>Confidence threshold calibrated from real review queue data</li>
+            <li>PhaseAlpha owns and operates 100% of the system</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 2 — SCOPE
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p2">
+      <div class="sec-head">
+        <h2>Scope Boundaries</h2>
+        <p>What Plus1 builds, what PhaseAlpha owns, and what is deferred to post-pilot.</p>
+      </div>
+
+      <div class="callout success">
+        <div class="callout-icon">✅</div>
+        <div class="callout-body">
+          <div class="callout-title">Scope confirmed from PhaseAlpha (Joe Lewis, March 28, 2026)</div>
+          PhaseAlpha handles page splitting and routing upstream and delivers pre-split schedule pages as PDF. PhaseAlpha owns the Review UI. Reference files will be cleaned up and provided. Quote signed. These scope decisions materially reduced the estimate by ~4–6 days vs. original scope.
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="card">
+          <div class="card-title">✅ In Scope — Plus1 Builds</div>
+          <div class="scope-item"><span class="scope-icon">🔍</span><div><strong>Layer 3 — Table Detection</strong><p>LlamaParse primary detector identifying every distinct equipment schedule table on each pre-split schedule page PDF, returning bounding boxes and equipment type labels. Docling fallback wired in if Option B selected.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">✂️</span><div><strong>Layer 4 — Rendering &amp; Crop Orchestration</strong><p>Two-pass pipeline: 150 DPI full-page scan for table location, then 300–500 DPI crop per table based on density. Full-width horizontal split-and-stitch for 40+ column AHU/RTU schedules. PyMuPDF (fitz) implementation.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">🤖</span><div><strong>Layer 5 — Extraction</strong><p>Claude Sonnet/Opus vision model processing cropped table images. Returns raw cell-level content with null for unreadable values. Operates on crops only — never full-page images.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">🗺</span><div><strong>Layer 6a — Column Header Mapping Agent</strong><p>AI agent with synonym knowledge base resolving novel header variants to canonical field names. Pre-populated with known variants from Bluestone, MODUS, and Shive Hattery analysis.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">📐</span><div><strong>Layer 6b — Schema Normalization</strong><p>OpenAI Structured Outputs enforcing canonical equipment schema at the model response layer. Unit conversion, terminology normalization, remarks concatenation.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">🛡</span><div><strong>Layer 7 — Validation, Anti-Hallucination &amp; Trust</strong><p>Eight failure codes with routing actions. Cross-model verification for FABRICATED_COMPLETENESS detection. Confidence scoring and review queue routing rules.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">🔄</span><div><strong>n8n Pilot Orchestration (Phase 0)</strong><p>Full pipeline wired in n8n for rapid iteration and validation. Self-hosted recommended. All 10 automation nodes (A1–A10) from intake through learning loop.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">📋</span><div><strong>API Payload Contract</strong><p>Defined JSON handoff contract for PhaseAlpha's Review UI team — normalized fields, per-field confidence scores, failure codes, flagged cell references, crop image URL, source traceability. Required deliverable before PhaseAlpha UI development begins.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">📊</span><div><strong>Canonical Data Model</strong><p>Document-level metadata, schedule-level metadata, and equipment record schema (identity, technical fields, audit &amp; review fields). All owned by PhaseAlpha post-engagement.</p></div></div>
+          <div class="scope-item"><span class="scope-icon">🧠</span><div><strong>7 Production Prompt Sets</strong><p>Page classifier, table detector, crop orchestrator, extraction, normalization, mapping agent, anti-hallucination. Each prompt versioned and documented.</p></div></div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-title">❌ Out of Scope — Explicit Exclusions</div>
+            <div class="scope-item"><span class="scope-icon">🚫</span><div><strong>Layer 1 — Document Ingestion &amp; Routing</strong><p>PhaseAlpha's existing system handles plan PDF ingestion and delivers pre-split schedule pages. Plus1's pipeline begins at Layer 3 (table detection). Saves ~2–3 days vs. original scope.</p></div></div>
+            <div class="scope-item"><span class="scope-icon">🚫</span><div><strong>Layer 2 — Page Classification</strong><p>PhaseAlpha delivers pre-classified schedule pages. Every page received is confirmed as a schedule page. Classifier layer documented for reference but not built or billed. Saves ~2–3 days vs. original scope.</p></div></div>
+            <div class="scope-item"><span class="scope-icon">🚫</span><div><strong>Review UI</strong><p>PhaseAlpha's development team owns and builds the Review UI. Plus1's deliverable at this boundary is a clean, fully-flagged JSON payload per the API contract.</p></div></div>
+            <div class="scope-item"><span class="scope-icon">🚫</span><div><strong>.NET Production Build (Phase 0)</strong><p>The n8n pilot is Phase 0. .NET migration occurs in Phases 1–3 post-pilot. No .NET code written during the testing phase.</p></div></div>
+            <div class="scope-item"><span class="scope-icon">🚫</span><div><strong>Outside Counsel / Legal Drafting</strong><p>Legal and privacy review time estimated separately. EULA drafting, DPA execution with vendors (LlamaParse training policy confirmation) not included.</p></div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🔮 Future Considerations (Post-Pilot)</div>
+            <div class="scope-item"><span class="scope-icon">🔭</span><div><strong>Enterprise Stack Migration</strong><p>Azure Document Intelligence, AWS Textract, or Self-Hosted Docling evaluated after pilot accuracy targets confirmed. Deferred until extraction approach is proven.</p></div></div>
+            <div class="scope-item"><span class="scope-icon">🔭</span><div><strong>Learning Loop Optimization</strong><p>Automated evaluation set building from reviewer corrections. Confidence threshold calibration at production volume. Deferred to Phase 3.</p></div></div>
+            <div class="scope-item"><span class="scope-icon">🔭</span><div><strong>Firm Fingerprinting Cache</strong><p>Once a firm is identified, skip the full mapping agent call and serve cached header map. Cost and latency optimization; deferred post-pilot.</p></div></div>
+            <div class="scope-item"><span class="scope-icon">🔭</span><div><strong>OpenAI Batch API for Normalization</strong><p>50% cost reduction for async non-realtime processing. Applicable at production volume. Deferred to Phase 3 hardening.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 3 — PHASED PLAN
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p3">
+      <div class="sec-head">
+        <h2>Phased Build Plan</h2>
+        <p>Four phases from n8n pilot through production hardening. Phase 0 is the current engagement. Phases 1–3 are the post-pilot .NET migration path.</p>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">Option Selection Required Before Phase 0 Kickoff</div>
+          Option A (Fast Path) or Option B (Full Pilot) must be selected to begin. The core pipeline is identical for both options — the choice only affects the detector layer (Week 1). Option B is the recommended planning assumption: single-pass extraction carries a meaningful failure risk on complex, image-based, or full-width HVAC schedules even with well-tuned prompts.
+        </div>
+      </div>
+
+      <!-- Phase 0A -->
+      <div class="phase-card">
+        <div class="phase-hdr" style="border-left:5px solid var(--blue-mid)">
+          <div class="phase-num">0A</div>
+          <div class="phase-hdr-text">
+            <h3>Phase 0 — Option A: Fast Path Pilot</h3>
+            <p>Single detector (LlamaParse + Claude). Fastest path to a working pilot. Start here.</p>
+          </div>
+          <div class="phase-hdr-meta">
+            <span class="status s-pending">Pending kickoff</span>
+            <span class="chip chip-blue">~2 weeks</span>
+            <span class="risk-badge rb-high">HIGH RISK</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-section">
+            <h4>Deliverables</h4>
+            <ul>
+              <li>n8n self-hosted environment running</li>
+              <li>LlamaParse table detector on sample PDFs</li>
+              <li>Two-pass crop + re-render pipeline (PyMuPDF)</li>
+              <li>Claude extraction returning structured JSON with nulls</li>
+              <li>Column header mapping agent with synonym KB</li>
+              <li>Schema normalization via OpenAI Structured Outputs</li>
+              <li>Validation rule engine with 8 failure codes</li>
+              <li>JSON payload contract published to PhaseAlpha</li>
+              <li>Accuracy measurement against reference files</li>
+            </ul>
+          </div>
+          <div class="phase-section">
+            <h4>Key Activities</h4>
+            <ul>
+              <li>Environment provisioning + n8n self-host setup</li>
+              <li>Sample PDF intake (10–20 pages from PhaseAlpha)</li>
+              <li>Reference file review + ground truth comparison setup</li>
+              <li>LlamaParse integration + bounding box extraction</li>
+              <li>PyMuPDF crop pipeline (150→300→500 DPI logic)</li>
+              <li>Claude vision extraction + prompt tuning</li>
+              <li>Normalization + mapping agent wiring</li>
+              <li>Validation layer + failure code routing</li>
+              <li>Accuracy measurement + pilot results report</li>
+            </ul>
+            <div style="margin-top:12px">
+              <h4>Entry Criteria</h4>
+              <ul>
+                <li>Option A formally selected by PhaseAlpha</li>
+                <li>10–20 sample schedule page PDFs delivered</li>
+                <li>Reference extraction files (JSON/Excel) delivered</li>
+                <li>Payload schema (project ID, page reference) confirmed</li>
+                <li>n8n hosting decision made (self-hosted recommended)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="phase-section">
+            <h4>Exit Criteria (Testable)</h4>
+            <ul>
+              <li>Pipeline processes all 3 sample firm document types without crash</li>
+              <li>LlamaParse detects ≥90% of tables correctly by count vs. manual audit</li>
+              <li>Null returned for every cell that is visually unreadable at 300 DPI</li>
+              <li>Field accuracy ≥85% measured against reference JSON ground truth</li>
+              <li>Full-width schedule split-stitch produces correct row count vs. manual</li>
+              <li>JSON payload matches published contract schema (validated by PhaseAlpha)</li>
+            </ul>
+          </div>
+          <div class="phase-section">
+            <h4>Risk Level &amp; Rationale</h4>
+            <div class="callout risk" style="margin-top:0">
+              <div class="callout-icon">🔴</div>
+              <div class="callout-body">
+                <div class="callout-title">HIGH — Single-pass extraction failure risk</div>
+                LlamaParse single-pass extraction has documented failure modes on complex image-based or full-width HVAC schedules. This option is the <em>starting point</em>, not the final answer. If accuracy targets are not met, escalate immediately to Option B — no redesign required, all code carries forward.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 0B -->
+      <div class="phase-card">
+        <div class="phase-hdr" style="border-left:5px solid var(--amber)">
+          <div class="phase-num" style="background:var(--amber)">0B</div>
+          <div class="phase-hdr-text">
+            <h3>Phase 0 — Option B: Full Pilot / Dual Detector</h3>
+            <p>Adds Docling as automatic fallback detector. Escalation path if Option A accuracy falls short. Recommended planning assumption for complex documents.</p>
+          </div>
+          <div class="phase-hdr-meta">
+            <span class="status s-pending">Escalation path</span>
+            <span class="chip chip-amber">~3 weeks</span>
+            <span class="risk-badge rb-med">MEDIUM RISK</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-section">
+            <h4>Additional Deliverables (vs. Option A)</h4>
+            <ul>
+              <li>Docling self-hosted installation (DocLayNet + TableFormer)</li>
+              <li>Dual detector orchestration with confidence-based routing</li>
+              <li>Automatic fallback: LlamaParse primary → Docling on TABLE_BOUNDARY_MISSED</li>
+              <li>A/B extraction comparison report across sample document set</li>
+              <li>Cross-model verification for FABRICATED_COMPLETENESS detection</li>
+            </ul>
+          </div>
+          <div class="phase-section">
+            <h4>Option A vs Option B Cost Difference</h4>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Option</th><th>Detection</th><th>Extraction</th><th>Total/Page</th></tr></thead>
+                <tbody>
+                  <tr><td>A — Fast Path</td><td>~$0.003</td><td>~$0.05–$0.90</td><td>~$0.054–$0.91</td></tr>
+                  <tr><td>B — Full Pilot</td><td>~$0.003–$0.006</td><td>~$0.05–$0.90</td><td>~$0.054–$0.91</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="font-size:12px;color:var(--gray4);margin-top:8px">Cost difference between A and B is negligible — Docling adds compute time (self-hosted, free) not API cost. The difference is accuracy and reliability on complex pages.</p>
+          </div>
+          <div class="phase-section">
+            <h4>Exit Criteria (Testable)</h4>
+            <ul>
+              <li>All Option A exit criteria met</li>
+              <li>Docling fallback triggers correctly on TABLE_BOUNDARY_MISSED failure code</li>
+              <li>Dual-detector comparison shows measurable improvement on image-based pages vs. Option A alone</li>
+              <li>Cross-model verification catches at least one FABRICATED_COMPLETENESS instance in test set</li>
+            </ul>
+          </div>
+          <div class="phase-section">
+            <h4>Risk Level &amp; Rationale</h4>
+            <div class="callout warn" style="margin-top:0">
+              <div class="callout-icon">🟡</div>
+              <div class="callout-body">
+                <div class="callout-title">MEDIUM — Docling self-hosting complexity</div>
+                Docling requires local Python environment with DocLayNet model weights. Setup adds ~1 day. No cloud dependency — eliminates third-party data exposure for detection stage. Strong data privacy story for PhaseAlpha's contractors.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="phase-card">
+        <div class="phase-hdr" style="border-left:5px solid var(--purple)">
+          <div class="phase-num" style="background:var(--purple)">1</div>
+          <div class="phase-hdr-text">
+            <h3>Phase 1 — API Hardening</h3>
+            <p>Expose the validated n8n pipeline as a production-grade API endpoint callable from PhaseAlpha's .NET platform.</p>
+          </div>
+          <div class="phase-hdr-meta">
+            <span class="status s-open">Post-pilot</span>
+            <span class="chip chip-purple">1–2 weeks</span>
+            <span class="risk-badge rb-low">LOW RISK</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-section">
+            <h4>Deliverables</h4>
+            <ul>
+              <li>n8n webhook exposed as production API endpoint</li>
+              <li>Retry logic, job monitoring, and alerting added</li>
+              <li>Rate limiting and job queue management</li>
+              <li>API payload contract published (formal handoff document)</li>
+              <li>PhaseAlpha Review UI team integration-ready</li>
+              <li>n8n pipeline production-grade and callable from .NET</li>
+            </ul>
+          </div>
+          <div class="phase-section">
+            <h4>Entry Criteria</h4>
+            <ul>
+              <li>Phase 0 exit criteria fully met</li>
+              <li>Option A or B selected and accuracy targets confirmed</li>
+              <li>PhaseAlpha .NET team ready to integrate</li>
+            </ul>
+            <div style="margin-top:12px">
+              <h4>Exit Criteria (Testable)</h4>
+              <ul>
+                <li>PhaseAlpha can call the n8n endpoint from .NET and receive valid JSON payload per contract</li>
+                <li>Retry logic re-processes failed jobs automatically (tested with injected failures)</li>
+                <li>Monitoring dashboard shows job success/failure rates</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card">
+        <div class="phase-hdr" style="border-left:5px solid var(--green)">
+          <div class="phase-num" style="background:var(--green)">2</div>
+          <div class="phase-hdr-text">
+            <h3>Phase 2 — .NET Integration</h3>
+            <p>Migrate extraction pipeline logic into PhaseAlpha's .NET platform. n8n becomes a sidecar service, then is retired from the critical path.</p>
+          </div>
+          <div class="phase-hdr-meta">
+            <span class="status s-open">Post-Phase 1</span>
+            <span class="chip chip-green">3–5 weeks</span>
+            <span class="risk-badge rb-med">MEDIUM RISK</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-section">
+            <h4>Deliverables</h4>
+            <ul>
+              <li>.NET service classes implementing each pipeline layer</li>
+              <li>Python FastAPI crop orchestration service (callable from .NET)</li>
+              <li>All prompts ported to .NET service context</li>
+              <li>Canonical data model integrated into PhaseAlpha database schema</li>
+              <li>n8n workflows converted to .NET service classes</li>
+              <li>Validation rule engine implemented natively</li>
+            </ul>
+          </div>
+          <div class="phase-section">
+            <h4>Entry Criteria</h4>
+            <ul>
+              <li>Phase 1 API hardening complete</li>
+              <li>PhaseAlpha .NET development resources allocated</li>
+              <li>All 7 prompt sets stable and versioned</li>
+            </ul>
+            <div style="margin-top:12px">
+              <h4>Exit Criteria (Testable)</h4>
+              <ul>
+                <li>Pipeline runs natively within PhaseAlpha's .NET platform without calling n8n</li>
+                <li>Output JSON for 10 test documents matches Phase 0 baseline within tolerance</li>
+                <li>PhaseAlpha team can deploy and operate pipeline independently</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 4 — MILESTONES
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p4">
+      <div class="sec-head">
+        <h2>Milestone &amp; Acceptance Criteria Tracker</h2>
+        <p>Each milestone has a tangible output and testable acceptance criteria. Vague milestones are not milestones.</p>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-icon">ℹ️</div>
+        <div class="callout-body">
+          <div class="callout-title">Timeline anchored to ~April 2, 2026 kickoff</div>
+          Weeks are business weeks. Option A path shown (add 1 week for Option B). Target dates shift if kickoff is delayed — the blockers in Tab 5 must clear before Week 1 begins.
+        </div>
+      </div>
+
+      <div class="card" style="padding:0">
+        <!-- M1 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M1</div></div>
+          <div class="ms-content">
+            <h4>Environment Provisioned &amp; Sample Data Received</h4>
+            <div class="ms-output">OUTPUT: n8n running; 10–20 sample schedule page PDFs in + reference files</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> n8n self-hosted instance accessible and processing test webhook. PhaseAlpha has delivered ≥10 sample schedule page PDFs spanning all 3 firm types. Reference JSON/Excel extraction files delivered and reviewed. Payload schema (project ID, page reference format) confirmed in writing.
+            </div>
+            <div style="margin-top:8px"><span class="status s-pending">Pending</span> <span class="chip chip-amber">⚠️ Blocker: reference files not yet received</span></div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 0</span>
+            <strong>Owner</strong><span>Marc / PhaseAlpha</span>
+            <strong>Target</strong><span>Week 1, Day 1–3</span>
+          </div>
+        </div>
+        <!-- M2 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M2</div></div>
+          <div class="ms-content">
+            <h4>Table Detector Operational on All Sample Types</h4>
+            <div class="ms-output">OUTPUT: Bounding boxes returned for every table on Bluestone, MODUS, and Shive Hattery documents</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> LlamaParse detects the correct number of tables on each of 3 sample firm document types (verified against manual count). Detection misses ≤10% of tables. Bounding box coordinates output as percentage-based fitz.Rect values. No pipeline crashes on any sample document.
+            </div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 0</span>
+            <strong>Owner</strong><span>Plus1 / Jessica</span>
+            <strong>Target</strong><span>Week 1, Day 3–5</span>
+          </div>
+        </div>
+        <!-- M3 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M3</div></div>
+          <div class="ms-content">
+            <h4>Two-Pass Crop Pipeline Functional</h4>
+            <div class="ms-output">OUTPUT: High-DPI cropped table images produced for all detected tables</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> Standard table crops produced at ≥300 DPI. Dense table crops produced at ≥400 DPI. Full-width table horizontal split triggered for any table spanning &gt;80% page width. Stitched output column count matches source table column count. VAV box confidence improves ≥10 percentage points vs. full-page render baseline (measured on sample data).
+            </div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 0</span>
+            <strong>Owner</strong><span>Plus1 / Jessica</span>
+            <strong>Target</strong><span>Week 1, Day 4–5</span>
+          </div>
+        </div>
+        <!-- M4 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M4</div></div>
+          <div class="ms-content">
+            <h4>Extraction Returns Valid Structured JSON</h4>
+            <div class="ms-output">OUTPUT: JSON records with canonical field mapping and null for every unreadable cell</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> Claude returns structured JSON for all crop inputs without schema violation. Every cell that is visually unreadable at the given DPI returns null — not an inferred value. equipment_id, area_served, and remarks_combined fields populated on ≥80% of rows in standard schedule pages.
+            </div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 0</span>
+            <strong>Owner</strong><span>Plus1 / Jessica</span>
+            <strong>Target</strong><span>Week 2, Day 1–2</span>
+          </div>
+        </div>
+        <!-- M5 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M5</div></div>
+          <div class="ms-content">
+            <h4>Accuracy Measured Against Reference Ground Truth</h4>
+            <div class="ms-output">OUTPUT: Pilot accuracy report with per-field accuracy and null rate vs. reference files</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> Field-level extraction accuracy ≥85% on pilot document set measured against PhaseAlpha's cleaned reference files. Null rate &lt;20% on standard pages. False completeness rate (FABRICATED_COMPLETENESS flags) &lt;5% of rows. Report delivered to PhaseAlpha within 1 business day of test run completion.
+            </div>
+            <div style="margin-top:8px"><span class="chip chip-amber">⚠️ Depends on reference files from PhaseAlpha</span></div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 0</span>
+            <strong>Owner</strong><span>Plus1 + PhaseAlpha</span>
+            <strong>Target</strong><span>Week 2, Day 3–5</span>
+          </div>
+        </div>
+        <!-- M6 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M6</div></div>
+          <div class="ms-content">
+            <h4>API Payload Contract Published</h4>
+            <div class="ms-output">OUTPUT: Formal JSON contract spec document with all fields, confidence scores, failure codes, and example payload</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> Contract document includes: all normalized field names, per-field confidence score format, all 8 failure code definitions and routing actions, crop image URL field, source traceability fields (project_id, page_ref). PhaseAlpha UI team confirms contract is sufficient to begin Review UI development.
+            </div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 0 / Phase 1</span>
+            <strong>Owner</strong><span>Plus1 + PhaseAlpha</span>
+            <strong>Target</strong><span>Week 2 (Option A) / Week 3 (Option B)</span>
+          </div>
+        </div>
+        <!-- M7 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M7</div></div>
+          <div class="ms-content">
+            <h4>Option A/B Decision Gate</h4>
+            <div class="ms-output">OUTPUT: Formal decision — proceed with Option A results or escalate to Option B</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> PhaseAlpha and Plus1 jointly review accuracy report (M5). If Option A meets ≥85% field accuracy target → Option A accepted as baseline. If Option A falls below target on image-based or full-width documents → Option B escalation triggered. Decision documented in writing.
+            </div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 0 Gate</span>
+            <strong>Owner</strong><span>Joe Lewis / Marc</span>
+            <strong>Target</strong><span>End of Week 2</span>
+          </div>
+        </div>
+        <!-- M8 -->
+        <div class="ms-row">
+          <div class="ms-num"><div class="ms-circle">M8</div></div>
+          <div class="ms-content">
+            <h4>n8n Pipeline Production-Grade API</h4>
+            <div class="ms-output">OUTPUT: n8n webhook endpoint callable from PhaseAlpha's .NET platform with retry, monitoring, and rate limiting</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> PhaseAlpha .NET team makes a test call and receives valid JSON matching contract. Job retry triggers automatically on injected failure (tested). Monitoring shows job status and failure rate. Rate limiting prevents queue overflow under load test.
+            </div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 1</span>
+            <strong>Owner</strong><span>Plus1</span>
+            <strong>Target</strong><span>Phase 1, Week 1–2</span>
+          </div>
+        </div>
+        <!-- M9 -->
+        <div class="ms-row" style="border-bottom:none">
+          <div class="ms-num"><div class="ms-circle">M9</div></div>
+          <div class="ms-content">
+            <h4>Pipeline Running Natively in .NET</h4>
+            <div class="ms-output">OUTPUT: PhaseAlpha's .NET platform processes schedule pages without calling n8n</div>
+            <div class="ms-criteria">
+              <strong>Acceptance:</strong> Pipeline runs end-to-end within PhaseAlpha's .NET platform. JSON output for 10 test documents matches Phase 0 baseline within ±2% field accuracy tolerance. PhaseAlpha team deploys an update to the extraction logic independently (without Plus1 involvement). n8n no longer required in production path.
+            </div>
+          </div>
+          <div class="ms-meta">
+            <strong>Phase</strong><span>Phase 2</span>
+            <strong>Owner</strong><span>PhaseAlpha + Plus1</span>
+            <strong>Target</strong><span>Phase 2 exit</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 5 — BLOCKERS & CRITICAL PATH
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p5">
+      <div class="sec-head">
+        <h2>Blockers &amp; Critical Path</h2>
+        <p>The longest dependent sequence to go-live, and every blocker that could derail it.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔗 Critical Path — Phase 0 (Option A Fast Path)</div>
+        <div class="cp-chain">
+          <div class="cp-node cn-amber">Option Selection ⚠️</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-amber">Sample PDFs Received ⚠️</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-amber">Reference Files Received ⚠️</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-blue">n8n Environment Setup</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-blue">Table Detector (LlamaParse)</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-blue">Crop Orchestration</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-blue">Claude Extraction</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-blue">Normalization + Validation</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-amber">Accuracy Measurement ⚠️</div>
+          <span class="cp-arrow">→</span>
+          <div class="cp-node cn-green">API Contract Published ✓</div>
+        </div>
+        <p style="font-size:12px;color:var(--gray4)">🟡 = Blocked on PhaseAlpha action &nbsp; 🔵 = Plus1 builds &nbsp; 🟢 = Gate/delivery</p>
+      </div>
+
+      <div class="callout risk">
+        <div class="callout-icon">🔴</div>
+        <div class="callout-body">
+          <div class="callout-title">Build-Blocking: Two items must clear before day 1 of active development</div>
+          Option A or B must be formally selected AND sample PDFs + reference files must be received. Without sample PDFs, no pipeline work can be validated. Without reference files, no accuracy measurement is possible — the pilot cannot be closed out.
+        </div>
+      </div>
+
+      <div class="card" style="padding:0">
+        <div class="card-title" style="padding:16px 20px 0">Full Blocker Table</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>#</th><th>Blocker</th><th>What It Blocks</th><th>Owner</th><th>Target Resolution</th><th>Workaround</th></tr></thead>
+            <tbody>
+              <tr style="background:var(--red-light)!important">
+                <td><strong>B1</strong></td>
+                <td><strong>⛔ Option A/B not yet formally selected</strong><br><span style="font-size:11px;color:var(--gray4)">Detector layer choice (Week 1 work) requires decision</span></td>
+                <td>Detector build cannot begin until option is locked</td>
+                <td>Joe Lewis / PhaseAlpha</td>
+                <td>Before kickoff (~Apr 2)</td>
+                <td>Begin core pipeline (Layers 4–7) without detector while awaiting decision — buys 1–2 days</td>
+              </tr>
+              <tr style="background:var(--red-light)!important">
+                <td><strong>B2</strong></td>
+                <td><strong>⛔ Reference extraction files not yet received</strong><br><span style="font-size:11px;color:var(--gray4)">Joe confirmed developer needs to clean up technical debt first</span></td>
+                <td>Accuracy measurement (M5) and pilot closeout impossible without ground truth</td>
+                <td>Joe Lewis / PhaseAlpha dev</td>
+                <td>Week 1 (needed by end of Week 1)</td>
+                <td>Manually create reference extractions from sample PDFs if files not available — adds ~1 day</td>
+              </tr>
+              <tr>
+                <td><strong>B3</strong></td>
+                <td>⚠️ LlamaParse training data policy not confirmed<br><span style="font-size:11px;color:var(--gray4)">LlamaParse data handling not publicly specified</span></td>
+                <td>Production use of LlamaParse may have data privacy risk for PhaseAlpha's contractor clients</td>
+                <td>Brian Knapp / PhaseAlpha legal</td>
+                <td>Before pilot results shared externally</td>
+                <td>Use Docling (self-hosted, no data exposure) for detection while LlamaParse policy confirmed</td>
+              </tr>
+              <tr>
+                <td><strong>B4</strong></td>
+                <td>⚠️ Internal LlamaParse/Docling findings call not yet scheduled<br><span style="font-size:11px;color:var(--gray4)">Joe confirmed he can make this happen</span></td>
+                <td>Without PhaseAlpha's internal findings, Plus1 may spend time re-testing what PhaseAlpha already knows</td>
+                <td>Joe Lewis → PhaseAlpha internal team</td>
+                <td>Week 1 (as early as possible)</td>
+                <td>Proceed with own testing — slower but possible</td>
+              </tr>
+              <tr>
+                <td><strong>B5</strong></td>
+                <td>⚠️ Payload schema exact format not confirmed<br><span style="font-size:11px;color:var(--gray4)">Joe confirmed project ID + page ID + name/unique identifier but exact format TBD</span></td>
+                <td>Pipeline cannot attach records back to PhaseAlpha jobs without confirmed schema</td>
+                <td>PhaseAlpha / Brian Knapp</td>
+                <td>Week 1, Day 1–2</td>
+                <td>Use placeholder schema and refactor on confirmation</td>
+              </tr>
+              <tr>
+                <td><strong>B6</strong></td>
+                <td>⚠️ n8n hosting decision pending<br><span style="font-size:11px;color:var(--gray4)">Self-hosted recommended; cloud n8n adds ~2 days setup and execution limits</span></td>
+                <td>Cloud n8n limits may block long-running crop pipeline jobs</td>
+                <td>Plus1 / PhaseAlpha infra</td>
+                <td>Before kickoff</td>
+                <td>Start with cloud n8n and migrate if limits hit — manageable risk</td>
+              </tr>
+              <tr>
+                <td><strong>B7</strong></td>
+                <td>⏳ Teams channel for communication not yet set up<br><span style="font-size:11px;color:var(--gray4)">Joe suggested shared Teams channel in his March 28 email</span></td>
+                <td>Communication delays during active build phase slow question resolution</td>
+                <td>Joe Lewis / PhaseAlpha</td>
+                <td>Before kickoff</td>
+                <td>Email works but slower — Teams channel strongly preferred</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Buffer Recommendations</div>
+        <div class="g3">
+          <div>
+            <h4 style="font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;color:var(--blue-mid);margin-bottom:8px">Option A → Option B Escalation</h4>
+            <p style="font-size:13px;color:var(--gray4)">Plan for Option B as the likely outcome. The +1 week escalation buffer should be built into PhaseAlpha's internal planning — do not treat Option A delivery as the production-ready date until accuracy is confirmed against reference files.</p>
+          </div>
+          <div>
+            <h4 style="font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;color:var(--blue-mid);margin-bottom:8px">Reference File Delay Buffer</h4>
+            <p style="font-size:13px;color:var(--gray4)">If reference files are not received by end of Week 1, add 1 day for manual ground truth creation. Do not delay the pipeline build waiting for reference files — build in parallel.</p>
+          </div>
+          <div>
+            <h4 style="font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;color:var(--blue-mid);margin-bottom:8px">Full-Width Table Discovery Buffer</h4>
+            <p style="font-size:13px;color:var(--gray4)">MODUS and Shive Hattery documents contain 40+ column AHU/RTU schedules that require the horizontal split-stitch pipeline. This is the highest complexity layer — build in 0.5 day buffer for this specific edge case.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 6 — RISK REGISTER
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p6">
+      <div class="sec-head">
+        <h2>Risk Register</h2>
+        <p>Known risks, their probability, and planned mitigation and contingency for each.</p>
+      </div>
+
+      <!-- R1 -->
+      <div class="risk-card">
+        <div class="risk-hdr">
+          <span class="risk-badge rb-high">HIGH impact</span>
+          <span class="risk-badge rb-high">HIGH likelihood</span>
+          <div class="risk-title" style="margin-left:8px">Option A accuracy insufficient on complex image-based documents</div>
+          <span class="risk-owner">Owner: Plus1 / Joe Lewis</span>
+        </div>
+        <div class="risk-body">
+          <div class="risk-col"><div class="risk-col-title">Description</div>Single-pass LlamaParse extraction has documented failure modes on MODUS/Shive-Hattery style image-based PDFs with 8–15 schedule types per page. Confidence below target threshold does not close pilot successfully.</div>
+          <div class="risk-col"><div class="risk-col-title">Mitigation</div>Option A is explicitly the starting point — this risk is <em>expected</em>. Option B escalation path is pre-designed. All Option A code carries forward. Measure accuracy against reference files before declaring pilot success.</div>
+          <div class="risk-col"><div class="risk-col-title">Contingency</div>Trigger Option B immediately on detection. Add Docling fallback. If both detectors fail on a specific edge case, flag for manual crop path (FULLWIDTH_SPLIT_FAIL routing action). Document failure cases for next iteration.</div>
+        </div>
+      </div>
+
+      <!-- R2 -->
+      <div class="risk-card">
+        <div class="risk-hdr">
+          <span class="risk-badge rb-high">HIGH impact</span>
+          <span class="risk-badge rb-med">MED likelihood</span>
+          <div class="risk-title" style="margin-left:8px">Reference files not delivered or quality insufficient for ground truth</div>
+          <span class="risk-owner">Owner: Joe Lewis / PhaseAlpha</span>
+        </div>
+        <div class="risk-body">
+          <div class="risk-col"><div class="risk-col-title">Description</div>Joe confirmed the reference files have technical debt and a developer needs to clean them up before delivery. If this is delayed or the cleaned files don't reflect actual output expectations, accuracy measurement is impossible.</div>
+          <div class="risk-col"><div class="risk-col-title">Mitigation</div>Flag this as a Week 1 dependency. Treat reference file delivery as a hard gate for milestone M5. If delayed, create manual reference extractions from sample PDFs (adds ~1 day but unblocks pilot closeout).</div>
+          <div class="risk-col"><div class="risk-col-title">Contingency</div>Visual manual audit against PDF source documents used as reference in absence of structured files. Accuracy targets adjusted to reflect manual audit methodology. Document gap explicitly in pilot report.</div>
+        </div>
+      </div>
+
+      <!-- R3 -->
+      <div class="risk-card">
+        <div class="risk-hdr">
+          <span class="risk-badge rb-high">HIGH impact</span>
+          <span class="risk-badge rb-low">LOW likelihood</span>
+          <div class="risk-title" style="margin-left:8px">FABRICATED_COMPLETENESS — model invents plausible but wrong values</div>
+          <span class="risk-owner">Owner: Plus1 / Jessica</span>
+        </div>
+        <div class="risk-body">
+          <div class="risk-col"><div class="risk-col-title">Description</div>A vision model can produce suspiciously complete rows from an unreadable crop by inferring plausible-looking values. This is the highest-severity failure mode — bad data creates downstream liability for HVAC contractors pricing off fabricated values.</div>
+          <div class="risk-col"><div class="risk-col-title">Mitigation</div>Extraction prompt must explicitly prohibit inference. System prompt: "Unreadable = null, always." FABRICATED_COMPLETENESS failure code triggers cross-model verification + mandatory review with export blocked.</div>
+          <div class="risk-col"><div class="risk-col-title">Contingency</div>Cross-model verification (run same crop through second model) catches most fabrication cases. Flag any row where confidence is high but crop quality is low. Route to mandatory human review — never export.</div>
+        </div>
+      </div>
+
+      <!-- R4 -->
+      <div class="risk-card">
+        <div class="risk-hdr">
+          <span class="risk-badge rb-med">MED impact</span>
+          <span class="risk-badge rb-med">MED likelihood</span>
+          <div class="risk-title" style="margin-left:8px">LlamaParse data privacy / training policy unconfirmed</div>
+          <span class="risk-owner">Owner: Brian Knapp / PhaseAlpha</span>
+        </div>
+        <div class="risk-body">
+          <div class="risk-col"><div class="risk-col-title">Description</div>LlamaParse's training data policy is "not publicly specified" per the assessment. PhaseAlpha's customers are uploading third-party proprietary engineering documents. If LlamaParse uses inputs for training, this creates a EULA compliance gap.</div>
+          <div class="risk-col"><div class="risk-col-title">Mitigation</div>Confirm LlamaParse policy before any client documents are processed in production. Use self-hosted Docling for detection while policy is confirmed — eliminates third-party data exposure for the detection stage.</div>
+          <div class="risk-col"><div class="risk-col-title">Contingency</div>If LlamaParse cannot confirm a no-training policy, use Docling as primary detector (free, self-hosted, no data exposure). LlamaParse becomes the fallback rather than the primary.</div>
+        </div>
+      </div>
+
+      <!-- R5 -->
+      <div class="risk-card">
+        <div class="risk-hdr">
+          <span class="risk-badge rb-med">MED impact</span>
+          <span class="risk-badge rb-med">MED likelihood</span>
+          <div class="risk-title" style="margin-left:8px">n8n cloud execution limits hit during crop pipeline</div>
+          <span class="risk-owner">Owner: Plus1</span>
+        </div>
+        <div class="risk-body">
+          <div class="risk-col"><div class="risk-col-title">Description</div>Cloud n8n has execution time limits that may be insufficient for the multi-pass crop pipeline on dense Shive Hattery documents (15 tables, 400–500 DPI crops). Self-hosted n8n avoids this but adds ~2 days setup.</div>
+          <div class="risk-col"><div class="risk-col-title">Mitigation</div>Default to self-hosted n8n as recommended in assessment. If cloud n8n is used, architect the crop pipeline as an external Python FastAPI service called by n8n webhook — bypasses execution limits.</div>
+          <div class="risk-col"><div class="risk-col-title">Contingency</div>Migrate to self-hosted n8n mid-engagement if cloud limits are hit. Timeline impact: ~1.5 days. Budget this risk explicitly in kickoff planning.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Assumptions Table</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Assumption</th><th>Impact If Wrong</th><th>How to Validate</th></tr></thead>
+            <tbody>
+              <tr><td>PhaseAlpha delivers pre-split schedule pages as individual PDF files — no splitting or classification required from Plus1</td><td>Adds Layers 1–2 back to scope; +4–6 days and additional cost</td><td>Confirm payload format explicitly at kickoff. Joe confirmed this in March 28 email.</td></tr>
+              <tr><td>10–20 sample schedule page PDFs available at Phase 0 kickoff</td><td>No pipeline work can be validated without real documents</td><td>Joe confirmed availability in March 28 email. Confirm delivery date at kickoff.</td></tr>
+              <tr><td>Reference extraction files (JSON or Excel) available for ground truth comparison</td><td>Accuracy measurement impossible — pilot cannot be formally closed</td><td>Joe confirmed developer will clean up files. Get delivery date confirmed before kickoff.</td></tr>
+              <tr><td>n8n is self-hosted (recommended path)</td><td>Cloud n8n adds ~2 days and may hit execution limits on dense crops</td><td>Confirm hosting decision at or before kickoff.</td></tr>
+              <tr><td>Testing time uses structured pass/fail criteria against reference files — not open-ended QA</td><td>Open-ended QA inflates timeline unpredictably</td><td>Define pass/fail criteria jointly with PhaseAlpha at kickoff.</td></tr>
+              <tr><td>PhaseAlpha's sample documents are representative of production volume distribution</td><td>Pilot accuracy targets may not hold at production scale on unseen document types</td><td>Request sample set covering all major client firm types and project categories.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 7 — OPEN ITEMS
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p7">
+      <div class="sec-head">
+        <h2>Open Decisions &amp; Gaps</h2>
+        <p>Unresolved questions that affect delivery. Red rows are build-blocking.</p>
+      </div>
+
+      <div class="callout risk">
+        <div class="callout-icon">🔴</div>
+        <div class="callout-body">
+          <div class="callout-title">2 Build-Blocking Items — Must Resolve Before Kickoff</div>
+          OI-1 (Option Selection) and OI-2 (Reference Files) must be resolved before active development begins. All other items can be resolved during Week 1 without blocking the build.
+        </div>
+      </div>
+
+      <div class="card" style="padding:0">
+        <div style="padding:12px 20px;border-bottom:1px solid var(--gray2)">
+          <div class="oi-row" style="font-family:var(--mono);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--gray3);padding:6px 12px;border-bottom:none">
+            <div>#</div><div>Question / Gap</div><div>Owner</div><div>Target</div><div>Category</div>
+          </div>
+        </div>
+
+        <div class="oi-row oi-blocking">
+          <div style="color:var(--red);font-weight:700">OI-1</div>
+          <div>
+            <strong style="color:var(--red)">⛔ BUILD-BLOCKING: Option A or Option B formally selected</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Impact: Without a formal option selection, the detector layer cannot be built. The core pipeline (Layers 4–7) can begin, but Layer 3 work is blocked. Delay pushes kickoff by 1 day per day of indecision.</p>
+          </div>
+          <div>Joe Lewis</div>
+          <div>Before kickoff (~Apr 2)</div>
+          <div><span class="chip chip-red">Scope</span></div>
+        </div>
+
+        <div class="oi-row oi-blocking">
+          <div style="color:var(--red);font-weight:700">OI-2</div>
+          <div>
+            <strong style="color:var(--red)">⛔ BUILD-BLOCKING: Reference extraction files (JSON/Excel) delivery date confirmed</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Impact: Without reference files, accuracy measurement at M5 is impossible. Pilot cannot be formally closed without ground truth. Joe said developer needs to clean up technical debt first — delivery date not confirmed.</p>
+          </div>
+          <div>Joe Lewis / PA dev</div>
+          <div>End of Week 1</div>
+          <div><span class="chip chip-red">Scope</span></div>
+        </div>
+
+        <div class="oi-row">
+          <div>OI-3</div>
+          <div>
+            <strong>Exact payload schema format confirmed</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Joe confirmed project ID + page ID + name/unique identifier. Exact field names, format (JSON vs. form), and whether PhaseAlpha will pull results or Plus1 will push to PhaseAlpha's endpoint need confirmation. Joe mentioned PhaseAlpha can provide endpoint documentation for proactive push-back.</p>
+          </div>
+          <div>Brian Knapp / PA</div>
+          <div>Week 1, Day 1–2</div>
+          <div><span class="chip chip-amber">Scope</span></div>
+        </div>
+
+        <div class="oi-row">
+          <div>OI-4</div>
+          <div>
+            <strong>n8n hosting: self-hosted vs. cloud n8n decision</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Self-hosted is recommended (avoids cloud execution limits). Cloud n8n adds ~2 days to setup but reduces infrastructure overhead. Needs to be decided before environment provisioning begins on Day 1.</p>
+          </div>
+          <div>Marc / Plus1</div>
+          <div>Before kickoff</div>
+          <div><span class="chip chip-amber">Tooling</span></div>
+        </div>
+
+        <div class="oi-row">
+          <div>OI-5</div>
+          <div>
+            <strong>LlamaParse/Docling internal findings — 30-minute call scheduled</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Joe confirmed he can make this happen. Specific questions: how did each library perform on image-based HVAC schedules vs. vector PDFs, and were full-width AHU/RTU tables problematic? This call could save a week of testing. Not yet scheduled.</p>
+          </div>
+          <div>Joe Lewis → PA team</div>
+          <div>Week 1 (ASAP)</div>
+          <div><span class="chip chip-blue">Tooling</span></div>
+        </div>
+
+        <div class="oi-row">
+          <div>OI-6</div>
+          <div>
+            <strong>Are sample documents single-schedule-type pages or mixed (multi-table) pages?</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Shive Hattery documents have 15 distinct schedule tables on a single page. If most of PhaseAlpha's production volume is simpler pages, Option A accuracy targets may be easier to achieve. If production volume mirrors Shive Hattery complexity, Option B is required from the start.</p>
+          </div>
+          <div>Joe Lewis</div>
+          <div>Week 1</div>
+          <div><span class="chip chip-blue">Scope</span></div>
+        </div>
+
+        <div class="oi-row">
+          <div>OI-7</div>
+          <div>
+            <strong>Per-execution cost budget target</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Marc asked "is there a budget per execution we are trying to achieve?" on March 25. No direct answer was given. Knowing this threshold would help calibrate model choices (e.g., Claude Haiku vs. Sonnet/Opus) and DPI logic for cost optimization.</p>
+          </div>
+          <div>Joe Lewis</div>
+          <div>Week 1</div>
+          <div><span class="chip chip-blue">Scope</span></div>
+        </div>
+
+        <div class="oi-row">
+          <div>OI-8</div>
+          <div>
+            <strong>Push vs. pull architecture for PhaseAlpha result retrieval</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Joe mentioned PhaseAlpha can provide endpoint documentation if Plus1 proactively sends results back to their system. Plus1 can also expose a polling endpoint if PhaseAlpha prefers to retrieve results. Architecture choice affects .NET integration complexity in Phase 2.</p>
+          </div>
+          <div>Brian Knapp / PA dev</div>
+          <div>Week 1–2</div>
+          <div><span class="chip chip-purple">Ownership</span></div>
+        </div>
+
+        <div class="oi-row">
+          <div>OI-9</div>
+          <div>
+            <strong>LlamaParse training data policy — confirm before production use</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Assessment documents that LlamaParse's training policy is "not publicly specified." PhaseAlpha processes third-party proprietary engineering documents. This must be confirmed before any client documents flow through LlamaParse in production. Test-phase use is acceptable; production use requires confirmation.</p>
+          </div>
+          <div>Brian Knapp</div>
+          <div>Before Phase 1 production</div>
+          <div><span class="chip chip-red">Security</span></div>
+        </div>
+
+        <div class="oi-row" style="border-bottom:none">
+          <div>OI-10</div>
+          <div>
+            <strong>Single PDF vs. separate files per schedule page payload format</strong>
+            <p style="font-size:12px;color:var(--gray4);margin-top:3px">Joe's email: "Some drawings have multiple schedule pages. We can send however many are present on a given drawing. Do you want them as a single PDF, or as separate files?" Plus1 recommended separate files (one page = one PDF = one discrete job). Needs formal confirmation from PhaseAlpha.</p>
+          </div>
+          <div>Marc / Joe Lewis</div>
+          <div>Before kickoff</div>
+          <div><span class="chip chip-amber">Scope</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 8 — TIMELINE & RESOURCES
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p8">
+      <div class="sec-head">
+        <h2>Timeline &amp; Resources</h2>
+        <p>Week-by-week schedule for Phase 0 (Option A). Add 1 week for Option B. Post-pilot phases shown at summary level.</p>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-icon">📅</div>
+        <div class="callout-body">
+          <div class="callout-title">Kickoff anchored to ~April 2, 2026. All estimates in business days unless noted as calendar weeks.</div>
+          Fixed-bid engagement. Quote signed March 28, 2026. Option A: ~2 calendar weeks. Option B escalation: +1 calendar week. Phases 1–3 are post-pilot, subject to PhaseAlpha resource availability and .NET development readiness.
+        </div>
+      </div>
+
+      <div class="g2">
+        <div>
+          <div class="tl-wrap">
+            <div class="tl-item">
+              <div class="tl-dot td-navy">🚀</div>
+              <div class="tl-week">Pre-Kickoff (Mar 28 – Apr 1)</div>
+              <div class="tl-gate">PRE-BUILD GATE — Clear All Blockers</div>
+              <div class="tl-card">
+                <h4>Pre-Kickoff Requirements</h4>
+                <p>Option A/B formally selected. Teams channel created. n8n hosting decision made. Payload schema (project ID, page reference format) confirmed. Sample PDFs requested and delivery date confirmed.</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-blue">1</div>
+              <div class="tl-week">Week 1 (Apr 2–4) — Environment + Detection</div>
+              <div class="tl-card">
+                <h4>🔧 Build: Layers 3 + 4</h4>
+                <p><strong>Days 1–2:</strong> Environment provisioning, n8n setup, Python environment, sample PDF intake. LlamaParse API integration + initial table detection test on all 3 firm types.<br>
+                <strong>Days 3–5:</strong> Two-pass crop orchestration (150→300→500 DPI). Full-width horizontal split-stitch pipeline for 40+ column tables. Bounding box extraction validated visually. LlamaParse/Docling call scheduled (OI-5).</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-blue">2</div>
+              <div class="tl-week">Week 1 continued — Extraction + Normalization</div>
+              <div class="tl-card">
+                <h4>🔧 Build: Layers 5 + 6</h4>
+                <p><strong>Day 4–5 parallel:</strong> Claude Sonnet/Opus extraction prompt development + tuning. Null enforcement tested on low-quality crops. Column header mapping agent wired with synonym KB. OpenAI Structured Outputs normalization integrated. Remarks concatenation tested.</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-blue">3</div>
+              <div class="tl-week">Week 2 (Apr 7–9) — Validation + Accuracy</div>
+              <div class="tl-card">
+                <h4>🔧 Build: Layer 7 + Measurement</h4>
+                <p><strong>Days 1–2:</strong> Validation rule engine with all 8 failure codes. Review queue routing rules. FABRICATED_COMPLETENESS cross-model verification. End-to-end pipeline test on all sample documents.<br>
+                <strong>Days 3–5:</strong> Accuracy measurement against reference files. Per-field accuracy report. Null rate analysis. Option A/B decision gate review with PhaseAlpha.</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-green">✓</div>
+              <div class="tl-week">End Week 2 (Option A)</div>
+              <div class="tl-gate">PHASE 0 GATE — Option A Pilot Complete</div>
+              <div class="tl-card">
+                <h4>Gate: Option A Accuracy Decision</h4>
+                <p>Accuracy report delivered to PhaseAlpha. If ≥85% field accuracy → Option A accepted. If below target → trigger Option B escalation (add 1 week). API payload contract drafted for PhaseAlpha UI team review.</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-amber">B</div>
+              <div class="tl-week">Week 3 (Apr 14–16) — Option B Only (if escalated)</div>
+              <div class="tl-card">
+                <h4>🔧 Option B Escalation: Docling Fallback</h4>
+                <p>Docling self-hosted installation (DocLayNet + TableFormer). Dual-detector routing logic wired into n8n. A/B extraction comparison report. Cross-model verification for FABRICATED_COMPLETENESS. All Option A code carries forward unchanged.</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-purple">1</div>
+              <div class="tl-week">Phase 1 (Weeks 4–5) — API Hardening</div>
+              <div class="tl-card">
+                <h4>n8n → Production API</h4>
+                <p>n8n webhook hardened as production endpoint. Retry logic, monitoring, rate limiting. API payload contract published. PhaseAlpha Review UI team integration-ready. Duration: 1–2 weeks.</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-green">2</div>
+              <div class="tl-week">Phase 2 (Weeks 6–10) — .NET Integration</div>
+              <div class="tl-card">
+                <h4>Pipeline Migrates to .NET</h4>
+                <p>.NET service classes implementing all pipeline layers. Python FastAPI crop orchestration service. Prompts, data model, validation rules ported. n8n retired from production path. Duration: 3–5 weeks.</p>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot td-navy">3</div>
+              <div class="tl-week">Phase 3 (Weeks 11–13) — Production Hardening</div>
+              <div class="tl-card">
+                <h4>Production-Grade System</h4>
+                <p>Load testing at production volume. Monitoring and alerting. Learning loop integration. Confidence threshold calibration at scale. Duration: 2–3 weeks. Total: ~10–15 weeks pilot through production.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-title">Resource Table — Phase 0</div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Role</th><th>Estimated Effort</th><th>Peak Demand</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Jessica Peaden</strong><br><span style="font-size:11px;color:var(--gray4)">AI Engineer / Extraction Architect</span></td><td>Full-time, Weeks 1–2</td><td>Weeks 1–2: crop pipeline + extraction prompt tuning</td></tr>
+                  <tr><td><strong>Marc Umstead</strong><br><span style="font-size:11px;color:var(--gray4)">Project Lead / Client Contact</span></td><td>Part-time oversight + client comms</td><td>Kickoff Day 1, Milestone gates, escalation decisions</td></tr>
+                  <tr><td><strong>Brian Knapp</strong><br><span style="font-size:11px;color:var(--gray4)">Technical / Legal Advisor</span></td><td>As needed</td><td>EULA review, LlamaParse privacy policy, payload schema</td></tr>
+                  <tr><td><strong>Joe Lewis (PhaseAlpha)</strong><br><span style="font-size:11px;color:var(--gray4)">President / Decision Maker</span></td><td>Available for quick Q&amp;A (committed)</td><td>Kickoff, Option selection, reference file delivery</td></tr>
+                  <tr><td><strong>Brian Knapp (PhaseAlpha)</strong><br><span style="font-size:11px;color:var(--gray4)">Technical Stakeholder</span></td><td>Payload schema + review</td><td>Payload contract review, .NET integration planning</td></tr>
+                  <tr><td><strong>Rick Jennings (PhaseAlpha)</strong><br><span style="font-size:11px;color:var(--gray4)">Technical Stakeholder</span></td><td>Review + feedback</td><td>Accuracy measurement review, remarks field validation</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Client-Side Commitments Required</div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>What PhaseAlpha Must Do</th><th>When</th><th>Risk If Late</th></tr></thead>
+                <tbody>
+                  <tr><td>Formally select Option A or Option B</td><td>Before Apr 2 kickoff</td><td>Detector layer blocked — delays build by 1+ day</td></tr>
+                  <tr><td>Deliver 10–20 sample schedule page PDFs</td><td>Day 1 of kickoff</td><td>No pipeline validation possible without real documents</td></tr>
+                  <tr><td>Deliver cleaned reference extraction files (JSON/Excel)</td><td>End of Week 1</td><td>Accuracy measurement impossible — pilot cannot close</td></tr>
+                  <tr><td>Confirm exact payload schema format (field names, push vs. pull)</td><td>Week 1, Days 1–2</td><td>Pipeline cannot attach records to correct jobs</td></tr>
+                  <tr><td>Schedule 30-min LlamaParse/Docling internal findings call</td><td>Week 1 (ASAP)</td><td>Plus1 re-tests what PhaseAlpha already knows — wastes days</td></tr>
+                  <tr><td>Create shared Teams channel for rapid Q&amp;A</td><td>Before kickoff</td><td>Email delays slow question resolution during active build</td></tr>
+                  <tr><td>Review and confirm API payload contract</td><td>End of Week 2</td><td>PhaseAlpha UI development cannot begin without confirmed contract</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Infrastructure &amp; Tool Access Requirements</div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Tool / Service</th><th>Status</th><th>Action Required</th></tr></thead>
+                <tbody>
+                  <tr><td>n8n (self-hosted)</td><td><span class="status s-pending">Pending setup</span></td><td>Provision server, install n8n, configure webhook</td></tr>
+                  <tr><td>LlamaParse API key</td><td><span class="status s-pending">Pending</span></td><td>Plus1 to create account and generate key</td></tr>
+                  <tr><td>Anthropic API key (Claude)</td><td><span class="status s-pending">Pending</span></td><td>Plus1 to provision — confirm Sonnet vs. Opus tier</td></tr>
+                  <tr><td>OpenAI API key (Structured Outputs)</td><td><span class="status s-pending">Pending</span></td><td>Plus1 to provision GPT-4o mini for normalization</td></tr>
+                  <tr><td>Docling (self-hosted) — Option B only</td><td><span class="status s-open">Optional</span></td><td>Python env + DocLayNet model weights install (~1 day)</td></tr>
+                  <tr><td>PyMuPDF (fitz)</td><td><span class="status s-open">Open source</span></td><td>pip install pymupdf — no access issues</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         TAB 9 — NEXT ACTIONS
+    ══════════════════════════════════════════ -->
+    <section class="slab" id="p9">
+      <div class="sec-head">
+        <h2>Next Actions</h2>
+        <p>The 7 actions that must happen in the next 5 business days to hit the April 2 kickoff on schedule.</p>
+      </div>
+
+      <div class="callout risk">
+        <div class="callout-icon">🔴</div>
+        <div class="callout-body">
+          <div class="callout-title">Actions 1 and 2 are build-blocking — both must complete before development begins</div>
+          Option selection and sample document delivery are the two hard gates. Everything else can run in parallel but these two must clear first.
+        </div>
+      </div>
+
+      <div class="action-grid">
+        <div class="action-card">
+          <div class="action-num">1</div>
+          <div class="action-body">
+            <h4>PhaseAlpha formally selects Option A or Option B</h4>
+            <p>Joe Lewis confirms the testing phase track in writing. Option B is the recommended planning assumption for complex document types. Option A is the faster and lower-cost starting point — the decision affects Week 1 detector build only. Both options share the same core pipeline.</p>
+            <p style="margin-top:8px;font-size:12px"><strong>Dependencies:</strong> Signed quote ✅ (complete). No other dependencies.</p>
+          </div>
+          <div class="action-meta">
+            <strong>Owner</strong><span>Joe Lewis</span>
+            <strong>Target</strong><span>By Apr 1, 2026</span>
+            <div class="action-risk">⛔ Build-blocking if delayed past kickoff day</div>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num">2</div>
+          <div class="action-body">
+            <h4>Deliver sample schedule page PDFs + confirm reference file timeline</h4>
+            <p>PhaseAlpha delivers ≥10 pre-split schedule page PDFs for pipeline testing (ideally covering all 3 firm types — vector and image-based). Separately, confirm the exact delivery date for reference extraction files (JSON/Excel). Joe's developer needs to clean these up first — get a specific date.</p>
+            <p style="margin-top:8px;font-size:12px"><strong>Dependencies:</strong> None. Joe confirmed availability in March 28 email.</p>
+          </div>
+          <div class="action-meta">
+            <strong>Owner</strong><span>Joe Lewis / PhaseAlpha</span>
+            <strong>Target</strong><span>Apr 1–2, 2026</span>
+            <div class="action-risk">⛔ Without sample PDFs: no pipeline validation possible</div>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num">3</div>
+          <div class="action-body">
+            <h4>Create shared Teams channel and confirm kickoff agenda</h4>
+            <p>Joe suggested a shared Teams channel in his March 28 email. Plus1 to send a kickoff meeting invite for April 2 with a 30-minute agenda covering: option selection, payload schema review, reference file delivery date, and communication cadence. Teams channel enables rapid Q&amp;A during the active 2-week build.</p>
+            <p style="margin-top:8px;font-size:12px"><strong>Dependencies:</strong> Action 1 (option selection) ideally complete before kickoff.</p>
+          </div>
+          <div class="action-meta">
+            <strong>Owner</strong><span>Marc Umstead</span>
+            <strong>Target</strong><span>Mar 31 – Apr 1</span>
+            <div class="action-risk">Communication delays slow the build by hours per unresolved question</div>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num">4</div>
+          <div class="action-body">
+            <h4>Confirm exact payload schema format (push vs. pull, field names)</h4>
+            <p>Joe confirmed project ID + page ID + name/unique identifier will be included. The remaining questions: (a) will PhaseAlpha push pages to Plus1's endpoint or will Plus1 push results back to PhaseAlpha's endpoint? (b) exact field name format expected. Joe offered to provide PhaseAlpha's endpoint documentation if Plus1 pushes back — get that documentation if proactive push is preferred.</p>
+            <p style="margin-top:8px;font-size:12px"><strong>Dependencies:</strong> PhaseAlpha internal decision on integration architecture.</p>
+          </div>
+          <div class="action-meta">
+            <strong>Owner</strong><span>Brian Knapp / PA</span>
+            <strong>Target</strong><span>Week 1, Day 1–2</span>
+            <div class="action-risk">Pipeline cannot attach records to correct PhaseAlpha jobs without confirmed schema</div>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num">5</div>
+          <div class="action-body">
+            <h4>Schedule 30-minute LlamaParse/Docling internal findings call</h4>
+            <p>Joe confirmed he can make this happen — he just needs to connect Plus1 with the internal team that did the LlamaParse/Docling testing. Key questions to answer on the call: (a) how did each library handle image-based HVAC schedules vs. vector PDFs? (b) did they observe failures on full-width AHU/RTU schedules (40+ columns)? This call could save 3–5 days of re-testing what PhaseAlpha already knows.</p>
+            <p style="margin-top:8px;font-size:12px"><strong>Dependencies:</strong> Joe Lewis to make the introduction.</p>
+          </div>
+          <div class="action-meta">
+            <strong>Owner</strong><span>Joe Lewis → PA internal team</span>
+            <strong>Target</strong><span>Week 1 (ASAP)</span>
+            <div class="action-risk">Missing this call wastes 3–5 days re-running tests PhaseAlpha has already run</div>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num">6</div>
+          <div class="action-body">
+            <h4>Provision Plus1 infrastructure: n8n, API keys, Python environment</h4>
+            <p>Plus1 internal task: (a) decide self-hosted vs. cloud n8n and provision accordingly, (b) provision Anthropic API key for Claude Sonnet/Opus, (c) provision OpenAI API key for GPT-4o mini (normalization), (d) provision LlamaParse API key, (e) stand up Python environment with PyMuPDF (fitz) installed. Self-hosted n8n strongly recommended to avoid execution limits on crop pipeline.</p>
+            <p style="margin-top:8px;font-size:12px"><strong>Dependencies:</strong> Internal Plus1 infrastructure decisions only.</p>
+          </div>
+          <div class="action-meta">
+            <strong>Owner</strong><span>Plus1 / Marc + Jessica</span>
+            <strong>Target</strong><span>Before Apr 2 kickoff</span>
+            <div class="action-risk">Day 1 development blocked without API access and n8n running</div>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-num">7</div>
+          <div class="action-body">
+            <h4>Define pass/fail acceptance criteria jointly with PhaseAlpha</h4>
+            <p>Before the pilot begins, Plus1 and PhaseAlpha must agree in writing on what ≥85% field accuracy means in practice — which fields are measured, how null values are scored (not penalized vs. penalized), and how full-width table row count is counted. Without joint criteria definition, the Option A/B decision gate (M7) cannot be objectively evaluated. This should be an agenda item on the April 2 kickoff call.</p>
+            <p style="margin-top:8px;font-size:12px"><strong>Dependencies:</strong> Kickoff call (Action 3). Reference file format (Action 2).</p>
+          </div>
+          <div class="action-meta">
+            <strong>Owner</strong><span>Marc + Joe Lewis</span>
+            <strong>Target</strong><span>Apr 2 kickoff call</span>
+            <div class="action-risk">Without agreed criteria, pilot results are subjective and escalation decision is contested</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px">
+        <div class="card-title">Summary — Responsibility Matrix</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th><th>Risk if Missed</th></tr></thead>
+            <tbody>
+              <tr style="background:var(--red-light)!important"><td>Option A/B selection</td><td>Joe Lewis</td><td>Apr 1</td><td><span class="status s-pending">Pending</span></td><td>Build-blocking</td></tr>
+              <tr style="background:var(--red-light)!important"><td>Sample PDFs + reference file date</td><td>Joe Lewis / PA dev</td><td>Apr 1–2</td><td><span class="status s-pending">Pending</span></td><td>Build-blocking</td></tr>
+              <tr><td>Teams channel + kickoff invite</td><td>Marc Umstead</td><td>Mar 31–Apr 1</td><td><span class="status s-progress">In progress</span></td><td>Comms delays</td></tr>
+              <tr><td>Payload schema confirmed</td><td>Brian Knapp / PA</td><td>Week 1, D1–2</td><td><span class="status s-open">Open</span></td><td>Job routing fails</td></tr>
+              <tr><td>LlamaParse/Docling call scheduled</td><td>Joe Lewis → PA team</td><td>Week 1</td><td><span class="status s-open">Open</span></td><td>3–5 days wasted</td></tr>
+              <tr><td>Plus1 infrastructure provisioned</td><td>Marc + Jessica</td><td>Apr 2</td><td><span class="status s-progress">In progress</span></td><td>Day 1 blocked</td></tr>
+              <tr><td>Pass/fail criteria defined jointly</td><td>Marc + Joe</td><td>Apr 2 kickoff</td><td><span class="status s-open">Open</span></td><td>Pilot results disputed</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /panes -->
+</div><!-- /shell -->
+
+<div style="background:var(--navy);color:#475569;font-family:var(--mono);font-size:11px;text-align:center;padding:12px;margin-top:0">
+  Plus1 Technology · Prepared for PhaseAlpha · March 2026 · Confidential — Do Not Distribute
+</div>
+
+</body>
+</html>
