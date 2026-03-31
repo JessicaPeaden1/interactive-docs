@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow Technical Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sidebar: #18253a;
+  --sidebar-hover: #1f3050;
+  --sidebar-active: #253d62;
+  --accent: #f07c2a;
+  --accent2: #3d8ef0;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --purple: #a855f7;
+  --bg: #edf0f4;
+  --card: #ffffff;
+  --border: #dde3ed;
+  --text: #18253a;
+  --muted: #6b7c93;
+  --light: #9aaabb;
+  --mono: 'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sidebar{width:236px;min-width:236px;background:var(--sidebar);height:100vh;overflow-y:auto;display:flex;flex-direction:column;flex-shrink:0}
+.sb-header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-brand{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
+.sb-title{font-size:12.5px;font-weight:500;color:rgba(255,255,255,.8);line-height:1.4;cursor:pointer}
+.sb-actions{padding:10px 14px 4px;display:flex;flex-direction:column;gap:6px}
+.save-btn{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;width:100%;transition:background .2s}
+.save-btn:hover{background:#d4690f}
+.export-btn-sb{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;width:100%;transition:all .2s}
+.export-btn-sb:hover{background:rgba(255,255,255,.12);color:#fff}
+.save-ts{font-size:9.5px;color:rgba(255,255,255,.25);text-align:center;padding:2px 0 6px;min-height:16px}
+.nav-group{padding:12px 0 4px}
+.nav-grp-label{font-size:8.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.28);padding:0 16px;margin-bottom:3px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6.5px 16px;font-size:12px;color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
+.nav-item.active{background:var(--sidebar-active);color:#fff;border-left-color:var(--accent);font-weight:500}
+.nav-item .ni{width:15px;text-align:center;font-size:12px;flex-shrink:0}
+
+/* ── MAIN ── */
+#main{flex:1;overflow-y:auto;padding:30px 36px}
+.section{display:none;max-width:920px;animation:fi .2s ease}
+.section.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-tag{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.sec-title{font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:5px}
+.sec-desc{font-size:13.5px;color:var(--muted);margin-bottom:24px;line-height:1.6;max-width:680px}
+.sec-hr{border:none;border-top:1px solid var(--border);margin:0 0 24px}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:14px}
+.card-title{font-family:'Sora',sans-serif;font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+
+/* ── FIELDS ── */
+.fl{margin-bottom:13px}
+.fl-label{display:block;font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--light);margin-bottom:4px}
+.ef,.ef-sm{width:100%;background:#f6f8fb;border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .2s;resize:vertical}
+.ef-sm{min-height:32px;resize:none;line-height:1.4}
+.ef:focus,.ef-sm:focus{border-color:var(--accent);background:#fff}
+textarea.ef{min-height:72px;line-height:1.6}
+textarea.ef.mono,textarea.ef-sm.mono{font-family:var(--mono);font-size:11.5px;min-height:110px}
+select.ef{cursor:pointer;min-height:36px}
+[contenteditable]{outline:none}
+[contenteditable]:focus{background:#fffbf5;border-color:var(--accent)!important}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow:hidden;border-radius:10px;border:1px solid var(--border);margin-bottom:8px}
+table.dt{width:100%;border-collapse:collapse;font-size:12.5px}
+.dt th{background:#f0f3f8;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.dt td{padding:7px 12px;border-bottom:1px solid #f0f3f8;vertical-align:top;min-width:80px}
+.dt td[contenteditable]:focus{background:#fffbf5;box-shadow:inset 0 0 0 1px var(--accent)}
+.dt tr:last-child td{border-bottom:none}
+.dt tr:hover td{background:#fafbfd}
+
+/* ── META GRID ── */
+.meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.meta-cell{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
+.meta-label{font-size:8.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--light);margin-bottom:3px}
+.meta-val{font-size:13px;font-weight:500;color:var(--text);display:block;outline:none;background:transparent;border:none;width:100%;font-family:'DM Sans',sans-serif;cursor:text}
+.meta-val:focus{color:var(--accent)}
+select.meta-val{cursor:pointer}
+
+/* ── DYNAMIC CARDS: PHASES / NODES / STEPS ── */
+.dyn-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.dyn-head{background:var(--sidebar);padding:11px 16px;display:flex;align-items:center;gap:10px}
+.dyn-num{background:var(--accent);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dyn-name{background:transparent;border:none;color:#fff;font-family:'Sora',sans-serif;font-size:13.5px;font-weight:600;outline:none;flex:1;min-width:0}
+.dyn-name::placeholder{color:rgba(255,255,255,.3)}
+.dyn-sel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.75);font-size:10.5px;padding:3px 8px;border-radius:5px;font-family:var(--mono);outline:none;cursor:pointer}
+.dyn-del{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:pointer;padding:3px 8px;border-radius:4px;font-size:11px;margin-left:4px;transition:all .15s}
+.dyn-del:hover{background:rgba(239,68,68,.2);color:#fca5a5;border-color:rgba(239,68,68,.3)}
+.dyn-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── STEP CARDS ── */
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden;border-left:4px solid var(--accent2)}
+.step-card[data-p="make"]{border-left-color:var(--purple)}
+.step-card[data-p="zapier"]{border-left-color:#ff6d00}
+.step-card[data-p="clickup"]{border-left-color:#7b68ee}
+.step-card[data-p="other"]{border-left-color:var(--green)}
+.step-head{padding:11px 16px;background:#f6f8fb;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border)}
+.step-num{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--muted);background:var(--border);padding:2px 7px;border-radius:4px;min-width:28px;text-align:center}
+.step-name{background:transparent;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;color:var(--text);outline:none;flex:1}
+.step-name::placeholder{color:var(--light)}
+.plat-sel{background:#fff;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:3px 8px;border-radius:5px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer}
+.step-body{padding:15px 17px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── NODE CARD SPECIFIC ── */
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.node-head{background:var(--sidebar);padding:11px 16px;display:flex;align-items:center;gap:10px}
+.node-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── GATE / RULE / PROMPT CARDS ── */
+.gate-card,.rule-card,.prompt-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+
+/* ── CHECKLIST ── */
+.chk-item{display:flex;align-items:flex-start;gap:11px;padding:12px 15px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;background:var(--card);transition:all .15s}
+.chk-item.done{background:#f0fdf4;border-color:#86efac}
+.chk-item input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--green);margin-top:2px;flex-shrink:0}
+.chk-txt{flex:1}
+.chk-lbl,.chk-desc{background:transparent;border:none;width:100%;font-family:'DM Sans',sans-serif;outline:none;cursor:text}
+.chk-lbl{font-size:13px;font-weight:500;color:var(--text)}
+.chk-desc{font-size:12px;color:var(--muted)}
+
+/* ── BADGES / TAGS ── */
+.badge{display:inline-flex;align-items:center;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.b-green{background:#dcfce7;color:#166534}
+.b-orange{background:#fff0e3;color:#c85a00}
+.b-red{background:#fee2e2;color:#991b1b}
+.b-blue{background:#e0f2fe;color:#075985}
+.b-gray{background:#f1f5f9;color:#475569}
+.b-purple{background:#f5f3ff;color:#5b21b6}
+
+/* ── INFO BOXES ── */
+.info-box{background:#fff8f0;border:1px solid #fcd9b0;border-left:4px solid var(--accent);border-radius:7px;padding:11px 16px;font-size:12.5px;color:#7c3c00;margin-bottom:16px;line-height:1.6}
+.warn-box{background:#fffbeb;border:1px solid #fde68a;border-left:4px solid var(--yellow);border-radius:7px;padding:11px 16px;font-size:12.5px;color:#78350f;margin-bottom:16px;line-height:1.6}
+.err-box{background:#fff0f0;border:1px solid #fecaca;border-left:4px solid var(--red);border-radius:7px;padding:11px 16px;font-size:12.5px;color:#7f1d1d;margin-bottom:16px;line-height:1.6}
+
+/* ── BTN ROW ── */
+.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#d4690f}
+.btn-o{background:transparent;border:1px solid var(--border);color:var(--muted)}.btn-o:hover{background:#f0f3f8;color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:11px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:22px;right:22px;background:var(--sidebar);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transform:translateY(6px);transition:all .3s;z-index:9999;pointer-events:none;border-left:3px solid var(--accent)}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:3px}
+code{font-family:var(--mono);font-size:11.5px;background:#f0f3f8;padding:1px 5px;border-radius:3px;color:#c0392b}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sb-header">
+    <div class="sb-brand">Plus 1 Technology</div>
+    <div class="sb-title" onclick="go('overview')">Workflow / Agent Technical Doc</div>
+  </div>
+
+  <div class="sb-actions">
+    <button class="save-btn" onclick="saveAll()">💾 Save Documentation</button>
+    <button class="export-btn-sb" onclick="exportDoc()">⬇ Export as HTML File</button>
+    <div class="save-ts" id="saveTs">Not saved yet</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-grp-label">Overview</div>
+    <div class="nav-item active" data-s="overview" onclick="go('overview')"><span class="ni">🗺</span>System Overview</div>
+    <div class="nav-item" data-s="platform-stack" onclick="go('platform-stack')"><span class="ni">🔌</span>Platform Stack</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Architecture</div>
+    <div class="nav-item" data-s="arch-diagram" onclick="go('arch-diagram')"><span class="ni">📐</span>System Diagram</div>
+    <div class="nav-item" data-s="data-flow" onclick="go('data-flow')"><span class="ni">🔄</span>Data Flow Map</div>
+    <div class="nav-item" data-s="component-map" onclick="go('component-map')"><span class="ni">🧩</span>Component Map</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Pipeline</div>
+    <div class="nav-item" data-s="phases" onclick="go('phases')"><span class="ni">📋</span>Phases & Steps</div>
+    <div class="nav-item" data-s="approval-gates" onclick="go('approval-gates')"><span class="ni">✋</span>Approval Gates</div>
+    <div class="nav-item" data-s="triggers" onclick="go('triggers')"><span class="ni">⚡</span>Triggers & Inputs</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Integrations</div>
+    <div class="nav-item" data-s="connectors" onclick="go('connectors')"><span class="ni">🔗</span>Connectors & Webhooks</div>
+    <div class="nav-item" data-s="schema" onclick="go('schema')"><span class="ni">📊</span>Platform Schema</div>
+    <div class="nav-item" data-s="api-ref" onclick="go('api-ref')"><span class="ni">📡</span>API Reference</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Reference</div>
+    <div class="nav-item" data-s="session-ids" onclick="go('session-ids')"><span class="ni">🔑</span>Session & IDs</div>
+    <div class="nav-item" data-s="behavioral-rules" onclick="go('behavioral-rules')"><span class="ni">📏</span>Behavioral Rules</div>
+    <div class="nav-item" data-s="prompt-library" onclick="go('prompt-library')"><span class="ni">💬</span>Prompt Library</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Diagrams</div>
+    <div class="nav-item" data-s="swimlane" onclick="go('swimlane')"><span class="ni">🏊</span>Swimlane Flows</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">n8n Node Map</div>
+    <div class="nav-item" data-s="n8n-nodes" onclick="go('n8n-nodes')"><span class="ni">⚙️</span>Node-by-Node</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Platform Steps</div>
+    <div class="nav-item" data-s="platform-steps" onclick="go('platform-steps')"><span class="ni">🪜</span>Make / Zapier / ClickUp</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Go-Live</div>
+    <div class="nav-item" data-s="readiness" onclick="go('readiness')"><span class="ni">✅</span>Readiness Checklist</div>
+    <div class="nav-item" data-s="known-issues" onclick="go('known-issues')"><span class="ni">🐛</span>Known Issues</div>
+    <div class="nav-item" data-s="changelog" onclick="go('changelog')"><span class="ni">📜</span>Changelog</div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════════════ -->
+<main id="main">
+<div id="toast"></div>
+
+<!-- ── SYSTEM OVERVIEW ── -->
+<div class="section active" id="s-overview">
+  <div class="sec-tag">OVERVIEW</div>
+  <div class="sec-title">System Overview</div>
+  <hr class="sec-hr">
+
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Document Title</div><span class="meta-val" contenteditable data-key="m-title">Untitled Workflow</span></div>
+    <div class="meta-cell"><div class="meta-label">Version</div><span class="meta-val" contenteditable data-key="m-version">v1.0.0</span></div>
+    <div class="meta-cell"><div class="meta-label">Status</div>
+      <select class="meta-val" data-key="m-status"><option>Draft</option><option>Active</option><option>In Review</option><option>Deprecated</option><option>Archived</option></select>
+    </div>
+    <div class="meta-cell"><div class="meta-label">Owner</div><span class="meta-val" contenteditable data-key="m-owner">—</span></div>
+    <div class="meta-cell"><div class="meta-label">Last Updated</div><span class="meta-val" contenteditable data-key="m-updated" id="m-date">—</span></div>
+    <div class="meta-cell"><div class="meta-label">Workflow Type</div>
+      <select class="meta-val" data-key="m-type"><option>AI Agent</option><option>Automation Workflow</option><option>Integration</option><option>Multi-Agent System</option><option>Hybrid</option><option>Other</option></select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📝 Purpose & Description</div>
+    <textarea class="ef" data-key="ov-purpose" placeholder="Describe what this workflow / agent does, its primary goal, the problem it solves, and who uses it..."></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title">🏗 Architecture Summary</div>
+    <textarea class="ef" data-key="ov-arch" placeholder="Brief high-level description — phase-locked, event-driven, human-in-the-loop, etc. How does it all hang together?"></textarea>
+  </div>
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">⚡ Primary Trigger</div>
+      <textarea class="ef" data-key="ov-trigger" style="min-height:60px" placeholder="What starts this workflow? Webhook, schedule, manual, user message, event..."></textarea>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">📤 Primary Output</div>
+      <textarea class="ef" data-key="ov-output" style="min-height:60px" placeholder="What does this produce? Files, updated records, notifications, new tasks..."></textarea>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔢 Quick Stats</div>
+    <div class="grid3">
+      <div class="fl"><label class="fl-label">Total Phases / Steps</label><input type="text" class="ef-sm" data-key="st-phases" placeholder="e.g. 8"></div>
+      <div class="fl"><label class="fl-label">Connected Platforms</label><input type="text" class="ef-sm" data-key="st-platforms" placeholder="e.g. 5"></div>
+      <div class="fl"><label class="fl-label">Human Approval Gates</label><input type="text" class="ef-sm" data-key="st-gates" placeholder="e.g. 3"></div>
+      <div class="fl"><label class="fl-label">n8n Workflows</label><input type="text" class="ef-sm" data-key="st-n8n" placeholder="e.g. 2"></div>
+      <div class="fl"><label class="fl-label">Environment</label><input type="text" class="ef-sm" data-key="st-env" placeholder="Production / Dev / Staging"></div>
+      <div class="fl"><label class="fl-label">Est. Run Time</label><input type="text" class="ef-sm" data-key="st-runtime" placeholder="e.g. ~15 min"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PLATFORM STACK ── -->
+<div class="section" id="s-platform-stack">
+  <div class="sec-tag">OVERVIEW</div>
+  <div class="sec-title">Platform Stack</div>
+  <div class="sec-desc">Every tool, service, and platform involved — its role, auth method, and environment.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Platform / Tool</th><th>Category</th><th>Role in Workflow</th><th>Auth Method</th><th>Environment</th></tr></thead>
+      <tbody id="tb-platform">
+        <tr><td contenteditable>e.g. Claude</td><td contenteditable>AI Model</td><td contenteditable>Content generation, phase enforcement, session state</td><td contenteditable>API Key / MCP Project</td><td contenteditable>Production</td></tr>
+        <tr><td contenteditable>n8n</td><td contenteditable>Automation</td><td contenteditable>File conversion, Monday.com delivery</td><td contenteditable>Shared Account (required)</td><td contenteditable>Production</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-platform',5)">+ Add Platform</button></div>
+  <div class="card" style="margin-top:18px">
+    <div class="card-title">🚨 Critical Infrastructure Notes</div>
+    <textarea class="ef" data-key="ps-infra" placeholder="e.g. Shared n8n account required — individual accounts break cross-user workflow execution..."></textarea>
+  </div>
+</div>
+
+<!-- ── SYSTEM DIAGRAM ── -->
+<div class="section" id="s-arch-diagram">
+  <div class="sec-tag">ARCHITECTURE</div>
+  <div class="sec-title">System Diagram</div>
+  <div class="sec-desc">Visual architecture. Paste an embed link or describe the layout in narrative form.</div>
+  <div class="card">
+    <div class="card-title">🔗 Diagram / Embed URL</div>
+    <input type="text" class="ef-sm" data-key="diag-url" placeholder="Miro, Lucidchart, Figma, FigJam, or other embed URL...">
+    <div style="margin-top:12px;background:#f0f3f8;border-radius:8px;min-height:180px;display:flex;align-items:center;justify-content:center;color:var(--light);font-size:13px;border:1px dashed var(--border)">
+      📐 Paste a diagram embed URL above, or screenshot your diagram and drop the image here
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📝 Architecture Narrative</div>
+    <textarea class="ef" data-key="diag-narrative" style="min-height:110px" placeholder="Walk through the architecture in prose — platforms involved, data flow direction, decision boundaries, phase locking rules, critical paths..."></textarea>
+  </div>
+</div>
+
+<!-- ── DATA FLOW MAP ── -->
+<div class="section" id="s-data-flow">
+  <div class="sec-tag">ARCHITECTURE</div>
+  <div class="sec-title">Data Flow Map</div>
+  <div class="sec-desc">How each data object moves through the system — source, destination, transformations.</div>
+
+  <!-- DATA FLOW SVG DIAGRAM -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:22px 18px;margin-bottom:16px;overflow:hidden">
+  <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+    <defs>
+      <marker id="df-arr-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#185fa5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="df-arr-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#534ab7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="df-arr-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#c85a00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="df-arr-blue-rev" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M9 1L1 5L9 9" fill="none" stroke="#185fa5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="df-arr-purple-rev" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M9 1L1 5L9 9" fill="none" stroke="#534ab7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <!-- Title -->
+    <text font-family="'Sora',system-ui,sans-serif" font-size="14" font-weight="700" fill="#18253a" x="450" y="24" text-anchor="middle">ConnectWise ↔ ClickUp — Bi-Directional Data Flow</text>
+
+    <!-- CONNECTWISE platform box -->
+    <rect x="20" y="44" width="195" height="390" rx="10" fill="#fff5f5" stroke="#d53132" stroke-width="1.5"/>
+    <rect x="20" y="44" width="195" height="34" rx="10" fill="#d53132"/>
+    <rect x="20" y="62" width="195" height="16" fill="#d53132"/>
+    <!-- CW icon: shield shape -->
+    <rect x="30" y="52" width="14" height="14" rx="3" fill="rgba(255,255,255,0.25)"/>
+    <text font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.9)" x="37" y="62" text-anchor="middle">CW</text>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="11" font-weight="700" fill="#fff" x="117" y="66" text-anchor="middle">ConnectWise PSA</text>
+
+    <!-- CW data objects -->
+    <!-- Companies entity -->
+    <rect x="34" y="92" width="167" height="70" rx="6" fill="#fff" stroke="#f7c1c1" stroke-width="1"/>
+    <rect x="34" y="92" width="167" height="20" rx="6" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <rect x="34" y="102" width="167" height="10" fill="#e6f1fb"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#0c447c" x="117" y="106" text-anchor="middle">COMPANIES RECORD</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="44" y="124">id, name, website, addressLine1</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="44" y="136">city, state, phoneNumber</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="44" y="148">timeZone, defaultContact, lastUpdated</text>
+
+    <!-- Contacts entity -->
+    <rect x="34" y="176" width="167" height="70" rx="6" fill="#fff" stroke="#d9d3fb" stroke-width="1"/>
+    <rect x="34" y="176" width="167" height="20" rx="6" fill="#eeedfe" stroke="#534ab7" stroke-width="1"/>
+    <rect x="34" y="186" width="167" height="10" fill="#eeedfe"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#3c3489" x="117" y="190" text-anchor="middle">CONTACTS RECORD</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="44" y="208">id, firstName, lastName, title</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="44" y="220">communicationItems (email, phone)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="44" y="232">company.id, lastUpdated</text>
+
+    <!-- CW API endpoints -->
+    <rect x="34" y="260" width="167" height="80" rx="6" fill="#f9f8f6" stroke="#e4e2db" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#6b6960" x="44" y="275">API ENDPOINTS</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0d7a5f" x="44" y="291">GET /company/companies</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0d7a5f" x="44" y="303">PATCH /company/companies/{id}</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0d7a5f" x="44" y="315">GET /company/contacts</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0d7a5f" x="44" y="327">PATCH /company/contacts/{id}</text>
+
+    <!-- CW Auth note -->
+    <rect x="34" y="354" width="167" height="66" rx="6" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#78350f" x="44" y="369">AUTH REQUIRED</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="44" y="382">Basic Auth: companyid+public:private</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="44" y="394">clientId: ec91c9f7-276e-4ff0...</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="44" y="406">Accept: ...version=2024.1</text>
+
+    <!-- n8n ORCHESTRATION box -->
+    <rect x="340" y="44" width="220" height="390" rx="10" fill="#fff8f0" stroke="#ea4b2b" stroke-width="1.5"/>
+    <rect x="340" y="44" width="220" height="34" rx="10" fill="#ea4b2b"/>
+    <rect x="340" y="62" width="220" height="16" fill="#ea4b2b"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="11" font-weight="700" fill="#fff" x="450" y="66" text-anchor="middle">n8n Orchestration</text>
+
+    <!-- Flow 1: Webhook CU→CW Company -->
+    <rect x="354" y="92" width="192" height="62" rx="6" fill="#fff" stroke="#fcd9b0" stroke-width="1"/>
+    <rect x="354" y="92" width="192" height="18" rx="6" fill="#fff0e3" stroke="#c85a00" stroke-width="1"/>
+    <rect x="354" y="100" width="192" height="10" fill="#fff0e3"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#c85a00" x="450" y="105" text-anchor="middle">⚡ FLOW 1 — Webhook</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="121">ClickUp taskUpdated → validate →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="132">extract fields → build PATCH →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="143">PATCH /company/companies/{recId}</text>
+
+    <!-- Flow 2: Schedule CW→CU Company -->
+    <rect x="354" y="166" width="192" height="62" rx="6" fill="#fff" stroke="#9fe1cb" stroke-width="1"/>
+    <rect x="354" y="166" width="192" height="18" rx="6" fill="#e6f4f0" stroke="#0d7a5f" stroke-width="1"/>
+    <rect x="354" y="174" width="192" height="10" fill="#e6f4f0"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#0d7a5f" x="450" y="179" text-anchor="middle">⏱ FLOW 2 — Schedule (1hr)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="195">GET companies (lastUpdated>1hr) →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="206">batch 10 → search CU by RecID →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="217">PUT update or POST create task</text>
+
+    <!-- Flow 3: Webhook CU→CW Contact -->
+    <rect x="354" y="240" width="192" height="62" rx="6" fill="#fff" stroke="#fcd9b0" stroke-width="1"/>
+    <rect x="354" y="240" width="192" height="18" rx="6" fill="#fff0e3" stroke="#c85a00" stroke-width="1"/>
+    <rect x="354" y="248" width="192" height="10" fill="#fff0e3"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#c85a00" x="450" y="253" text-anchor="middle">⚡ FLOW 3 — Webhook</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="269">ClickUp Contact taskUpdated →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="280">extract contact fields → build PATCH →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="291">PATCH /company/contacts/{id}</text>
+
+    <!-- Flow 4: Schedule CW→CU Contact -->
+    <rect x="354" y="314" width="192" height="62" rx="6" fill="#fff" stroke="#9fe1cb" stroke-width="1"/>
+    <rect x="354" y="314" width="192" height="18" rx="6" fill="#e6f4f0" stroke="#0d7a5f" stroke-width="1"/>
+    <rect x="354" y="322" width="192" height="10" fill="#e6f4f0"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#0d7a5f" x="450" y="327" text-anchor="middle">⏱ FLOW 4 — Schedule (1hr)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="343">GET contacts (lastUpdated>1hr) →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="354">batch 50 → search CU by CW ID →</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="364" y="365">PUT update or POST create task</text>
+
+    <!-- n8n transform note -->
+    <rect x="354" y="390" width="192" height="32" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#7a4d0a" x="450" y="402" text-anchor="middle">JSON Patch (RFC 6902) for CW updates</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#7a4d0a" x="450" y="413" text-anchor="middle">Last Synced At written on every CW→CU run</text>
+
+    <!-- CLICKUP platform box -->
+    <rect x="685" y="44" width="195" height="390" rx="10" fill="#f5f4ff" stroke="#7B68EE" stroke-width="1.5"/>
+    <rect x="685" y="44" width="195" height="34" rx="10" fill="#7B68EE"/>
+    <rect x="685" y="62" width="195" height="16" fill="#7B68EE"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="11" font-weight="700" fill="#fff" x="782" y="66" text-anchor="middle">ClickUp</text>
+
+    <!-- Company Directory list -->
+    <rect x="699" y="92" width="167" height="100" rx="6" fill="#fff" stroke="#c5c0f7" stroke-width="1"/>
+    <rect x="699" y="92" width="167" height="20" rx="6" fill="#eeedfe" stroke="#534ab7" stroke-width="1"/>
+    <rect x="699" y="102" width="167" height="10" fill="#eeedfe"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#3c3489" x="782" y="106" text-anchor="middle">COMPANY DIRECTORY</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="122">List: 901707471373</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="133">RecID → 142e9dc4-...</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="144">website, address, city, state</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="155">phone, email, contact, timezone</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="166">Last Synced At → 796fc085-...</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="178">10 custom fields mapped</text>
+
+    <!-- Contact list -->
+    <rect x="699" y="204" width="167" height="84" rx="6" fill="#fff" stroke="#c5c0f7" stroke-width="1"/>
+    <rect x="699" y="204" width="167" height="20" rx="6" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <rect x="699" y="214" width="167" height="10" fill="#e6f1fb"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#0c447c" x="782" y="218" text-anchor="middle">CONTACT LIST</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="234">List: 901707481918</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="245">CW Contact ID → 257f67cb-...</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="256">firstName, lastName, title</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="267">email, phone, company.id</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="278">6+ custom fields mapped</text>
+
+    <!-- Webhook triggers -->
+    <rect x="699" y="300" width="167" height="60" rx="6" fill="#fff0e3" stroke="#c85a00" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#c85a00" x="709" y="315">WEBHOOK TRIGGERS</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="327">taskUpdated → Company list</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="338">taskUpdated → Contact list</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="349">Fires instantly on any field change</text>
+
+    <!-- CU Auth note -->
+    <rect x="699" y="374" width="167" height="46" rx="6" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#78350f" x="709" y="389">AUTH</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="401">Personal API Key — Jess</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="412">WgZ4hEqXNShwQLMO</text>
+
+    <!-- ── ARROWS ── -->
+    <!-- CW → n8n: GET companies (schedule, blue, Flow 2) -->
+    <path d="M216 123 L353 123" fill="none" stroke="#185fa5" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#df-arr-blue)"/>
+    <rect x="234" y="112" width="87" height="13" rx="3" fill="#e6f1fb"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0c447c" x="277" y="122" text-anchor="middle">GET companies (hourly)</text>
+
+    <!-- n8n → CW: PATCH company (webhook, orange, Flow 1) -->
+    <path d="M353 143 L216 143" fill="none" stroke="#c85a00" stroke-width="1.8" marker-end="url(#df-arr-orange)"/>
+    <rect x="234" y="131" width="87" height="13" rx="3" fill="#fff0e3"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#c85a00" x="277" y="141" text-anchor="middle">PATCH company (instant)</text>
+
+    <!-- CW → n8n: GET contacts (schedule, purple, Flow 4) -->
+    <path d="M216 207 L353 207" fill="none" stroke="#534ab7" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#df-arr-purple)"/>
+    <rect x="234" y="196" width="87" height="13" rx="3" fill="#eeedfe"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#3c3489" x="277" y="206" text-anchor="middle">GET contacts (hourly)</text>
+
+    <!-- n8n → CW: PATCH contact (webhook, orange, Flow 3) -->
+    <path d="M353 227 L216 227" fill="none" stroke="#c85a00" stroke-width="1.8" marker-end="url(#df-arr-orange)"/>
+    <rect x="234" y="215" width="87" height="13" rx="3" fill="#fff0e3"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#c85a00" x="277" y="225" text-anchor="middle">PATCH contact (instant)</text>
+
+    <!-- n8n → ClickUp: PUT/POST company task (teal, Flow 2) -->
+    <path d="M547 197 L698 170" fill="none" stroke="#0d7a5f" stroke-width="1.8" marker-end="url(#df-arr-blue)"/>
+    <rect x="578" y="173" width="82" height="13" rx="3" fill="#e6f4f0"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0d7a5f" x="619" y="183" text-anchor="middle">PUT/POST task (Co.)</text>
+
+    <!-- ClickUp → n8n: webhook taskUpdated company (orange, Flow 1) -->
+    <path d="M698 140 L547 157" fill="none" stroke="#c85a00" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#df-arr-orange)"/>
+    <rect x="580" y="138" width="77" height="13" rx="3" fill="#fff0e3"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#c85a00" x="618" y="148" text-anchor="middle">Webhook (Co. update)</text>
+
+    <!-- n8n → ClickUp: PUT/POST contact task (purple, Flow 4) -->
+    <path d="M547 345 L698 268" fill="none" stroke="#534ab7" stroke-width="1.8" marker-end="url(#df-arr-purple)"/>
+    <rect x="570" y="295" width="82" height="13" rx="3" fill="#eeedfe"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#3c3489" x="611" y="305" text-anchor="middle">PUT/POST task (Ct.)</text>
+
+    <!-- ClickUp → n8n: webhook taskUpdated contact (orange, Flow 3) -->
+    <path d="M698 248 L547 305" fill="none" stroke="#c85a00" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#df-arr-orange)"/>
+    <rect x="573" y="261" width="77" height="13" rx="3" fill="#fff0e3"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#c85a00" x="611" y="271" text-anchor="middle">Webhook (Ct. update)</text>
+
+    <!-- LEGEND -->
+    <rect x="24" y="448" width="852" height="28" rx="6" fill="#f9f8f6" stroke="#e4e2db" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#6b6960" x="38" y="463">LEGEND:</text>
+    <line x1="90" y1="462" x2="115" y2="462" stroke="#185fa5" stroke-width="1.8" stroke-dasharray="5 3"/>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="120" y="464">Schedule pull (hourly)</text>
+    <line x1="226" y1="462" x2="251" y2="462" stroke="#c85a00" stroke-width="1.8" stroke-dasharray="5 3"/>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="256" y="464">Webhook trigger (instant)</text>
+    <line x1="372" y1="462" x2="397" y2="462" stroke="#0d7a5f" stroke-width="1.8"/>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="402" y="464">Company data write</text>
+    <line x1="492" y1="462" x2="517" y2="462" stroke="#534ab7" stroke-width="1.8"/>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="522" y="464">Contact data write</text>
+    <line x1="612" y1="462" x2="637" y2="462" stroke="#c85a00" stroke-width="1.8"/>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="642" y="464">PATCH (CW update)</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#9b9890" x="860" y="464" text-anchor="end">v1.0.0 · Feb 2026</text>
+  </svg>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Data / Object</th><th>Source</th><th>Transform</th><th>Destination</th><th>Triggered By</th></tr></thead>
+      <tbody id="tb-dataflow">
+        <tr><td contenteditable>e.g. Textbook Markdown</td><td contenteditable>Claude output</td><td contenteditable>n8n → DOCX conversion</td><td contenteditable>Monday.com file column</td><td contenteditable>User confirms YES</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-dataflow',5)">+ Add Data Flow</button></div>
+</div>
+
+<!-- ── COMPONENT MAP ── -->
+<div class="section" id="s-component-map">
+  <div class="sec-tag">ARCHITECTURE</div>
+  <div class="sec-title">Component Map</div>
+  <div class="sec-desc">Each system component, its platform, responsibility, and what it depends on.</div>
+
+  <!-- COMPONENT MAP SVG -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:22px 18px;margin-bottom:16px;overflow:hidden">
+  <svg viewBox="0 0 900 530" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+    <defs>
+      <marker id="cm-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#5f5e5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="cm-arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#a32d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <!-- Title -->
+    <text font-family="'Sora',system-ui,sans-serif" font-size="14" font-weight="700" fill="#18253a" x="450" y="26" text-anchor="middle">System Component Map — ConnectWise ↔ ClickUp Sync</text>
+
+    <!-- ── ROW 1: External Triggers ── -->
+    <!-- ClickUp Webhook Trigger -->
+    <rect x="60" y="50" width="180" height="70" rx="8" fill="#fff0e3" stroke="#c85a00" stroke-width="1.5"/>
+    <rect x="60" y="50" width="180" height="22" rx="8" fill="#c85a00"/>
+    <rect x="60" y="62" width="180" height="10" fill="#c85a00"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="150" y="65" text-anchor="middle">⚡ ClickUp Webhook</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="72" y="86">Fires on: taskUpdated</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="72" y="98">Lists: 901707471373 / 901707481918</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="72" y="110">Flows 1 &amp; 3 (real-time)</text>
+
+    <!-- n8n Schedule Trigger -->
+    <rect x="280" y="50" width="180" height="70" rx="8" fill="#e6f4f0" stroke="#0d7a5f" stroke-width="1.5"/>
+    <rect x="280" y="50" width="180" height="22" rx="8" fill="#0d7a5f"/>
+    <rect x="280" y="62" width="180" height="10" fill="#0d7a5f"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="370" y="65" text-anchor="middle">⏱ n8n Schedule Trigger</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="292" y="86">Every 1 hour (cron)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="292" y="98">Flows 2 &amp; 4 (polling)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="292" y="110">No catch-up on missed runs</text>
+
+    <!-- ── ROW 2: n8n Core Nodes ── -->
+    <!-- HTTP GET CW -->
+    <rect x="60" y="165" width="180" height="80" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1.5"/>
+    <rect x="60" y="165" width="180" height="22" rx="8" fill="#185fa5"/>
+    <rect x="60" y="177" width="180" height="10" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="150" y="180" text-anchor="middle">GET ConnectWise Records</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="72" y="200">HTTP Request node</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="72" y="211">Filter: lastUpdated &gt; now−1hr</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="72" y="222">pageSize: 1000 (no pagination)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#a32d2d" x="72" y="234">⚠ Cap 1000 records/run</text>
+
+    <!-- Split + Loop -->
+    <rect x="280" y="165" width="180" height="80" rx="8" fill="#f9f8f6" stroke="#5f5e5a" stroke-width="1.5"/>
+    <rect x="280" y="165" width="180" height="22" rx="8" fill="#5f5e5a"/>
+    <rect x="280" y="177" width="180" height="10" fill="#5f5e5a"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="370" y="180" text-anchor="middle">Split Out + Loop Over Items</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#444441" x="292" y="200">splitOut: body → individual items</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#444441" x="292" y="211">batchSize: 10 (companies)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#444441" x="292" y="222">batchSize: 50 (contacts)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#444441" x="292" y="234">Loop-back via Merge Results</text>
+
+    <!-- Search ClickUp -->
+    <rect x="500" y="165" width="180" height="80" rx="8" fill="#f5f4ff" stroke="#7B68EE" stroke-width="1.5"/>
+    <rect x="500" y="165" width="180" height="22" rx="8" fill="#7B68EE"/>
+    <rect x="500" y="177" width="180" height="10" fill="#7B68EE"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="590" y="180" text-anchor="middle">Search ClickUp by RecID</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="512" y="200">ClickUp getAll node</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="512" y="211">Filter: custom field 142e9dc4-... = CW id</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="512" y="222">alwaysOutputData: true</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="512" y="234">Auth: Personal API key — Jess</text>
+
+    <!-- IF Gate -->
+    <polygon points="720,175 790,205 720,235 650,205" fill="#faeeda" stroke="#ba7517" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#7a4d0a" x="720" y="201" text-anchor="middle">IF Task</text>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#7a4d0a" x="720" y="213" text-anchor="middle">Exists?</text>
+
+    <!-- ── ROW 3: Update / Create ── -->
+    <!-- Update ClickUp Task -->
+    <rect x="615" y="285" width="170" height="70" rx="8" fill="#eaf3de" stroke="#3b6d11" stroke-width="1.5"/>
+    <rect x="615" y="285" width="170" height="22" rx="8" fill="#3b6d11"/>
+    <rect x="615" y="297" width="170" height="10" fill="#3b6d11"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="700" y="300" text-anchor="middle">✓ Update ClickUp Task</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#27500a" x="627" y="318">PUT /api/v2/task/{task_id}</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#27500a" x="627" y="329">10 custom fields written</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#27500a" x="627" y="340">Last Synced At = Date.now()</text>
+
+    <!-- Create ClickUp Task -->
+    <rect x="800" y="285" width="80" height="70" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1.5"/>
+    <rect x="800" y="285" width="80" height="22" rx="8" fill="#185fa5"/>
+    <rect x="800" y="297" width="80" height="10" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="840" y="300" text-anchor="middle">+ Create</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="810" y="318">POST to list</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="810" y="329">status: active</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="810" y="340">10 fields</text>
+
+    <!-- Merge Results -->
+    <rect x="680" y="380" width="135" height="55" rx="8" fill="#f9f8f6" stroke="#5f5e5a" stroke-width="1.5"/>
+    <rect x="680" y="380" width="135" height="22" rx="8" fill="#5f5e5a"/>
+    <rect x="680" y="392" width="135" height="10" fill="#5f5e5a"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="747" y="395" text-anchor="middle">Merge Results</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#444441" x="692" y="413">combineByPosition</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#444441" x="692" y="424">→ loops back to batcher</text>
+
+    <!-- PATCH CW (webhook flows) -->
+    <rect x="60" y="285" width="180" height="70" rx="8" fill="#fcebeb" stroke="#a32d2d" stroke-width="1.5"/>
+    <rect x="60" y="285" width="180" height="22" rx="8" fill="#a32d2d"/>
+    <rect x="60" y="297" width="180" height="10" fill="#a32d2d"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="150" y="300" text-anchor="middle">PATCH ConnectWise (Webhook)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7f1d1d" x="72" y="318">PATCH /company/companies/{id}</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7f1d1d" x="72" y="329">JSON Patch RFC 6902 format</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7f1d1d" x="72" y="340">Accept: version=2024.1 header</text>
+
+    <!-- RecID Link Field (custom field) -->
+    <rect x="280" y="285" width="180" height="70" rx="8" fill="#eeedfe" stroke="#534ab7" stroke-width="1.5"/>
+    <rect x="280" y="285" width="180" height="22" rx="8" fill="#534ab7"/>
+    <rect x="280" y="297" width="180" height="10" fill="#534ab7"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="370" y="300" text-anchor="middle">🔑 RecID Link Custom Field</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="292" y="318">Stored in ClickUp tasks</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="292" y="329">Companies: 142e9dc4-...</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="292" y="340">Contacts: 257f67cb-...</text>
+
+    <!-- ── CONNECTING ARROWS ── -->
+    <!-- ClickUp Webhook → PATCH CW -->
+    <path d="M150 120 L150 284" fill="none" stroke="#c85a00" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#cm-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#c85a00" x="155" y="207">Flows 1&amp;3</text>
+
+    <!-- Schedule → GET CW -->
+    <path d="M370 120 L150 164" fill="none" stroke="#0d7a5f" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0d7a5f" x="242" y="141">Flows 2&amp;4</text>
+
+    <!-- Schedule → Split+Loop -->
+    <path d="M370 120 L370 164" fill="none" stroke="#0d7a5f" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+
+    <!-- GET CW → Split+Loop -->
+    <path d="M241 205 L279 205" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+
+    <!-- Split+Loop → Search CU -->
+    <path d="M461 205 L499 205" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+
+    <!-- Search CU → IF -->
+    <path d="M681 205 L649 205" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+
+    <!-- IF → Update (TRUE) -->
+    <path d="M720 235 L700 284" fill="none" stroke="#3b6d11" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#3b6d11" x="703" y="266">TRUE</text>
+
+    <!-- IF → Create (FALSE) -->
+    <path d="M791 205 L840 205 L840 284" fill="none" stroke="#185fa5" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#185fa5" x="815" y="200">FALSE</text>
+
+    <!-- Update → Merge -->
+    <path d="M718 355 L735 379" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+
+    <!-- Create → Merge -->
+    <path d="M840 355 L800 379" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#cm-arr)"/>
+
+    <!-- Merge → Loop (loop back) -->
+    <path d="M747 435 L747 460 L460 460 L370 460 L370 246" fill="none" stroke="#5f5e5a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#cm-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="555" y="470">loop back to next batch</text>
+
+    <!-- RecID field ↔ Search CU (used by) -->
+    <path d="M460 290 L500 220" fill="none" stroke="#534ab7" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#cm-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#534ab7" x="467" y="262">search key</text>
+
+    <!-- STATUS BADGES -->
+    <rect x="60" y="500" width="80" height="18" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#166534" x="100" y="513" text-anchor="middle">LIVE &amp; TESTED</text>
+
+    <rect x="160" y="500" width="110" height="18" rx="4" fill="#fff0e3" stroke="#fcd9b0" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#c85a00" x="215" y="513" text-anchor="middle">Flows 1 &amp; 2 → Companies</text>
+
+    <rect x="290" y="500" width="110" height="18" rx="4" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#78350f" x="345" y="513" text-anchor="middle">Flows 3 &amp; 4 → Contacts (Testing)</text>
+
+    <rect x="430" y="500" width="120" height="18" rx="4" fill="#fcebeb" stroke="#fecaca" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#991b1b" x="490" y="513" text-anchor="middle">⚠ Personal API key risk</text>
+
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#9b9890" x="876" y="513" text-anchor="end">v1.0.0 · Feb 2026</text>
+  </svg>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Component</th><th>Platform</th><th>Responsibility</th><th>Depends On</th><th>Critical?</th></tr></thead>
+      <tbody id="tb-components">
+        <tr><td contenteditable>e.g. Behavior Engine</td><td contenteditable>Claude Project</td><td contenteditable>Phase locking, content generation, session state management</td><td contenteditable>System prompt in Project Instructions</td><td contenteditable>🔴 Yes</td></tr>
+        <tr><td contenteditable>Orchestration Layer</td><td contenteditable>n8n</td><td contenteditable>File conversion, Monday.com delivery via webhooks</td><td contenteditable>Shared employee account</td><td contenteditable>🔴 Yes</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-components',5)">+ Add Component</button></div>
+</div>
+
+<!-- ── PHASES ── -->
+<div class="section" id="s-phases">
+  <div class="sec-tag">PIPELINE</div>
+  <div class="sec-title">Phases & Steps</div>
+  <div class="sec-desc">Each phase or major step in sequence. Add as many as needed — simple or complex.</div>
+
+  <!-- PHASE FLOW SVG -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:22px 18px;margin-bottom:16px;overflow:hidden">
+  <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+    <defs>
+      <marker id="ph-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#5f5e5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <text font-family="'Sora',system-ui,sans-serif" font-size="13" font-weight="700" fill="#18253a" x="450" y="24" text-anchor="middle">Four-Flow Sync Architecture — Phase Overview</text>
+
+    <!-- DIRECTION LABELS -->
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#c85a00" x="450" y="46" text-anchor="middle">⚡ REAL-TIME (WEBHOOK)</text>
+    <line x1="20" y1="50" x2="330" y2="50" stroke="#c85a00" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="570" y1="50" x2="880" y2="50" stroke="#c85a00" stroke-width="1" stroke-dasharray="4 3"/>
+
+    <!-- FLOW 1 card -->
+    <rect x="20" y="58" width="190" height="140" rx="8" fill="#fff0e3" stroke="#c85a00" stroke-width="1.5"/>
+    <rect x="20" y="58" width="190" height="26" rx="8" fill="#c85a00"/>
+    <rect x="20" y="74" width="190" height="10" fill="#c85a00"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="115" y="73" text-anchor="middle">FLOW 1 — ClickUp → CW Company</text>
+    <!-- status badge -->
+    <rect x="30" y="94" width="68" height="14" rx="4" fill="#dcfce7"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#166534" x="64" y="104" text-anchor="middle">✓ Live &amp; Tested</text>
+    <!-- details -->
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="30" y="122">Trigger: ClickUp taskUpdated webhook</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="30" y="134">Direction: ClickUp → ConnectWise</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="30" y="146">Action: PATCH /company/companies/{id}</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="30" y="158">Format: JSON Patch (RFC 6902)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="30" y="170">Latency: &lt; 2 seconds</text>
+    <!-- node steps -->
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="30" y="186">Webhook→Filter→Get Task→Check RecID</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="30" y="197">→Build Patch→PATCH CW</text>
+
+    <!-- FLOW 2 card -->
+    <rect x="230" y="58" width="190" height="140" rx="8" fill="#e6f4f0" stroke="#0d7a5f" stroke-width="1.5"/>
+    <rect x="230" y="58" width="190" height="26" rx="8" fill="#0d7a5f"/>
+    <rect x="230" y="74" width="190" height="10" fill="#0d7a5f"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="325" y="73" text-anchor="middle">FLOW 2 — CW → ClickUp Company</text>
+    <rect x="240" y="94" width="68" height="14" rx="4" fill="#dcfce7"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#166534" x="274" y="104" text-anchor="middle">✓ Live &amp; Tested</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="240" y="122">Trigger: Schedule — every 1 hour</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="240" y="134">Direction: ConnectWise → ClickUp</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="240" y="146">Action: PUT or POST ClickUp task</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="240" y="158">Batch: 10 companies/batch</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="240" y="170">Delay: up to 1 hour</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="240" y="186">Schedule→GET CW→Split→Loop</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="240" y="197">→Search CU→IF→Update/Create→Merge</text>
+
+    <!-- FLOW 3 card -->
+    <rect x="480" y="58" width="190" height="140" rx="8" fill="#fff0e3" stroke="#c85a00" stroke-width="1.5"/>
+    <rect x="480" y="58" width="190" height="26" rx="8" fill="#c85a00"/>
+    <rect x="480" y="74" width="190" height="10" fill="#c85a00"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="575" y="73" text-anchor="middle">FLOW 3 — ClickUp → CW Contact</text>
+    <rect x="490" y="94" width="76" height="14" rx="4" fill="#fff0e3" stroke="#fcd9b0" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#c85a00" x="528" y="104" text-anchor="middle">⏳ Built &amp; Testing</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="490" y="122">Trigger: ClickUp taskUpdated webhook</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="490" y="134">Direction: ClickUp → ConnectWise</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="490" y="146">Action: PATCH /company/contacts/{id}</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="490" y="158">List: 901707481918</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#a32d2d" x="490" y="170">⚠ No create branch yet</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="490" y="186">Webhook→Filter→Get Task→Check</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="490" y="197">Contact ID→Build Patch→PATCH CW</text>
+
+    <!-- FLOW 4 card -->
+    <rect x="690" y="58" width="190" height="140" rx="8" fill="#e6f4f0" stroke="#0d7a5f" stroke-width="1.5"/>
+    <rect x="690" y="58" width="190" height="26" rx="8" fill="#0d7a5f"/>
+    <rect x="690" y="74" width="190" height="10" fill="#0d7a5f"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="785" y="73" text-anchor="middle">FLOW 4 — CW → ClickUp Contact</text>
+    <rect x="700" y="94" width="76" height="14" rx="4" fill="#fff0e3" stroke="#fcd9b0" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#c85a00" x="738" y="104" text-anchor="middle">⏳ Built &amp; Testing</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="700" y="122">Trigger: Schedule — every 1 hour</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="700" y="134">Direction: ConnectWise → ClickUp</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="700" y="146">Action: PUT or POST contact task</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="700" y="158">Batch: 50 contacts/batch</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#085041" x="700" y="170">List: 901707481918</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="700" y="186">Schedule→GET CW→Loop→Search CU</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#5f5e5a" x="700" y="197">→IF→Update/Create</text>
+
+    <!-- Connecting arrows between phases -->
+    <path d="M211 128 L229 128" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#ph-arr)"/>
+    <path d="M421 128 L479 128" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#ph-arr)"/>
+    <path d="M671 128 L689 128" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#ph-arr)"/>
+
+    <!-- Shared link: RecID -->
+    <rect x="20" y="215" width="860" height="50" rx="8" fill="#eeedfe" stroke="#534ab7" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#3c3489" x="450" y="233" text-anchor="middle">🔑 CANONICAL LINK — ConnectWise RecID stored in ClickUp Custom Field</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#534ab7" x="450" y="247" text-anchor="middle">Companies: custom field 142e9dc4-66bc-4412-94dd-e3063bb48ca0 | Contacts: 257f67cb-b1ce-44fa-a307-87627f9406e3</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#534ab7" x="450" y="259" text-anchor="middle">This field is the dedup key — all four flows use it to determine UPDATE vs CREATE routing</text>
+
+    <!-- Team / Space markers -->
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#9b9890" x="450" y="277" text-anchor="middle">Team: 9017426462 | Space: 90172134996 | Folder: 90173998395 | v1.0.0 · Feb 2026</text>
+  </svg>
+  </div>
+
+  <div id="c-phases"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addPhase()">+ Add Phase / Step</button></div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">🔁 Phase Transition Rules</div>
+    <textarea class="ef" data-key="phase-transitions" placeholder="e.g. Phase 2 cannot begin until Phase 1 output is approved. Session state enforces sequencing. Agent never skips phases..."></textarea>
+  </div>
+  <div class="tbl-wrap" style="margin-top:16px">
+    <table class="dt">
+      <thead><tr><th>Phase</th><th>Output / Deliverable</th><th>Owner</th><th>Tracking Status</th><th>Kevin / Notify?</th></tr></thead>
+      <tbody id="tb-phase-summary">
+        <tr><td contenteditable>1 — e.g. Textbook</td><td contenteditable>Study Unit as Word doc</td><td contenteditable>Brian</td><td contenteditable>Textbook Ready for Review</td><td contenteditable>⚡ Auto-created</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-phase-summary',5)">+ Add to Summary Table</button></div>
+</div>
+
+<!-- ── APPROVAL GATES ── -->
+<div class="section" id="s-approval-gates">
+  <div class="sec-tag">PIPELINE</div>
+  <div class="sec-title">Approval Gates</div>
+  <div class="sec-desc">Every human-in-the-loop decision point. Nothing moves forward without an explicit action.</div>
+  <div id="c-gates"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addGate()">+ Add Approval Gate</button></div>
+</div>
+
+<!-- ── TRIGGERS ── -->
+<div class="section" id="s-triggers">
+  <div class="sec-tag">PIPELINE</div>
+  <div class="sec-title">Triggers & Inputs</div>
+  <div class="sec-desc">What initiates this workflow and what data it expects at entry.</div>
+  <div class="card">
+    <div class="card-title">⚡ Primary Trigger</div>
+    <div class="grid2">
+      <div class="fl"><label class="fl-label">Trigger Type</label>
+        <select class="ef" data-key="trig-type"><option>Webhook</option><option>Schedule (Cron)</option><option>Manual</option><option>Form Submission</option><option>Event / Watch</option><option>API Call</option><option>User Message (Claude)</option><option>Other</option></select>
+      </div>
+      <div class="fl"><label class="fl-label">Platform</label><input type="text" class="ef-sm" data-key="trig-platform" placeholder="e.g. n8n, Make, Claude, Monday.com"></div>
+      <div class="fl full"><label class="fl-label">Trigger Description</label><textarea class="ef" data-key="trig-desc" placeholder="Describe exactly how and when the workflow starts..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📥 Expected Input Payload / Schema</div>
+    <textarea class="ef mono" data-key="trig-payload" placeholder='{\n  "mondayItemId": "<from session state>",\n  "columnId": "text_...",\n  "content": "..."\n}'></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 Required Input Fields</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>Field Name</th><th>Type</th><th>Required?</th><th>Source</th><th>Description</th></tr></thead>
+        <tbody id="tb-inputs">
+          <tr><td contenteditable>e.g. mondayItemId</td><td contenteditable>String</td><td contenteditable>Yes</td><td contenteditable>Session state / search_task</td><td contenteditable>Monday board item ID for the production run</td></tr>
+          <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-inputs',5)">+ Add Field</button></div>
+  </div>
+</div>
+
+<!-- ── CONNECTORS ── -->
+<div class="section" id="s-connectors">
+  <div class="sec-tag">INTEGRATIONS</div>
+  <div class="sec-title">Connectors & Webhooks</div>
+  <div class="sec-desc">All external connections, webhook endpoints, and integration points.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Name</th><th>Type</th><th>URL / Endpoint</th><th>Auth</th><th>Phase / Step</th><th>Direction</th></tr></thead>
+      <tbody id="tb-connectors">
+        <tr><td contenteditable>e.g. add-textbook-file</td><td contenteditable>Webhook</td><td contenteditable style="font-family:var(--mono);font-size:11px">hockintl.app.n8n.cloud/webhook/add-textbook-file</td><td contenteditable>Shared n8n Account</td><td contenteditable>Phase 1</td><td contenteditable>Outbound</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-connectors',6)">+ Add Connector</button></div>
+</div>
+
+<!-- ── SCHEMA ── -->
+<div class="section" id="s-schema">
+  <div class="sec-tag">INTEGRATIONS</div>
+  <div class="sec-title">Platform Schema</div>
+  <div class="sec-desc">Field mappings, column IDs, and data structures for connected platforms.</div>
+  <div class="card">
+    <div class="card-title">📋 Platform / Board Details</div>
+    <div class="grid2">
+      <div class="fl"><label class="fl-label">Platform</label><input type="text" class="ef-sm" data-key="sch-platform" placeholder="e.g. Monday.com"></div>
+      <div class="fl"><label class="fl-label">Board / Table / DB ID</label><input type="text" class="ef-sm" data-key="sch-boardid" placeholder="e.g. 18398486903"></div>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Column / Field Name</th><th>Column ID</th><th>Phase / Step</th><th>How Used</th><th>Type</th></tr></thead>
+      <tbody id="tb-schema">
+        <tr><td contenteditable>e.g. Textbook Markdown</td><td contenteditable style="font-family:var(--mono);font-size:11px">text_mm1h6708</td><td contenteditable>Phase 1</td><td contenteditable>change_column_value — full markdown text</td><td contenteditable>Text</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-schema',5)">+ Add Field</button></div>
+</div>
+
+<!-- ── API REF ── -->
+<div class="section" id="s-api-ref">
+  <div class="sec-tag">INTEGRATIONS</div>
+  <div class="sec-title">API Reference</div>
+  <div class="sec-desc">Payload schemas, endpoint specs, and example calls for each integration.</div>
+  <div id="c-api"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addApi()">+ Add API / Payload Block</button></div>
+</div>
+
+<!-- ── SESSION IDs ── -->
+<div class="section" id="s-session-ids">
+  <div class="sec-tag">REFERENCE</div>
+  <div class="sec-title">Session & IDs</div>
+  <div class="sec-desc">Session state keys, stored IDs, and naming conventions maintained throughout a run.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Key / Variable</th><th>How It's Set</th><th>Required Before</th><th>Notes / Rules</th></tr></thead>
+      <tbody id="tb-session">
+        <tr><td contenteditable style="font-family:var(--mono);font-size:11px">mondayItemId</td><td contenteditable>Retrieved via search_task — never hardcoded</td><td contenteditable>Any Monday MCP call or n8n workflow</td><td contenteditable>Never ask user for this value. Run search_task automatically if missing.</td></tr>
+        <tr><td contenteditable style="font-family:var(--mono);font-size:11px">currentPhase</td><td contenteditable>Updated on every phase transition</td><td contenteditable>All phase actions</td><td contenteditable></td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-session',4)">+ Add Key</button></div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">🏷 Naming Conventions</div>
+    <textarea class="ef" data-key="naming-convs" placeholder="e.g. Session keys: camelCase. Webhook names: kebab-case. IDs always retrieved via API — never hardcoded. Column IDs stored in reference doc..."></textarea>
+  </div>
+</div>
+
+<!-- ── BEHAVIORAL RULES ── -->
+<div class="section" id="s-behavioral-rules">
+  <div class="sec-tag">REFERENCE</div>
+  <div class="sec-title">Behavioral Rules</div>
+  <div class="sec-desc">Absolute constraints and enforcement rules governing how this agent / workflow must behave.</div>
+  <div id="c-rules"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addRule()">+ Add Rule</button></div>
+</div>
+
+<!-- ── PROMPT LIBRARY ── -->
+<div class="section" id="s-prompt-library">
+  <div class="sec-tag">REFERENCE</div>
+  <div class="sec-title">Prompt Library</div>
+  <div class="sec-desc">Phase prompts, system instructions, and reusable prompt templates for this workflow.</div>
+  <div id="c-prompts"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addPrompt()">+ Add Prompt</button></div>
+</div>
+
+<!-- ── SWIMLANE ── -->
+<div class="section" id="s-swimlane">
+  <div class="sec-tag">DIAGRAMS</div>
+  <div class="sec-title">Swimlane Flows</div>
+  <div class="sec-desc">End-to-end process flows — which system owns each step, how data moves, and where decision gates occur.</div>
+
+  <!-- ═══════════════════════════════════════
+       SWIMLANE 1: Flow 2 — CW → ClickUp Company Sync (Hourly)
+  ════════════════════════════════════════ -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:22px 18px;margin-bottom:20px;overflow:hidden">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Swimlane A</div>
+    <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px">Flow 2 — ConnectWise → ClickUp Company Sync <span style="font-size:11px;font-weight:500;color:var(--muted);background:#f0f3f8;padding:2px 8px;border-radius:4px;margin-left:6px">Scheduled · Every 1 Hour</span></div>
+  <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+    <defs>
+      <marker id="sw1-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#5f5e5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="sw1-arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#3b6d11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="sw1-arr-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#185fa5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <!-- LANE BACKGROUNDS -->
+    <!-- Lane 1: ConnectWise API -->
+    <rect x="0" y="0" width="900" height="140" rx="0" fill="#fff5f5"/>
+    <rect x="0" y="0" width="900" height="32" fill="#d53132"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="10" font-weight="700" fill="#fff" x="12" y="20">CONNECTWISE PSA</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" x="12" y="30">GET /company/companies · api-na.myconnectwise.net</text>
+
+    <!-- Lane 2: n8n Automation -->
+    <rect x="0" y="140" width="900" height="160" fill="#fff8f5"/>
+    <rect x="0" y="140" width="6" height="160" fill="#ea4b2b"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="10" font-weight="700" fill="#ea4b2b" x="12" y="158">n8n AUTOMATION</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#9b9890" x="12" y="169">Orchestration · Batching · Routing</text>
+    <line x1="0" y1="300" x2="900" y2="300" stroke="#e4e2db" stroke-width="1"/>
+
+    <!-- Lane 3: ClickUp API -->
+    <rect x="0" y="300" width="900" height="120" fill="#f5f4ff"/>
+    <rect x="0" y="300" width="6" height="120" fill="#7B68EE"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="10" font-weight="700" fill="#7B68EE" x="12" y="318">CLICKUP API</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#9b9890" x="12" y="329">api.clickup.com · List 901707471373</text>
+
+    <!-- Lane dividers -->
+    <line x1="0" y1="140" x2="900" y2="140" stroke="#e4e2db" stroke-width="1.5"/>
+    <line x1="0" y1="300" x2="900" y2="300" stroke="#e4e2db" stroke-width="1.5"/>
+
+    <!-- STEP POSITIONS (x-centers): 80, 200, 330, 460, 570, 680, 780, 840 -->
+
+    <!-- STEP 1: Schedule Trigger (n8n lane) -->
+    <circle cx="70" cy="220" r="22" fill="none" stroke="#185fa5" stroke-width="2.5"/>
+    <circle cx="70" cy="220" r="14" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#fff" x="70" y="224" text-anchor="middle">START</text>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="600" fill="#18253a" x="70" y="252" text-anchor="middle">Schedule</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="70" y="263" text-anchor="middle">Every 1 hr</text>
+
+    <!-- Arrow 1→2 -->
+    <path d="M93 220 L135 220" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw1-arr)"/>
+
+    <!-- STEP 2: GET Companies (n8n lane, calls CW) -->
+    <rect x="136" y="196" width="120" height="48" rx="6" fill="#e6f1fb" stroke="#185fa5" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#0c447c" x="196" y="212" text-anchor="middle">GET Companies</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="196" y="224" text-anchor="middle">HTTP Request</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="196" y="235" text-anchor="middle">lastUpdated &gt; 1hr</text>
+
+    <!-- Vertical call into CW lane -->
+    <path d="M196 196 L196 100" fill="none" stroke="#185fa5" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#sw1-arr)"/>
+    <!-- CW response node -->
+    <rect x="136" y="50" width="120" height="46" rx="6" fill="#fff5f5" stroke="#d53132" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#d53132" x="196" y="67" text-anchor="middle">CW Returns</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="196" y="79" text-anchor="middle">JSON array</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="196" y="90" text-anchor="middle">≤1000 records</text>
+    <!-- Response return arrow -->
+    <path d="M196 97 L196 244" fill="none" stroke="#d53132" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#sw1-arr)"/>
+
+    <!-- Arrow 2→3 -->
+    <path d="M257 220 L283 220" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw1-arr)"/>
+
+    <!-- STEP 3: Split Out (n8n) -->
+    <rect x="284" y="200" width="90" height="40" rx="6" fill="#f9f8f6" stroke="#5f5e5a" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#444441" x="329" y="216" text-anchor="middle">Split Out</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="329" y="228" text-anchor="middle">body → items</text>
+
+    <!-- Arrow 3→4 -->
+    <path d="M375 220 L400 220" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw1-arr)"/>
+
+    <!-- STEP 4: Loop (n8n) -->
+    <rect x="401" y="196" width="90" height="48" rx="6" fill="#fff8f0" stroke="#ea4b2b" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#ea4b2b" x="446" y="212" text-anchor="middle">Loop Batch</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="446" y="224" text-anchor="middle">10/batch</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="446" y="236" text-anchor="middle">splitInBatches</text>
+
+    <!-- Arrow 4→5 -->
+    <path d="M492 220 L518 220" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw1-arr)"/>
+
+    <!-- STEP 5: Search ClickUp — calls into CU lane -->
+    <rect x="519" y="196" width="110" height="48" rx="6" fill="#f5f4ff" stroke="#7B68EE" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#3c3489" x="574" y="212" text-anchor="middle">Search ClickUp</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="574" y="224" text-anchor="middle">by RecID field</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="574" y="236" text-anchor="middle">getAll node</text>
+    <!-- Call into ClickUp lane -->
+    <path d="M574 244 L574 305" fill="none" stroke="#7B68EE" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#sw1-arr)"/>
+    <!-- CU Search result -->
+    <rect x="519" y="308" width="110" height="40" rx="6" fill="#f5f4ff" stroke="#7B68EE" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="574" y="323" text-anchor="middle">Returns task</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="574" y="335" text-anchor="middle">or empty</text>
+    <!-- Return arrow -->
+    <path d="M574 300 L574 248" fill="none" stroke="#7B68EE" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#sw1-arr)"/>
+
+    <!-- Arrow 5→6 -->
+    <path d="M630 220 L656 220" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw1-arr)"/>
+
+    <!-- STEP 6: IF node (diamond) -->
+    <polygon points="690,196 730,220 690,244 650,220" fill="#faeeda" stroke="#ba7517" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#7a4d0a" x="690" y="217" text-anchor="middle">IF Task</text>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#7a4d0a" x="690" y="228" text-anchor="middle">Exists?</text>
+
+    <!-- TRUE branch: goes up to CU lane → Update -->
+    <path d="M690 196 L690 170 L780 170 L780 305" fill="none" stroke="#3b6d11" stroke-width="1.5" marker-end="url(#sw1-arr-g)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#3b6d11" x="720" y="166">TRUE</text>
+    <!-- Update Task (CU lane) -->
+    <rect x="725" y="308" width="110" height="48" rx="6" fill="#eaf3de" stroke="#3b6d11" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#27500a" x="780" y="323" text-anchor="middle">PUT Update</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#27500a" x="780" y="335" text-anchor="middle">10 fields</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#27500a" x="780" y="347" text-anchor="middle">Last Synced At</text>
+
+    <!-- FALSE branch: stays in n8n → Create -->
+    <path d="M730 220 L840 220 L840 305" fill="none" stroke="#185fa5" stroke-width="1.5" marker-end="url(#sw1-arr-b)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#185fa5" x="775" y="215">FALSE</text>
+    <!-- Create Task (CU lane) -->
+    <rect x="790" y="308" width="100" height="48" rx="6" fill="#e6f1fb" stroke="#185fa5" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#0c447c" x="840" y="323" text-anchor="middle">POST Create</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0c447c" x="840" y="335" text-anchor="middle">status: active</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#0c447c" x="840" y="347" text-anchor="middle">10 fields</text>
+
+    <!-- Merge → loop back (both branches return to loop in n8n lane) -->
+    <path d="M780 357 L780 380 L446 380 L446 244" fill="none" stroke="#5f5e5a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#sw1-arr)"/>
+    <path d="M840 357 L840 390 L430 390" fill="none" stroke="#185fa5" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="610" y="397">→ loop back until all batches done</text>
+
+    <!-- End event -->
+    <circle cx="860" cy="220" r="14" fill="none" stroke="#3b6d11" stroke-width="2.5"/>
+    <circle cx="860" cy="220" r="8" fill="#3b6d11"/>
+    <line x1="853" y1="220" x2="867" y2="220" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#3b6d11" x="860" y="243" text-anchor="middle">END</text>
+
+    <!-- Step numbers -->
+    <circle cx="70" cy="175" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="70" y="179" text-anchor="middle">1</text>
+    <circle cx="196" cy="175" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="196" y="179" text-anchor="middle">2</text>
+    <circle cx="329" cy="191" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="329" y="195" text-anchor="middle">3</text>
+    <circle cx="446" cy="187" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="446" y="191" text-anchor="middle">4</text>
+    <circle cx="574" cy="187" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="574" y="191" text-anchor="middle">5</text>
+    <circle cx="690" cy="187" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="690" y="191" text-anchor="middle">6</text>
+    <circle cx="780" cy="299" r="9" fill="#3b6d11"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="780" y="303" text-anchor="middle">7</text>
+    <circle cx="840" cy="299" r="9" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="840" y="303" text-anchor="middle">8</text>
+
+    <!-- Status badge -->
+    <rect x="786" y="8" width="100" height="18" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#166534" x="836" y="21" text-anchor="middle">✓ Live &amp; Tested</text>
+  </svg>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SWIMLANE 2: Flow 1 — ClickUp → CW Company Sync (Webhook)
+  ════════════════════════════════════════ -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:22px 18px;margin-bottom:20px;overflow:hidden">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Swimlane B</div>
+    <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px">Flow 1 — ClickUp → ConnectWise Company Sync <span style="font-size:11px;font-weight:500;color:var(--muted);background:#f0f3f8;padding:2px 8px;border-radius:4px;margin-left:6px">Webhook · Real-time</span></div>
+  <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+    <defs>
+      <marker id="sw2-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#5f5e5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="sw2-arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#d53132" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <!-- LANE BACKGROUNDS -->
+    <!-- Lane 1: ClickUp (webhook source) -->
+    <rect x="0" y="0" width="900" height="130" fill="#f5f4ff"/>
+    <rect x="0" y="0" width="900" height="32" fill="#7B68EE"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="10" font-weight="700" fill="#fff" x="12" y="20">CLICKUP</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" x="12" y="30">taskUpdated webhook · Company List 901707471373</text>
+
+    <!-- Lane 2: n8n Automation -->
+    <rect x="0" y="130" width="900" height="130" fill="#fff8f5"/>
+    <rect x="0" y="130" width="6" height="130" fill="#ea4b2b"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="10" font-weight="700" fill="#ea4b2b" x="12" y="148">n8n AUTOMATION</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#9b9890" x="12" y="159">Webhook receiver · Field extractor · PATCH builder</text>
+    <line x1="0" y1="260" x2="900" y2="260" stroke="#e4e2db" stroke-width="1.5"/>
+
+    <!-- Lane 3: ConnectWise API -->
+    <rect x="0" y="260" width="900" height="120" fill="#fff5f5"/>
+    <rect x="0" y="260" width="6" height="120" fill="#d53132"/>
+    <text font-family="'Sora',system-ui,sans-serif" font-size="10" font-weight="700" fill="#d53132" x="12" y="278">CONNECTWISE PSA</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#9b9890" x="12" y="289">PATCH /company/companies/{recId} · JSON Patch RFC 6902</text>
+    <line x1="0" y1="130" x2="900" y2="130" stroke="#e4e2db" stroke-width="1.5"/>
+
+    <!-- STEP 1: User edits ClickUp task -->
+    <rect x="30" y="50" width="100" height="44" rx="6" fill="#eeedfe" stroke="#534ab7" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#3c3489" x="80" y="66" text-anchor="middle">User Updates</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#534ab7" x="80" y="77" text-anchor="middle">Company Task</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#534ab7" x="80" y="88" text-anchor="middle">in ClickUp</text>
+
+    <!-- Webhook fires -->
+    <path d="M131 72 L175 72" fill="none" stroke="#7B68EE" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+    <!-- Webhook event bubble -->
+    <rect x="176" y="50" width="100" height="44" rx="6" fill="#fff0e3" stroke="#c85a00" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#c85a00" x="226" y="66" text-anchor="middle">⚡ taskUpdated</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#7a4d0a" x="226" y="77" text-anchor="middle">Webhook fires</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#7a4d0a" x="226" y="88" text-anchor="middle">instantly</text>
+
+    <!-- Down into n8n -->
+    <path d="M226 94 L226 135" fill="none" stroke="#c85a00" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#sw2-arr)"/>
+
+    <!-- STEP 2: Webhook Trigger node (n8n) -->
+    <rect x="176" y="152" width="100" height="44" rx="6" fill="#fff8f0" stroke="#ea4b2b" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#ea4b2b" x="226" y="168" text-anchor="middle">Webhook</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="226" y="179" text-anchor="middle">Trigger node</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="226" y="190" text-anchor="middle">receives payload</text>
+
+    <!-- Arrow → Filter -->
+    <path d="M277 174 L305 174" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+
+    <!-- STEP 3: Filter Valid Updates (IF) -->
+    <polygon points="340,152 390,174 340,196 290,174" fill="#faeeda" stroke="#ba7517" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#7a4d0a" x="340" y="170" text-anchor="middle">Filter</text>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#7a4d0a" x="340" y="181" text-anchor="middle">Valid?</text>
+
+    <!-- Valid → proceed -->
+    <path d="M391 174 L420 174" fill="none" stroke="#3b6d11" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7" fill="#3b6d11" x="404" y="170">YES</text>
+
+    <!-- Invalid → skip (end small) -->
+    <path d="M340 196 L340 220" fill="none" stroke="#a32d2d" stroke-width="1" stroke-dasharray="4 3"/>
+    <circle cx="340" cy="230" r="6" fill="#a32d2d"/>
+    <text font-family="system-ui,sans-serif" font-size="7" fill="#a32d2d" x="355" y="232">skip / NO</text>
+
+    <!-- STEP 4: Get Task Details (ClickUp API call, goes up) -->
+    <rect x="421" y="152" width="100" height="44" rx="6" fill="#f5f4ff" stroke="#7B68EE" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#3c3489" x="471" y="168" text-anchor="middle">Get Task</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#3c3489" x="471" y="179" text-anchor="middle">Details (GET)</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="471" y="190" text-anchor="middle">ClickUp API</text>
+    <!-- Calls up into CU lane -->
+    <path d="M471 152 L471 100" fill="none" stroke="#7B68EE" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#sw2-arr)"/>
+    <rect x="421" y="55" width="100" height="44" rx="6" fill="#f5f4ff" stroke="#7B68EE" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="471" y="71" text-anchor="middle">Task w/ all</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#3c3489" x="471" y="82" text-anchor="middle">custom fields</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="471" y="93" text-anchor="middle">returned</text>
+    <!-- Return -->
+    <path d="M471 94 L471 151" fill="none" stroke="#7B68EE" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#sw2-arr)"/>
+
+    <!-- Arrow → Check RecID -->
+    <path d="M522 174 L548 174" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+
+    <!-- STEP 5: Check RecID Exists (IF) -->
+    <polygon points="585,152 630,174 585,196 540,174" fill="#faeeda" stroke="#ba7517" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#7a4d0a" x="585" y="170" text-anchor="middle">RecID</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#7a4d0a" x="585" y="181" text-anchor="middle">Exists?</text>
+
+    <!-- No RecID → skip -->
+    <path d="M585 196 L585 225" fill="none" stroke="#a32d2d" stroke-width="1" stroke-dasharray="4 3"/>
+    <circle cx="585" cy="232" r="6" fill="#a32d2d"/>
+    <text font-family="system-ui,sans-serif" font-size="7" fill="#a32d2d" x="600" y="234">no → skip</text>
+
+    <!-- Has RecID → proceed -->
+    <path d="M631 174 L658 174" fill="none" stroke="#3b6d11" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7" fill="#3b6d11" x="639" y="170">YES</text>
+
+    <!-- STEP 6: Build JSON Patch (n8n) -->
+    <rect x="659" y="152" width="100" height="44" rx="6" fill="#f9f8f6" stroke="#5f5e5a" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#444441" x="709" y="168" text-anchor="middle">Build JSON</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="179" text-anchor="middle">Patch Payload</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="709" y="190" text-anchor="middle">RFC 6902</text>
+
+    <!-- Arrow → PATCH CW (goes down) -->
+    <path d="M759 174 L792 174" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+
+    <!-- STEP 7: PATCH ConnectWise (calls into CW lane) -->
+    <rect x="793" y="152" width="100" height="44" rx="6" fill="#fff5f5" stroke="#d53132" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#d53132" x="843" y="168" text-anchor="middle">PATCH CW</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="843" y="179" text-anchor="middle">HTTP Request</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="843" y="190" text-anchor="middle">n8n sends</text>
+    <!-- Down into CW lane -->
+    <path d="M843 196 L843 265" fill="none" stroke="#d53132" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+    <!-- CW receives PATCH -->
+    <rect x="793" y="268" width="100" height="48" rx="6" fill="#fff5f5" stroke="#d53132" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#d53132" x="843" y="283" text-anchor="middle">CW Updated</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="843" y="295" text-anchor="middle">/company/companies</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="843" y="307" text-anchor="middle">/{recId} patched</text>
+
+    <!-- End event -->
+    <circle cx="843" cy="330" r="12" fill="none" stroke="#3b6d11" stroke-width="2.5"/>
+    <circle cx="843" cy="330" r="7" fill="#3b6d11"/>
+    <line x1="837" y1="330" x2="849" y2="330" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M843 317 L843 316" fill="none" stroke="#3b6d11" stroke-width="1.5" marker-end="url(#sw2-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" font-weight="700" fill="#3b6d11" x="843" y="350" text-anchor="middle">END · &lt;2s</text>
+
+    <!-- Step number badges -->
+    <circle cx="80" cy="44" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="80" y="48" text-anchor="middle">1</text>
+    <circle cx="226" cy="44" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="226" y="48" text-anchor="middle">2</text>
+    <circle cx="226" cy="144" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="226" y="148" text-anchor="middle">3</text>
+    <circle cx="340" cy="144" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="340" y="148" text-anchor="middle">4</text>
+    <circle cx="471" cy="144" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="471" y="148" text-anchor="middle">5</text>
+    <circle cx="585" cy="144" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="585" y="148" text-anchor="middle">6</text>
+    <circle cx="709" cy="144" r="9" fill="#18253a"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="709" y="148" text-anchor="middle">7</text>
+    <circle cx="843" cy="144" r="9" fill="#d53132"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="843" y="148" text-anchor="middle">8</text>
+
+    <!-- Status badge -->
+    <rect x="786" y="8" width="100" height="18" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#166534" x="836" y="21" text-anchor="middle">✓ Live &amp; Tested</text>
+  </svg>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔗 Diagram Embed URL</div>
+    <input type="text" class="ef-sm" data-key="swim-url" placeholder="Paste embed URL for swimlane diagram...">
+  </div>
+  <div id="c-swim"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addSwim()">+ Add Additional Flow Notes</button></div>
+</div>
+
+<!-- ── n8n NODES ── -->
+<div class="section" id="s-n8n-nodes">
+  <div class="sec-tag">n8n NODE MAP</div>
+  <div class="sec-title">Node-by-Node Breakdown</div>
+  <div class="sec-desc">Every n8n node documented with type, description, inputs, outputs, error handling, risks, known issues, and workarounds.</div>
+  <div class="warn-box">⚠️ <strong>Execution Rule:</strong> Always use <code>n8n:execute_workflow</code> via MCP connector. Direct HTTP POST to webhook URLs bypasses authentication and will fail silently.</div>
+
+  <!-- NODE FLOW SVG — Flow 2: CW→ClickUp Company Sync -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:22px 18px;margin-bottom:16px;overflow:hidden">
+  <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Flow 2: ConnectWise → ClickUp Company Sync — Node Flowchart</div>
+  <svg viewBox="0 0 900 660" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+    <defs>
+      <marker id="nd-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#5f5e5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="nd-arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#3b6d11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="nd-arr-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#185fa5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <!-- NODE 1: Schedule Trigger -->
+    <!-- Start event circle -->
+    <circle cx="450" cy="40" r="22" fill="none" stroke="#185fa5" stroke-width="2.5"/>
+    <circle cx="450" cy="40" r="14" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#fff" x="450" y="44" text-anchor="middle">START</text>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#18253a" x="450" y="72" text-anchor="middle">1 — Schedule Trigger</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#6b6960" x="450" y="83" text-anchor="middle">Every 1 hour · n8n cron</text>
+
+    <!-- Arrow 1→2 -->
+    <path d="M450 90 L450 108" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#nd-arr)"/>
+
+    <!-- NODE 2: GET ConnectWise Companies -->
+    <rect x="260" y="109" width="380" height="60" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1.5"/>
+    <rect x="260" y="109" width="380" height="20" rx="8" fill="#185fa5"/>
+    <rect x="260" y="119" width="380" height="10" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="450" y="122" text-anchor="middle">2 — GET /company/companies (HTTP Request)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="275" y="142">Filter: lastUpdated &gt; [now − 1hr] | pageSize: 1000 | orderBy: lastUpdated desc</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="275" y="154">Auth: Basic + clientId header | fullResponse: true</text>
+
+    <!-- Arrow 2→3 -->
+    <path d="M450 170 L450 188" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#nd-arr)"/>
+
+    <!-- NODE 3: Split Out Companies -->
+    <rect x="310" y="189" width="280" height="50" rx="8" fill="#f9f8f6" stroke="#5f5e5a" stroke-width="1.5"/>
+    <rect x="310" y="189" width="280" height="18" rx="8" fill="#5f5e5a"/>
+    <rect x="310" y="197" width="280" height="10" fill="#5f5e5a"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="450" y="201" text-anchor="middle">3 — Split Out Companies</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#444441" x="325" y="218">fieldToSplitOut: body | Outputs individual company JSON objects</text>
+
+    <!-- Arrow 3→4 -->
+    <path d="M450 240 L450 258" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#nd-arr)"/>
+
+    <!-- NODE 4: Loop Over Items -->
+    <rect x="310" y="259" width="280" height="55" rx="8" fill="#fff8f0" stroke="#ea4b2b" stroke-width="1.5"/>
+    <rect x="310" y="259" width="280" height="20" rx="8" fill="#ea4b2b"/>
+    <rect x="310" y="269" width="280" height="10" fill="#ea4b2b"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="450" y="272" text-anchor="middle">4 — Loop Over Items (splitInBatches)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="325" y="290">batchSize: 10 | Passes current batch to next node</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#7a4d0a" x="325" y="302">Done output: empty when all batches processed</text>
+
+    <!-- Arrow 4→5 -->
+    <path d="M450 315 L450 333" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#nd-arr)"/>
+
+    <!-- NODE 5: Search ClickUp -->
+    <rect x="260" y="334" width="380" height="55" rx="8" fill="#f5f4ff" stroke="#7B68EE" stroke-width="1.5"/>
+    <rect x="260" y="334" width="380" height="20" rx="8" fill="#7B68EE"/>
+    <rect x="260" y="344" width="380" height="10" fill="#7B68EE"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="450" y="347" text-anchor="middle">5 — Search ClickUp for Company (getAll)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="275" y="365">List: 901707471373 | Filter: custom field 142e9dc4-... = $json.id (CW company id)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#3c3489" x="275" y="377">alwaysOutputData: true | Auth: Jess Personal API key</text>
+
+    <!-- Arrow 5→6 -->
+    <path d="M450 390 L450 408" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#nd-arr)"/>
+
+    <!-- NODE 6: IF Task Exists -->
+    <polygon points="450,409 540,432 450,455 360,432" fill="#faeeda" stroke="#ba7517" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#7a4d0a" x="450" y="428" text-anchor="middle">6 — IF Task</text>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#7a4d0a" x="450" y="441" text-anchor="middle">Exists? ($json.id)</text>
+
+    <!-- TRUE arrow → Update -->
+    <path d="M360 432 L220 432 L220 499" fill="none" stroke="#3b6d11" stroke-width="1.5" marker-end="url(#nd-arr-g)"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#3b6d11" x="267" y="428">TRUE</text>
+
+    <!-- FALSE arrow → Create -->
+    <path d="M540 432 L690 432 L690 499" fill="none" stroke="#185fa5" stroke-width="1.5" marker-end="url(#nd-arr-b)"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#185fa5" x="605" y="428">FALSE</text>
+
+    <!-- NODE 7: Update ClickUp Task -->
+    <rect x="100" y="500" width="240" height="70" rx="8" fill="#eaf3de" stroke="#3b6d11" stroke-width="1.5"/>
+    <rect x="100" y="500" width="240" height="20" rx="8" fill="#3b6d11"/>
+    <rect x="100" y="510" width="240" height="10" fill="#3b6d11"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="220" y="513" text-anchor="middle">7 — Update ClickUp Task (PUT)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#27500a" x="114" y="531">PUT /api/v2/task/{task_id}</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#27500a" x="114" y="543">10 custom fields | Last Synced At = now</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#27500a" x="114" y="555">Auth: ClickUp Personal API predefined cred</text>
+
+    <!-- NODE 8: Create New ClickUp Task -->
+    <rect x="570" y="500" width="240" height="70" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1.5"/>
+    <rect x="570" y="500" width="240" height="20" rx="8" fill="#185fa5"/>
+    <rect x="570" y="510" width="240" height="10" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#fff" x="690" y="513" text-anchor="middle">8 — Create New ClickUp Task (POST)</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="584" y="531">POST /api/v2/list/901707471373/task</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="584" y="543">status: active | 10 custom fields</text>
+    <text font-family="system-ui,sans-serif" font-size="8" fill="#0c447c" x="584" y="555">Auth: ClickUp Personal API predefined cred</text>
+
+    <!-- Update → Merge -->
+    <path d="M220 571 L220 605 L390 605" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#nd-arr)"/>
+
+    <!-- Create → Merge -->
+    <path d="M690 571 L690 605 L510 605" fill="none" stroke="#5f5e5a" stroke-width="1.5" marker-end="url(#nd-arr)"/>
+
+    <!-- NODE 9: Merge Results -->
+    <rect x="390" y="589" width="120" height="40" rx="8" fill="#f9f8f6" stroke="#5f5e5a" stroke-width="1.5"/>
+    <text font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#5f5e5a" x="450" y="608" text-anchor="middle">9 — Merge Results</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="450" y="622" text-anchor="middle">combineByPosition</text>
+
+    <!-- Merge → Loop back -->
+    <path d="M450 630 L450 645 L820 645 L820 285 L591 285" fill="none" stroke="#5f5e5a" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#nd-arr)"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="635" y="643">loop back → next batch</text>
+
+    <!-- End event: loop exhausted -->
+    <circle cx="840" cy="286" r="14" fill="none" stroke="#3b6d11" stroke-width="2.5"/>
+    <circle cx="840" cy="286" r="8" fill="#3b6d11"/>
+    <line x1="833" y1="286" x2="847" y2="286" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <text font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="#3b6d11" x="840" y="310" text-anchor="middle">END</text>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="840" y="320" text-anchor="middle">all batches done</text>
+
+    <!-- Legend -->
+    <rect x="20" y="630" width="340" height="28" rx="5" fill="#f9f8f6" stroke="#e4e2db" stroke-width="1"/>
+    <rect x="28" y="639" width="10" height="10" rx="2" fill="#185fa5"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="44" y="647">HTTP Request</text>
+    <rect x="100" y="639" width="10" height="10" rx="2" fill="#7B68EE"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="116" y="647">ClickUp node</text>
+    <polygon points="180,644 188,649 180,654 172,649" fill="#faeeda" stroke="#ba7517" stroke-width="1"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="196" y="647">IF / Decision</text>
+    <rect x="255" y="639" width="10" height="10" rx="2" fill="#3b6d11"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="271" y="647">Success branch</text>
+    <rect x="324" y="639" width="10" height="10" rx="2" fill="#ea4b2b"/>
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#6b6960" x="340" y="647">n8n native</text>
+
+    <text font-family="system-ui,sans-serif" font-size="7.5" fill="#9b9890" x="876" y="650" text-anchor="end">Flow 2 · v1.0.0</text>
+  </svg>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Workflow Registry</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>Workflow Name</th><th>Webhook URL</th><th>Phase / Step</th><th>Trigger Condition</th></tr></thead>
+        <tbody id="tb-n8n-registry">
+          <tr><td contenteditable>e.g. Monday_update_item_Textbook</td><td contenteditable style="font-family:var(--mono);font-size:11px">...webhook/add-textbook-file</td><td contenteditable>Phase 1</td><td contenteditable>User confirms YES to DOCX conversion</td></tr>
+          <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-n8n-registry',4)">+ Add Workflow</button></div>
+  </div>
+  <div id="c-nodes"></div>
+  <div class="btn-row"><button class="btn btn-p" onclick="addNode()">+ Add n8n Node</button></div>
+</div>
+
+<!-- ── PLATFORM STEPS ── -->
+<div class="section" id="s-platform-steps">
+  <div class="sec-tag">PLATFORM STEPS</div>
+  <div class="sec-title">Make / Zapier / ClickUp Steps</div>
+  <div class="sec-desc">Step-by-step documentation for workflows built on Make, Zapier, ClickUp Automations, or any other no-code / low-code platform. Each step includes inputs, outputs, conditions, risks, known issues, and workarounds.</div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">ℹ️ Platform Overview</div>
+    <div class="grid2">
+      <div class="fl"><label class="fl-label">Primary Platform</label>
+        <select class="ef" data-key="ps-platform"><option>Make (Integromat)</option><option>Zapier</option><option>ClickUp Automations</option><option>n8n</option><option>Power Automate</option><option>Workato</option><option>Multiple / Mixed</option><option>Other</option></select>
+      </div>
+      <div class="fl"><label class="fl-label">Scenario / Zap / Automation Name</label><input type="text" class="ef-sm" data-key="ps-name" placeholder="e.g. HOCK Phase 1 Delivery"></div>
+      <div class="fl full"><label class="fl-label">Description</label><textarea class="ef" data-key="ps-desc" style="min-height:60px" placeholder="What does this automation do at a high level..."></textarea></div>
+    </div>
+  </div>
+  <div id="c-steps"></div>
+  <div class="btn-row"><button class="btn btn-p" onclick="addStep()">+ Add Step</button></div>
+</div>
+
+<!-- ── READINESS ── -->
+<div class="section" id="s-readiness">
+  <div class="sec-tag">GO-LIVE</div>
+  <div class="sec-title">Readiness Checklist</div>
+  <div class="sec-desc">Every condition that must be confirmed before this workflow runs in production. Check items off as you verify them.</div>
+  <div id="c-checklist"></div>
+  <div class="btn-row">
+    <button class="btn btn-p btn-sm" onclick="addCheck()">+ Add Item</button>
+    <button class="btn btn-o btn-sm" onclick="resetChecks()">↺ Reset All</button>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">💥 What Breaks Without Each Item</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>Missing Item</th><th>What Breaks</th><th>Severity</th></tr></thead>
+        <tbody id="tb-breaks">
+          <tr><td contenteditable>e.g. Shared automation account</td><td contenteditable>File delivery fails when team members change. Workflows stop working across employees.</td><td contenteditable>🔴 Critical</td></tr>
+          <tr><td contenteditable>Instructions in wrong location</td><td contenteditable>Agent behavior becomes inconsistent. Phase locking weakens unpredictably.</td><td contenteditable>🔴 Critical</td></tr>
+          <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-breaks',3)">+ Add Row</button></div>
+  </div>
+</div>
+
+<!-- ── KNOWN ISSUES ── -->
+<div class="section" id="s-known-issues">
+  <div class="sec-tag">GO-LIVE</div>
+  <div class="sec-title">Known Issues</div>
+  <div class="sec-desc">Documented bugs, limitations, and edge cases — with workarounds where available.</div>
+  <div id="c-issues"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addIssue()">+ Add Issue</button></div>
+</div>
+
+<!-- ── CHANGELOG ── -->
+<div class="section" id="s-changelog">
+  <div class="sec-tag">GO-LIVE</div>
+  <div class="sec-title">Changelog</div>
+  <div class="sec-desc">Version history — what changed, when, and who made the change.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th style="width:80px">Version</th><th style="width:110px">Date</th><th>Changes</th><th style="width:120px">Author</th></tr></thead>
+      <tbody id="tb-changelog">
+        <tr><td contenteditable style="font-family:var(--mono)">v1.0.0</td><td contenteditable></td><td contenteditable>Initial documentation created</td><td contenteditable></td></tr>
+        <tr><td contenteditable style="font-family:var(--mono)"></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-changelog',4)">+ Add Entry</button></div>
+</div>
+
+</main><!-- end #main -->
+
+<!-- ════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+// ── NAV ──
+function go(s){
+  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  const sec=document.getElementById('s-'+s);
+  if(sec)sec.classList.add('active');
+  const ni=document.querySelector('[data-s="'+s+'"]');
+  if(ni)ni.classList.add('active');
+}
+
+// ── TABLE ROWS ──
+function addRow(tid,cols){
+  const tb=document.getElementById(tid);
+  if(!tb)return;
+  const tr=document.createElement('tr');
+  for(let i=0;i<cols;i++){
+    const td=document.createElement('td');
+    td.contentEditable=true;
+    if(tid==='tb-session'&&i===0)td.style.fontFamily='var(--mono)';
+    if(tid==='tb-n8n-registry'&&i===1)td.style.cssText='font-family:var(--mono);font-size:11px';
+    tr.appendChild(td);
+  }
+  tb.appendChild(tr);
+}
+
+// ── COUNTS (for save/restore) ──
+let counts={phases:0,gates:0,rules:0,prompts:0,nodes:0,steps:0,checks:0,issues:0,apis:0,swims:0};
+
+// ── PHASES ──
+function addPhase(){
+  counts.phases++;
+  const n=counts.phases;
+  const c=document.getElementById('c-phases');
+  const d=document.createElement('div');
+  d.className='dyn-card';d.id='phase-'+n;
+  d.innerHTML=`<div class="dyn-head">
+    <div class="dyn-num">${n}</div>
+    <input class="dyn-name" data-key="ph${n}-name" placeholder="Phase / Step name...">
+    <select class="dyn-sel" data-key="ph${n}-status"><option>Not Started</option><option>In Progress</option><option>Done</option><option>Blocked</option></select>
+    <button class="dyn-del" onclick="del('phase-${n}')">✕</button>
+  </div>
+  <div class="dyn-body">
+    <div class="fl full"><label class="fl-label">Description</label><textarea class="ef" data-key="ph${n}-desc" placeholder="What happens in this phase..."></textarea></div>
+    <div class="fl"><label class="fl-label">Output / Deliverable</label><textarea class="ef" data-key="ph${n}-output" style="min-height:60px" placeholder="What gets produced..."></textarea></div>
+    <div class="fl"><label class="fl-label">Owner</label><input type="text" class="ef-sm" data-key="ph${n}-owner" placeholder="Who is responsible..."></div>
+    <div class="fl"><label class="fl-label">Tracking Status (Monday etc.)</label><input type="text" class="ef-sm" data-key="ph${n}-mstatus" placeholder="e.g. Textbook Ready for Review"></div>
+    <div class="fl"><label class="fl-label">Prerequisites</label><input type="text" class="ef-sm" data-key="ph${n}-prereqs" placeholder="What must be done first..."></div>
+    <div class="fl"><label class="fl-label">Skills / Tools Invoked</label><input type="text" class="ef-sm" data-key="ph${n}-skills" placeholder="e.g. depth-calibration-skill, textbook-style-guide"></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── GATES ──
+function addGate(){
+  counts.gates++;
+  const n=counts.gates;
+  const c=document.getElementById('c-gates');
+  const d=document.createElement('div');
+  d.className='gate-card';d.id='gate-'+n;
+  d.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <span style="font-size:18px">✋</span>
+    <input type="text" class="ef-sm" data-key="gt${n}-name" placeholder="Gate name (e.g. Textbook Approval Gate)" style="flex:1">
+    <input type="text" class="ef-sm" data-key="gt${n}-phase" placeholder="Phase / step" style="width:130px">
+    <button class="dyn-del" onclick="del('gate-${n}')">✕</button>
+  </div>
+  <div class="grid2">
+    <div class="fl full"><label class="fl-label">Condition — What the user must do</label><textarea class="ef" data-key="gt${n}-condition" placeholder="e.g. Agent asks: 'Is the textbook finalized?' — waits for explicit YES before proceeding..."></textarea></div>
+    <div class="fl"><label class="fl-label">On YES — What happens</label><textarea class="ef" data-key="gt${n}-yes" style="min-height:60px" placeholder="e.g. Triggers n8n workflow, updates Monday status..."></textarea></div>
+    <div class="fl"><label class="fl-label">On NO / No Response — What happens</label><textarea class="ef" data-key="gt${n}-no" style="min-height:60px" placeholder="e.g. Agent waits. No external action taken. Nothing saved."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── RULES ──
+function addRule(){
+  counts.rules++;
+  const n=counts.rules;
+  const c=document.getElementById('c-rules');
+  const d=document.createElement('div');
+  d.className='rule-card';d.id='rule-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+    <select class="ef-sm" data-key="ru${n}-level" style="width:140px;resize:none">
+      <option>🔒 Absolute</option><option>⚠️ Strong Warning</option><option>ℹ️ Guidance</option><option>🚫 Prohibited</option>
+    </select>
+    <input type="text" class="ef-sm" data-key="ru${n}-name" placeholder="Rule name / title..." style="flex:1">
+    <button class="dyn-del" onclick="del('rule-${n}')">✕</button>
+  </div>
+  <div class="fl"><label class="fl-label">Description & Rationale</label><textarea class="ef" data-key="ru${n}-desc" placeholder="Full description of the rule and why it exists — what breaks if violated..."></textarea></div>`;
+  c.appendChild(d);
+}
+
+// ── PROMPTS ──
+function addPrompt(){
+  counts.prompts++;
+  const n=counts.prompts;
+  const c=document.getElementById('c-prompts');
+  const d=document.createElement('div');
+  d.className='prompt-card';d.id='prompt-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+    <input type="text" class="ef-sm" data-key="pr${n}-name" placeholder="Prompt name (e.g. Phase 1 Start Prompt)" style="flex:1">
+    <input type="text" class="ef-sm" data-key="pr${n}-phase" placeholder="Phase / context" style="width:150px">
+    <button class="dyn-del" onclick="del('prompt-${n}')">✕</button>
+  </div>
+  <div class="fl"><label class="fl-label">Prompt Content</label><textarea class="ef mono" data-key="pr${n}-content" style="min-height:130px" placeholder="Paste or type the full prompt here..."></textarea></div>
+  <div class="fl"><label class="fl-label">Usage Notes</label><input type="text" class="ef-sm" data-key="pr${n}-notes" placeholder="When and how to use this prompt, any special instructions..."></div>`;
+  c.appendChild(d);
+}
+
+// ── SWIM LANES ──
+function addSwim(){
+  counts.swims++;
+  const n=counts.swims;
+  const c=document.getElementById('c-swim');
+  const d=document.createElement('div');
+  d.className='card';d.id='swim-'+n;
+  d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="card-title" style="margin-bottom:0">🏊 Phase / Flow ${n}</div>
+    <button class="dyn-del" onclick="del('swim-${n}')">✕</button>
+  </div>
+  <div class="grid2">
+    <div class="fl"><label class="fl-label">Phase Name</label><input type="text" class="ef-sm" data-key="sw${n}-name" placeholder="e.g. Phase 1 — Textbook Creation"></div>
+    <div class="fl"><label class="fl-label">Lanes (Systems Involved)</label><input type="text" class="ef-sm" data-key="sw${n}-lanes" placeholder="e.g. Claude/AI, n8n/Automation, Monday.com, User/Manual"></div>
+    <div class="fl full"><label class="fl-label">Flow Description (Step by Step)</label><textarea class="ef" data-key="sw${n}-desc" style="min-height:90px" placeholder="Step 1: User sends phase prompt to Claude → Step 2: Claude generates content → Step 3: User reviews → Step 4: On YES, Claude calls n8n webhook → Step 5: n8n converts file → Step 6: n8n posts to Monday..."></textarea></div>
+    <div class="fl"><label class="fl-label">Decision Points / Gates</label><textarea class="ef" data-key="sw${n}-decisions" style="min-height:60px" placeholder="Where does the flow branch or pause for human input?"></textarea></div>
+    <div class="fl"><label class="fl-label">Error / Fallback Path</label><textarea class="ef" data-key="sw${n}-fallback" style="min-height:60px" placeholder="What happens if something fails in this flow?"></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── n8n NODES ──
+const nTypes=['HTTP Request','Code / Function','IF / Branch','Set / Assign','Switch','Merge','Loop Over Items','Wait / Delay','Webhook Trigger','Email','Slack','Monday.com','Google Sheets','Google Drive','Dropbox','Database / SQL','Filter','Aggregate','Sort / Limit','Start','End','SubWorkflow','Other'];
+
+function addNode(){
+  counts.nodes++;
+  const n=counts.nodes;
+  const c=document.getElementById('c-nodes');
+  const d=document.createElement('div');
+  d.className='node-card';d.id='node-'+n;
+  const opts=nTypes.map(t=>`<option>${t}</option>`).join('');
+  d.innerHTML=`<div class="node-head">
+    <div class="dyn-num">${n}</div>
+    <input class="dyn-name" data-key="nd${n}-name" placeholder="Node name (e.g. Get Monday Item, Convert to DOCX)">
+    <select class="dyn-sel" data-key="nd${n}-type">${opts}</select>
+    <button class="dyn-del" onclick="del('node-${n}')">✕</button>
+  </div>
+  <div class="node-body">
+    <div class="fl full"><label class="fl-label">📝 Description — What this node does</label><textarea class="ef" data-key="nd${n}-desc" placeholder="Explain what this node does in the context of the workflow. Be specific about its purpose."></textarea></div>
+    <div class="fl"><label class="fl-label">📥 Inputs — Data coming in</label><textarea class="ef" data-key="nd${n}-inputs" placeholder="Fields, format, source node. e.g: mondayItemId (String) from session state, markdownContent (String) from previous node..."></textarea></div>
+    <div class="fl"><label class="fl-label">📤 Outputs — Data going out</label><textarea class="ef" data-key="nd${n}-outputs" placeholder="Fields, format, destination. e.g: docxFile (Buffer) → sent to Monday webhook, statusCode (Number) → IF node..."></textarea></div>
+    <div class="fl full"><label class="fl-label">🔴 Error Handling / Failure Behavior</label><textarea class="ef" data-key="nd${n}-errors" placeholder="What happens on failure? Retry count, error branch, fallback behavior, notification trigger, error message to user..."></textarea></div>
+    <div class="fl"><label class="fl-label">⚠️ Risks</label><textarea class="ef" data-key="nd${n}-risks" placeholder="Potential failure modes, race conditions, data integrity risks, silent failures, edge cases..."></textarea></div>
+    <div class="fl"><label class="fl-label">🐛 Known Issues</label><textarea class="ef" data-key="nd${n}-issues" placeholder="Documented bugs or limitations specific to this node..."></textarea></div>
+    <div class="fl full"><label class="fl-label">🔧 Workarounds</label><textarea class="ef" data-key="nd${n}-workarounds" placeholder="Current workarounds for known issues. Include the exact steps or config changes needed..."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── PLATFORM STEPS ──
+function addStep(){
+  counts.steps++;
+  const n=counts.steps;
+  const c=document.getElementById('c-steps');
+  const d=document.createElement('div');
+  d.className='step-card';d.id='step-'+n;d.dataset.p='make';
+  d.innerHTML=`<div class="step-head">
+    <div class="step-num">${n}</div>
+    <input class="step-name" data-key="st${n}-name" placeholder="Step name...">
+    <select class="plat-sel" data-key="st${n}-platform" onchange="updatePlat(this,${n})">
+      <option value="make">Make</option>
+      <option value="zapier">Zapier</option>
+      <option value="clickup">ClickUp</option>
+      <option value="n8n">n8n</option>
+      <option value="other">Other</option>
+    </select>
+    <button class="dyn-del" onclick="del('step-${n}')">✕</button>
+  </div>
+  <div class="step-body">
+    <div class="fl full"><label class="fl-label">📝 Description</label><textarea class="ef" data-key="st${n}-desc" placeholder="What does this step do? What module / action / trigger is it?"></textarea></div>
+    <div class="fl"><label class="fl-label">📥 Inputs — What comes in</label><textarea class="ef" data-key="st${n}-inputs" placeholder="Data fields, mapped variables, format expected..."></textarea></div>
+    <div class="fl"><label class="fl-label">📤 Outputs — What goes out</label><textarea class="ef" data-key="st${n}-outputs" placeholder="Data fields produced, where they go next..."></textarea></div>
+    <div class="fl"><label class="fl-label">🔀 Filters / Conditions / Routers</label><textarea class="ef" data-key="st${n}-conditions" placeholder="Any filter conditions, router branches, or conditional logic applied at this step..."></textarea></div>
+    <div class="fl"><label class="fl-label">⚙️ Config / Settings</label><textarea class="ef" data-key="st${n}-config" placeholder="Key configuration settings — auth, rate limits, pagination, data mapping notes..."></textarea></div>
+    <div class="fl"><label class="fl-label">⚠️ Risks</label><textarea class="ef" data-key="st${n}-risks" placeholder="What could go wrong? Rate limits, auth expiry, mapping failures, empty payloads..."></textarea></div>
+    <div class="fl"><label class="fl-label">🐛 Known Issues</label><textarea class="ef" data-key="st${n}-issues" placeholder="Documented bugs, platform quirks, edge cases specific to this step..."></textarea></div>
+    <div class="fl full"><label class="fl-label">🔧 Workarounds</label><textarea class="ef" data-key="st${n}-workarounds" placeholder="How to work around known issues. Exact steps, alternative approaches, config changes..."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+function updatePlat(sel,n){
+  const d=document.getElementById('step-'+n);
+  if(d)d.dataset.p=sel.value;
+}
+
+// ── CHECKLIST ──
+function addCheck(){
+  counts.checks++;
+  const n=counts.checks;
+  const c=document.getElementById('c-checklist');
+  const d=document.createElement('div');
+  d.className='chk-item';d.id='chk-'+n;
+  d.innerHTML=`<input type="checkbox" onchange="toggleChk(this,'chk-${n}')">
+  <div class="chk-txt">
+    <input class="chk-lbl" type="text" data-key="ck${n}-lbl" placeholder="Checklist item title...">
+    <input class="chk-desc" type="text" data-key="ck${n}-desc" placeholder="Notes or description...">
+  </div>
+  <select style="background:#f0f3f8;border:1px solid var(--border);border-radius:4px;padding:3px 6px;font-size:10px;font-family:'DM Sans',sans-serif;outline:none" data-key="ck${n}-sev">
+    <option>🔴 Critical</option><option>🟡 Warning</option><option>🟢 Optional</option>
+  </select>
+  <button class="dyn-del" onclick="del('chk-${n}')">✕</button>`;
+  c.appendChild(d);
+}
+
+function toggleChk(cb,id){
+  const el=document.getElementById(id);
+  if(el)el.classList.toggle('done',cb.checked);
+}
+
+function resetChecks(){
+  document.querySelectorAll('.chk-item input[type=checkbox]').forEach(cb=>{
+    cb.checked=false;
+    const el=cb.closest('.chk-item');
+    if(el)el.classList.remove('done');
+  });
+}
+
+// ── ISSUES ──
+function addIssue(){
+  counts.issues++;
+  const n=counts.issues;
+  const c=document.getElementById('c-issues');
+  const d=document.createElement('div');
+  d.className='card';d.id='issue-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+    <select class="ef-sm" data-key="is${n}-status" style="width:150px;resize:none">
+      <option>🔴 Open</option><option>🟡 Investigating</option><option>🟢 Resolved</option><option>⚪ Won't Fix</option>
+    </select>
+    <input type="text" class="ef-sm" data-key="is${n}-title" placeholder="Issue title..." style="flex:1">
+    <button class="dyn-del" onclick="del('issue-${n}')">✕</button>
+  </div>
+  <div class="grid2">
+    <div class="fl"><label class="fl-label">🐛 Issue Description</label><textarea class="ef" data-key="is${n}-desc" placeholder="Describe the issue in full detail..."></textarea></div>
+    <div class="fl"><label class="fl-label">🔁 Steps to Reproduce</label><textarea class="ef" data-key="is${n}-repro" placeholder="Exact steps to trigger this issue..."></textarea></div>
+    <div class="fl"><label class="fl-label">💥 Impact</label><textarea class="ef" data-key="is${n}-impact" placeholder="What breaks or fails? How critical is it? Which phases/steps are affected?"></textarea></div>
+    <div class="fl"><label class="fl-label">🔧 Workaround</label><textarea class="ef" data-key="is${n}-workaround" placeholder="Current workaround — exact steps if available..."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── API BLOCKS ──
+function addApi(){
+  counts.apis++;
+  const n=counts.apis;
+  const c=document.getElementById('c-api');
+  const d=document.createElement('div');
+  d.className='card';d.id='api-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+    <input type="text" class="ef-sm" data-key="ap${n}-name" placeholder="Endpoint / payload name..." style="flex:1">
+    <input type="text" class="ef-sm" data-key="ap${n}-phase" placeholder="Phase / step" style="width:120px">
+    <button class="dyn-del" onclick="del('api-${n}')">✕</button>
+  </div>
+  <div class="fl"><label class="fl-label">Payload / Schema</label><textarea class="ef mono" data-key="ap${n}-payload" style="min-height:120px" placeholder='{\n  "mondayItemId": "<from session state>",\n  "columnId": "text_...",\n  "markdownContent": "<full content>"\n}'></textarea></div>
+  <div class="fl"><label class="fl-label">Rules & Notes</label><input type="text" class="ef-sm" data-key="ap${n}-notes" placeholder="Constraints, gotchas, required sequence..."></div>`;
+  c.appendChild(d);
+}
+
+// ── GENERIC DELETE ──
+function del(id){
+  const el=document.getElementById(id);
+  if(el)el.remove();
+}
+
+// ════════════════════════════════════════════
+// SAVE / LOAD / EXPORT
+// ════════════════════════════════════════════
+
+const SAVE_KEY='wf-doc-v1';
+
+function collectData(){
+  const d={counts:{...counts},cells:{},_ts:new Date().toISOString()};
+  
+  // data-key elements
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const k=el.dataset.key;
+    if(!k)return;
+    if(el.tagName==='TEXTAREA'||el.tagName==='INPUT')d[k]=el.value;
+    else if(el.tagName==='SELECT')d[k]=el.value;
+    else if(el.contentEditable==='true')d[k]=el.innerHTML;
+  });
+  
+  // contenteditable TDs — indexed by tbody id + position
+  document.querySelectorAll('tbody[id]').forEach(tb=>{
+    const rows=[...tb.rows];
+    rows.forEach((tr,ri)=>{
+      [...tr.cells].forEach((td,ci)=>{
+        if(td.contentEditable==='true')
+          d.cells[`${tb.id}:${ri}:${ci}`]=td.innerHTML;
+      });
+    });
+  });
+  
+  // checkbox states
+  document.querySelectorAll('.chk-item').forEach(item=>{
+    const cb=item.querySelector('input[type=checkbox]');
+    if(cb&&item.id)d['cb:'+item.id]=cb.checked;
+  });
+  
+  return d;
+}
+
+function saveAll(){
+  const d=collectData();
+  localStorage.setItem(SAVE_KEY,JSON.stringify(d));
+  const t=new Date(d._ts);
+  document.getElementById('saveTs').textContent=`Saved ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+  toast('✅ Documentation saved!');
+}
+
+function loadAll(){
+  const raw=localStorage.getItem(SAVE_KEY);
+  if(!raw)return;
+  let d;
+  try{d=JSON.parse(raw)}catch{return}
+  
+  // Recreate dynamic structure first
+  const c=d.counts||{};
+  for(let i=0;i<(c.phases||0);i++)addPhase();
+  for(let i=0;i<(c.gates||0);i++)addGate();
+  for(let i=0;i<(c.rules||0);i++)addRule();
+  for(let i=0;i<(c.prompts||0);i++)addPrompt();
+  for(let i=0;i<(c.nodes||0);i++)addNode();
+  for(let i=0;i<(c.steps||0);i++)addStep();
+  for(let i=0;i<(c.checks||0);i++)addCheck();
+  for(let i=0;i<(c.issues||0);i++)addIssue();
+  for(let i=0;i<(c.apis||0);i++)addApi();
+  for(let i=0;i<(c.swims||0);i++)addSwim();
+  
+  // Restore data-key fields
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const k=el.dataset.key;
+    if(!(k in d))return;
+    if(el.tagName==='TEXTAREA'||el.tagName==='INPUT')el.value=d[k];
+    else if(el.tagName==='SELECT')el.value=d[k];
+    else if(el.contentEditable==='true')el.innerHTML=d[k];
+  });
+  
+  // Restore platform on step cards
+  for(let i=1;i<=counts.steps;i++){
+    const k='st'+i+'-platform';
+    if(d[k]){
+      const card=document.getElementById('step-'+i);
+      if(card)card.dataset.p=d[k];
+    }
+  }
+  
+  // Restore TDs
+  document.querySelectorAll('tbody[id]').forEach(tb=>{
+    [...tb.rows].forEach((tr,ri)=>{
+      [...tr.cells].forEach((td,ci)=>{
+        const k=`${tb.id}:${ri}:${ci}`;
+        if(k in d.cells)td.innerHTML=d.cells[k];
+      });
+    });
+  });
+  
+  // Restore checkboxes
+  document.querySelectorAll('.chk-item').forEach(item=>{
+    const cb=item.querySelector('input[type=checkbox]');
+    if(cb&&item.id){
+      const val=d['cb:'+item.id];
+      if(val){cb.checked=true;item.classList.add('done');}
+    }
+  });
+  
+  if(d._ts){
+    const t=new Date(d._ts);
+    document.getElementById('saveTs').textContent=`Last saved ${t.toLocaleDateString()} ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+  }
+}
+
+function exportDoc(){
+  saveAll();
+  // Embed saved data directly into the exported file
+  const saved=localStorage.getItem(SAVE_KEY)||'{}';
+  let html=document.documentElement.outerHTML;
+  // Inject a restore script right before </body>
+  const injectScript=`<script>
+(function(){
+  const k='${SAVE_KEY}';
+  if(!localStorage.getItem(k)){
+    localStorage.setItem(k,${JSON.stringify(saved)});
+  }
+})();
+<\/script>`;
+  html=html.replace('</body>',injectScript+'</body>');
+  const blob=new Blob(['<!DOCTYPE html>\n'+html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const title=document.querySelector('[data-key="m-title"]');
+  const name=(title?title.textContent.trim()||'workflow-doc':'workflow-doc').replace(/\s+/g,'-').toLowerCase();
+  a.download=name+'.html';
+  a.click();
+  toast('📄 Exported as HTML — file includes all saved data!');
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',()=>{
+  // Set today's date
+  const de=document.getElementById('m-date');
+  if(de&&!de.textContent.trim()||de.textContent==='—')
+    de.textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  
+  // Load saved data
+  loadAll();
+  
+  // Auto-save every 90s if there's saved data
+  setInterval(()=>{if(localStorage.getItem(SAVE_KEY))saveAll();},90000);
+});
+</script>
+<script>
+(function(){
+  const SAVE_KEY='wf-doc-v1';
+
+  // Add rows to static tables before loadAll() runs
+  function addStaticRows(){
+    function grow(tid,cols,targetRows){
+      const tb=document.getElementById(tid);
+      if(!tb)return;
+      const have=tb.rows.length;
+      for(let i=have;i<targetRows;i++){
+        const tr=document.createElement('tr');
+        for(let c=0;c<cols;c++){const td=document.createElement('td');td.contentEditable='true';tr.appendChild(td);}
+        tb.appendChild(tr);
+      }
+    }
+    grow('tb-platform',5,4);
+    grow('tb-dataflow',5,5);
+    grow('tb-components',5,7);
+    grow('tb-phase-summary',5,5);
+    grow('tb-inputs',5,6);
+    grow('tb-connectors',6,7);
+    grow('tb-schema',5,12);
+    grow('tb-session',4,4);
+    grow('tb-n8n-registry',4,5);
+    grow('tb-breaks',3,5);
+    grow('tb-changelog',4,3);
+  }
+
+  const DATA={
+    _ts:'2026-02-04T00:00:00.000Z',
+    counts:{phases:4,gates:0,rules:4,prompts:0,nodes:9,steps:0,checks:8,issues:4,apis:2,swims:2},
+
+    /* ── META ── */
+    'm-title':'ConnectWise \u2194 ClickUp Bi-Directional Sync',
+    'm-version':'v1.0.0',
+    'm-status':'Active',
+    'm-owner':'Jessica Peaden',
+    'm-updated':'Feb 4, 2026',
+    'm-type':'Integration',
+
+    /* ── OVERVIEW ── */
+    'ov-purpose':'Keep company and contact records synchronized between ClickUp (task-based CRM view) and ConnectWise PSA in near real-time (or hourly polling). Reduces manual data entry and ensures consistency across both systems. Four n8n workflows cover bi-directional sync for both Companies and Contacts.\n\nUsers: Scalepad / Plus 1 Technology operations team.',
+    'ov-arch':'Four-flow bi-directional sync architecture orchestrated entirely in n8n.\n\n\u2022 Flows 1 & 3 (ClickUp \u2192 ConnectWise): Webhook-triggered. Fire immediately when a task is updated in ClickUp. PATCHes the corresponding ConnectWise company or contact record using JSON Patch (RFC 6902).\n\u2022 Flows 2 & 4 (ConnectWise \u2192 ClickUp): Schedule-triggered every 1 hour. Queries ConnectWise for records updated in the last hour, then creates or updates the matching ClickUp task.\n\nAll four flows use a ConnectWise RecID stored in a ClickUp custom field as the canonical linking key to determine create vs. update logic.',
+    'ov-trigger':'Mixed:\n\u2022 Webhook on ClickUp taskUpdated event (Flows 1 & 3 \u2014 ClickUp\u2192CW)\n\u2022 n8n Schedule Trigger every 1 hour (Flows 2 & 4 \u2014 CW\u2192ClickUp)',
+    'ov-output':'Synchronized company and contact records in both ConnectWise PSA and ClickUp:\n\u2022 Existing records updated in place (both directions)\n\u2022 New records auto-created in ClickUp when no matching task found (CW\u2192ClickUp flows)\n\u2022 Last Synced At timestamp written to ClickUp custom field on every sync',
+    'st-phases':'4 flows / ~8\u20139 nodes each',
+    'st-platforms':'2 (ConnectWise PSA, ClickUp)',
+    'st-gates':'0 (fully automated)',
+    'st-n8n':'4',
+    'st-env':'Production',
+    'st-runtime':'Real-time (webhook flows) / up to 1 hr (schedule flows)',
+    'ps-infra':'ClickUp Personal API key is tied to Jess\u2019s individual account (credential id: WgZ4hEqXNShwQLMO). If this credential is rotated or the account is deactivated, all four sync flows will fail. ConnectWise Basic Auth uses companyid+public:private key pair. The clientId header ec91c9f7-276e-4ff0-bc4a-85bc2d5a59ac is required on every ConnectWise API call \u2014 missing it causes immediate rejection.',
+
+    /* ── DIAGRAM ── */
+    'diag-url':'',
+    'diag-narrative':'Four n8n workflows form a bi-directional sync loop between ConnectWise PSA and ClickUp.\n\nWebhook flows (ClickUp\u2192CW) fire immediately on ClickUp taskUpdated events for either the Company list (901707471373) or Contact list (901707481918). n8n receives the payload, reads custom field values, and PATCHes the appropriate ConnectWise record.\n\nSchedule flows (CW\u2192ClickUp) poll ConnectWise every hour using lastUpdated > [now \u2212 1hr] filter. Results are split into batches, each batch searches ClickUp for a task whose RecID custom field matches the ConnectWise record id. If found: PUT update. If not found: POST create.\n\nThe canonical link between systems is the ConnectWise RecID stored in ClickUp custom field 142e9dc4-66bc-4412-94dd-e3063bb48ca0 (companies) or 257f67cb-b1ce-44fa-a307-87627f9406e3 (contacts).',
+
+    /* ── TRIGGERS ── */
+    'trig-type':'Webhook',
+    'trig-platform':'n8n (ClickUp\u2192CW: Webhook trigger | CW\u2192ClickUp: Schedule trigger)',
+    'trig-desc':'Two trigger types exist across the four flows:\n\n1. WEBHOOK (Flows 1 & 3): ClickUp fires a taskUpdated webhook when any field on a Company or Contact task is changed. n8n receives the payload and immediately processes the update. No polling delay.\n\n2. SCHEDULE (Flows 2 & 4): n8n Schedule Trigger fires every 1 hour. Queries ConnectWise API for records where lastUpdated > [now \u2212 1 hour]. Processes up to 1,000 records per run in batches (10/batch for companies, 50/batch for contacts).',
+    'trig-payload':'// Webhook flows (ClickUp \u2192 CW) \u2014 incoming ClickUp webhook body:\n{\n  "task_id": "<clickup_task_id>",\n  "webhook_event": "taskUpdated",\n  "history_items": [...]\n}\n\n// Schedule flows (CW \u2192 ClickUp) \u2014 ConnectWise GET response item:\n{\n  "id": 12345,\n  "name": "Acme Corp",\n  "website": "https://acme.com",\n  "addressLine1": "123 Main St",\n  "city": "Tampa",\n  "state": { "name": "FL" },\n  "phoneNumber": "813-555-0100",\n  "timeZone": { "name": "Eastern" },\n  "lastUpdated": "2026-02-04T12:00:00Z",\n  "defaultContact": {\n    "name": "John Smith",\n    "communicationItems": [\n      { "type": { "name": "Email" }, "value": "john@acme.com" }\n    ]\n  }\n}',
+    'phase-transitions':'Flows are independent and run in parallel. No phase locking or dependency between flows. Each flow processes its own record type (companies vs. contacts) and direction. Batch processing in CW\u2192ClickUp flows uses splitInBatches (10/batch companies, 50/batch contacts) with a merge-and-loop-back pattern \u2014 each batch triggers the next automatically until exhausted.',
+    'naming-convs':'Custom field IDs documented in the ConnectWise Sync PDF (Identifiers page). Workflow names: [Source] \u2192 [Destination] [Entity] Sync [Date] (e.g. "ConnectWise \u2192 ClickUp Company Sync 2.4.26"). n8n node names: [Platform] - [Action] [Entity] (e.g. "ConnectWise - Get Updated Companies"). CW RecID always retrieved from API \u2014 never hardcoded.',
+
+    /* ── SCHEMA ── */
+    'sch-platform':'ClickUp',
+    'sch-boardid':'Company List: 901707471373 | Contact List: 901707481918 | Team: 9017426462 | Space: 90172134996 | Folder: 90173998395',
+
+    /* ── PLATFORM STEPS ── */
+    'ps-platform':'n8n',
+    'ps-name':'ConnectWise \u2194 ClickUp Bi-Directional Sync (4 workflows)',
+    'ps-desc':'Four n8n workflows synchronize company and contact records between ConnectWise PSA and ClickUp bi-directionally. Webhook-based flows handle real-time ClickUp\u2192CW updates; schedule-based flows handle hourly CW\u2192ClickUp pulls.',
+    'swim-url':'',
+
+    /* ── PHASES ── */
+    'ph1-name':'ClickUp \u2192 ConnectWise Company Sync',
+    'ph1-status':'Done',
+    'ph1-desc':'Webhook-triggered. When a company task is updated in ClickUp, the webhook fires and n8n immediately extracts ConnectWise field values from the task\u2019s custom fields, validates the RecID, builds a JSON Patch payload, and PATCHes the ConnectWise company record. Uses Accept: application/vnd.connectwise.com+json; version=2024.1 header to lock API version.',
+    'ph1-output':'Updated ConnectWise company record via PATCH /company/companies/{recId}',
+    'ph1-owner':'Jessica Peaden',
+    'ph1-mstatus':'Live & Tested',
+    'ph1-prereqs':'ClickUp webhook configured for taskUpdated on Company list 901707471373',
+    'ph1-skills':'ConnectWise REST API, ClickUp Webhook, JSON Patch RFC 6902',
+
+    'ph2-name':'ConnectWise \u2192 ClickUp Company Sync',
+    'ph2-status':'Done',
+    'ph2-desc':'Schedule-triggered every 1 hour. Queries ConnectWise for companies where lastUpdated > [now \u2212 1hr] (up to 1,000 records, pageSize=1000). Splits results into batches of 10, searches ClickUp Company list by RecID custom field, then either updates the existing task (PUT) or creates a new one (POST). Last Synced At written to custom field 796fc085-...',
+    'ph2-output':'Updated or newly created ClickUp task in Company Directory list (901707471373)',
+    'ph2-owner':'Jessica Peaden',
+    'ph2-mstatus':'Live & Tested',
+    'ph2-prereqs':'ConnectWise API credentials active, ClickUp Personal API key active, Company list exists in ClickUp',
+    'ph2-skills':'ConnectWise REST API, ClickUp API, n8n splitInBatches',
+
+    'ph3-name':'ClickUp \u2192 ConnectWise Contact Sync',
+    'ph3-status':'In Progress',
+    'ph3-desc':'Webhook-triggered on Contact list (901707481918). When a contact task is updated in ClickUp, n8n extracts contact fields (firstName, lastName, title, email, phone) and PATCHes the ConnectWise contact record. CommunicationItems patching uses simple index (0=email, 1=phone) \u2014 fragile, needs GET-before-PATCH for production. No create branch yet.',
+    'ph3-output':'Updated ConnectWise contact record via PATCH /company/contacts/{id}',
+    'ph3-owner':'Jessica Peaden',
+    'ph3-mstatus':'Built & Testing',
+    'ph3-prereqs':'ClickUp webhook on Contact list 901707481918, CW contact ID field configured',
+    'ph3-skills':'ConnectWise REST API, ClickUp Webhook, JSON Patch RFC 6902',
+
+    'ph4-name':'ConnectWise \u2192 ClickUp Contact Sync',
+    'ph4-status':'In Progress',
+    'ph4-desc':'Schedule-triggered every 1 hour. Queries ConnectWise for contacts where lastUpdated > [now \u2212 1hr]. Processes in batches of 50. Searches ClickUp Contact list (901707481918) by CW contact ID field (257f67cb-...). Updates existing task or creates new one. Array handling fixed by removing unnecessary Split Out node.',
+    'ph4-output':'Updated or newly created ClickUp task in Contact list (901707481918)',
+    'ph4-owner':'Jessica Peaden',
+    'ph4-mstatus':'Built & Testing',
+    'ph4-prereqs':'ConnectWise API credentials, ClickUp API key, Contact list exists in ClickUp with CW Contact ID custom field',
+    'ph4-skills':'ConnectWise REST API, ClickUp API, n8n splitInBatches',
+
+    /* ── RULES ── */
+    'ru1-level':'\uD83D\uDD12 Absolute',
+    'ru1-name':'Always link by ConnectWise RecID \u2014 never match by name',
+    'ru1-desc':'Company and contact records are linked exclusively via the CW RecID stored in ClickUp custom field 142e9dc4-66bc-4412-94dd-e3063bb48ca0 (companies) or 257f67cb-b1ce-44fa-a307-87627f9406e3 (contacts). Name-based matching will cause duplicate records when names change in either system and will silently merge unrelated records.',
+
+    'ru2-level':'\uD83D\uDD12 Absolute',
+    'ru2-name':'clientId header required on every ConnectWise API call',
+    'ru2-desc':'Every HTTP request to ConnectWise must include the header clientId: ec91c9f7-276e-4ff0-bc4a-85bc2d5a59ac. Without it, the ConnectWise Dev Portal rejects the call with a 401/403. This is the unique integration identifier \u2014 not authentication, but required alongside Basic Auth.',
+
+    'ru3-level':'\uD83D\uDD12 Absolute',
+    'ru3-name':'Use JSON Patch (RFC 6902) for all ConnectWise PATCH operations',
+    'ru3-desc':'ConnectWise requires RFC 6902 JSON Patch format for partial record updates. Standard JSON request bodies will not be accepted. Always include Accept: application/vnd.connectwise.com+json; version=2024.1 to lock the API model and prevent breaking changes from affecting the workflow.',
+
+    'ru4-level':'\u26A0\uFE0F Strong Warning',
+    'ru4-name':'GET contact before PATCH \u2014 communicationItems index patching is fragile',
+    'ru4-desc':'The current contact sync uses array index 0=email, 1=phone when patching communicationItems. If a contact in ConnectWise has items stored in a different order, the PATCH will overwrite the wrong fields. For production: always GET /company/contacts/{id} first, read the current communicationItems array, then build accurate patch ops targeting the correct indices.',
+
+    /* ── n8n NODES (documenting ConnectWise\u2192ClickUp Company Sync as primary) ── */
+    'nd1-name':'Schedule Trigger \u2014 Every Hour',
+    'nd1-type':'Other',
+    'nd1-desc':'Fires the ConnectWise \u2192 ClickUp sync workflows every hour on the hour. Configured with interval: hours (1). Present in both the Company Sync and Contact Sync CW\u2192ClickUp workflows.',
+    'nd1-inputs':'None (trigger node)',
+    'nd1-outputs':'Execution context / timestamp \u2192 ConnectWise - Get Updated Companies node',
+    'nd1-errors':'If n8n instance is down, executions are missed with no queue or catch-up. No built-in retry.',
+    'nd1-risks':'Up to 1-hour propagation delay on ConnectWise changes. If one execution runs longer than 1 hour, overlap is possible.',
+    'nd1-issues':'No missed-execution recovery. Gaps in sync are only visible in n8n execution log.',
+    'nd1-workarounds':'Reduce interval to 15\u201330 min if faster propagation is needed. Monitor execution history for gaps.',
+
+    'nd2-name':'ConnectWise \u2014 Get Updated Companies',
+    'nd2-type':'HTTP Request',
+    'nd2-desc':'GET /company/companies with filter conditions: lastUpdated > [now \u2212 1hr]. Returns up to 1,000 company objects ordered by lastUpdated desc. fullResponse: true to capture HTTP status code alongside body.',
+    'nd2-inputs':'Execution timestamp from Schedule Trigger. Auth: Basic Auth credential "ConnectWise-Create a Quote Keys" (id: jJOQk4JzIbbvU2J6). Headers: clientId, Content-Type: application/json.',
+    'nd2-outputs':'Full response body array of ConnectWise company objects \u2192 Split Out Companies node.',
+    'nd2-errors':'HTTP 4xx/5xx throws n8n execution error. No retry logic configured.',
+    'nd2-risks':'If >1,000 companies are updated in 1 hour, excess records are silently dropped (no pagination). This is unlikely but possible during bulk imports.',
+    'nd2-issues':'No pagination handling. pageSize is hardcoded to 1000.',
+    'nd2-workarounds':'For high-volume environments, implement pagination loop using the page query parameter. Monitor execution logs for volume spikes.',
+
+    'nd3-name':'Split Out Companies',
+    'nd3-type':'Other',
+    'nd3-desc':'Splits the body array from the ConnectWise HTTP response into individual company items so each can be processed independently by the downstream loop.',
+    'nd3-inputs':'body array from HTTP response (array of CW company objects)',
+    'nd3-outputs':'Individual company JSON objects \u2192 Loop Over Items node',
+    'nd3-errors':'If body is empty or null, outputs no items and workflow ends gracefully.',
+    'nd3-risks':'If ConnectWise returns an unexpected response structure, split may fail silently with no items output.',
+    'nd3-issues':'None documented.',
+    'nd3-workarounds':'Add an IF node before Split Out to validate the body is a non-empty array.',
+
+    'nd4-name':'Loop Over Items',
+    'nd4-type':'Loop Over Items',
+    'nd4-desc':'Processes companies in batches of 10. On each iteration, passes the current batch to Search ClickUp for Company. After each batch is processed by Merge Results, control loops back here for the next batch until all items are consumed.',
+    'nd4-inputs':'Individual company items from Split Out Companies (first pass) or loop-back from Merge Results (subsequent passes). batchSize: 10.',
+    'nd4-outputs':'Batch of up to 10 companies \u2192 Search ClickUp for Company. Empty output when all batches are done (workflow ends).',
+    'nd4-errors':'If a downstream node fails mid-batch, remaining items in that batch may be skipped depending on error mode.',
+    'nd4-risks':'An error in one record can halt processing of the entire batch. Error propagation behavior depends on node error handling settings.',
+    'nd4-issues':'None documented.',
+    'nd4-workarounds':'Set Continue on Fail on downstream nodes to prevent one bad record from breaking the entire run.',
+
+    'nd5-name':'Search ClickUp for Company',
+    'nd5-type':'Other',
+    'nd5-desc':'Queries ClickUp list 901707471373 (Company Directory) filtering by custom field 142e9dc4-66bc-4412-94dd-e3063bb48ca0 = ConnectWise company id. Returns the matching ClickUp task if it exists. alwaysOutputData: true ensures the IF node receives input regardless.',
+    'nd5-inputs':'ConnectWise company $json.id from Loop Over Items. Auth: ClickUp Personal API credential WgZ4hEqXNShwQLMO.',
+    'nd5-outputs':'Matching ClickUp task object (or empty) \u2192 If Task Exists in ClickUp node.',
+    'nd5-errors':'API auth failure or rate limit throws error. alwaysOutputData ensures empty result passes through to IF node.',
+    'nd5-risks':'Personal API key is tied to Jess\u2019s account \u2014 rotation or deactivation breaks all lookups. ClickUp API rate limits may throttle at high volume.',
+    'nd5-issues':'Custom field search returns no results if field ID is mismatched or field not indexed.',
+    'nd5-workarounds':'Verify all field IDs against the Identifiers reference doc. Monitor ClickUp API quota in n8n execution logs.',
+
+    'nd6-name':'If Task Exists in ClickUp',
+    'nd6-type':'IF / Branch',
+    'nd6-desc':'Checks whether the ClickUp search returned a task by testing if $json.id is not empty (string, notEmpty operator). Routes to Update ClickUp Task (true) or Create New ClickUp Task (false).',
+    'nd6-inputs':'ClickUp task result from Search ClickUp for Company.',
+    'nd6-outputs':'True \u2192 Update ClickUp Task. False \u2192 Create New ClickUp Task.',
+    'nd6-errors':'None \u2014 pure logic node.',
+    'nd6-risks':'If ClickUp returns a malformed task object (no id field), the false branch fires incorrectly, triggering a duplicate create.',
+    'nd6-issues':'None documented.',
+    'nd6-workarounds':'Validate ClickUp search response shape before passing to IF. Add a secondary check on task name or list membership.',
+
+    'nd7-name':'Update ClickUp Task',
+    'nd7-type':'HTTP Request',
+    'nd7-desc':'PUT https://api.clickup.com/api/v2/task/{task_id} with full company field set. Updates task name, description, and all 10 custom fields from the ConnectWise record. Sets Last Synced At (796fc085-...) to current epoch milliseconds on every run.',
+    'nd7-inputs':'ClickUp task id from IF node (true branch). All company data from $node[\'Loop Over Items\'].json. Auth: ClickUp Personal API predefined credential.',
+    'nd7-outputs':'Updated task response JSON \u2192 Merge Results node.',
+    'nd7-errors':'HTTP 4xx throws n8n execution error. No retry configured.',
+    'nd7-risks':'If any custom field ID in the jsonBody is stale or incorrect, ClickUp silently skips that field write with no error returned.',
+    'nd7-issues':'None documented.',
+    'nd7-workarounds':'After any schema change in ClickUp, re-verify all 10 field IDs against the Identifiers doc. Validate via ClickUp UI after a test run.',
+
+    'nd8-name':'Create New ClickUp Task',
+    'nd8-type':'HTTP Request',
+    'nd8-desc':'POST https://api.clickup.com/api/v2/list/901707471373/task. Creates a new company task in the Company Directory list with status "active" and all 10 custom fields populated from the ConnectWise record. This branch fires when no matching ClickUp task was found.',
+    'nd8-inputs':'All company data from $node[\'Loop Over Items\'].json (false branch from IF node). Auth: ClickUp Personal API.',
+    'nd8-outputs':'New task response JSON \u2192 Merge Results node.',
+    'nd8-errors':'HTTP 4xx throws n8n execution error. Race condition between two overlapping executions could create duplicate tasks.',
+    'nd8-risks':'If two executions overlap before the RecID field is written to the new task, the same company can be created twice on the next run.',
+    'nd8-issues':'No duplicate guard beyond the IF node RecID check.',
+    'nd8-workarounds':'Keep poll interval \u2265 expected execution time. Consider adding a secondary name-based dedup check as a guard.',
+
+    'nd9-name':'Merge Results',
+    'nd9-type':'Merge',
+    'nd9-desc':'Combines output from Update ClickUp Task (index 0) and Create New ClickUp Task (index 1) using combineByPosition, then loops the result back to Loop Over Items to trigger processing of the next batch.',
+    'nd9-inputs':'Update ClickUp Task result (input 0) and Create New ClickUp Task result (input 1).',
+    'nd9-outputs':'Merged result \u2192 Loop Over Items (loop-back connection).',
+    'nd9-errors':'combineByPosition may stall if one input branch produces no items for a given batch iteration.',
+    'nd9-risks':'If all records in a batch go to only one branch (all updates or all creates), the other input to Merge is empty and combineByPosition may not produce output to trigger the next batch.',
+    'nd9-issues':'Potential stall when one branch consistently produces no data.',
+    'nd9-workarounds':'Consider switching merge mode to combineAll, or use separate loop-back connections from both Update and Create branches directly into Loop Over Items.',
+
+    /* ── CHECKLIST ITEMS ── */
+    'ck1-lbl':'ConnectWise API credentials configured in n8n',
+    'ck1-desc':'Basic Auth credential "ConnectWise-Create a Quote Keys" (id: jJOQk4JzIbbvU2J6) must be active and valid.',
+    'ck1-sev':'\uD83D\uDD34 Critical',
+    'ck2-lbl':'ClickUp Personal API key active',
+    'ck2-desc':'Credential "ClickUp account-Jess Personal API" (id: WgZ4hEqXNShwQLMO) must be valid and not rotated.',
+    'ck2-sev':'\uD83D\uDD34 Critical',
+    'ck3-lbl':'clientId header set on all ConnectWise HTTP Request nodes',
+    'ck3-desc':'Value: ec91c9f7-276e-4ff0-bc4a-85bc2d5a59ac. Present in all four workflows\u2019 CW API calls.',
+    'ck3-sev':'\uD83D\uDD34 Critical',
+    'ck4-lbl':'All ClickUp custom field IDs verified against Identifiers doc',
+    'ck4-desc':'Match field IDs in all n8n jsonBody payloads to the ConnectWise Sync PDF before production.',
+    'ck4-sev':'\uD83D\uDD34 Critical',
+    'ck5-lbl':'ClickUp webhook configured for taskUpdated on Company list 901707471373',
+    'ck5-desc':'Required for Flow 1: ClickUp \u2192 ConnectWise Company Sync.',
+    'ck5-sev':'\uD83D\uDD34 Critical',
+    'ck6-lbl':'ClickUp webhook configured for taskUpdated on Contact list 901707481918',
+    'ck6-desc':'Required for Flow 3: ClickUp \u2192 ConnectWise Contact Sync.',
+    'ck6-sev':'\uD83D\uDD34 Critical',
+    'ck7-lbl':'All four n8n workflows imported and set to Active',
+    'ck7-desc':'Verify all four flows show as "Active" in n8n dashboard. Inactive workflows will not trigger.',
+    'ck7-sev':'\uD83D\uDD34 Critical',
+    'ck8-lbl':'End-to-end test completed in both directions',
+    'ck8-desc':'Change company name in CW \u2192 verify ClickUp updates within ~1hr. Update ClickUp task \u2192 verify CW updates instantly.',
+    'ck8-sev':'\uD83D\uDD34 Critical',
+
+    /* ── ISSUES ── */
+    'is1-status':'\uD83D\uDD34 Open',
+    'is1-title':'CommunicationItems index-based patching is fragile (Contact Sync)',
+    'is1-desc':'The contact sync uses array index 0=email, 1=phone when building the JSON Patch payload for communicationItems. If a ConnectWise contact has items stored in a different order, the wrong fields get overwritten silently.',
+    'is1-repro':'1. Create a ConnectWise contact with phone listed before email. 2. Trigger ClickUp \u2192 CW contact sync. 3. Observe \u2014 email value written to phone slot.',
+    'is1-impact':'Contact phone/email data corruption for affected records. Affects Flows 3 & 4. Could cause ongoing bad data in ConnectWise.',
+    'is1-workaround':'Add GET /company/contacts/{id} call before each PATCH to read current communicationItems array order. Build accurate patch ops targeting the correct indices based on type.name.',
+
+    'is2-status':'\uD83D\uDD34 Open',
+    'is2-title':'No create branch in ClickUp \u2192 ConnectWise Contact Sync (Flow 3)',
+    'is2-desc':'Flow 3 only updates existing ConnectWise contacts when a CW contact ID is present on the ClickUp task. New contacts created directly in ClickUp (no CW ID) are silently skipped.',
+    'is2-repro':'1. Create a brand-new task in ClickUp Contact list (no CW ID set). 2. Trigger the webhook. 3. Observe \u2014 no new contact appears in ConnectWise.',
+    'is2-impact':'New contacts created in ClickUp never sync to ConnectWise. Data gap grows over time.',
+    'is2-workaround':'Add IF branch: if contactId custom field is empty \u2192 POST /company/contacts to create new contact \u2192 write returned CW ID back to ClickUp task custom field.',
+
+    'is3-status':'\uD83D\uDD34 Open',
+    'is3-title':'No pagination \u2014 ConnectWise query capped at 1,000 records per run',
+    'is3-desc':'GET /company/companies and GET /company/contacts both use pageSize=1000 with no pagination loop. If more than 1,000 records are updated in a 1-hour window, excess records are silently dropped.',
+    'is3-repro':'Perform a bulk update of 1,001+ ConnectWise records. Run the hourly sync. Observe \u2014 only the first 1,000 are processed.',
+    'is3-impact':'Silent data loss during high-volume operations (bulk imports, mass field updates). Severity depends on data change volume.',
+    'is3-workaround':'Implement a pagination loop using the page query parameter in ConnectWise API calls. Continue fetching until the response array is empty.',
+
+    'is4-status':'\uD83D\uDD34 Open',
+    'is4-title':'No error monitoring or alerting on any of the four workflows',
+    'is4-desc':'All four workflows lack error notification nodes. Failures are silent \u2014 only visible by manually checking the n8n execution log.',
+    'is4-repro':'Invalidate an API credential. Run any workflow. Observe \u2014 no alert sent, failure only visible in execution history.',
+    'is4-impact':'Sync failures go undetected until manually discovered. Data can fall out of sync for hours or days.',
+    'is4-workaround':'Add error output branches on key HTTP Request and ClickUp nodes. Connect to an Email or Slack notification node with details of the failed record and error message.',
+
+    /* ── API BLOCKS ── */
+    'ap1-name':'ConnectWise \u2014 Get Updated Companies / Contacts',
+    'ap1-phase':'Flows 2 & 4 (CW\u2192ClickUp, Schedule)',
+    'ap1-payload':'// Companies:\nGET https://api-na.myconnectwise.net/v4_6_release/apis/3.0/company/companies\n\n// Contacts:\nGET https://api-na.myconnectwise.net/v4_6_release/apis/3.0/company/contacts\n\nHeaders:\n  clientId: ec91c9f7-276e-4ff0-bc4a-85bc2d5a59ac\n  Content-Type: application/json\n  Accept: application/vnd.connectwise.com+json; version=2024.1\n  Authorization: Basic <base64(companyid+publicKey:privateKey)>\n\nQuery Params:\n  conditions: lastUpdated > [{{ $now.minus({ hours: 1 }).toISO() }}]\n  pageSize: 1000\n  orderBy: lastUpdated desc',
+    'ap1-notes':'clientId header required on every call. pageSize max 1000 with no auto-pagination \u2014 add loop for bulk environments. Returns full company/contact objects including defaultContact and communicationItems.',
+
+    'ap2-name':'ClickUp \u2014 Update / Create Company Task',
+    'ap2-phase':'Flows 1 & 2',
+    'ap2-payload':'// Update (PUT):\nPUT https://api.clickup.com/api/v2/task/{{ $json.id }}\n\n// Create (POST):\nPOST https://api.clickup.com/api/v2/list/901707471373/task\n\nAuth: ClickUp Personal API (predefined credential)\n\nBody:\n{\n  "name": "{{ company.name }}",\n  "description": "{{ company.notes || \'\' }}",\n  "status": "active",\n  "custom_fields": [\n    {"id":"142e9dc4-66bc-4412-94dd-e3063bb48ca0","value":"{{ company.id }}"},\n    {"id":"23dfb25f-618a-4fa1-886b-b752a3727800","value":"{{ company.website || \'\' }}"},\n    {"id":"e8618aa5-9a2c-496f-ad82-1185a5016364","value":"{{ company.addressLine1 || \'\' }}"},\n    {"id":"06e4d043-f0b4-4b2c-b09f-acc0f71cbe30","value":"{{ company.city || \'\' }}"},\n    {"id":"4c5cd689-586d-444a-b696-8608718813dd","value":"{{ company.state || \'\' }}"},\n    {"id":"605de830-b1a3-451d-a3ba-4a03cd221efb","value":"{{ company.phoneNumber || \'\' }}"},\n    {"id":"1d6c15cd-c1c6-4a14-b875-2c202e38a231","value":"{{ defaultContact.email || \'\' }}"},\n    {"id":"32a51409-9726-430b-9fdc-7da74a30b43a","value":"{{ defaultContact.name || \'\' }}"},\n    {"id":"a794d086-96c9-4dfa-b8ef-15d4c8c8c061","value":"{{ company.timeZone.name || \'\' }}"},\n    {"id":"796fc085-d59b-44d2-94aa-528736c6b7cc","value": {{ Date.now() }} }\n  ]\n}',
+    'ap2-notes':'All 10 custom fields written on every update. Last Synced At (796fc085-...) set to current epoch ms. Status "active" only set on POST (create) \u2014 not on PUT (update). Silent field-write failures occur if field IDs are stale \u2014 verify after any ClickUp schema change.',
+
+    /* ── SWIMLANES ── */
+    'sw1-name':'Flow 2: ConnectWise \u2192 ClickUp Company Sync (Hourly)',
+    'sw1-lanes':'ConnectWise API, n8n Automation, ClickUp API',
+    'sw1-desc':'Step 1: n8n Schedule Trigger fires every hour\nStep 2: HTTP GET to ConnectWise /company/companies with lastUpdated > [now\u22121hr] filter\nStep 3: Split Out Companies breaks response array into individual records\nStep 4: Loop Over Items batches 10 records at a time\nStep 5: Search ClickUp for task where custom field 142e9dc4-... = CW company id\nStep 6: IF node \u2014 task found (id not empty)?\n  \u2192 TRUE: PUT update existing ClickUp task with all 10 custom fields + Last Synced At\n  \u2192 FALSE: POST create new ClickUp task in list 901707471373\nStep 7: Merge Results combines both branches and loops back to Step 4 for next batch',
+    'sw1-decisions':'IF Task Exists: Routes to update (true) or create (false) based on ClickUp RecID field search result.',
+    'sw1-fallback':'No explicit error branches. Failed HTTP calls throw n8n execution errors only visible in execution log. No retry or notification.',
+
+    'sw2-name':'Flow 1: ClickUp \u2192 ConnectWise Company Sync (Real-time Webhook)',
+    'sw2-lanes':'ClickUp (Webhook), n8n Automation, ConnectWise API',
+    'sw2-desc':'Step 1: User updates a task in ClickUp Company list (901707471373)\nStep 2: ClickUp fires taskUpdated webhook to n8n\nStep 3: n8n Webhook Trigger receives payload\nStep 4: Filter Valid Updates (IF node) \u2014 checks event type is a relevant field change\nStep 5: Get Task Details \u2014 retrieves full ClickUp task with custom fields\nStep 6: Extract ConnectWise fields from task custom fields\nStep 7: Check RecID Exists \u2014 IF custom field 142e9dc4-... is populated\nStep 8: Build JSON Patch payload (RFC 6902)\nStep 9: PATCH /company/companies/{recId} in ConnectWise\nStep 10: Return success response',
+    'sw2-decisions':'Filter Valid Updates: Only processes relevant field changes, ignores unrelated events. Check RecID Exists: Only proceeds if CW RecID is present \u2014 no create branch.',
+    'sw2-fallback':'If RecID is missing on the ClickUp task, the record is silently skipped. No error notification. No create-in-CW branch.',
+
+    cells:{
+      /* ─── tb-platform ─── */
+      'tb-platform:0:0':'ConnectWise PSA','tb-platform:0:1':'PSA / CRM','tb-platform:0:2':'Source of truth for company and contact records. Queried via REST API every hour (schedule flows) and updated via PATCH on webhook flows.','tb-platform:0:3':'Basic Auth (companyid+publicKey:privateKey)','tb-platform:0:4':'Production',
+      'tb-platform:1:0':'ClickUp','tb-platform:1:1':'Project / Task CRM','tb-platform:1:2':'Task-based CRM view. Companies in list 901707471373, contacts in list 901707481918. Tasks created/updated by all four sync flows.','tb-platform:1:3':'Personal API Key \u2014 Jess (WgZ4hEqXNShwQLMO)','tb-platform:1:4':'Production',
+      'tb-platform:2:0':'n8n','tb-platform:2:1':'Automation / Orchestration','tb-platform:2:2':'Hosts all four sync workflows. Receives ClickUp webhooks and executes scheduled ConnectWise polls. Handles batching, branching, and looping.','tb-platform:2:3':'Shared Account','tb-platform:2:4':'Production',
+      'tb-platform:3:0':'ConnectWise REST API (v4_6_release)','tb-platform:3:1':'External API','tb-platform:3:2':'Endpoint for company and contact CRUD. Base URL: https://api-na.myconnectwise.net/v4_6_release/apis/3.0','tb-platform:3:3':'Basic Auth + clientId header + Accept version header','tb-platform:3:4':'Production',
+
+      /* ─── tb-dataflow ─── */
+      'tb-dataflow:0:0':'Company record (CW\u2192CU)','tb-dataflow:0:1':'ConnectWise PSA (hourly poll)','tb-dataflow:0:2':'n8n maps 10 CW fields to ClickUp custom fields. Batched in groups of 10.','tb-dataflow:0:3':'ClickUp task (update or create) in list 901707471373','tb-dataflow:0:4':'Schedule trigger fires every hour',
+      'tb-dataflow:1:0':'Company record (CU\u2192CW)','tb-dataflow:1:1':'ClickUp task update (webhook)','tb-dataflow:1:2':'n8n extracts custom fields from ClickUp task, builds RFC 6902 JSON Patch payload','tb-dataflow:1:3':'ConnectWise company record via PATCH /company/companies/{recId}','tb-dataflow:1:4':'ClickUp taskUpdated webhook fires on list 901707471373',
+      'tb-dataflow:2:0':'Contact record (CW\u2192CU)','tb-dataflow:2:1':'ConnectWise PSA (hourly poll)','tb-dataflow:2:2':'n8n maps contact fields to ClickUp custom fields. Batched in groups of 50.','tb-dataflow:2:3':'ClickUp task (update or create) in Contact list 901707481918','tb-dataflow:2:4':'Schedule trigger fires every hour',
+      'tb-dataflow:3:0':'Contact record (CU\u2192CW)','tb-dataflow:3:1':'ClickUp task update (webhook)','tb-dataflow:3:2':'n8n extracts firstName, lastName, title, email, phone from task custom fields. Builds JSON Patch.','tb-dataflow:3:3':'ConnectWise contact record via PATCH /company/contacts/{id}','tb-dataflow:3:4':'ClickUp taskUpdated webhook fires on list 901707481918',
+      'tb-dataflow:4:0':'Last Synced At timestamp','tb-dataflow:4:1':'n8n (current time)','tb-dataflow:4:2':'new Date().getTime() \u2014 current epoch milliseconds','tb-dataflow:4:3':'ClickUp custom field 796fc085-d59b-44d2-94aa-528736c6b7cc','tb-dataflow:4:4':'Every CW\u2192ClickUp sync run (Flows 2 & 4)',
+
+      /* ─── tb-components ─── */
+      'tb-components:0:0':'Schedule Trigger (CW\u2192CU)','tb-components:0:1':'n8n','tb-components:0:2':'Polls ConnectWise every 1 hour for updated records. Present in Flows 2 & 4.','tb-components:0:3':'n8n scheduler (no external dep)','tb-components:0:4':'\uD83D\uDD34 Yes',
+      'tb-components:1:0':'Webhook Trigger (CU\u2192CW)','tb-components:1:1':'n8n + ClickUp','tb-components:1:2':'Receives ClickUp taskUpdated events in real-time for Company (Flow 1) and Contact (Flow 3) lists.','tb-components:1:3':'ClickUp webhook configuration, n8n webhook URL','tb-components:1:4':'\uD83D\uDD34 Yes',
+      'tb-components:2:0':'ConnectWise API Client','tb-components:2:1':'ConnectWise REST API (v4_6_release)','tb-components:2:2':'Source/destination for company & contact data. GET (poll), PATCH (update). Requires Basic Auth + clientId + Accept header.','tb-components:2:3':'Basic Auth credential, clientId header','tb-components:2:4':'\uD83D\uDD34 Yes',
+      'tb-components:3:0':'ClickUp API Client','tb-components:3:1':'ClickUp REST API v2','tb-components:3:2':'Searches tasks by custom field, creates new tasks, updates existing tasks in Company and Contact lists.','tb-components:3:3':'Personal API key (Jess \u2014 WgZ4hEqXNShwQLMO)','tb-components:3:4':'\uD83D\uDD34 Yes',
+      'tb-components:4:0':'RecID Link Field (Companies)','tb-components:4:1':'ClickUp Custom Field','tb-components:4:2':'Stores CW company id on each ClickUp company task. Used as the canonical dedup/link key. Field ID: 142e9dc4-66bc-4412-94dd-e3063bb48ca0','tb-components:4:3':'Custom field configured in ClickUp','tb-components:4:4':'\uD83D\uDD34 Yes',
+      'tb-components:5:0':'RecID Link Field (Contacts)','tb-components:5:1':'ClickUp Custom Field','tb-components:5:2':'Stores CW contact id on each ClickUp contact task. Field ID: 257f67cb-b1ce-44fa-a307-87627f9406e3','tb-components:5:3':'Custom field configured in ClickUp','tb-components:5:4':'\uD83D\uDD34 Yes',
+      'tb-components:6:0':'IF / Dedup Router','tb-components:6:1':'n8n (IF node)','tb-components:6:2':'Checks RecID custom field presence to route records to update branch (true) or create branch (false). Present in Flows 2 & 4.','tb-components:6:3':'ClickUp API search result','tb-components:6:4':'\uD83D\DF1F No',
+
+      /* ─── tb-phase-summary ─── */
+      'tb-phase-summary:0:0':'Flow 1 \u2014 CU\u2192CW Company Sync','tb-phase-summary:0:1':'Updated ConnectWise company record','tb-phase-summary:0:2':'Jessica Peaden','tb-phase-summary:0:3':'Live & Tested','tb-phase-summary:0:4':'Instant (webhook)',
+      'tb-phase-summary:1:0':'Flow 2 \u2014 CW\u2192CU Company Sync','tb-phase-summary:1:1':'Updated or created ClickUp company task','tb-phase-summary:1:2':'Jessica Peaden','tb-phase-summary:1:3':'Live & Tested','tb-phase-summary:1:4':'Up to 1 hour',
+      'tb-phase-summary:2:0':'Flow 3 \u2014 CU\u2192CW Contact Sync','tb-phase-summary:2:1':'Updated ConnectWise contact record','tb-phase-summary:2:2':'Jessica Peaden','tb-phase-summary:2:3':'Built & Testing','tb-phase-summary:2:4':'Instant (webhook)',
+      'tb-phase-summary:3:0':'Flow 4 \u2014 CW\u2192CU Contact Sync','tb-phase-summary:3:1':'Updated or created ClickUp contact task','tb-phase-summary:3:2':'Jessica Peaden','tb-phase-summary:3:3':'Built & Testing','tb-phase-summary:3:4':'Up to 1 hour',
+
+      /* ─── tb-inputs ─── */
+      'tb-inputs:0:0':'id (company)','tb-inputs:0:1':'Integer','tb-inputs:0:2':'Yes','tb-inputs:0:3':'ConnectWise API response','tb-inputs:0:4':'ConnectWise company RecID. Used as linking key in ClickUp custom field 142e9dc4-...',
+      'tb-inputs:1:0':'lastUpdated','tb-inputs:1:1':'DateTime (ISO)','tb-inputs:1:2':'Yes','tb-inputs:1:3':'ConnectWise API response','tb-inputs:1:4':'Used in hourly filter: lastUpdated > [now \u2212 1hr]. Drives which records each run processes.',
+      'tb-inputs:2:0':'task_id','tb-inputs:2:1':'String','tb-inputs:2:2':'Yes (webhook flows)','tb-inputs:2:3':'ClickUp webhook payload','tb-inputs:2:4':'ClickUp task ID of the updated record. Used to fetch full task details.',
+      'tb-inputs:3:0':'custom_fields[142e9dc4-...]','tb-inputs:3:1':'String','tb-inputs:3:2':'Yes (CU\u2192CW flows)','tb-inputs:3:3':'ClickUp task custom field','tb-inputs:3:4':'Stores the ConnectWise company RecID. Must be populated for update routing to work correctly.',
+      'tb-inputs:4:0':'custom_fields[257f67cb-...]','tb-inputs:4:1':'String','tb-inputs:4:2':'Yes (Contact flows)','tb-inputs:4:3':'ClickUp task custom field','tb-inputs:4:4':'Stores the ConnectWise contact ID. Required for contact update routing.',
+
+      /* ─── tb-connectors ─── */
+      'tb-connectors:0:0':'ConnectWise Company API','tb-connectors:0:1':'REST API','tb-connectors:0:2':'https://api-na.myconnectwise.net/v4_6_release/apis/3.0/company/companies','tb-connectors:0:3':'Basic Auth + clientId header','tb-connectors:0:4':'Flows 1 & 2','tb-connectors:0:5':'Bidirectional',
+      'tb-connectors:1:0':'ConnectWise Contact API','tb-connectors:1:1':'REST API','tb-connectors:1:2':'https://api-na.myconnectwise.net/v4_6_release/apis/3.0/company/contacts','tb-connectors:1:3':'Basic Auth + clientId header','tb-connectors:1:4':'Flows 3 & 4','tb-connectors:1:5':'Bidirectional',
+      'tb-connectors:2:0':'ClickUp Task API (Company)','tb-connectors:2:1':'REST API','tb-connectors:2:2':'https://api.clickup.com/api/v2/list/901707471373/task','tb-connectors:2:3':'ClickUp Personal API Key','tb-connectors:2:4':'Flows 1 & 2','tb-connectors:2:5':'Bidirectional',
+      'tb-connectors:3:0':'ClickUp Task API (Contact)','tb-connectors:3:1':'REST API','tb-connectors:3:2':'https://api.clickup.com/api/v2/list/901707481918/task','tb-connectors:3:3':'ClickUp Personal API Key','tb-connectors:3:4':'Flows 3 & 4','tb-connectors:3:5':'Bidirectional',
+      'tb-connectors:4:0':'ClickUp Webhook (Company)','tb-connectors:4:1':'Webhook (Inbound)','tb-connectors:4:2':'taskUpdated on list 901707471373','tb-connectors:4:3':'ClickUp webhook secret','tb-connectors:4:4':'Flow 1','tb-connectors:4:5':'Inbound',
+      'tb-connectors:5:0':'ClickUp Webhook (Contact)','tb-connectors:5:1':'Webhook (Inbound)','tb-connectors:5:2':'taskUpdated on list 901707481918','tb-connectors:5:3':'ClickUp webhook secret','tb-connectors:5:4':'Flow 3','tb-connectors:5:5':'Inbound',
+      'tb-connectors:6:0':'ClickUp getAll (Search)','tb-connectors:6:1':'ClickUp n8n Node','tb-connectors:6:2':'GET /api/v2/list/{listId}/task?custom_field[id]={value}','tb-connectors:6:3':'ClickUp Personal API Key','tb-connectors:6:4':'Flows 2 & 4','tb-connectors:6:5':'Outbound',
+
+      /* ─── tb-schema ─── */
+      'tb-schema:0:0':'RecID / CW Company ID','tb-schema:0:1':'142e9dc4-66bc-4412-94dd-e3063bb48ca0','tb-schema:0:2':'Flows 1 & 2','tb-schema:0:3':'Canonical linking key. ConnectWise company id stored here. Used in search filter and PATCH routing.','tb-schema:0:4':'Text',
+      'tb-schema:1:0':'Business Website','tb-schema:1:1':'23dfb25f-618a-4fa1-886b-b752a3727800','tb-schema:1:2':'Flows 1 & 2','tb-schema:1:3':'Maps to company.website in ConnectWise','tb-schema:1:4':'Text',
+      'tb-schema:2:0':'Company Address (Line 1)','tb-schema:2:1':'e8618aa5-9a2c-496f-ad82-1185a5016364','tb-schema:2:2':'Flows 1 & 2','tb-schema:2:3':'Maps to company.addressLine1','tb-schema:2:4':'Text',
+      'tb-schema:3:0':'City','tb-schema:3:1':'06e4d043-f0b4-4b2c-b09f-acc0f71cbe30','tb-schema:3:2':'Flows 1 & 2','tb-schema:3:3':'Maps to company.city','tb-schema:3:4':'Text',
+      'tb-schema:4:0':'State','tb-schema:4:1':'4c5cd689-586d-444a-b696-8608718813dd','tb-schema:4:2':'Flows 1 & 2','tb-schema:4:3':'Maps to company.state. Note: state field not fully tested in CU\u2192CW direction.','tb-schema:4:4':'Text',
+      'tb-schema:5:0':'Contact Phone Number','tb-schema:5:1':'605de830-b1a3-451d-a3ba-4a03cd221efb','tb-schema:5:2':'Flows 1 & 2','tb-schema:5:3':'Maps to company.phoneNumber','tb-schema:5:4':'Text',
+      'tb-schema:6:0':'Contact Person Email','tb-schema:6:1':'1d6c15cd-c1c6-4a14-b875-2c202e38a231','tb-schema:6:2':'Flows 1 & 2','tb-schema:6:3':'defaultContact.communicationItems.find(type.name===Email).value','tb-schema:6:4':'Text',
+      'tb-schema:7:0':'Contact Person (Name)','tb-schema:7:1':'32a51409-9726-430b-9fdc-7da74a30b43a','tb-schema:7:2':'Flows 1 & 2','tb-schema:7:3':'Maps to company.defaultContact.name','tb-schema:7:4':'Text',
+      'tb-schema:8:0':'Time Zone','tb-schema:8:1':'a794d086-96c9-4dfa-b8ef-15d4c8c8c061','tb-schema:8:2':'Flows 1 & 2','tb-schema:8:3':'Maps to company.timeZone.name','tb-schema:8:4':'Text',
+      'tb-schema:9:0':'Last Synced At','tb-schema:9:1':'796fc085-d59b-44d2-94aa-528736c6b7cc','tb-schema:9:2':'Flows 2 & 4','tb-schema:9:3':'Set to new Date().getTime() (epoch ms) on every CW\u2192ClickUp sync run.','tb-schema:9:4':'Number / Timestamp',
+      'tb-schema:10:0':'CW Contact ID','tb-schema:10:1':'257f67cb-b1ce-44fa-a307-87627f9406e3','tb-schema:10:2':'Flows 3 & 4','tb-schema:10:3':'Canonical linking key for contacts. ConnectWise contact id stored here.','tb-schema:10:4':'Text',
+      'tb-schema:11:0':'(Company RecID on Contact list)','tb-schema:11:1':'142e9dc4-66bc-4412-94dd-e3063bb48ca0','tb-schema:11:2':'Flows 3 & 4','tb-schema:11:3':'CW company id stored on contact tasks for company\u2013contact relationship linking. Same field ID as company list.','tb-schema:11:4':'Text',
+
+      /* ─── tb-session ─── */
+      'tb-session:0:0':'$json.id (CW company)','tb-session:0:1':'ConnectWise GET /company/companies response','tb-session:0:2':'All ClickUp search and create/update calls','tb-session:0:3':'Never hardcode. Always pulled live from CW API response per execution.',
+      'tb-session:1:0':'$json.id (ClickUp task)','tb-session:1:1':'Search ClickUp for Company / Contact result','tb-session:1:2':'Update ClickUp Task (PUT) calls','tb-session:1:3':'Only present when an existing task was found. Empty = create branch fires.',
+      'tb-session:2:0':'142e9dc4-... (RecID custom field)','tb-session:2:1':'Written by Create/Update ClickUp Task node after record creation','tb-session:2:2':'Dedup check on subsequent runs','tb-session:2:3':'Must be written correctly after task creation or duplicate records will be created on the next run.',
+      'tb-session:3:0':'$now.minus({ hours: 1 }).toISO()','tb-session:3:1':'n8n built-in date expression evaluated at execution start','tb-session:3:2':'ConnectWise GET conditions filter','tb-session:3:3':'Used as the lastUpdated filter. Evaluated fresh on every execution \u2014 not stored between runs.',
+
+      /* ─── tb-n8n-registry ─── */
+      'tb-n8n-registry:0:0':'ConnectWise \u2192 ClickUp Company Sync 2.4.26','tb-n8n-registry:0:1':'n/a (Schedule Trigger)','tb-n8n-registry:0:2':'Flow 2','tb-n8n-registry:0:3':'Fires automatically every hour. No manual trigger needed.',
+      'tb-n8n-registry:1:0':'ConnectWise \u2192 ClickUp Contact Sync 2.4.26','tb-n8n-registry:1:1':'n/a (Schedule Trigger)','tb-n8n-registry:1:2':'Flow 4','tb-n8n-registry:1:3':'Fires automatically every hour. No manual trigger needed.',
+      'tb-n8n-registry:2:0':'ClickUp \u2192 ConnectWise Company Sync (BI-DIRECTIONAL)','tb-n8n-registry:2:1':'ClickUp webhook \u2014 taskUpdated on list 901707471373','tb-n8n-registry:2:2':'Flow 1','tb-n8n-registry:2:3':'Fires on any ClickUp company task field update.',
+      'tb-n8n-registry:3:0':'ClickUp \u2192 ConnectWise Contact Sync 2.4.26','tb-n8n-registry:3:1':'ClickUp webhook \u2014 taskUpdated on list 901707481918','tb-n8n-registry:3:2':'Flow 3','tb-n8n-registry:3:3':'Fires on any ClickUp contact task field update.',
+      'tb-n8n-registry:4:0':'ClickUp \u2192 ConnectWise Contact Sync (BI-DIRECTIONAL)','tb-n8n-registry:4:1':'ClickUp webhook \u2014 taskUpdated on list 901707481918','tb-n8n-registry:4:2':'Flow 3 (alt)','tb-n8n-registry:4:3':'Alternate version \u2014 verify which is active in n8n.',
+
+      /* ─── tb-breaks ─── */
+      'tb-breaks:0:0':'ClickUp Personal API key invalid/rotated','tb-breaks:0:1':'All ClickUp search lookups fail. No tasks created or updated. Sync halts silently.','tb-breaks:0:2':'\uD83D\uDD34 Critical',
+      'tb-breaks:1:0':'clientId header missing from CW calls','tb-breaks:1:1':'Every ConnectWise API call rejected immediately. All four flows break.','tb-breaks:1:2':'\uD83D\uDD34 Critical',
+      'tb-breaks:2:0':'Custom field IDs mismatched in n8n','tb-breaks:2:1':'Fields written to wrong ClickUp columns, or silently skipped. Data corruption without error.','tb-breaks:2:2':'\uD83D\uDD34 Critical',
+      'tb-breaks:3:0':'ClickUp webhook not configured','tb-breaks:3:1':'CU\u2192CW flows (1 & 3) never trigger. Changes in ClickUp never reach ConnectWise.','tb-breaks:3:2':'\uD83D\uDD34 Critical',
+      'tb-breaks:4:0':'n8n workflows not set to Active','tb-breaks:4:1':'Schedule flows miss all executions. Webhook flows reject incoming events. No sync occurs.','tb-breaks:4:2':'\uD83D\uDD34 Critical',
+
+      /* ─── tb-changelog ─── */
+      'tb-changelog:0:0':'v1.0.0','tb-changelog:0:1':'Feb 4, 2026','tb-changelog:0:2':'Initial technical documentation created. All four flows documented. Known gaps, field IDs, and workarounds captured.','tb-changelog:0:3':'Jessica Peaden',
+      'tb-changelog:1:0':'v1.0.1','tb-changelog:1:1':'Mar 31, 2026','tb-changelog:1:2':'Documentation transferred to workflow doc template. Node-by-node breakdown added. Readiness checklist populated.','tb-changelog:1:3':'Plus 1 Technology'
+    }
+  };
+
+  localStorage.setItem(SAVE_KEY, JSON.stringify(DATA));
+
+  // Run BEFORE template's DOMContentLoaded listener (capture phase)
+  document.addEventListener('DOMContentLoaded', addStaticRows, true);
+})();
+</script>
+</body>
+</html>
