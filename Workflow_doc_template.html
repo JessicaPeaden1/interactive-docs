@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow Technical Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sidebar: #18253a;
+  --sidebar-hover: #1f3050;
+  --sidebar-active: #253d62;
+  --accent: #f07c2a;
+  --accent2: #3d8ef0;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --purple: #a855f7;
+  --bg: #edf0f4;
+  --card: #ffffff;
+  --border: #dde3ed;
+  --text: #18253a;
+  --muted: #6b7c93;
+  --light: #9aaabb;
+  --mono: 'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sidebar{width:236px;min-width:236px;background:var(--sidebar);height:100vh;overflow-y:auto;display:flex;flex-direction:column;flex-shrink:0}
+.sb-header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-brand{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
+.sb-title{font-size:12.5px;font-weight:500;color:rgba(255,255,255,.8);line-height:1.4;cursor:pointer}
+.sb-actions{padding:10px 14px 4px;display:flex;flex-direction:column;gap:6px}
+.save-btn{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;width:100%;transition:background .2s}
+.save-btn:hover{background:#d4690f}
+.export-btn-sb{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;width:100%;transition:all .2s}
+.export-btn-sb:hover{background:rgba(255,255,255,.12);color:#fff}
+.save-ts{font-size:9.5px;color:rgba(255,255,255,.25);text-align:center;padding:2px 0 6px;min-height:16px}
+.nav-group{padding:12px 0 4px}
+.nav-grp-label{font-size:8.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.28);padding:0 16px;margin-bottom:3px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6.5px 16px;font-size:12px;color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
+.nav-item.active{background:var(--sidebar-active);color:#fff;border-left-color:var(--accent);font-weight:500}
+.nav-item .ni{width:15px;text-align:center;font-size:12px;flex-shrink:0}
+
+/* ── MAIN ── */
+#main{flex:1;overflow-y:auto;padding:30px 36px}
+.section{display:none;max-width:920px;animation:fi .2s ease}
+.section.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-tag{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.sec-title{font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:5px}
+.sec-desc{font-size:13.5px;color:var(--muted);margin-bottom:24px;line-height:1.6;max-width:680px}
+.sec-hr{border:none;border-top:1px solid var(--border);margin:0 0 24px}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:14px}
+.card-title{font-family:'Sora',sans-serif;font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+
+/* ── FIELDS ── */
+.fl{margin-bottom:13px}
+.fl-label{display:block;font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--light);margin-bottom:4px}
+.ef,.ef-sm{width:100%;background:#f6f8fb;border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .2s;resize:vertical}
+.ef-sm{min-height:32px;resize:none;line-height:1.4}
+.ef:focus,.ef-sm:focus{border-color:var(--accent);background:#fff}
+textarea.ef{min-height:72px;line-height:1.6}
+textarea.ef.mono,textarea.ef-sm.mono{font-family:var(--mono);font-size:11.5px;min-height:110px}
+select.ef{cursor:pointer;min-height:36px}
+[contenteditable]{outline:none}
+[contenteditable]:focus{background:#fffbf5;border-color:var(--accent)!important}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow:hidden;border-radius:10px;border:1px solid var(--border);margin-bottom:8px}
+table.dt{width:100%;border-collapse:collapse;font-size:12.5px}
+.dt th{background:#f0f3f8;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.dt td{padding:7px 12px;border-bottom:1px solid #f0f3f8;vertical-align:top;min-width:80px}
+.dt td[contenteditable]:focus{background:#fffbf5;box-shadow:inset 0 0 0 1px var(--accent)}
+.dt tr:last-child td{border-bottom:none}
+.dt tr:hover td{background:#fafbfd}
+
+/* ── META GRID ── */
+.meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.meta-cell{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
+.meta-label{font-size:8.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--light);margin-bottom:3px}
+.meta-val{font-size:13px;font-weight:500;color:var(--text);display:block;outline:none;background:transparent;border:none;width:100%;font-family:'DM Sans',sans-serif;cursor:text}
+.meta-val:focus{color:var(--accent)}
+select.meta-val{cursor:pointer}
+
+/* ── DYNAMIC CARDS: PHASES / NODES / STEPS ── */
+.dyn-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.dyn-head{background:var(--sidebar);padding:11px 16px;display:flex;align-items:center;gap:10px}
+.dyn-num{background:var(--accent);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dyn-name{background:transparent;border:none;color:#fff;font-family:'Sora',sans-serif;font-size:13.5px;font-weight:600;outline:none;flex:1;min-width:0}
+.dyn-name::placeholder{color:rgba(255,255,255,.3)}
+.dyn-sel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.75);font-size:10.5px;padding:3px 8px;border-radius:5px;font-family:var(--mono);outline:none;cursor:pointer}
+.dyn-del{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:pointer;padding:3px 8px;border-radius:4px;font-size:11px;margin-left:4px;transition:all .15s}
+.dyn-del:hover{background:rgba(239,68,68,.2);color:#fca5a5;border-color:rgba(239,68,68,.3)}
+.dyn-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── STEP CARDS ── */
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden;border-left:4px solid var(--accent2)}
+.step-card[data-p="make"]{border-left-color:var(--purple)}
+.step-card[data-p="zapier"]{border-left-color:#ff6d00}
+.step-card[data-p="clickup"]{border-left-color:#7b68ee}
+.step-card[data-p="other"]{border-left-color:var(--green)}
+.step-head{padding:11px 16px;background:#f6f8fb;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border)}
+.step-num{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--muted);background:var(--border);padding:2px 7px;border-radius:4px;min-width:28px;text-align:center}
+.step-name{background:transparent;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;color:var(--text);outline:none;flex:1}
+.step-name::placeholder{color:var(--light)}
+.plat-sel{background:#fff;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:3px 8px;border-radius:5px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer}
+.step-body{padding:15px 17px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── NODE CARD SPECIFIC ── */
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.node-head{background:var(--sidebar);padding:11px 16px;display:flex;align-items:center;gap:10px}
+.node-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── GATE / RULE / PROMPT CARDS ── */
+.gate-card,.rule-card,.prompt-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+
+/* ── CHECKLIST ── */
+.chk-item{display:flex;align-items:flex-start;gap:11px;padding:12px 15px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;background:var(--card);transition:all .15s}
+.chk-item.done{background:#f0fdf4;border-color:#86efac}
+.chk-item input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--green);margin-top:2px;flex-shrink:0}
+.chk-txt{flex:1}
+.chk-lbl,.chk-desc{background:transparent;border:none;width:100%;font-family:'DM Sans',sans-serif;outline:none;cursor:text}
+.chk-lbl{font-size:13px;font-weight:500;color:var(--text)}
+.chk-desc{font-size:12px;color:var(--muted)}
+
+/* ── BADGES / TAGS ── */
+.badge{display:inline-flex;align-items:center;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.b-green{background:#dcfce7;color:#166534}
+.b-orange{background:#fff0e3;color:#c85a00}
+.b-red{background:#fee2e2;color:#991b1b}
+.b-blue{background:#e0f2fe;color:#075985}
+.b-gray{background:#f1f5f9;color:#475569}
+.b-purple{background:#f5f3ff;color:#5b21b6}
+
+/* ── INFO BOXES ── */
+.info-box{background:#fff8f0;border:1px solid #fcd9b0;border-left:4px solid var(--accent);border-radius:7px;padding:11px 16px;font-size:12.5px;color:#7c3c00;margin-bottom:16px;line-height:1.6}
+.warn-box{background:#fffbeb;border:1px solid #fde68a;border-left:4px solid var(--yellow);border-radius:7px;padding:11px 16px;font-size:12.5px;color:#78350f;margin-bottom:16px;line-height:1.6}
+.err-box{background:#fff0f0;border:1px solid #fecaca;border-left:4px solid var(--red);border-radius:7px;padding:11px 16px;font-size:12.5px;color:#7f1d1d;margin-bottom:16px;line-height:1.6}
+
+/* ── BTN ROW ── */
+.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#d4690f}
+.btn-o{background:transparent;border:1px solid var(--border);color:var(--muted)}.btn-o:hover{background:#f0f3f8;color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:11px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:22px;right:22px;background:var(--sidebar);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transform:translateY(6px);transition:all .3s;z-index:9999;pointer-events:none;border-left:3px solid var(--accent)}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:3px}
+code{font-family:var(--mono);font-size:11.5px;background:#f0f3f8;padding:1px 5px;border-radius:3px;color:#c0392b}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sb-header">
+    <div class="sb-brand">Plus 1 Technology</div>
+    <div class="sb-title" onclick="go('overview')">Workflow / Agent Technical Doc</div>
+  </div>
+
+  <div class="sb-actions">
+    <button class="save-btn" onclick="saveAll()">💾 Save Documentation</button>
+    <button class="export-btn-sb" onclick="exportDoc()">⬇ Export as HTML File</button>
+    <div class="save-ts" id="saveTs">Not saved yet</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-grp-label">Overview</div>
+    <div class="nav-item active" data-s="overview" onclick="go('overview')"><span class="ni">🗺</span>System Overview</div>
+    <div class="nav-item" data-s="platform-stack" onclick="go('platform-stack')"><span class="ni">🔌</span>Platform Stack</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Architecture</div>
+    <div class="nav-item" data-s="arch-diagram" onclick="go('arch-diagram')"><span class="ni">📐</span>System Diagram</div>
+    <div class="nav-item" data-s="data-flow" onclick="go('data-flow')"><span class="ni">🔄</span>Data Flow Map</div>
+    <div class="nav-item" data-s="component-map" onclick="go('component-map')"><span class="ni">🧩</span>Component Map</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Pipeline</div>
+    <div class="nav-item" data-s="phases" onclick="go('phases')"><span class="ni">📋</span>Phases & Steps</div>
+    <div class="nav-item" data-s="approval-gates" onclick="go('approval-gates')"><span class="ni">✋</span>Approval Gates</div>
+    <div class="nav-item" data-s="triggers" onclick="go('triggers')"><span class="ni">⚡</span>Triggers & Inputs</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Integrations</div>
+    <div class="nav-item" data-s="connectors" onclick="go('connectors')"><span class="ni">🔗</span>Connectors & Webhooks</div>
+    <div class="nav-item" data-s="schema" onclick="go('schema')"><span class="ni">📊</span>Platform Schema</div>
+    <div class="nav-item" data-s="api-ref" onclick="go('api-ref')"><span class="ni">📡</span>API Reference</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Reference</div>
+    <div class="nav-item" data-s="session-ids" onclick="go('session-ids')"><span class="ni">🔑</span>Session & IDs</div>
+    <div class="nav-item" data-s="behavioral-rules" onclick="go('behavioral-rules')"><span class="ni">📏</span>Behavioral Rules</div>
+    <div class="nav-item" data-s="prompt-library" onclick="go('prompt-library')"><span class="ni">💬</span>Prompt Library</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Diagrams</div>
+    <div class="nav-item" data-s="swimlane" onclick="go('swimlane')"><span class="ni">🏊</span>Swimlane Flows</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">n8n Node Map</div>
+    <div class="nav-item" data-s="n8n-nodes" onclick="go('n8n-nodes')"><span class="ni">⚙️</span>Node-by-Node</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Platform Steps</div>
+    <div class="nav-item" data-s="platform-steps" onclick="go('platform-steps')"><span class="ni">🪜</span>Make / Zapier / ClickUp</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-grp-label">Go-Live</div>
+    <div class="nav-item" data-s="readiness" onclick="go('readiness')"><span class="ni">✅</span>Readiness Checklist</div>
+    <div class="nav-item" data-s="known-issues" onclick="go('known-issues')"><span class="ni">🐛</span>Known Issues</div>
+    <div class="nav-item" data-s="changelog" onclick="go('changelog')"><span class="ni">📜</span>Changelog</div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════════════ -->
+<main id="main">
+<div id="toast"></div>
+
+<!-- ── SYSTEM OVERVIEW ── -->
+<div class="section active" id="s-overview">
+  <div class="sec-tag">OVERVIEW</div>
+  <div class="sec-title">System Overview</div>
+  <hr class="sec-hr">
+
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Document Title</div><span class="meta-val" contenteditable data-key="m-title">Untitled Workflow</span></div>
+    <div class="meta-cell"><div class="meta-label">Version</div><span class="meta-val" contenteditable data-key="m-version">v1.0.0</span></div>
+    <div class="meta-cell"><div class="meta-label">Status</div>
+      <select class="meta-val" data-key="m-status"><option>Draft</option><option>Active</option><option>In Review</option><option>Deprecated</option><option>Archived</option></select>
+    </div>
+    <div class="meta-cell"><div class="meta-label">Owner</div><span class="meta-val" contenteditable data-key="m-owner">—</span></div>
+    <div class="meta-cell"><div class="meta-label">Last Updated</div><span class="meta-val" contenteditable data-key="m-updated" id="m-date">—</span></div>
+    <div class="meta-cell"><div class="meta-label">Workflow Type</div>
+      <select class="meta-val" data-key="m-type"><option>AI Agent</option><option>Automation Workflow</option><option>Integration</option><option>Multi-Agent System</option><option>Hybrid</option><option>Other</option></select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📝 Purpose & Description</div>
+    <textarea class="ef" data-key="ov-purpose" placeholder="Describe what this workflow / agent does, its primary goal, the problem it solves, and who uses it..."></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title">🏗 Architecture Summary</div>
+    <textarea class="ef" data-key="ov-arch" placeholder="Brief high-level description — phase-locked, event-driven, human-in-the-loop, etc. How does it all hang together?"></textarea>
+  </div>
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">⚡ Primary Trigger</div>
+      <textarea class="ef" data-key="ov-trigger" style="min-height:60px" placeholder="What starts this workflow? Webhook, schedule, manual, user message, event..."></textarea>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">📤 Primary Output</div>
+      <textarea class="ef" data-key="ov-output" style="min-height:60px" placeholder="What does this produce? Files, updated records, notifications, new tasks..."></textarea>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔢 Quick Stats</div>
+    <div class="grid3">
+      <div class="fl"><label class="fl-label">Total Phases / Steps</label><input type="text" class="ef-sm" data-key="st-phases" placeholder="e.g. 8"></div>
+      <div class="fl"><label class="fl-label">Connected Platforms</label><input type="text" class="ef-sm" data-key="st-platforms" placeholder="e.g. 5"></div>
+      <div class="fl"><label class="fl-label">Human Approval Gates</label><input type="text" class="ef-sm" data-key="st-gates" placeholder="e.g. 3"></div>
+      <div class="fl"><label class="fl-label">n8n Workflows</label><input type="text" class="ef-sm" data-key="st-n8n" placeholder="e.g. 2"></div>
+      <div class="fl"><label class="fl-label">Environment</label><input type="text" class="ef-sm" data-key="st-env" placeholder="Production / Dev / Staging"></div>
+      <div class="fl"><label class="fl-label">Est. Run Time</label><input type="text" class="ef-sm" data-key="st-runtime" placeholder="e.g. ~15 min"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PLATFORM STACK ── -->
+<div class="section" id="s-platform-stack">
+  <div class="sec-tag">OVERVIEW</div>
+  <div class="sec-title">Platform Stack</div>
+  <div class="sec-desc">Every tool, service, and platform involved — its role, auth method, and environment.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Platform / Tool</th><th>Category</th><th>Role in Workflow</th><th>Auth Method</th><th>Environment</th></tr></thead>
+      <tbody id="tb-platform">
+        <tr><td contenteditable>e.g. Claude</td><td contenteditable>AI Model</td><td contenteditable>Content generation, phase enforcement, session state</td><td contenteditable>API Key / MCP Project</td><td contenteditable>Production</td></tr>
+        <tr><td contenteditable>n8n</td><td contenteditable>Automation</td><td contenteditable>File conversion, Monday.com delivery</td><td contenteditable>Shared Account (required)</td><td contenteditable>Production</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-platform',5)">+ Add Platform</button></div>
+  <div class="card" style="margin-top:18px">
+    <div class="card-title">🚨 Critical Infrastructure Notes</div>
+    <textarea class="ef" data-key="ps-infra" placeholder="e.g. Shared n8n account required — individual accounts break cross-user workflow execution..."></textarea>
+  </div>
+</div>
+
+<!-- ── SYSTEM DIAGRAM ── -->
+<div class="section" id="s-arch-diagram">
+  <div class="sec-tag">ARCHITECTURE</div>
+  <div class="sec-title">System Diagram</div>
+  <div class="sec-desc">Visual architecture. Paste an embed link or describe the layout in narrative form.</div>
+  <div class="card">
+    <div class="card-title">🔗 Diagram / Embed URL</div>
+    <input type="text" class="ef-sm" data-key="diag-url" placeholder="Miro, Lucidchart, Figma, FigJam, or other embed URL...">
+    <div style="margin-top:12px;background:#f0f3f8;border-radius:8px;min-height:180px;display:flex;align-items:center;justify-content:center;color:var(--light);font-size:13px;border:1px dashed var(--border)">
+      📐 Paste a diagram embed URL above, or screenshot your diagram and drop the image here
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📝 Architecture Narrative</div>
+    <textarea class="ef" data-key="diag-narrative" style="min-height:110px" placeholder="Walk through the architecture in prose — platforms involved, data flow direction, decision boundaries, phase locking rules, critical paths..."></textarea>
+  </div>
+</div>
+
+<!-- ── DATA FLOW MAP ── -->
+<div class="section" id="s-data-flow">
+  <div class="sec-tag">ARCHITECTURE</div>
+  <div class="sec-title">Data Flow Map</div>
+  <div class="sec-desc">How each data object moves through the system — source, destination, transformations.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Data / Object</th><th>Source</th><th>Transform</th><th>Destination</th><th>Triggered By</th></tr></thead>
+      <tbody id="tb-dataflow">
+        <tr><td contenteditable>e.g. Textbook Markdown</td><td contenteditable>Claude output</td><td contenteditable>n8n → DOCX conversion</td><td contenteditable>Monday.com file column</td><td contenteditable>User confirms YES</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-dataflow',5)">+ Add Data Flow</button></div>
+</div>
+
+<!-- ── COMPONENT MAP ── -->
+<div class="section" id="s-component-map">
+  <div class="sec-tag">ARCHITECTURE</div>
+  <div class="sec-title">Component Map</div>
+  <div class="sec-desc">Each system component, its platform, responsibility, and what it depends on.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Component</th><th>Platform</th><th>Responsibility</th><th>Depends On</th><th>Critical?</th></tr></thead>
+      <tbody id="tb-components">
+        <tr><td contenteditable>e.g. Behavior Engine</td><td contenteditable>Claude Project</td><td contenteditable>Phase locking, content generation, session state management</td><td contenteditable>System prompt in Project Instructions</td><td contenteditable>🔴 Yes</td></tr>
+        <tr><td contenteditable>Orchestration Layer</td><td contenteditable>n8n</td><td contenteditable>File conversion, Monday.com delivery via webhooks</td><td contenteditable>Shared employee account</td><td contenteditable>🔴 Yes</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-components',5)">+ Add Component</button></div>
+</div>
+
+<!-- ── PHASES ── -->
+<div class="section" id="s-phases">
+  <div class="sec-tag">PIPELINE</div>
+  <div class="sec-title">Phases & Steps</div>
+  <div class="sec-desc">Each phase or major step in sequence. Add as many as needed — simple or complex.</div>
+  <div id="c-phases"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addPhase()">+ Add Phase / Step</button></div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">🔁 Phase Transition Rules</div>
+    <textarea class="ef" data-key="phase-transitions" placeholder="e.g. Phase 2 cannot begin until Phase 1 output is approved. Session state enforces sequencing. Agent never skips phases..."></textarea>
+  </div>
+  <div class="tbl-wrap" style="margin-top:16px">
+    <table class="dt">
+      <thead><tr><th>Phase</th><th>Output / Deliverable</th><th>Owner</th><th>Tracking Status</th><th>Kevin / Notify?</th></tr></thead>
+      <tbody id="tb-phase-summary">
+        <tr><td contenteditable>1 — e.g. Textbook</td><td contenteditable>Study Unit as Word doc</td><td contenteditable>Brian</td><td contenteditable>Textbook Ready for Review</td><td contenteditable>⚡ Auto-created</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-phase-summary',5)">+ Add to Summary Table</button></div>
+</div>
+
+<!-- ── APPROVAL GATES ── -->
+<div class="section" id="s-approval-gates">
+  <div class="sec-tag">PIPELINE</div>
+  <div class="sec-title">Approval Gates</div>
+  <div class="sec-desc">Every human-in-the-loop decision point. Nothing moves forward without an explicit action.</div>
+  <div id="c-gates"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addGate()">+ Add Approval Gate</button></div>
+</div>
+
+<!-- ── TRIGGERS ── -->
+<div class="section" id="s-triggers">
+  <div class="sec-tag">PIPELINE</div>
+  <div class="sec-title">Triggers & Inputs</div>
+  <div class="sec-desc">What initiates this workflow and what data it expects at entry.</div>
+  <div class="card">
+    <div class="card-title">⚡ Primary Trigger</div>
+    <div class="grid2">
+      <div class="fl"><label class="fl-label">Trigger Type</label>
+        <select class="ef" data-key="trig-type"><option>Webhook</option><option>Schedule (Cron)</option><option>Manual</option><option>Form Submission</option><option>Event / Watch</option><option>API Call</option><option>User Message (Claude)</option><option>Other</option></select>
+      </div>
+      <div class="fl"><label class="fl-label">Platform</label><input type="text" class="ef-sm" data-key="trig-platform" placeholder="e.g. n8n, Make, Claude, Monday.com"></div>
+      <div class="fl full"><label class="fl-label">Trigger Description</label><textarea class="ef" data-key="trig-desc" placeholder="Describe exactly how and when the workflow starts..."></textarea></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📥 Expected Input Payload / Schema</div>
+    <textarea class="ef mono" data-key="trig-payload" placeholder='{\n  "mondayItemId": "<from session state>",\n  "columnId": "text_...",\n  "content": "..."\n}'></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 Required Input Fields</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>Field Name</th><th>Type</th><th>Required?</th><th>Source</th><th>Description</th></tr></thead>
+        <tbody id="tb-inputs">
+          <tr><td contenteditable>e.g. mondayItemId</td><td contenteditable>String</td><td contenteditable>Yes</td><td contenteditable>Session state / search_task</td><td contenteditable>Monday board item ID for the production run</td></tr>
+          <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-inputs',5)">+ Add Field</button></div>
+  </div>
+</div>
+
+<!-- ── CONNECTORS ── -->
+<div class="section" id="s-connectors">
+  <div class="sec-tag">INTEGRATIONS</div>
+  <div class="sec-title">Connectors & Webhooks</div>
+  <div class="sec-desc">All external connections, webhook endpoints, and integration points.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Name</th><th>Type</th><th>URL / Endpoint</th><th>Auth</th><th>Phase / Step</th><th>Direction</th></tr></thead>
+      <tbody id="tb-connectors">
+        <tr><td contenteditable>e.g. add-textbook-file</td><td contenteditable>Webhook</td><td contenteditable style="font-family:var(--mono);font-size:11px">hockintl.app.n8n.cloud/webhook/add-textbook-file</td><td contenteditable>Shared n8n Account</td><td contenteditable>Phase 1</td><td contenteditable>Outbound</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-connectors',6)">+ Add Connector</button></div>
+</div>
+
+<!-- ── SCHEMA ── -->
+<div class="section" id="s-schema">
+  <div class="sec-tag">INTEGRATIONS</div>
+  <div class="sec-title">Platform Schema</div>
+  <div class="sec-desc">Field mappings, column IDs, and data structures for connected platforms.</div>
+  <div class="card">
+    <div class="card-title">📋 Platform / Board Details</div>
+    <div class="grid2">
+      <div class="fl"><label class="fl-label">Platform</label><input type="text" class="ef-sm" data-key="sch-platform" placeholder="e.g. Monday.com"></div>
+      <div class="fl"><label class="fl-label">Board / Table / DB ID</label><input type="text" class="ef-sm" data-key="sch-boardid" placeholder="e.g. 18398486903"></div>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Column / Field Name</th><th>Column ID</th><th>Phase / Step</th><th>How Used</th><th>Type</th></tr></thead>
+      <tbody id="tb-schema">
+        <tr><td contenteditable>e.g. Textbook Markdown</td><td contenteditable style="font-family:var(--mono);font-size:11px">text_mm1h6708</td><td contenteditable>Phase 1</td><td contenteditable>change_column_value — full markdown text</td><td contenteditable>Text</td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-schema',5)">+ Add Field</button></div>
+</div>
+
+<!-- ── API REF ── -->
+<div class="section" id="s-api-ref">
+  <div class="sec-tag">INTEGRATIONS</div>
+  <div class="sec-title">API Reference</div>
+  <div class="sec-desc">Payload schemas, endpoint specs, and example calls for each integration.</div>
+  <div id="c-api"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addApi()">+ Add API / Payload Block</button></div>
+</div>
+
+<!-- ── SESSION IDs ── -->
+<div class="section" id="s-session-ids">
+  <div class="sec-tag">REFERENCE</div>
+  <div class="sec-title">Session & IDs</div>
+  <div class="sec-desc">Session state keys, stored IDs, and naming conventions maintained throughout a run.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th>Key / Variable</th><th>How It's Set</th><th>Required Before</th><th>Notes / Rules</th></tr></thead>
+      <tbody id="tb-session">
+        <tr><td contenteditable style="font-family:var(--mono);font-size:11px">mondayItemId</td><td contenteditable>Retrieved via search_task — never hardcoded</td><td contenteditable>Any Monday MCP call or n8n workflow</td><td contenteditable>Never ask user for this value. Run search_task automatically if missing.</td></tr>
+        <tr><td contenteditable style="font-family:var(--mono);font-size:11px">currentPhase</td><td contenteditable>Updated on every phase transition</td><td contenteditable>All phase actions</td><td contenteditable></td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-session',4)">+ Add Key</button></div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">🏷 Naming Conventions</div>
+    <textarea class="ef" data-key="naming-convs" placeholder="e.g. Session keys: camelCase. Webhook names: kebab-case. IDs always retrieved via API — never hardcoded. Column IDs stored in reference doc..."></textarea>
+  </div>
+</div>
+
+<!-- ── BEHAVIORAL RULES ── -->
+<div class="section" id="s-behavioral-rules">
+  <div class="sec-tag">REFERENCE</div>
+  <div class="sec-title">Behavioral Rules</div>
+  <div class="sec-desc">Absolute constraints and enforcement rules governing how this agent / workflow must behave.</div>
+  <div id="c-rules"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addRule()">+ Add Rule</button></div>
+</div>
+
+<!-- ── PROMPT LIBRARY ── -->
+<div class="section" id="s-prompt-library">
+  <div class="sec-tag">REFERENCE</div>
+  <div class="sec-title">Prompt Library</div>
+  <div class="sec-desc">Phase prompts, system instructions, and reusable prompt templates for this workflow.</div>
+  <div id="c-prompts"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addPrompt()">+ Add Prompt</button></div>
+</div>
+
+<!-- ── SWIMLANE ── -->
+<div class="section" id="s-swimlane">
+  <div class="sec-tag">DIAGRAMS</div>
+  <div class="sec-title">Swimlane Flows</div>
+  <div class="sec-desc">End-to-end process flows — which system owns each step, how data moves, and where decision gates occur.</div>
+  <div class="info-box">📌 Embed a Miro, Lucidchart, or FigJam diagram, or describe each phase flow below. Lanes = the systems involved (e.g. Claude / AI, n8n / Automation, Monday.com, User / Manual).</div>
+  <div class="card">
+    <div class="card-title">🔗 Diagram Embed URL</div>
+    <input type="text" class="ef-sm" data-key="swim-url" placeholder="Paste embed URL for swimlane diagram...">
+  </div>
+  <div id="c-swim"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addSwim()">+ Add Phase Flow</button></div>
+</div>
+
+<!-- ── n8n NODES ── -->
+<div class="section" id="s-n8n-nodes">
+  <div class="sec-tag">n8n NODE MAP</div>
+  <div class="sec-title">Node-by-Node Breakdown</div>
+  <div class="sec-desc">Every n8n node documented with type, description, inputs, outputs, error handling, risks, known issues, and workarounds.</div>
+  <div class="warn-box">⚠️ <strong>Execution Rule:</strong> Always use <code>n8n:execute_workflow</code> via MCP connector. Direct HTTP POST to webhook URLs bypasses authentication and will fail silently.</div>
+  <div class="card">
+    <div class="card-title">📋 Workflow Registry</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>Workflow Name</th><th>Webhook URL</th><th>Phase / Step</th><th>Trigger Condition</th></tr></thead>
+        <tbody id="tb-n8n-registry">
+          <tr><td contenteditable>e.g. Monday_update_item_Textbook</td><td contenteditable style="font-family:var(--mono);font-size:11px">...webhook/add-textbook-file</td><td contenteditable>Phase 1</td><td contenteditable>User confirms YES to DOCX conversion</td></tr>
+          <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-n8n-registry',4)">+ Add Workflow</button></div>
+  </div>
+  <div id="c-nodes"></div>
+  <div class="btn-row"><button class="btn btn-p" onclick="addNode()">+ Add n8n Node</button></div>
+</div>
+
+<!-- ── PLATFORM STEPS ── -->
+<div class="section" id="s-platform-steps">
+  <div class="sec-tag">PLATFORM STEPS</div>
+  <div class="sec-title">Make / Zapier / ClickUp Steps</div>
+  <div class="sec-desc">Step-by-step documentation for workflows built on Make, Zapier, ClickUp Automations, or any other no-code / low-code platform. Each step includes inputs, outputs, conditions, risks, known issues, and workarounds.</div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">ℹ️ Platform Overview</div>
+    <div class="grid2">
+      <div class="fl"><label class="fl-label">Primary Platform</label>
+        <select class="ef" data-key="ps-platform"><option>Make (Integromat)</option><option>Zapier</option><option>ClickUp Automations</option><option>n8n</option><option>Power Automate</option><option>Workato</option><option>Multiple / Mixed</option><option>Other</option></select>
+      </div>
+      <div class="fl"><label class="fl-label">Scenario / Zap / Automation Name</label><input type="text" class="ef-sm" data-key="ps-name" placeholder="e.g. HOCK Phase 1 Delivery"></div>
+      <div class="fl full"><label class="fl-label">Description</label><textarea class="ef" data-key="ps-desc" style="min-height:60px" placeholder="What does this automation do at a high level..."></textarea></div>
+    </div>
+  </div>
+  <div id="c-steps"></div>
+  <div class="btn-row"><button class="btn btn-p" onclick="addStep()">+ Add Step</button></div>
+</div>
+
+<!-- ── READINESS ── -->
+<div class="section" id="s-readiness">
+  <div class="sec-tag">GO-LIVE</div>
+  <div class="sec-title">Readiness Checklist</div>
+  <div class="sec-desc">Every condition that must be confirmed before this workflow runs in production. Check items off as you verify them.</div>
+  <div id="c-checklist"></div>
+  <div class="btn-row">
+    <button class="btn btn-p btn-sm" onclick="addCheck()">+ Add Item</button>
+    <button class="btn btn-o btn-sm" onclick="resetChecks()">↺ Reset All</button>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">💥 What Breaks Without Each Item</div>
+    <div class="tbl-wrap">
+      <table class="dt">
+        <thead><tr><th>Missing Item</th><th>What Breaks</th><th>Severity</th></tr></thead>
+        <tbody id="tb-breaks">
+          <tr><td contenteditable>e.g. Shared automation account</td><td contenteditable>File delivery fails when team members change. Workflows stop working across employees.</td><td contenteditable>🔴 Critical</td></tr>
+          <tr><td contenteditable>Instructions in wrong location</td><td contenteditable>Agent behavior becomes inconsistent. Phase locking weakens unpredictably.</td><td contenteditable>🔴 Critical</td></tr>
+          <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-breaks',3)">+ Add Row</button></div>
+  </div>
+</div>
+
+<!-- ── KNOWN ISSUES ── -->
+<div class="section" id="s-known-issues">
+  <div class="sec-tag">GO-LIVE</div>
+  <div class="sec-title">Known Issues</div>
+  <div class="sec-desc">Documented bugs, limitations, and edge cases — with workarounds where available.</div>
+  <div id="c-issues"></div>
+  <div class="btn-row"><button class="btn btn-p btn-sm" onclick="addIssue()">+ Add Issue</button></div>
+</div>
+
+<!-- ── CHANGELOG ── -->
+<div class="section" id="s-changelog">
+  <div class="sec-tag">GO-LIVE</div>
+  <div class="sec-title">Changelog</div>
+  <div class="sec-desc">Version history — what changed, when, and who made the change.</div>
+  <div class="tbl-wrap">
+    <table class="dt">
+      <thead><tr><th style="width:80px">Version</th><th style="width:110px">Date</th><th>Changes</th><th style="width:120px">Author</th></tr></thead>
+      <tbody id="tb-changelog">
+        <tr><td contenteditable style="font-family:var(--mono)">v1.0.0</td><td contenteditable></td><td contenteditable>Initial documentation created</td><td contenteditable></td></tr>
+        <tr><td contenteditable style="font-family:var(--mono)"></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-row"><button class="btn btn-o btn-sm" onclick="addRow('tb-changelog',4)">+ Add Entry</button></div>
+</div>
+
+</main><!-- end #main -->
+
+<!-- ════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+// ── NAV ──
+function go(s){
+  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  const sec=document.getElementById('s-'+s);
+  if(sec)sec.classList.add('active');
+  const ni=document.querySelector('[data-s="'+s+'"]');
+  if(ni)ni.classList.add('active');
+}
+
+// ── TABLE ROWS ──
+function addRow(tid,cols){
+  const tb=document.getElementById(tid);
+  if(!tb)return;
+  const tr=document.createElement('tr');
+  for(let i=0;i<cols;i++){
+    const td=document.createElement('td');
+    td.contentEditable=true;
+    if(tid==='tb-session'&&i===0)td.style.fontFamily='var(--mono)';
+    if(tid==='tb-n8n-registry'&&i===1)td.style.cssText='font-family:var(--mono);font-size:11px';
+    tr.appendChild(td);
+  }
+  tb.appendChild(tr);
+}
+
+// ── COUNTS (for save/restore) ──
+let counts={phases:0,gates:0,rules:0,prompts:0,nodes:0,steps:0,checks:0,issues:0,apis:0,swims:0};
+
+// ── PHASES ──
+function addPhase(){
+  counts.phases++;
+  const n=counts.phases;
+  const c=document.getElementById('c-phases');
+  const d=document.createElement('div');
+  d.className='dyn-card';d.id='phase-'+n;
+  d.innerHTML=`<div class="dyn-head">
+    <div class="dyn-num">${n}</div>
+    <input class="dyn-name" data-key="ph${n}-name" placeholder="Phase / Step name...">
+    <select class="dyn-sel" data-key="ph${n}-status"><option>Not Started</option><option>In Progress</option><option>Done</option><option>Blocked</option></select>
+    <button class="dyn-del" onclick="del('phase-${n}')">✕</button>
+  </div>
+  <div class="dyn-body">
+    <div class="fl full"><label class="fl-label">Description</label><textarea class="ef" data-key="ph${n}-desc" placeholder="What happens in this phase..."></textarea></div>
+    <div class="fl"><label class="fl-label">Output / Deliverable</label><textarea class="ef" data-key="ph${n}-output" style="min-height:60px" placeholder="What gets produced..."></textarea></div>
+    <div class="fl"><label class="fl-label">Owner</label><input type="text" class="ef-sm" data-key="ph${n}-owner" placeholder="Who is responsible..."></div>
+    <div class="fl"><label class="fl-label">Tracking Status (Monday etc.)</label><input type="text" class="ef-sm" data-key="ph${n}-mstatus" placeholder="e.g. Textbook Ready for Review"></div>
+    <div class="fl"><label class="fl-label">Prerequisites</label><input type="text" class="ef-sm" data-key="ph${n}-prereqs" placeholder="What must be done first..."></div>
+    <div class="fl"><label class="fl-label">Skills / Tools Invoked</label><input type="text" class="ef-sm" data-key="ph${n}-skills" placeholder="e.g. depth-calibration-skill, textbook-style-guide"></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── GATES ──
+function addGate(){
+  counts.gates++;
+  const n=counts.gates;
+  const c=document.getElementById('c-gates');
+  const d=document.createElement('div');
+  d.className='gate-card';d.id='gate-'+n;
+  d.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <span style="font-size:18px">✋</span>
+    <input type="text" class="ef-sm" data-key="gt${n}-name" placeholder="Gate name (e.g. Textbook Approval Gate)" style="flex:1">
+    <input type="text" class="ef-sm" data-key="gt${n}-phase" placeholder="Phase / step" style="width:130px">
+    <button class="dyn-del" onclick="del('gate-${n}')">✕</button>
+  </div>
+  <div class="grid2">
+    <div class="fl full"><label class="fl-label">Condition — What the user must do</label><textarea class="ef" data-key="gt${n}-condition" placeholder="e.g. Agent asks: 'Is the textbook finalized?' — waits for explicit YES before proceeding..."></textarea></div>
+    <div class="fl"><label class="fl-label">On YES — What happens</label><textarea class="ef" data-key="gt${n}-yes" style="min-height:60px" placeholder="e.g. Triggers n8n workflow, updates Monday status..."></textarea></div>
+    <div class="fl"><label class="fl-label">On NO / No Response — What happens</label><textarea class="ef" data-key="gt${n}-no" style="min-height:60px" placeholder="e.g. Agent waits. No external action taken. Nothing saved."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── RULES ──
+function addRule(){
+  counts.rules++;
+  const n=counts.rules;
+  const c=document.getElementById('c-rules');
+  const d=document.createElement('div');
+  d.className='rule-card';d.id='rule-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+    <select class="ef-sm" data-key="ru${n}-level" style="width:140px;resize:none">
+      <option>🔒 Absolute</option><option>⚠️ Strong Warning</option><option>ℹ️ Guidance</option><option>🚫 Prohibited</option>
+    </select>
+    <input type="text" class="ef-sm" data-key="ru${n}-name" placeholder="Rule name / title..." style="flex:1">
+    <button class="dyn-del" onclick="del('rule-${n}')">✕</button>
+  </div>
+  <div class="fl"><label class="fl-label">Description & Rationale</label><textarea class="ef" data-key="ru${n}-desc" placeholder="Full description of the rule and why it exists — what breaks if violated..."></textarea></div>`;
+  c.appendChild(d);
+}
+
+// ── PROMPTS ──
+function addPrompt(){
+  counts.prompts++;
+  const n=counts.prompts;
+  const c=document.getElementById('c-prompts');
+  const d=document.createElement('div');
+  d.className='prompt-card';d.id='prompt-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+    <input type="text" class="ef-sm" data-key="pr${n}-name" placeholder="Prompt name (e.g. Phase 1 Start Prompt)" style="flex:1">
+    <input type="text" class="ef-sm" data-key="pr${n}-phase" placeholder="Phase / context" style="width:150px">
+    <button class="dyn-del" onclick="del('prompt-${n}')">✕</button>
+  </div>
+  <div class="fl"><label class="fl-label">Prompt Content</label><textarea class="ef mono" data-key="pr${n}-content" style="min-height:130px" placeholder="Paste or type the full prompt here..."></textarea></div>
+  <div class="fl"><label class="fl-label">Usage Notes</label><input type="text" class="ef-sm" data-key="pr${n}-notes" placeholder="When and how to use this prompt, any special instructions..."></div>`;
+  c.appendChild(d);
+}
+
+// ── SWIM LANES ──
+function addSwim(){
+  counts.swims++;
+  const n=counts.swims;
+  const c=document.getElementById('c-swim');
+  const d=document.createElement('div');
+  d.className='card';d.id='swim-'+n;
+  d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="card-title" style="margin-bottom:0">🏊 Phase / Flow ${n}</div>
+    <button class="dyn-del" onclick="del('swim-${n}')">✕</button>
+  </div>
+  <div class="grid2">
+    <div class="fl"><label class="fl-label">Phase Name</label><input type="text" class="ef-sm" data-key="sw${n}-name" placeholder="e.g. Phase 1 — Textbook Creation"></div>
+    <div class="fl"><label class="fl-label">Lanes (Systems Involved)</label><input type="text" class="ef-sm" data-key="sw${n}-lanes" placeholder="e.g. Claude/AI, n8n/Automation, Monday.com, User/Manual"></div>
+    <div class="fl full"><label class="fl-label">Flow Description (Step by Step)</label><textarea class="ef" data-key="sw${n}-desc" style="min-height:90px" placeholder="Step 1: User sends phase prompt to Claude → Step 2: Claude generates content → Step 3: User reviews → Step 4: On YES, Claude calls n8n webhook → Step 5: n8n converts file → Step 6: n8n posts to Monday..."></textarea></div>
+    <div class="fl"><label class="fl-label">Decision Points / Gates</label><textarea class="ef" data-key="sw${n}-decisions" style="min-height:60px" placeholder="Where does the flow branch or pause for human input?"></textarea></div>
+    <div class="fl"><label class="fl-label">Error / Fallback Path</label><textarea class="ef" data-key="sw${n}-fallback" style="min-height:60px" placeholder="What happens if something fails in this flow?"></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── n8n NODES ──
+const nTypes=['HTTP Request','Code / Function','IF / Branch','Set / Assign','Switch','Merge','Loop Over Items','Wait / Delay','Webhook Trigger','Email','Slack','Monday.com','Google Sheets','Google Drive','Dropbox','Database / SQL','Filter','Aggregate','Sort / Limit','Start','End','SubWorkflow','Other'];
+
+function addNode(){
+  counts.nodes++;
+  const n=counts.nodes;
+  const c=document.getElementById('c-nodes');
+  const d=document.createElement('div');
+  d.className='node-card';d.id='node-'+n;
+  const opts=nTypes.map(t=>`<option>${t}</option>`).join('');
+  d.innerHTML=`<div class="node-head">
+    <div class="dyn-num">${n}</div>
+    <input class="dyn-name" data-key="nd${n}-name" placeholder="Node name (e.g. Get Monday Item, Convert to DOCX)">
+    <select class="dyn-sel" data-key="nd${n}-type">${opts}</select>
+    <button class="dyn-del" onclick="del('node-${n}')">✕</button>
+  </div>
+  <div class="node-body">
+    <div class="fl full"><label class="fl-label">📝 Description — What this node does</label><textarea class="ef" data-key="nd${n}-desc" placeholder="Explain what this node does in the context of the workflow. Be specific about its purpose."></textarea></div>
+    <div class="fl"><label class="fl-label">📥 Inputs — Data coming in</label><textarea class="ef" data-key="nd${n}-inputs" placeholder="Fields, format, source node. e.g: mondayItemId (String) from session state, markdownContent (String) from previous node..."></textarea></div>
+    <div class="fl"><label class="fl-label">📤 Outputs — Data going out</label><textarea class="ef" data-key="nd${n}-outputs" placeholder="Fields, format, destination. e.g: docxFile (Buffer) → sent to Monday webhook, statusCode (Number) → IF node..."></textarea></div>
+    <div class="fl full"><label class="fl-label">🔴 Error Handling / Failure Behavior</label><textarea class="ef" data-key="nd${n}-errors" placeholder="What happens on failure? Retry count, error branch, fallback behavior, notification trigger, error message to user..."></textarea></div>
+    <div class="fl"><label class="fl-label">⚠️ Risks</label><textarea class="ef" data-key="nd${n}-risks" placeholder="Potential failure modes, race conditions, data integrity risks, silent failures, edge cases..."></textarea></div>
+    <div class="fl"><label class="fl-label">🐛 Known Issues</label><textarea class="ef" data-key="nd${n}-issues" placeholder="Documented bugs or limitations specific to this node..."></textarea></div>
+    <div class="fl full"><label class="fl-label">🔧 Workarounds</label><textarea class="ef" data-key="nd${n}-workarounds" placeholder="Current workarounds for known issues. Include the exact steps or config changes needed..."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── PLATFORM STEPS ──
+function addStep(){
+  counts.steps++;
+  const n=counts.steps;
+  const c=document.getElementById('c-steps');
+  const d=document.createElement('div');
+  d.className='step-card';d.id='step-'+n;d.dataset.p='make';
+  d.innerHTML=`<div class="step-head">
+    <div class="step-num">${n}</div>
+    <input class="step-name" data-key="st${n}-name" placeholder="Step name...">
+    <select class="plat-sel" data-key="st${n}-platform" onchange="updatePlat(this,${n})">
+      <option value="make">Make</option>
+      <option value="zapier">Zapier</option>
+      <option value="clickup">ClickUp</option>
+      <option value="n8n">n8n</option>
+      <option value="other">Other</option>
+    </select>
+    <button class="dyn-del" onclick="del('step-${n}')">✕</button>
+  </div>
+  <div class="step-body">
+    <div class="fl full"><label class="fl-label">📝 Description</label><textarea class="ef" data-key="st${n}-desc" placeholder="What does this step do? What module / action / trigger is it?"></textarea></div>
+    <div class="fl"><label class="fl-label">📥 Inputs — What comes in</label><textarea class="ef" data-key="st${n}-inputs" placeholder="Data fields, mapped variables, format expected..."></textarea></div>
+    <div class="fl"><label class="fl-label">📤 Outputs — What goes out</label><textarea class="ef" data-key="st${n}-outputs" placeholder="Data fields produced, where they go next..."></textarea></div>
+    <div class="fl"><label class="fl-label">🔀 Filters / Conditions / Routers</label><textarea class="ef" data-key="st${n}-conditions" placeholder="Any filter conditions, router branches, or conditional logic applied at this step..."></textarea></div>
+    <div class="fl"><label class="fl-label">⚙️ Config / Settings</label><textarea class="ef" data-key="st${n}-config" placeholder="Key configuration settings — auth, rate limits, pagination, data mapping notes..."></textarea></div>
+    <div class="fl"><label class="fl-label">⚠️ Risks</label><textarea class="ef" data-key="st${n}-risks" placeholder="What could go wrong? Rate limits, auth expiry, mapping failures, empty payloads..."></textarea></div>
+    <div class="fl"><label class="fl-label">🐛 Known Issues</label><textarea class="ef" data-key="st${n}-issues" placeholder="Documented bugs, platform quirks, edge cases specific to this step..."></textarea></div>
+    <div class="fl full"><label class="fl-label">🔧 Workarounds</label><textarea class="ef" data-key="st${n}-workarounds" placeholder="How to work around known issues. Exact steps, alternative approaches, config changes..."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+function updatePlat(sel,n){
+  const d=document.getElementById('step-'+n);
+  if(d)d.dataset.p=sel.value;
+}
+
+// ── CHECKLIST ──
+function addCheck(){
+  counts.checks++;
+  const n=counts.checks;
+  const c=document.getElementById('c-checklist');
+  const d=document.createElement('div');
+  d.className='chk-item';d.id='chk-'+n;
+  d.innerHTML=`<input type="checkbox" onchange="toggleChk(this,'chk-${n}')">
+  <div class="chk-txt">
+    <input class="chk-lbl" type="text" data-key="ck${n}-lbl" placeholder="Checklist item title...">
+    <input class="chk-desc" type="text" data-key="ck${n}-desc" placeholder="Notes or description...">
+  </div>
+  <select style="background:#f0f3f8;border:1px solid var(--border);border-radius:4px;padding:3px 6px;font-size:10px;font-family:'DM Sans',sans-serif;outline:none" data-key="ck${n}-sev">
+    <option>🔴 Critical</option><option>🟡 Warning</option><option>🟢 Optional</option>
+  </select>
+  <button class="dyn-del" onclick="del('chk-${n}')">✕</button>`;
+  c.appendChild(d);
+}
+
+function toggleChk(cb,id){
+  const el=document.getElementById(id);
+  if(el)el.classList.toggle('done',cb.checked);
+}
+
+function resetChecks(){
+  document.querySelectorAll('.chk-item input[type=checkbox]').forEach(cb=>{
+    cb.checked=false;
+    const el=cb.closest('.chk-item');
+    if(el)el.classList.remove('done');
+  });
+}
+
+// ── ISSUES ──
+function addIssue(){
+  counts.issues++;
+  const n=counts.issues;
+  const c=document.getElementById('c-issues');
+  const d=document.createElement('div');
+  d.className='card';d.id='issue-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+    <select class="ef-sm" data-key="is${n}-status" style="width:150px;resize:none">
+      <option>🔴 Open</option><option>🟡 Investigating</option><option>🟢 Resolved</option><option>⚪ Won't Fix</option>
+    </select>
+    <input type="text" class="ef-sm" data-key="is${n}-title" placeholder="Issue title..." style="flex:1">
+    <button class="dyn-del" onclick="del('issue-${n}')">✕</button>
+  </div>
+  <div class="grid2">
+    <div class="fl"><label class="fl-label">🐛 Issue Description</label><textarea class="ef" data-key="is${n}-desc" placeholder="Describe the issue in full detail..."></textarea></div>
+    <div class="fl"><label class="fl-label">🔁 Steps to Reproduce</label><textarea class="ef" data-key="is${n}-repro" placeholder="Exact steps to trigger this issue..."></textarea></div>
+    <div class="fl"><label class="fl-label">💥 Impact</label><textarea class="ef" data-key="is${n}-impact" placeholder="What breaks or fails? How critical is it? Which phases/steps are affected?"></textarea></div>
+    <div class="fl"><label class="fl-label">🔧 Workaround</label><textarea class="ef" data-key="is${n}-workaround" placeholder="Current workaround — exact steps if available..."></textarea></div>
+  </div>`;
+  c.appendChild(d);
+}
+
+// ── API BLOCKS ──
+function addApi(){
+  counts.apis++;
+  const n=counts.apis;
+  const c=document.getElementById('c-api');
+  const d=document.createElement('div');
+  d.className='card';d.id='api-'+n;
+  d.innerHTML=`<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+    <input type="text" class="ef-sm" data-key="ap${n}-name" placeholder="Endpoint / payload name..." style="flex:1">
+    <input type="text" class="ef-sm" data-key="ap${n}-phase" placeholder="Phase / step" style="width:120px">
+    <button class="dyn-del" onclick="del('api-${n}')">✕</button>
+  </div>
+  <div class="fl"><label class="fl-label">Payload / Schema</label><textarea class="ef mono" data-key="ap${n}-payload" style="min-height:120px" placeholder='{\n  "mondayItemId": "<from session state>",\n  "columnId": "text_...",\n  "markdownContent": "<full content>"\n}'></textarea></div>
+  <div class="fl"><label class="fl-label">Rules & Notes</label><input type="text" class="ef-sm" data-key="ap${n}-notes" placeholder="Constraints, gotchas, required sequence..."></div>`;
+  c.appendChild(d);
+}
+
+// ── GENERIC DELETE ──
+function del(id){
+  const el=document.getElementById(id);
+  if(el)el.remove();
+}
+
+// ════════════════════════════════════════════
+// SAVE / LOAD / EXPORT
+// ════════════════════════════════════════════
+
+const SAVE_KEY='wf-doc-v1';
+
+function collectData(){
+  const d={counts:{...counts},cells:{},_ts:new Date().toISOString()};
+  
+  // data-key elements
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const k=el.dataset.key;
+    if(!k)return;
+    if(el.tagName==='TEXTAREA'||el.tagName==='INPUT')d[k]=el.value;
+    else if(el.tagName==='SELECT')d[k]=el.value;
+    else if(el.contentEditable==='true')d[k]=el.innerHTML;
+  });
+  
+  // contenteditable TDs — indexed by tbody id + position
+  document.querySelectorAll('tbody[id]').forEach(tb=>{
+    const rows=[...tb.rows];
+    rows.forEach((tr,ri)=>{
+      [...tr.cells].forEach((td,ci)=>{
+        if(td.contentEditable==='true')
+          d.cells[`${tb.id}:${ri}:${ci}`]=td.innerHTML;
+      });
+    });
+  });
+  
+  // checkbox states
+  document.querySelectorAll('.chk-item').forEach(item=>{
+    const cb=item.querySelector('input[type=checkbox]');
+    if(cb&&item.id)d['cb:'+item.id]=cb.checked;
+  });
+  
+  return d;
+}
+
+function saveAll(){
+  const d=collectData();
+  localStorage.setItem(SAVE_KEY,JSON.stringify(d));
+  const t=new Date(d._ts);
+  document.getElementById('saveTs').textContent=`Saved ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+  toast('✅ Documentation saved!');
+}
+
+function loadAll(){
+  const raw=localStorage.getItem(SAVE_KEY);
+  if(!raw)return;
+  let d;
+  try{d=JSON.parse(raw)}catch{return}
+  
+  // Recreate dynamic structure first
+  const c=d.counts||{};
+  for(let i=0;i<(c.phases||0);i++)addPhase();
+  for(let i=0;i<(c.gates||0);i++)addGate();
+  for(let i=0;i<(c.rules||0);i++)addRule();
+  for(let i=0;i<(c.prompts||0);i++)addPrompt();
+  for(let i=0;i<(c.nodes||0);i++)addNode();
+  for(let i=0;i<(c.steps||0);i++)addStep();
+  for(let i=0;i<(c.checks||0);i++)addCheck();
+  for(let i=0;i<(c.issues||0);i++)addIssue();
+  for(let i=0;i<(c.apis||0);i++)addApi();
+  for(let i=0;i<(c.swims||0);i++)addSwim();
+  
+  // Restore data-key fields
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const k=el.dataset.key;
+    if(!(k in d))return;
+    if(el.tagName==='TEXTAREA'||el.tagName==='INPUT')el.value=d[k];
+    else if(el.tagName==='SELECT')el.value=d[k];
+    else if(el.contentEditable==='true')el.innerHTML=d[k];
+  });
+  
+  // Restore platform on step cards
+  for(let i=1;i<=counts.steps;i++){
+    const k='st'+i+'-platform';
+    if(d[k]){
+      const card=document.getElementById('step-'+i);
+      if(card)card.dataset.p=d[k];
+    }
+  }
+  
+  // Restore TDs
+  document.querySelectorAll('tbody[id]').forEach(tb=>{
+    [...tb.rows].forEach((tr,ri)=>{
+      [...tr.cells].forEach((td,ci)=>{
+        const k=`${tb.id}:${ri}:${ci}`;
+        if(k in d.cells)td.innerHTML=d.cells[k];
+      });
+    });
+  });
+  
+  // Restore checkboxes
+  document.querySelectorAll('.chk-item').forEach(item=>{
+    const cb=item.querySelector('input[type=checkbox]');
+    if(cb&&item.id){
+      const val=d['cb:'+item.id];
+      if(val){cb.checked=true;item.classList.add('done');}
+    }
+  });
+  
+  if(d._ts){
+    const t=new Date(d._ts);
+    document.getElementById('saveTs').textContent=`Last saved ${t.toLocaleDateString()} ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+  }
+}
+
+function exportDoc(){
+  saveAll();
+  // Embed saved data directly into the exported file
+  const saved=localStorage.getItem(SAVE_KEY)||'{}';
+  let html=document.documentElement.outerHTML;
+  // Inject a restore script right before </body>
+  const injectScript=`<script>
+(function(){
+  const k='${SAVE_KEY}';
+  if(!localStorage.getItem(k)){
+    localStorage.setItem(k,${JSON.stringify(saved)});
+  }
+})();
+<\/script>`;
+  html=html.replace('</body>',injectScript+'</body>');
+  const blob=new Blob(['<!DOCTYPE html>\n'+html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const title=document.querySelector('[data-key="m-title"]');
+  const name=(title?title.textContent.trim()||'workflow-doc':'workflow-doc').replace(/\s+/g,'-').toLowerCase();
+  a.download=name+'.html';
+  a.click();
+  toast('📄 Exported as HTML — file includes all saved data!');
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',()=>{
+  // Set today's date
+  const de=document.getElementById('m-date');
+  if(de&&!de.textContent.trim()||de.textContent==='—')
+    de.textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  
+  // Load saved data
+  loadAll();
+  
+  // Auto-save every 90s if there's saved data
+  setInterval(()=>{if(localStorage.getItem(SAVE_KEY))saveAll();},90000);
+});
+</script>
+</body>
+</html>
