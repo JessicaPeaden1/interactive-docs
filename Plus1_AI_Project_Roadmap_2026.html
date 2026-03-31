@@ -1,0 +1,2202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Plus 1 Technology — AI Project Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:       #1e2d8a;
+    --navy-dim:   #e8ecf8;
+    --navy-mid:   #c5ceed;
+    --cyan:       #29abe2;
+    --cyan-dim:   #e0f4fc;
+    --cyan-mid:   #a8ddf5;
+
+    --accent:     var(--navy);
+    --accent2:    var(--cyan);
+
+    --bg:         #f4f6fb;
+    --bg2:        #ffffff;
+    --bg3:        #eef1f8;
+    --bg4:        #f9fafd;
+
+    --border:     #dce2f0;
+    --border2:    #c8d0e8;
+
+    --text:       #1a2040;
+    --muted:      #5a6589;
+    --subtle:     #8e9ab8;
+
+    --green:      #16a34a;
+    --green-bg:   #f0fdf4;
+    --green-bdr:  #bbf7d0;
+    --yellow:     #b45309;
+    --yellow-bg:  #fffbeb;
+    --yellow-bdr: #fde68a;
+    --red:        #dc2626;
+    --red-bg:     #fef2f2;
+    --red-bdr:    #fecaca;
+    --purple:     #7c3aed;
+    --purple-bg:  #f5f3ff;
+    --purple-bdr: #ddd6fe;
+    --teal:       #0f766e;
+    --teal-bg:    #f0fdfa;
+    --teal-bdr:   #99f6e4;
+    --orange:     #c2410c;
+    --orange-bg:  #fff7ed;
+    --orange-bdr: #fed7aa;
+
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(30,45,138,0.18);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    gap: 24px;
+  }
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .logo-svg { height: 28px; width: auto; }
+  .header-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.2); }
+  .header-label { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500; letter-spacing: 0.03em; }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+  }
+  .version-badge {
+    background: rgba(41,171,226,0.25);
+    color: #7dd3fc;
+    border: 1px solid rgba(41,171,226,0.4);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .header-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #2a3ea8 60%, #1a5fa8 100%);
+    border-bottom: 3px solid var(--cyan);
+    padding: 32px 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 85% 0%, rgba(41,171,226,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1200px; margin: 0 auto; }
+  .project-header-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 20px;
+  }
+  .project-type-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .type-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 4px;
+    border: 1px solid;
+    font-family: var(--mono);
+  }
+  .type-badge.automation  { color: #7dd3fc; border-color: rgba(125,211,252,0.4); background: rgba(125,211,252,0.1); }
+  .type-badge.llm         { color: #c4b5fd; border-color: rgba(196,181,253,0.4); background: rgba(196,181,253,0.1); }
+  .type-badge.agent       { color: #5eead4; border-color: rgba(94,234,212,0.4);  background: rgba(94,234,212,0.1); }
+  .type-badge.chatbot     { color: #86efac; border-color: rgba(134,239,172,0.4); background: rgba(134,239,172,0.1); }
+  .type-badge.integration { color: #93c5fd; border-color: rgba(147,197,253,0.4); background: rgba(147,197,253,0.1); }
+  .type-badge.rag         { color: #fde68a; border-color: rgba(253,230,138,0.4); background: rgba(253,230,138,0.1); }
+  .type-badge.analytics   { color: #fca5a5; border-color: rgba(252,165,165,0.4); background: rgba(252,165,165,0.1); }
+
+  .project-title {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .project-subtitle { color: rgba(255,255,255,0.65); font-size: 13px; }
+  .project-subtitle span { color: rgba(255,255,255,0.9); font-weight: 500; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    min-width: 260px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+  .stat-card .s-label { font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+  .stat-card .s-value { font-weight: 700; font-size: 14px; color: var(--cyan); }
+  .stat-card .s-sub   { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+
+  .meta-row {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .meta-row .meta-item { display: flex; align-items: center; gap: 6px; }
+  .meta-row .meta-item strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+  .meta-row .clickup-link {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 6px;
+    color: #7dd3fc;
+    text-decoration: none;
+    font-size: 12px;
+    padding: 4px 12px;
+    border: 1px solid rgba(125,211,252,0.35);
+    border-radius: 6px;
+    background: rgba(125,211,252,0.08);
+    transition: all 0.15s;
+  }
+  .meta-row .clickup-link:hover { background: rgba(125,211,252,0.16); }
+
+  /* ── TABS ── */
+  .tabs-nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(30,45,138,0.06);
+    position: relative;
+    display: flex;
+    align-items: stretch;
+  }
+  .tabs-scroll-btn {
+    flex-shrink: 0;
+    width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg2);
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 16px;
+    z-index: 2;
+    transition: all 0.15s;
+    border-bottom: 1px solid transparent;
+  }
+  .tabs-scroll-btn:hover { color: var(--navy); background: var(--bg3); }
+  .tabs-scroll-btn.left  { border-right: 1px solid var(--border); box-shadow:  3px 0 8px rgba(30,45,138,0.06); }
+  .tabs-scroll-btn.right { border-left:  1px solid var(--border); box-shadow: -3px 0 8px rgba(30,45,138,0.06); }
+  .tabs-scroll-btn.hidden { opacity: 0; pointer-events: none; }
+
+  .tabs-bar { flex: 1; overflow-x: auto; scrollbar-width: none; }
+  .tabs-bar::-webkit-scrollbar { display: none; }
+  .tabs-inner { display: flex; gap: 0; width: max-content; min-width: 100%; }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 13px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: var(--sans);
+  }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+  .tab-icon { font-size: 13px; }
+
+  /* ── CONTENT ── */
+  .content-area { max-width: 1200px; margin: 0 auto; padding: 28px 32px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .section-desc { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+
+  /* Cards */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 3px rgba(30,45,138,0.05);
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card p { color: var(--muted); font-size: 13px; line-height: 1.75; }
+  .card p strong { color: var(--text); }
+
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px; }
+
+  .goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .goal-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .goal-item .gi-icon  { font-size: 20px; margin-bottom: 8px; }
+  .goal-item .gi-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--text); }
+  .goal-item .gi-desc  { color: var(--muted); font-size: 12px; line-height: 1.55; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th {
+    background: var(--bg3);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  .data-table td:first-child { color: var(--text); font-weight: 500; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--bg4); }
+
+  .checkpoint-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+  .checkpoint-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(30,45,138,0.05);
+  }
+  .checkpoint-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .checkpoint-card.c1::before { background: var(--cyan); }
+  .checkpoint-card.c2::before { background: var(--navy); }
+  .checkpoint-card.c3::before { background: var(--green); }
+  .checkpoint-card .cp-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
+  .checkpoint-card .cp-title { font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text); }
+  .checkpoint-card ul { color: var(--muted); font-size: 12px; padding-left: 14px; }
+  .checkpoint-card ul li { margin-bottom: 3px; line-height: 1.5; }
+  .checkpoint-card ul li::marker { color: var(--cyan); }
+
+  .scope-section { margin-bottom: 22px; }
+  .scope-section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .scope-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .scope-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .scope-item .si-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .scope-item .si-title { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 3px; }
+  .scope-item .si-body  { color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+  .oos-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .oos-item {
+    background: var(--red-bg);
+    border: 1px solid var(--red-bdr);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .oos-item strong { display: block; color: var(--red); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+
+  /* Phase cards */
+  .phase-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(30,45,138,0.06);
+  }
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 12px 0 0 12px;
+  }
+  .phase-card.low::before    { background: var(--green); }
+  .phase-card.medium::before { background: var(--yellow); }
+  .phase-card.high::before   { background: var(--red); }
+  .phase-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .phase-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--navy-dim);
+    border: 1px solid var(--navy-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--navy);
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+  .phase-name { font-weight: 700; font-size: 16px; color: var(--text); }
+  .phase-purpose { color: var(--muted); font-size: 13px; margin-top: 3px; }
+  .phase-meta-right { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .risk-pill {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: var(--mono);
+  }
+  .risk-pill.high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-bdr); }
+  .risk-pill.medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bdr); }
+  .risk-pill.low    { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-bdr); }
+  .duration-tag {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-family: var(--mono);
+  }
+  .phase-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  .phase-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+  .phase-col ul { padding-left: 14px; }
+  .phase-col ul li { font-size: 12px; color: var(--muted); margin-bottom: 4px; line-height: 1.5; }
+  .phase-col ul li::marker { color: var(--cyan); }
+  .criteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .criteria-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .criteria-box h5 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 5px; }
+  .criteria-box p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Milestones */
+  .milestone-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: start;
+    box-shadow: 0 1px 3px rgba(30,45,138,0.04);
+  }
+  .m-num {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--navy-dim);
+    border: 1px solid var(--navy-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+  .m-main .m-title    { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .m-main .m-output   { color: var(--cyan); font-size: 12px; margin-bottom: 6px; font-style: italic; }
+  .m-main .m-criteria { color: var(--muted); font-size: 12px; line-height: 1.6; }
+  .m-side { text-align: right; flex-shrink: 0; }
+  .m-side .m-phase  { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+  .m-side .m-owner  { font-size: 12px; font-weight: 600; color: var(--text); }
+  .m-side .m-target { font-family: var(--mono); font-size: 11px; color: var(--navy); margin-top: 3px; }
+  .m-side .m-time   { font-family: var(--mono); font-size: 10px; color: var(--muted); background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; margin-top: 5px; display: inline-block; }
+  .blocker-flag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 600;
+    background: var(--yellow-bg); color: var(--yellow);
+    border: 1px solid var(--yellow-bdr);
+    border-radius: 4px; padding: 2px 8px; margin-top: 5px;
+  }
+
+  /* Critical path */
+  .cp-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(30,45,138,0.05);
+  }
+  .cp-chain { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin-top: 12px; row-gap: 8px; }
+  .cp-step {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .cp-step.blocker { border-color: var(--red-bdr);    background: var(--red-bg);    color: var(--red); }
+  .cp-step.client  { border-color: var(--yellow-bdr); background: var(--yellow-bg); color: var(--yellow); }
+  .cp-step.gate    { border-color: var(--green-bdr);  background: var(--green-bg);  color: var(--green); }
+  .cp-arrow { color: var(--muted); padding: 0 6px; font-size: 14px; }
+
+  /* Blocker table */
+  .blocker-sev {
+    display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 2px 8px; border-radius: 4px;
+  }
+  .blocker-sev.build  { background: var(--red-bg);    color: var(--red); }
+  .blocker-sev.warn   { background: var(--yellow-bg); color: var(--yellow); }
+  .blocker-sev.vendor { background: var(--purple-bg); color: var(--purple); }
+  .data-table td strong { color: var(--text); font-size: 13px; display: block; margin-bottom: 2px; }
+  .data-table td small  { color: var(--muted); font-size: 11px; display: block; }
+  .data-table td:first-child { font-family: var(--mono); color: var(--navy); font-size: 11px; font-weight: 600; }
+
+  /* Risk cards */
+  .risk-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left-width: 4px;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(30,45,138,0.04);
+  }
+  .risk-card.high   { border-left-color: var(--red); }
+  .risk-card.medium { border-left-color: var(--yellow); }
+  .risk-card.low    { border-left-color: var(--green); }
+  .risk-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .risk-id { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--navy); }
+  .risk-title { font-weight: 600; font-size: 13px; color: var(--text); flex: 1; }
+  .impact-pill {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 2px 8px; border-radius: 20px; font-family: var(--mono);
+  }
+  .impact-pill.high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-bdr); }
+  .impact-pill.medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bdr); }
+  .impact-pill.low    { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-bdr); }
+  .risk-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .risk-col h5 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 4px; }
+  .risk-col p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Open Items */
+  .build-block-banner {
+    background: var(--red-bg);
+    border: 1px solid var(--red-bdr);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--red);
+    margin-bottom: 20px;
+  }
+  .open-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(30,45,138,0.04);
+  }
+  .open-item.blocking { border-left: 4px solid var(--red); }
+  .open-item-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .open-item-id { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--navy); }
+  .open-item-title { font-weight: 600; font-size: 13px; color: var(--text); }
+  .open-item-desc { color: var(--muted); font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+  .open-item-footer { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+  .oi-meta { display: flex; gap: 5px; font-size: 11px; }
+  .oi-meta .label { color: var(--subtle); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .oi-meta .value { color: var(--text); }
+
+  /* Tags */
+  .tag {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px;
+    font-family: var(--mono); border: 1px solid;
+  }
+  .tag-red    { background: var(--red-bg);    color: var(--red);    border-color: var(--red-bdr); }
+  .tag-yellow { background: var(--yellow-bg); color: var(--yellow); border-color: var(--yellow-bdr); }
+  .tag-green  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-bdr); }
+  .tag-blue   { background: var(--navy-dim);  color: var(--navy);   border-color: var(--navy-mid); }
+  .tag-cyan   { background: var(--cyan-dim);  color: #0077aa;       border-color: var(--cyan-mid); }
+  .tag-purple { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-bdr); }
+  .tag-gray   { background: var(--bg3);       color: var(--muted);  border-color: var(--border); }
+  .tag-teal   { background: var(--teal-bg);   color: var(--teal);   border-color: var(--teal-bdr); }
+  .tag-orange { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-bdr); }
+
+  /* Notices */
+  .notice {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    border: 1px solid;
+  }
+  .notice.warn    { background: var(--yellow-bg); border-color: var(--yellow-bdr); color: var(--yellow); }
+  .notice.info    { background: var(--cyan-dim);  border-color: var(--cyan-mid);  color: #0077aa; }
+  .notice.success { background: var(--green-bg);  border-color: var(--green-bdr); color: var(--green); }
+  .notice.error   { background: var(--red-bg);    border-color: var(--red-bdr);   color: var(--red); }
+  .notice .n-icon { font-size: 15px; flex-shrink: 0; }
+
+  /* Tool/Integration Track (replaces Procurement) */
+  .tool-steps { display: flex; align-items: stretch; gap: 0; margin: 16px 0; overflow-x: auto; }
+  .tool-step {
+    flex: 1; min-width: 140px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-right: none;
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .tool-step:last-child { border-right: 1px solid var(--border); border-radius: 0 8px 8px 0; }
+  .tool-step:first-child { border-radius: 8px 0 0 8px; }
+  .tool-step.done    { background: var(--green-bg);  border-color: var(--green-bdr); }
+  .tool-step.active  { background: var(--cyan-dim);  border-color: var(--cyan-mid); }
+  .ts-icon  { font-size: 20px; margin-bottom: 6px; }
+  .ts-label { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 3px; }
+  .ts-date  { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .ts-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; color: var(--muted); }
+  .ts-status.done-s   { color: var(--green); }
+  .ts-status.active-s { color: #0077aa; }
+  .ts-status.pending  { color: var(--subtle); }
+
+  /* Timeline */
+  .timeline-track { padding: 4px 0; position: relative; margin-bottom: 20px; }
+  .tl-line { position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-week { position: relative; padding-left: 44px; margin-bottom: 20px; }
+  .tl-dot {
+    position: absolute; left: 8px; top: 4px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--bg2);
+    border: 3px solid var(--border);
+  }
+  .tl-dot.pre    { border-color: var(--red); }
+  .tl-dot.active { border-color: var(--cyan); background: var(--cyan); }
+  .tl-dot.done   { border-color: var(--green); background: var(--green); }
+  .tl-week-label { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .tl-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px; background: var(--navy-dim); color: var(--navy); border: 1px solid var(--navy-mid); font-family: var(--mono); }
+  .tl-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .tl-card h4 { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .tl-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Next Actions */
+  .action-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: start;
+  }
+  .a-num {
+    width: 32px; height: 32px;
+    background: var(--navy);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 13px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+  .a-main .a-action { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+  .a-main .a-dep    { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .a-side { text-align: right; }
+  .a-side .a-owner  { font-weight: 600; font-size: 12px; color: var(--text); }
+  .a-side .a-target { font-family: var(--mono); font-size: 11px; color: var(--navy); margin-top: 3px; }
+  .a-side .a-risk   { font-size: 11px; color: var(--red); margin-top: 4px; }
+
+  /* ClickUp */
+  .cu-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .cu-step:last-child { border-bottom: none; }
+  .cu-step-num {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: var(--navy); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 12px; font-weight: 700; color: white;
+  }
+  .cu-step h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .cu-step p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .ms-ref-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .ms-ref-table th { background: var(--bg3); color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .ms-ref-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  .ms-ref-table td:first-child { font-weight: 600; color: var(--text); }
+  .ms-ref-table td:nth-child(2) { font-family: var(--mono); color: var(--navy); }
+  .ms-ref-table tr:last-child td { border-bottom: none; }
+
+  /* Code blocks */
+  .code-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+  .code-brace { color: var(--text); font-weight: 700; }
+  .code-key   { color: var(--navy); }
+  .code-str   { color: var(--green); }
+
+  /* Checklist */
+  .checklist { font-size: 12px; color: var(--muted); line-height: 2; }
+
+  /* Spacer */
+  .spacer-16 { height: 16px; }
+
+  /* Model/Data track card */
+  .model-card {
+    background: var(--purple-bg);
+    border: 1px solid var(--purple-bdr);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .model-card .mc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--purple); margin-bottom: 4px; }
+  .model-card .mc-value { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .model-card .mc-sub   { font-size: 12px; color: var(--muted); }
+
+  /* Site footer */
+  .site-footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.55);
+    text-align: center;
+    font-size: 11px;
+    padding: 14px 32px;
+  }
+  .site-footer strong { color: rgba(255,255,255,0.85); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .project-header-grid { grid-template-columns: 1fr; }
+    .stats-grid           { grid-template-columns: repeat(3,1fr); min-width: 0; }
+    .checkpoint-grid      { grid-template-columns: 1fr; }
+    .two-col, .three-col  { grid-template-columns: 1fr; }
+    .phase-cols           { grid-template-columns: 1fr; }
+    .scope-items, .oos-items { grid-template-columns: 1fr; }
+    .milestone-item       { grid-template-columns: 1fr; }
+    .m-side, .a-side      { grid-column: 2; text-align: left; }
+    .risk-body            { grid-template-columns: 1fr; }
+    .card-grid            { grid-template-columns: 1fr; }
+    .content-area         { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-block">
+      <svg class="logo-svg" viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg" fill="white">
+        <text x="0" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">PLUS</text>
+        <circle cx="208" cy="36" r="34" fill="none" stroke="white" stroke-width="7"/>
+        <text x="200" y="47" font-family="Arial Black, sans-serif" font-weight="900" font-size="26" fill="white">+1</text>
+        <text x="243" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">NE</text>
+        <text x="18" y="78" font-family="Arial, sans-serif" font-weight="400" font-size="13" letter-spacing="8">TECHNOLOGY</text>
+      </svg>
+      <div class="header-divider"></div>
+      <span class="header-label">AI Project Roadmap</span>
+    </div>
+    <div class="header-meta">
+      <span class="version-badge">AI Roadmap v1.0</span>
+      <span class="header-dot"></span>
+      <span>[Client Name] · AI Implementation</span>
+      <span class="header-dot"></span>
+      <span>Confidential</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="project-header-grid">
+      <div>
+        <div class="project-type-badges">
+          <span class="type-badge automation">Automation</span>
+          <!-- <span class="type-badge llm">LLM</span> -->
+          <!-- <span class="type-badge agent">Agent</span> -->
+          <!-- <span class="type-badge chatbot">Chatbot</span> -->
+          <!-- <span class="type-badge integration">Integration</span> -->
+          <!-- <span class="type-badge rag">RAG</span> -->
+          <!-- <span class="type-badge analytics">Analytics</span> -->
+        </div>
+        <div class="project-title">[Client Name] — [Brief AI Project Description]</div>
+        <div class="project-subtitle">
+          Plus 1 Technology AI implementation roadmap ·
+          <span>[Start Date]</span> through <span>[End Date]</span> ·
+          Confidential — Do Not Distribute
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="s-label">Go-Live</div><div class="s-value">~[Date]</div><div class="s-sub">Target</div></div>
+        <div class="stat-card"><div class="s-label">Duration</div><div class="s-value">[X] wks</div><div class="s-sub">Estimated</div></div>
+        <div class="stat-card"><div class="s-label">Phase</div><div class="s-value">[N]</div><div class="s-sub">of [Total]</div></div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item">👤 <strong>Client:</strong> [Client Name]</div>
+      <div class="meta-item">📋 <strong>PM:</strong> [Project Manager]</div>
+      <div class="meta-item">🤖 <strong>AI Architect:</strong> [Lead Builder]</div>
+      <div class="meta-item">📅 <strong>Kickoff:</strong> [Kickoff Date]</div>
+      <div class="meta-item">🔧 <strong>Platform:</strong> [Primary Tool / Stack]</div>
+      <a class="clickup-link" href="#" target="_blank">🔗 View in ClickUp</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABS ═══ -->
+<nav class="tabs-nav" id="tabsNav">
+  <button class="tabs-scroll-btn left hidden" id="scrollLeft" onclick="scrollTabs(-1)" title="Scroll left">&#8249;</button>
+  <div class="tabs-bar" id="tabsBar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('howto',this)"><span class="tab-icon">📖</span> How to Use</button>
+    <button class="tab-btn" onclick="showTab('summary',this)"><span class="tab-icon">📋</span> Summary &amp; Goals</button>
+    <button class="tab-btn" onclick="showTab('scope',this)"><span class="tab-icon">🔲</span> Scope</button>
+    <button class="tab-btn" onclick="showTab('phases',this)"><span class="tab-icon">🏗</span> Phased Plan</button>
+    <button class="tab-btn" onclick="showTab('milestones',this)"><span class="tab-icon">🎯</span> Milestones</button>
+    <button class="tab-btn" onclick="showTab('blockers',this)"><span class="tab-icon">🚧</span> Blockers &amp; Critical Path</button>
+    <button class="tab-btn" onclick="showTab('risks',this)"><span class="tab-icon">⚠️</span> Risk Register</button>
+    <button class="tab-btn" onclick="showTab('openitems',this)"><span class="tab-icon">❓</span> Open Items</button>
+    <button class="tab-btn" onclick="showTab('tooltrack',this)"><span class="tab-icon">🔌</span> Tool &amp; Integration Track</button>
+    <button class="tab-btn" onclick="showTab('timeline',this)"><span class="tab-icon">📅</span> Timeline &amp; Resources</button>
+    <button class="tab-btn" onclick="showTab('actions',this)"><span class="tab-icon">⚡</span> Next Actions</button>
+    <button class="tab-btn" onclick="showTab('clickup',this)"><span class="tab-icon">✅</span> ClickUp Setup</button>
+    <button class="tab-btn" onclick="showTab('resources',this)"><span class="tab-icon">📎</span> Resources</button>
+  </div>
+  </div>
+  <button class="tabs-scroll-btn right" id="scrollRight" onclick="scrollTabs(1)" title="Scroll right">&#8250;</button>
+</nav>
+
+<!-- ═══ CONTENT ═══ -->
+<main style="padding: 0 0 60px;">
+<div class="content-area">
+
+  <!-- ══════════════════════════════════════════
+       HOW TO USE
+  ══════════════════════════════════════════ -->
+  <div id="tab-howto" class="tab-panel active">
+    <div class="section-title">How to Use This AI Roadmap Template</div>
+    <div class="section-desc">Use this template after discovery is complete and the AI/automation project is scoped and moving forward.</div>
+
+    <div class="card">
+      <div class="card-title"><span>🕐</span> When to Use This Template</div>
+      <p>Use this template for any <strong>Plus 1 Technology AI or automation engagement</strong> — workflow automation, LLM integrations, AI agents, chatbots, RAG pipelines, data analytics, or multi-tool orchestration. This is your <strong>scoping and planning deliverable</strong> — shared with the client and your team before any build work begins. It replaces the standard Project Roadmap for AI-specific implementations.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📋</span> What You Need Before Starting</div>
+      <div class="goal-grid" style="margin-bottom:0">
+        <div class="goal-item">
+          <div class="gi-icon">📞</div>
+          <div class="gi-title">Completed Discovery</div>
+          <div class="gi-desc">Call notes, workflow pain points, current process documentation, and confirmed decisions. Data sources and integration targets identified.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">🔧</div>
+          <div class="gi-title">Tool Stack Confirmed</div>
+          <div class="gi-desc">Primary platform confirmed (n8n, Make, Zapier, LangChain, etc.). API access and licensing status known. Model provider decided.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">🔐</div>
+          <div class="gi-title">Access &amp; Credentials Plan</div>
+          <div class="gi-desc">Who provides API keys, credentials, and data access. OAuth vs. service account decisions. Data governance and privacy requirements noted.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">📊</div>
+          <div class="gi-title">Data &amp; Integration Map</div>
+          <div class="gi-desc">Source systems identified. Data quality assessed. Integration endpoints and API availability confirmed. Any PII or compliance constraints documented.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">📝</div>
+          <div class="gi-title">Signed SOW / Contract</div>
+          <div class="gi-desc">Statement of Work executed with AI scope clearly defined. Model usage costs, hosting, and IP ownership addressed.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">👥</div>
+          <div class="gi-title">Stakeholders Identified</div>
+          <div class="gi-desc">Client-side champion, end users, and IT contact confirmed. UAT participants identified. Training and change management owner assigned.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📦</span> What This Template Covers</div>
+      <p style="margin-bottom:14px">A complete, client-ready AI project roadmap covering all sections:</p>
+      <div class="goal-grid" style="margin-bottom:0">
+        <div class="goal-item"><div class="gi-icon">📋</div><div class="gi-title">Summary &amp; Goals</div><div class="gi-desc">Project narrative, business + technical goals, and 30/60/90-day success checkpoints with testable AI-specific metrics.</div></div>
+        <div class="goal-item"><div class="gi-icon">🔲</div><div class="gi-title">Scope Boundaries</div><div class="gi-desc">Explicit in-scope automations/workflows, out-of-scope items, and deferred phases — no ambiguity for client or team.</div></div>
+        <div class="goal-item"><div class="gi-icon">🏗</div><div class="gi-title">Phased Build Plan</div><div class="gi-desc">Foundation → Build → Test &amp; UAT → Deploy &amp; Handoff phases with testable entry/exit criteria for each.</div></div>
+        <div class="goal-item"><div class="gi-icon">🎯</div><div class="gi-title">Milestone Tracker</div><div class="gi-desc">Every milestone with testable acceptance criteria and ClickUp time estimates in milliseconds.</div></div>
+        <div class="goal-item"><div class="gi-icon">🚧</div><div class="gi-title">Blockers &amp; Critical Path</div><div class="gi-desc">Visual critical path chain and sequenced blocker table — API access, credential, and data-dependency specific.</div></div>
+        <div class="goal-item"><div class="gi-icon">⚠️</div><div class="gi-title">Risk Register</div><div class="gi-desc">AI-specific risks: model drift, hallucination, data quality, vendor dependency, scope creep, and change management.</div></div>
+        <div class="goal-item"><div class="gi-icon">❓</div><div class="gi-title">Open Decisions &amp; Gaps</div><div class="gi-desc">Build-blocking items flagged clearly with owners — API keys, data access, model selection, and prompt approval.</div></div>
+        <div class="goal-item"><div class="gi-icon">🔌</div><div class="gi-title">Tool &amp; Integration Track</div><div class="gi-desc">Credential pipeline, API key status, model provider setup, connection testing checklist, and go-live gates.</div></div>
+        <div class="goal-item"><div class="gi-icon">📅</div><div class="gi-title">Timeline &amp; Resources</div><div class="gi-desc">Sprint-by-sprint schedule, resource table, client-side commitments, and UAT window requirements.</div></div>
+        <div class="goal-item"><div class="gi-icon">⚡</div><div class="gi-title">Next Actions</div><div class="gi-desc">Prioritized action list with owners, deadlines, dependencies, and responsibility matrix.</div></div>
+        <div class="goal-item"><div class="gi-icon">✅</div><div class="gi-title">ClickUp Setup Guide</div><div class="gi-desc">Naming rules, millisecond reference chart, correct API entry examples, and pre-entry checklist.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🌐</span> Deploy as a Live GitHub Page</div>
+      <p style="margin-bottom:14px">To publish this roadmap as a shareable live URL, use the <strong>OneDrive → GitHub Pages</strong> n8n workflow:</p>
+      <div class="code-block">1. Upload the HTML file to <strong style="color:var(--text)">OneDrive</strong> with the matching filename
+2. Fire the webhook with this body (swap three values for each new file):
+
+<span class="code-brace">{</span>
+  <span class="code-key">"fileName"</span>: <span class="code-str">"ClientName_AI_Project_Roadmap.html"</span>,
+  <span class="code-key">"repoPath"</span>: <span class="code-str">"ClientName_AI_Project_Roadmap.html"</span>,
+  <span class="code-key">"commitMessage"</span>: <span class="code-str">"Add [Client] AI project roadmap"</span>,
+  <span class="code-key">"mimeType"</span>: <span class="code-str">"text/html"</span>
+<span class="code-brace">}</span>
+
+<span style="color:var(--muted)">mimeType stays "text/html" for all HTML pages. OneDrive upload must happen before firing the webhook.</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>✅</span> Quality Checklist — Before Sharing with Client</div>
+      <div class="two-col" style="margin-bottom:0">
+        <div class="checklist">
+          ☐ All sections complete or explicitly marked TBD<br>
+          ☐ No assumptions stated as facts<br>
+          ☐ Tool stack and API access confirmed or flagged<br>
+          ☐ Data sources and integration map populated<br>
+          ☐ Blockers sequenced — critical path identifiable<br>
+          ☐ AI-specific risks evaluated (drift, hallucination, data quality)
+        </div>
+        <div class="checklist">
+          ☐ All milestone names are clean (no prefixes)<br>
+          ☐ Client-side commitments listed separately<br>
+          ☐ UAT and user acceptance plan documented<br>
+          ☐ ClickUp time estimates converted to milliseconds<br>
+          ☐ 30/60/90-day success checkpoints defined and testable<br>
+          ☐ ClickUp Roadmap Link added at the top
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SUMMARY & GOALS
+  ══════════════════════════════════════════ -->
+  <div id="tab-summary" class="tab-panel">
+    <div class="section-title">Project Summary &amp; Goals</div>
+    <div class="section-desc">What we are building, why it matters, and what success looks like at every checkpoint.</div>
+
+    <div class="card">
+      <div class="card-title">🧩 Project Summary</div>
+      <p><strong>[Problem being solved or process being automated.]</strong> [Solution approach — what AI tools, models, or automation platform are being used and how.] [Expected outcome for the client: time saved, errors reduced, new capability unlocked.] [Hard constraints shaping the build: data privacy requirements, existing system limitations, no-code boundaries, budget.]</p>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="section-title" style="font-size:16px;">Business Goals</div>
+    <div class="goal-grid" style="margin-top:12px;">
+      <div class="goal-item"><div class="gi-icon">⚡</div><div class="gi-title">[Business Goal 1]</div><div class="gi-desc">[Operational improvement: hours saved per week, manual steps eliminated, throughput increased.]</div></div>
+      <div class="goal-item"><div class="gi-icon">💰</div><div class="gi-title">[Business Goal 2]</div><div class="gi-desc">[Cost or ROI target: reduced labor cost, avoided errors, faster turnaround time.]</div></div>
+      <div class="goal-item"><div class="gi-icon">🎯</div><div class="gi-title">[Business Goal 3]</div><div class="gi-desc">[User or customer experience improvement: faster response times, more consistent outputs, self-service capability.]</div></div>
+    </div>
+
+    <div class="section-title" style="font-size:16px; margin-top:4px;">Technical Goals</div>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="goal-item"><div class="gi-icon">🤖</div><div class="gi-title">[Technical Goal 1]</div><div class="gi-desc">[Systems, APIs, and AI models being connected or deployed. Integration endpoints and data flow targets.]</div></div>
+      <div class="goal-item"><div class="gi-icon">📐</div><div class="gi-title">[Technical Goal 2]</div><div class="gi-desc">[Accuracy, reliability, or latency requirements. Fallback and human-in-the-loop thresholds defined.]</div></div>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="section-title" style="font-size:16px;">Success Metrics</div>
+    <div class="card" style="padding:0;overflow:hidden;margin-top:12px;">
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Baseline (Today)</th><th>30-Day Target</th><th>60-Day Target</th><th>90-Day Target</th></tr></thead>
+        <tbody>
+          <tr><td>[Time saved per workflow / week]</td><td>[Current manual hours]</td><td>[Target]</td><td>[Target]</td><td>[Target]</td></tr>
+          <tr><td>[Automation accuracy rate]</td><td>[Manual error rate]</td><td>[Target %]</td><td>[Target %]</td><td>[Target %]</td></tr>
+          <tr><td>[Throughput / volume processed]</td><td>[Current volume]</td><td>[Target]</td><td>[Target]</td><td>[Target]</td></tr>
+          <tr><td>[User adoption rate]</td><td>0%</td><td>[Target %]</td><td>[Target %]</td><td>[Target %]</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="checkpoint-grid">
+      <div class="checkpoint-card c1">
+        <div class="cp-label">📍 30-Day Checkpoint</div>
+        <div class="cp-title">"Working" at 30 days</div>
+        <ul>
+          <li>[Core workflow running end-to-end]</li>
+          <li>[Integration connections verified]</li>
+          <li>[Initial accuracy benchmark met]</li>
+          <li>[Client champion has tested and approved]</li>
+        </ul>
+      </div>
+      <div class="checkpoint-card c2">
+        <div class="cp-label">📍 60-Day Checkpoint</div>
+        <div class="cp-title">"Stable and adopted" at 60 days</div>
+        <ul>
+          <li>[All users trained and using in production]</li>
+          <li>[Error rate within target threshold]</li>
+          <li>[Monitoring and alerting active]</li>
+          <li>[Edge cases documented and handled]</li>
+        </ul>
+      </div>
+      <div class="checkpoint-card c3">
+        <div class="cp-label">📍 90-Day Checkpoint</div>
+        <div class="cp-title">Full adoption &amp; optimization</div>
+        <ul>
+          <li>[ROI measurable against baseline]</li>
+          <li>[Optimization iterations completed]</li>
+          <li>[Documentation and SOPs delivered]</li>
+          <li>[Handoff to client team complete]</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SCOPE
+  ══════════════════════════════════════════ -->
+  <div id="tab-scope" class="tab-panel">
+    <div class="section-title">Scope Boundaries</div>
+    <div class="section-desc">What is included, what is explicitly excluded, and what is deferred. Ambiguity at this stage costs time later.</div>
+
+    <div class="scope-section">
+      <div class="scope-section-header"><span>✅</span> In Scope</div>
+      <div class="scope-items">
+        <div class="scope-item"><div class="si-icon">🤖</div><div><div class="si-title">[Workflow / Automation 1]</div><div class="si-body">[Specific process being automated, trigger event, and expected output. Which system it connects.]</div></div></div>
+        <div class="scope-item"><div class="si-icon">🔗</div><div><div class="si-title">[Integration 1]</div><div class="si-body">[Specific API or system being connected. Direction of data flow. Read vs. write access required.]</div></div></div>
+        <div class="scope-item"><div class="si-icon">💬</div><div><div class="si-title">[AI Feature / Model Use Case]</div><div class="si-body">[LLM use case, prompt workflow, or AI-assisted task being built. Model provider and deployment method.]</div></div></div>
+        <div class="scope-item"><div class="si-icon">📊</div><div><div class="si-title">[Reporting / Output Deliverable]</div><div class="si-body">[Automated report, notification, dashboard, or structured output being produced by the system.]</div></div></div>
+        <div class="scope-item"><div class="si-icon">🎓</div><div><div class="si-title">User Training &amp; Handoff</div><div class="si-body">Training session for [user groups], written SOP, and 30-day post-launch support window.</div></div></div>
+        <div class="scope-item"><div class="si-icon">📝</div><div><div class="si-title">Documentation</div><div class="si-body">As-built workflow documentation, prompt library, and maintenance runbook delivered at project close.</div></div></div>
+      </div>
+    </div>
+
+    <div class="scope-section">
+      <div class="scope-section-header"><span>❌</span> Out of Scope</div>
+      <div class="oos-items">
+        <div class="oos-item"><strong>Hard Wall</strong>[Custom model training or fine-tuning — not included in this engagement. Uses existing foundation models only.]</div>
+        <div class="oos-item"><strong>Hard Wall</strong>[ERP / core system API integration — no API available or access not granted. Client-managed item.]</div>
+        <div class="oos-item"><strong>Excluded</strong>[Historical data migration or data cleaning — client provides clean, structured inputs only.]</div>
+        <div class="oos-item"><strong>Excluded</strong>[Ongoing prompt engineering or model updates post-handoff — covered under separate retainer if needed.]</div>
+        <div class="oos-item"><strong>Client-Managed</strong>[User access management and role provisioning — client IT handles all account setup.]</div>
+        <div class="oos-item"><strong>Excluded</strong>[Custom front-end UI development — uses existing platform interfaces (Slack, Teams, web app, etc.)]</div>
+      </div>
+    </div>
+
+    <div class="scope-section">
+      <div class="scope-section-header"><span>🔮</span> Future Considerations (Post-MVP)</div>
+      <div class="card-grid" style="margin-bottom:0">
+        <div class="goal-item"><div class="gi-icon">🚀</div><div class="gi-title">[Enhancement 1]</div><div class="gi-desc">[Deferred feature or workflow expansion. Why deferred: dependency on Phase 1 stability / budget.]</div></div>
+        <div class="goal-item"><div class="gi-icon">🧠</div><div class="gi-title">[Model Upgrade Path]</div><div class="gi-desc">[Future fine-tuning or custom model consideration once sufficient usage data is collected.]</div></div>
+        <div class="goal-item"><div class="gi-icon">🔗</div><div class="gi-title">[Additional Integration]</div><div class="gi-desc">[Next system to connect once core workflow is stable. Scope and cost TBD.]</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PHASED PLAN
+  ══════════════════════════════════════════ -->
+  <div id="tab-phases" class="tab-panel">
+    <div class="section-title">Phased Build Plan</div>
+    <div class="section-desc">Four standard phases for AI implementation projects. Each phase has testable entry and exit criteria before the next begins.</div>
+
+    <!-- PHASE 1 -->
+    <div class="phase-card low">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">1</div>
+          <div>
+            <div class="phase-name">Foundation</div>
+            <div class="phase-purpose">Establish all prerequisites — credentials, data access, environment setup, and approved workflow logic — before any automation is built.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill low">Low Risk</span>
+          <span class="duration-tag">[X] weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>All API credentials secured and tested</li>
+            <li>Approved workflow logic diagram</li>
+            <li>Data source access confirmed</li>
+            <li>Development environment live</li>
+            <li>Discovery gaps resolved</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>Credential collection and validation</li>
+            <li>Workflow mapping and approval session</li>
+            <li>Sandbox/staging environment setup</li>
+            <li>Data quality assessment</li>
+            <li>Resolve open items from discovery</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>SOW signed and project kicked off</li>
+            <li>Client champion identified</li>
+            <li>Tool stack and platform confirmed</li>
+            <li>Access requests submitted</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>All credentials validated. Workflow logic approved in writing by client. Dev environment live and connection-tested. No open blockers remain.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>Credential delays are the most common Phase 1 blocker. Start access requests on Day 1 of kickoff — do not wait for discovery sign-off.</p></div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-card medium">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">2</div>
+          <div>
+            <div class="phase-name">Build</div>
+            <div class="phase-purpose">Construct the core automation workflows, AI integrations, and data pipelines in the development environment against approved specs.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill medium">Medium Risk</span>
+          <span class="duration-tag">[X] weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>Core workflows built and internally tested</li>
+            <li>AI/LLM integration connected and prompts tuned</li>
+            <li>Error handling and fallback logic implemented</li>
+            <li>Logging and monitoring configured</li>
+            <li>Build sign-off from Plus 1 team</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>Workflow construction in [platform]</li>
+            <li>Prompt engineering and iteration</li>
+            <li>API integration and data mapping</li>
+            <li>Internal QA against test cases</li>
+            <li>Edge case and error path testing</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>Phase 1 exit criteria met</li>
+            <li>All credentials in place</li>
+            <li>Workflow logic approved</li>
+            <li>Test data set ready</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>All workflows execute end-to-end on test data without errors. AI outputs reviewed internally and meet accuracy threshold. Error handling tested and logged.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>Scope creep is highest in this phase. Any additions to the workflow spec require a change request — do not absorb undocumented requests into the build.</p></div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase-card medium">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">3</div>
+          <div>
+            <div class="phase-name">Test &amp; UAT</div>
+            <div class="phase-purpose">Client-side user acceptance testing with real data. Validate accuracy, edge cases, and usability before production deployment.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill medium">Medium Risk</span>
+          <span class="duration-tag">[X] weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>Completed UAT sign-off document</li>
+            <li>All critical bugs resolved</li>
+            <li>Edge cases documented and handled</li>
+            <li>Client approval to proceed to production</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>UAT session facilitation with client users</li>
+            <li>Real-data testing and output review</li>
+            <li>Bug triage and fix cycle</li>
+            <li>Prompt refinement based on feedback</li>
+            <li>Acceptance sign-off collection</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>Phase 2 exit criteria met</li>
+            <li>UAT participants confirmed by client</li>
+            <li>Real test data prepared</li>
+            <li>UAT schedule agreed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>Client signs UAT acceptance document. Zero critical bugs open. AI output accuracy meets agreed threshold. Client champion approves go-live.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>UAT requires active client participation. If client testers are unavailable, go-live slides. Confirm UAT participants and dates before Phase 2 begins.</p></div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase-card low">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">4</div>
+          <div>
+            <div class="phase-name">Deploy &amp; Handoff</div>
+            <div class="phase-purpose">Production deployment, user training, documentation delivery, and transition to steady-state operations.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill low">Low Risk</span>
+          <span class="duration-tag">[X] weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>Production environment live</li>
+            <li>User training session completed</li>
+            <li>As-built workflow documentation</li>
+            <li>Prompt library and maintenance runbook</li>
+            <li>30-day monitoring plan active</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>Production cutover and go-live</li>
+            <li>User training and walkthrough</li>
+            <li>Documentation handoff</li>
+            <li>Monitoring and alerting setup</li>
+            <li>30-day checkpoint scheduled</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>Phase 3 exit criteria met</li>
+            <li>UAT sign-off received</li>
+            <li>Production credentials ready</li>
+            <li>Training date confirmed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>System live in production with no critical issues. Training complete and attendance confirmed. All documentation delivered to client SharePoint. 30-day support window starts.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>Rollback plan required before go-live. Define what "rollback" means for this automation (disable trigger, revert to manual process) and who authorizes it.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MILESTONES
+  ══════════════════════════════════════════ -->
+  <div id="tab-milestones" class="tab-panel">
+    <div class="section-title">Milestone &amp; Acceptance Criteria Tracker</div>
+    <div class="section-desc">Every milestone has a tangible output and a testable acceptance criterion. "It works" is not an acceptance criterion.</div>
+
+    <div class="milestone-item">
+      <div class="m-num">M1</div>
+      <div class="m-main">
+        <div class="m-title">Credential Setup &amp; Environment Ready</div>
+        <div class="m-output">Output: All API keys validated, dev environment live, connections tested</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Every required API returns a successful test call from the build environment. No pending access requests. Environment documented in SharePoint.</div>
+        <div class="blocker-flag">⚠️ Blocked on: [Client provides API keys by Date]</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Foundation</div>
+        <div class="m-owner">[Owner]</div>
+        <div class="m-target">Week [X]</div>
+        <div class="m-time">[Xh] → "[ms]"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M2</div>
+      <div class="m-main">
+        <div class="m-title">Workflow Logic Approved</div>
+        <div class="m-output">Output: Signed workflow diagram and written client approval to proceed</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Client champion reviews and approves workflow logic in writing (email or ClickUp comment). Scope changes documented and change-ordered if applicable.</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Foundation</div>
+        <div class="m-owner">[Owner]</div>
+        <div class="m-target">Week [X]</div>
+        <div class="m-time">[Xh] → "[ms]"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M3</div>
+      <div class="m-main">
+        <div class="m-title">Core Workflow Built &amp; Internally Tested</div>
+        <div class="m-output">Output: Working automation passing all internal QA test cases</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Workflow completes end-to-end on [X] test data sets without error. AI outputs reviewed internally and meet [X]% accuracy threshold. Error paths logged and handled.</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Build</div>
+        <div class="m-owner">[Owner]</div>
+        <div class="m-target">Week [X]</div>
+        <div class="m-time">[Xh] → "[ms]"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M4</div>
+      <div class="m-main">
+        <div class="m-title">UAT Complete &amp; Signed Off</div>
+        <div class="m-output">Output: Completed UAT sign-off document with client signature</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Client users complete UAT test script. Zero critical defects open. AI output accuracy meets agreed threshold on real data. Go-live approval received in writing.</div>
+        <div class="blocker-flag">⚠️ Blocked on: [Client UAT participants confirmed by Date]</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Test &amp; UAT</div>
+        <div class="m-owner">[Owner]</div>
+        <div class="m-target">Week [X]</div>
+        <div class="m-time">[Xh] → "[ms]"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M5</div>
+      <div class="m-main">
+        <div class="m-title">Production Go-Live</div>
+        <div class="m-output">Output: Live automation processing real transactions in production</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Workflow triggers and completes on first [X] real production events without errors. Monitoring alerts active. Rollback plan confirmed. Client PM notified of go-live.</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Deploy &amp; Handoff</div>
+        <div class="m-owner">[Owner]</div>
+        <div class="m-target">Week [X]</div>
+        <div class="m-time">[Xh] → "[ms]"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M6</div>
+      <div class="m-main">
+        <div class="m-title">Training &amp; Documentation Delivered</div>
+        <div class="m-output">Output: Training session completed, all documentation in client SharePoint</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Training attendance confirmed for all target users. As-built docs, prompt library, and maintenance runbook delivered. Client signs project close document.</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Deploy &amp; Handoff</div>
+        <div class="m-owner">[Owner]</div>
+        <div class="m-target">Week [X]</div>
+        <div class="m-time">[Xh] → "[ms]"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOCKERS & CRITICAL PATH
+  ══════════════════════════════════════════ -->
+  <div id="tab-blockers" class="tab-panel">
+    <div class="section-title">Blockers &amp; Critical Path</div>
+    <div class="section-desc">Sequenced dependencies from now to go-live. Red items are build-blocking. Yellow items require client action.</div>
+
+    <div class="cp-box">
+      <div style="font-weight:700;font-size:13px;color:var(--text);">⚡ Critical Path Chain</div>
+      <div class="cp-chain">
+        <div class="cp-step client">Client provides API keys</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">Credential validation</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step client">Client approves workflow logic</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">Core build</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step client">UAT participants confirmed</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">UAT &amp; sign-off</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step gate">Go-Live</div>
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--muted);">
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:14px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);"></span> Client action required</span>
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:14px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--red-bg);border:1px solid var(--red-bdr);"></span> Build-blocking</span>
+        <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--green-bg);border:1px solid var(--green-bdr);"></span> Gate / approval</span>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">🚧 Full Blocker Table</div>
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Blocker</th><th>Severity</th><th>Owner</th><th>Due</th><th>Workaround</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>B-1</td>
+            <td><strong>API credentials not provided</strong><small>Build cannot start without valid API keys for [System]. Every day of delay extends go-live.</small></td>
+            <td><span class="blocker-sev build">Build-Blocking</span></td>
+            <td>[Client IT]</td>
+            <td>[Date]</td>
+            <td>None — hard dependency</td>
+          </tr>
+          <tr>
+            <td>B-2</td>
+            <td><strong>Workflow logic not yet approved</strong><small>Cannot build against unapproved spec. Changes after build begins require change order.</small></td>
+            <td><span class="blocker-sev build">Build-Blocking</span></td>
+            <td>[Client Champion]</td>
+            <td>[Date]</td>
+            <td>Build stub only; full build gated</td>
+          </tr>
+          <tr>
+            <td>B-3</td>
+            <td><strong>Data access / source system not ready</strong><small>Test data set needed before internal QA can begin. Data quality unknown.</small></td>
+            <td><span class="blocker-sev warn">Warning</span></td>
+            <td>[Client IT / PM]</td>
+            <td>[Date]</td>
+            <td>Use synthetic test data for initial build</td>
+          </tr>
+          <tr>
+            <td>B-4</td>
+            <td><strong>UAT participants not confirmed</strong><small>Cannot schedule UAT without named participants. Delays Phase 3 start.</small></td>
+            <td><span class="blocker-sev warn">Warning</span></td>
+            <td>[Client PM]</td>
+            <td>[Date]</td>
+            <td>None — client action required</td>
+          </tr>
+          <tr>
+            <td>B-5</td>
+            <td><strong>Third-party vendor / platform dependency</strong><small>[Vendor name] API availability or rate limits may affect build design.</small></td>
+            <td><span class="blocker-sev vendor">Vendor</span></td>
+            <td>[PM / Vendor]</td>
+            <td>[Date]</td>
+            <td>Evaluate alternative API or fallback path</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚠️ Critical Path Notes</div>
+      <p><strong>Longest delay chain:</strong> API credential delays → workflow approval delays → build start pushed → go-live pushed. Client action on B-1 and B-2 is the single highest-leverage item.<br><br><strong>Buffer recommendation:</strong> Build in [X]-week buffer between UAT completion and go-live for bug fix cycles. Do not schedule go-live back-to-back with UAT sign-off.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       RISK REGISTER
+  ══════════════════════════════════════════ -->
+  <div id="tab-risks" class="tab-panel">
+    <div class="section-title">Risk Register</div>
+    <div class="section-desc">AI-specific risks evaluated for this engagement. High-impact items are escalated immediately — not documented and ignored.</div>
+
+    <div class="risk-card high">
+      <div class="risk-header">
+        <span class="risk-id">R-1</span>
+        <span class="risk-title">AI Output Accuracy / Hallucination</span>
+        <span class="impact-pill high">Impact: High</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: Medium</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>LLM generates incorrect, fabricated, or inconsistent outputs that enter client workflows or are presented to end users without human review.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Define clear accuracy thresholds in UAT. Implement human-in-the-loop review for high-stakes outputs. Add confidence scoring and fallback routing.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Revert to manual process for affected workflow. Engage in prompt re-engineering sprint. Escalate to client and document incident.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>[AI Architect / Lead Builder]</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card high">
+      <div class="risk-header">
+        <span class="risk-id">R-2</span>
+        <span class="risk-title">Scope Creep — Undocumented Workflow Additions</span>
+        <span class="impact-pill high">Impact: High</span>
+        <span class="impact-pill high" style="margin-left:4px;">Likelihood: High</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Client requests additional workflows, automations, or AI features mid-build that were not included in the signed SOW.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Reference scope document at every check-in. Anything outside scope goes through formal change request with cost/timeline impact stated before work begins.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Pause on addition until change order is signed. Document request and defer to post-MVP phase if not approved.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>[Project Manager]</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <span class="risk-id">R-3</span>
+        <span class="risk-title">API / Credential Access Delays</span>
+        <span class="impact-pill high">Impact: High</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: Medium</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Client IT does not provide API keys, OAuth access, or system credentials in time to meet build start date.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Submit access requests on Day 1 of kickoff. Escalate at +3 days if no response. Build with stub/mock data while access is pending.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Adjust timeline formally. Document delay cause and impact. Do not absorb delays silently into the build schedule.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>[PM / Client IT]</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <span class="risk-id">R-4</span>
+        <span class="risk-title">Data Quality Issues</span>
+        <span class="impact-pill medium">Impact: Medium</span>
+        <span class="impact-pill high" style="margin-left:4px;">Likelihood: High</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Source data is incomplete, inconsistently formatted, or contains errors that degrade AI output quality or cause workflow failures.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Conduct data quality assessment in Phase 1. Define minimum data quality standards. Client is responsible for data cleaning unless contracted otherwise.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Add data validation layer to workflow. Flag bad records for human review rather than failing silently. Escalate cleaning requirements to client.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>[AI Architect / Client]</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <span class="risk-id">R-5</span>
+        <span class="risk-title">Low User Adoption / Change Resistance</span>
+        <span class="impact-pill medium">Impact: Medium</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: Medium</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>End users resist or avoid the new AI workflow, reverting to manual processes and negating ROI of the implementation.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Involve end users in UAT. Provide training with real use cases. Ensure client champion is visibly endorsing the system. Document the "why" for users.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Schedule additional training sessions. Identify and address specific objections. Escalate to client leadership if adoption remains low at 30-day checkpoint.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>[Client Champion / PM]</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card low">
+      <div class="risk-header">
+        <span class="risk-id">R-6</span>
+        <span class="risk-title">Third-Party Model / Platform Pricing or Availability Change</span>
+        <span class="impact-pill medium">Impact: Medium</span>
+        <span class="impact-pill low" style="margin-left:4px;">Likelihood: Low</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Model provider (OpenAI, Anthropic, etc.) changes pricing, deprecates a model version, or experiences an outage that affects the build.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Pin model versions where possible. Design prompt architecture to be model-agnostic. Monitor provider announcements throughout build.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Switch to alternative model or provider. Communicate impact and updated timeline to client. Track model costs throughout project.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>[AI Architect]</p></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;margin-top:4px;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">📋 Assumptions Table</div>
+      <table class="data-table">
+        <thead><tr><th>Assumption</th><th>Impact if False</th><th>How to Confirm</th></tr></thead>
+        <tbody>
+          <tr><td>Client data is clean and structured for AI input</td><td>Significant additional build time for data normalization</td><td>Data quality assessment in Phase 1</td></tr>
+          <tr><td>API access will be granted within [X] business days</td><td>Build start delayed; go-live pushed</td><td>Access request submitted Day 1 with deadline</td></tr>
+          <tr><td>Client champion has authority to approve workflow logic</td><td>Re-approval loop adds weeks to Phase 1</td><td>Confirm in kickoff call</td></tr>
+          <tr><td>[Model provider] API meets latency requirements</td><td>User experience degraded; may need architecture change</td><td>Load test in Phase 2 staging</td></tr>
+          <tr><td>[Assumption 5]</td><td>[Impact if false]</td><td>[How to confirm]</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       OPEN ITEMS
+  ══════════════════════════════════════════ -->
+  <div id="tab-openitems" class="tab-panel">
+    <div class="section-title">Open Decisions &amp; Gaps</div>
+    <div class="section-desc">Unresolved questions that affect delivery. Red items are build-blocking and must close before build starts.</div>
+    <div class="build-block-banner"><span>🔴</span><span><strong>[X] Build-Blocking Items</strong> — Must resolve before any automation build work begins.</span></div>
+
+    <div class="open-item blocking">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-1</span>
+        <span class="tag tag-red">⛔ BUILD-BLOCKING</span>
+        <div class="open-item-title">[API credentials not yet provided for [System]]</div>
+      </div>
+      <div class="open-item-desc">Cannot validate connections or begin build without API keys. Every day of delay pushes the build start and go-live date.</div>
+      <div class="open-item-desc" style="color:var(--muted);font-size:12px;">Impact: Build cannot start. Target: resolve before [Date].</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">[Client IT]</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">[Date]</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-cyan">Access</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item blocking">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-2</span>
+        <span class="tag tag-red">⛔ BUILD-BLOCKING</span>
+        <div class="open-item-title">[Workflow logic not yet approved by client champion]</div>
+      </div>
+      <div class="open-item-desc">Cannot build to spec without written approval. Changes after build begins require a formal change order.</div>
+      <div class="open-item-desc" style="color:var(--muted);font-size:12px;">Impact: Build cannot start. Target: resolve before [Date].</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">[Client Champion]</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">[Date]</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-blue">Scope</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-3</span>
+        <div class="open-item-title">[AI model / provider selection not finalized]</div>
+      </div>
+      <div class="open-item-desc">Model selection affects prompt design, cost structure, and latency. Needs to be locked before prompt engineering begins.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">[PM / AI Architect]</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">[Date]</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-purple">Tooling</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-4</span>
+        <div class="open-item-title">[Data governance / PII handling policy not confirmed]</div>
+      </div>
+      <div class="open-item-desc">If client data contains PII, the architecture must be designed to comply with their data handling policy. This affects model routing and logging decisions.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">[Client IT / Legal]</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">[Date]</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr);">Security</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-5</span>
+        <div class="open-item-title">[UAT participants and dates not yet confirmed]</div>
+      </div>
+      <div class="open-item-desc">Phase 3 cannot be scheduled without named UAT participants and available dates. If unresolved, Phase 3 will be delayed regardless of build completion.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">[Client PM]</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">[Date]</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-blue">Scope</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TOOL & INTEGRATION TRACK
+  ══════════════════════════════════════════ -->
+  <div id="tab-tooltrack" class="tab-panel">
+    <div class="section-title">Tool &amp; Integration Track</div>
+    <div class="section-desc">Credential and access pipeline running in parallel to planning. All connections must be validated before build begins.</div>
+    <div class="notice warn"><span class="n-icon">⚠️</span><span><strong>Credential and access setup is on the critical path.</strong> API key requests must be submitted by <strong>[Date]</strong> to hit the <strong>[Build Start Date]</strong> build window. Do not wait for discovery sign-off before submitting access requests.</span></div>
+
+    <div class="card">
+      <div class="card-title">🔌 Integration &amp; Credential Pipeline</div>
+      <div class="tool-steps">
+        <div class="tool-step done"><div class="ts-icon">📝</div><div class="ts-label">Access Requests Submitted</div><div class="ts-date">[Date]</div><div class="ts-status done-s">✓ Done</div></div>
+        <div class="tool-step active"><div class="ts-icon">🔑</div><div class="ts-label">Credentials Received</div><div class="ts-date">[Date]</div><div class="ts-status active-s">In Progress</div></div>
+        <div class="tool-step"><div class="ts-icon">🧪</div><div class="ts-label">Connections Tested</div><div class="ts-date">[Date]</div><div class="ts-status pending">Pending</div></div>
+        <div class="tool-step"><div class="ts-icon">✅</div><div class="ts-label">Environment Validated</div><div class="ts-date">[Date]</div><div class="ts-status pending">Pending</div></div>
+        <div class="tool-step"><div class="ts-icon">🚀</div><div class="ts-label">Build Start</div><div class="ts-date">[Date]</div><div class="ts-status pending">Pending</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">🗂 Integration &amp; Credential Status Table</div>
+      <table class="data-table">
+        <thead><tr><th>System / API</th><th>Purpose</th><th>Auth Type</th><th>Provided By</th><th>Request Date</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>[System 1]</td><td>[What it does in the workflow]</td><td>API Key</td><td>[Client IT]</td><td>[Date]</td><td><span class="tag tag-yellow">Pending</span></td></tr>
+          <tr><td>[System 2]</td><td>[What it does in the workflow]</td><td>OAuth 2.0</td><td>[Client IT]</td><td>[Date]</td><td><span class="tag tag-yellow">Pending</span></td></tr>
+          <tr><td>[AI Model Provider]</td><td>LLM / inference layer</td><td>API Key</td><td>[Plus 1 / Client]</td><td>[Date]</td><td><span class="tag tag-green">Ready</span></td></tr>
+          <tr><td>[Automation Platform]</td><td>Workflow orchestration (n8n / Make / etc.)</td><td>Account Login</td><td>Plus 1</td><td>[Date]</td><td><span class="tag tag-green">Ready</span></td></tr>
+          <tr><td>[Output System]</td><td>[Where results are written or sent]</td><td>Webhook / API</td><td>[Client IT]</td><td>[Date]</td><td><span class="tag tag-gray">Not Started</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🧠 Model &amp; AI Platform Setup</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0;">
+          <div class="model-card"><div class="mc-label">AI Model</div><div class="mc-value">[Model Name]</div><div class="mc-sub">[Provider — OpenAI, Anthropic, etc.]</div></div>
+          <div class="model-card"><div class="mc-label">Version / Tier</div><div class="mc-value">[e.g. GPT-4o / Claude 3.5]</div><div class="mc-sub">Pinned for this build</div></div>
+          <div class="model-card"><div class="mc-label">Hosting</div><div class="mc-value">[Cloud API / Self-hosted]</div><div class="mc-sub">[Vendor or on-prem]</div></div>
+          <div class="model-card"><div class="mc-label">Est. Monthly Cost</div><div class="mc-value">~$[Amount]</div><div class="mc-sub">Based on [X] requests/month</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">✅ Connection Validation Checklist</div>
+        <div class="checklist">
+          ☐ All API keys received and stored in [credential vault]<br>
+          ☐ Each API returns a successful test call from dev environment<br>
+          ☐ OAuth tokens tested and refresh flow verified<br>
+          ☐ Rate limits confirmed for each integration<br>
+          ☐ Data schema mapped from source to target<br>
+          ☐ PII handling confirmed — no sensitive data logged<br>
+          ☐ Error handling tested for each connection<br>
+          ☐ Prod vs. dev environments separated and documented
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">📋 Go-Live Gate Requirements</div>
+        <p><strong>Go-Live Date:</strong> [Target Date]<br><br>
+        <strong>Pre-Go-Live Requirements:</strong><br>
+        All integrations validated in staging<br>
+        UAT sign-off received<br>
+        Monitoring and alerting active<br>
+        Rollback plan documented and approved<br>
+        Training completed<br><br>
+        <strong>Rollback Plan:</strong> [Disable workflow trigger / revert to manual process — describe specifically]<br><br>
+        <strong>Approved By:</strong> [Client contact — pending]</p>
+      </div>
+      <div class="card">
+        <div class="card-title">🔒 Security &amp; Compliance Notes</div>
+        <p><strong>PII in Workflow:</strong> [Yes / No — describe what data is processed]<br><br>
+        <strong>Data Retention Policy:</strong> [How long logs and model inputs are retained]<br><br>
+        <strong>Credential Storage:</strong> [Where API keys are stored — e.g. n8n encrypted credentials, client vault]<br><br>
+        <strong>Compliance Requirements:</strong> [HIPAA / SOC2 / GDPR considerations if applicable]<br><br>
+        <strong>Model Data Policy:</strong> [Does the model provider use inputs for training? Opt-out confirmed?]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TIMELINE & RESOURCES
+  ══════════════════════════════════════════ -->
+  <div id="tab-timeline" class="tab-panel">
+    <div class="section-title">Timeline &amp; Resources</div>
+    <div class="section-desc">Sprint-by-sprint schedule, resource allocation, and client-side commitments required for on-time delivery.</div>
+    <div class="notice info"><span class="n-icon">📅</span><span>Kickoff anchored to <strong>[Kickoff Date]</strong>. Hard dates are confirmed; ranges are estimates pending blocker resolution.</span></div>
+
+    <div class="timeline-track">
+      <div class="tl-line"></div>
+      <div class="tl-week">
+        <div class="tl-dot pre"></div>
+        <div class="tl-week-label">Pre-Kickoff <span class="tl-tag">Gate: Clear Blockers</span></div>
+        <div class="tl-card"><h4>🔐 Pre-Build Gate — All Blockers Must Clear</h4><p>Access requests submitted. Data governance policy confirmed. Model provider selected. Client champion identified and committed. Workflow logic draft shared for pre-review.</p></div>
+      </div>
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 1–2 <span class="tl-tag">Phase 1: Foundation</span></div>
+        <div class="tl-card"><h4>🏗 Foundation — Setup &amp; Approval</h4><p>Kickoff call. Credentials collected and validated. Dev environment provisioned. Workflow logic mapping session with client. Open items resolved. Phase 1 exit criteria met.</p></div>
+      </div>
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 3–5 <span class="tl-tag">Phase 2: Build</span></div>
+        <div class="tl-card"><h4>🔧 Build — Core Automation &amp; AI Integration</h4><p>Core workflow construction. Prompt engineering and iteration. API integration and data mapping. Internal QA test cycle. Error handling and edge case coverage. Build sign-off from Plus 1 team.</p></div>
+      </div>
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 6–7 <span class="tl-tag">Phase 3: UAT</span></div>
+        <div class="tl-card"><h4>🧪 UAT — Client Testing &amp; Acceptance</h4><p>UAT sessions with named client users on real data. Bug triage and fix cycle. Prompt refinements based on feedback. Acceptance sign-off document completed.</p></div>
+      </div>
+      <div class="tl-week">
+        <div class="tl-dot active"></div>
+        <div class="tl-week-label">Week 8 <span class="tl-tag">Phase 4: Deploy &amp; Handoff</span></div>
+        <div class="tl-card"><h4>🚀 Go-Live — Production Deployment &amp; Training</h4><p>Production cutover. User training session. As-built documentation and prompt library delivered. Monitoring active. 30-day support window begins.</p></div>
+      </div>
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">30 / 60 / 90 Days Post-Launch</div>
+        <div class="tl-card"><h4>📊 Post-Launch Checkpoints</h4><p>30-day: Stability review and adoption check. 60-day: Performance against success metrics. 90-day: ROI assessment and optimization sprint if needed. Ongoing retainer or close-out.</p></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">👥 Resource Table</div>
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>Role</th><th>Allocation</th><th>Phase(s)</th><th>Responsibilities</th></tr></thead>
+        <tbody>
+          <tr><td>[PM Name]</td><td>Project Manager</td><td>[X]%</td><td>All</td><td>Client communication, milestone tracking, blocker escalation</td></tr>
+          <tr><td>[Builder Name]</td><td>AI Architect / Lead Builder</td><td>[X]%</td><td>2, 3, 4</td><td>Workflow build, prompt engineering, integration, testing</td></tr>
+          <tr><td>[QA / Support Name]</td><td>QA &amp; UAT Support</td><td>[X]%</td><td>3, 4</td><td>Test case execution, bug documentation, UAT facilitation</td></tr>
+          <tr><td>[Client Champion]</td><td>Client — Champion</td><td>[X]%</td><td>1, 2, 3</td><td>Workflow approval, UAT, go-live sign-off</td></tr>
+          <tr><td>[Client IT]</td><td>Client — IT Contact</td><td>As needed</td><td>1</td><td>API credential provisioning, data access, security review</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">📋 Client-Side Commitments Required</div>
+        <div class="checklist">
+          ☐ API credentials provided by [Date]<br>
+          ☐ Workflow logic reviewed and approved by [Date]<br>
+          ☐ Test data set prepared and provided by [Date]<br>
+          ☐ UAT participants named and scheduled by [Date]<br>
+          ☐ Data governance / PII policy confirmed by [Date]<br>
+          ☐ Training attendees confirmed by [Date]<br>
+          ☐ Go-live approval sign-off by [Date]
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔧 Infrastructure &amp; Tool Access</div>
+        <table class="data-table" style="margin-top:0;">
+          <thead><tr><th>Tool / System</th><th>Access Type</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>[Automation Platform]</td><td>Admin — Plus 1 managed</td><td><span class="tag tag-green">Ready</span></td></tr>
+            <tr><td>[AI Model Provider]</td><td>API — Plus 1 account</td><td><span class="tag tag-green">Ready</span></td></tr>
+            <tr><td>[Client System 1]</td><td>API Key — client provides</td><td><span class="tag tag-yellow">Pending</span></td></tr>
+            <tr><td>[Client System 2]</td><td>OAuth — client approves</td><td><span class="tag tag-yellow">Pending</span></td></tr>
+            <tr><td>[Output / Destination]</td><td>Webhook / Write access</td><td><span class="tag tag-gray">Not Started</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NEXT ACTIONS
+  ══════════════════════════════════════════ -->
+  <div id="tab-actions" class="tab-panel">
+    <div class="section-title">Next Actions</div>
+    <div class="section-desc">The 5–7 highest-leverage actions to advance the project right now. Sequenced by dependency.</div>
+
+    <div class="action-item">
+      <div class="a-num">1</div>
+      <div class="a-main">
+        <div class="a-action">[Submit API access requests to client IT for all required systems]</div>
+        <div class="a-dep">Required input: List of systems and access types needed (prepared). Waiting on: Client IT contact confirmation. Cannot start build without this.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">[PM Name]</div>
+        <div class="a-target">By [Date]</div>
+        <div class="a-risk">🔴 Build-blocking if delayed</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">2</div>
+      <div class="a-main">
+        <div class="a-action">[Schedule and complete workflow logic approval session with client champion]</div>
+        <div class="a-dep">Required input: Workflow diagram draft (in progress). Client champion availability needed. Written approval required before Phase 2 begins.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">[PM Name]</div>
+        <div class="a-target">By [Date]</div>
+        <div class="a-risk">🔴 Build-blocking if delayed</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">3</div>
+      <div class="a-main">
+        <div class="a-action">[Confirm AI model provider and finalize cost estimate]</div>
+        <div class="a-dep">Required input: Expected monthly request volume from client. Model shortlist prepared. Decision needed before prompt engineering begins.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">[AI Architect]</div>
+        <div class="a-target">By [Date]</div>
+        <div class="a-risk">⚠️ Delays prompt engineering</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">4</div>
+      <div class="a-main">
+        <div class="a-action">[Confirm data governance and PII handling policy with client IT / legal]</div>
+        <div class="a-dep">Required input: Client data classification policy. Affects architecture decisions (logging, data retention, model routing). Must resolve before build.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">[PM / Client IT]</div>
+        <div class="a-target">By [Date]</div>
+        <div class="a-risk">⚠️ Architecture decision dependent</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">5</div>
+      <div class="a-main">
+        <div class="a-action">[Name and confirm UAT participants and schedule for Phase 3]</div>
+        <div class="a-dep">Required input: Client provides names and availability. UAT cannot be scheduled without this. Delays will push go-live date.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">[Client PM]</div>
+        <div class="a-target">By [Date]</div>
+        <div class="a-risk">⚠️ Phase 3 gate dependency</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">6</div>
+      <div class="a-main">
+        <div class="a-action">[Enter approved roadmap into ClickUp — phases, milestones, and tasks]</div>
+        <div class="a-dep">Required input: Roadmap approved by client. ClickUp Space URL confirmed. Follow naming and millisecond rules in the ClickUp Setup tab.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">[PM Name]</div>
+        <div class="a-target">By [Date]</div>
+        <div class="a-risk">—</div>
+      </div>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">📊 Responsibility Matrix (RACI)</div>
+      <table class="data-table">
+        <thead><tr><th>Activity</th><th>Plus 1 PM</th><th>AI Architect</th><th>Client Champion</th><th>Client IT</th></tr></thead>
+        <tbody>
+          <tr><td>Credential provisioning</td><td>Accountable</td><td>Consulted</td><td>Informed</td><td><strong>Responsible</strong></td></tr>
+          <tr><td>Workflow logic approval</td><td>Accountable</td><td>Consulted</td><td><strong>Responsible</strong></td><td>Informed</td></tr>
+          <tr><td>Core build &amp; prompt engineering</td><td>Informed</td><td><strong>Responsible</strong></td><td>Consulted</td><td>—</td></tr>
+          <tr><td>UAT execution</td><td>Accountable</td><td>Consulted</td><td><strong>Responsible</strong></td><td>Consulted</td></tr>
+          <tr><td>Go-live approval</td><td>Accountable</td><td>Consulted</td><td><strong>Responsible</strong></td><td>Informed</td></tr>
+          <tr><td>Training delivery</td><td>Accountable</td><td><strong>Responsible</strong></td><td>Informed</td><td>—</td></tr>
+          <tr><td>Documentation delivery</td><td><strong>Responsible</strong></td><td>Responsible</td><td>Informed</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CLICKUP SETUP
+  ══════════════════════════════════════════ -->
+  <div id="tab-clickup" class="tab-panel">
+    <div class="section-title">ClickUp Entry Instructions</div>
+    <div class="section-desc">After roadmap is approved, follow these rules exactly when entering into ClickUp. Naming and time estimate format are critical.</div>
+    <div class="notice success"><span class="n-icon">✅</span><span><strong>ClickUp Roadmap Link:</strong> <a href="#" style="color:var(--green);text-decoration:underline;">[Paste ClickUp list/folder URL here once created]</a></span></div>
+
+    <div class="card">
+      <div class="cu-step"><div class="cu-step-num">1</div><div><h4>Phases → Create as Folders</h4><p>Each phase becomes a <strong>Folder</strong> inside the designated ClickUp Space. Do not create phases as tasks or lists.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">2</div><div><h4>Milestones → Tasks tagged "Milestone" inside each Phase Folder</h4><p>Each milestone becomes a Task inside its respective Phase Folder, tagged as <strong>Milestone</strong>. Use the milestone title exactly as written — no prefixes.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">3</div><div><h4>Tasks → Created separately from Task Breakdown output</h4><p>Individual tasks come from the Task Breakdown Prompt, not this roadmap. Tasks live as subtasks inside milestone tasks, or in a List inside the Phase Folder.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">4</div><div><h4>Naming — Clean titles only. No prefixes, numbers, or structural labels.</h4><p>❌ <code style="font-family:var(--mono);background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:3px;font-size:12px;">"Phase 2: Build"</code> &nbsp;&nbsp; ❌ <code style="font-family:var(--mono);background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:3px;font-size:12px;">"M3 — Core Workflow Built"</code><br><br>✅ <code style="font-family:var(--mono);background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:3px;font-size:12px;">"Build"</code> &nbsp;&nbsp; ✅ <code style="font-family:var(--mono);background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:3px;font-size:12px;">"Core Workflow Built &amp; Internally Tested"</code></p></div></div>
+      <div class="cu-step"><div class="cu-step-num">5</div><div><h4>Time Estimates — ClickUp API uses MILLISECONDS as quoted strings</h4><p>Always pass <code style="font-family:var(--mono);background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:12px;">time_estimate</code> as a <strong>quoted string in milliseconds</strong>. Never use hours, never pass as a plain number.</p></div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">⏱ Millisecond Reference Chart</div>
+        <table class="ms-ref-table">
+          <thead><tr><th>Readable</th><th>Milliseconds (string)</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>30 min</td><td>"1800000"</td><td>Quick tasks</td></tr>
+            <tr><td>1 hour</td><td>"3600000"</td><td>Standard task</td></tr>
+            <tr><td>2 hours</td><td>"7200000"</td><td></td></tr>
+            <tr><td>4 hours</td><td>"14400000"</td><td>Half day</td></tr>
+            <tr><td>8 hours</td><td>"28800000"</td><td>1 full day</td></tr>
+            <tr><td>16 hours</td><td>"57600000"</td><td>2 days</td></tr>
+            <tr><td>24 hours</td><td>"86400000"</td><td>3 days</td></tr>
+            <tr><td>40 hours</td><td>"144000000"</td><td>1 full week</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">✅ Correct API Entry Example</div><pre class="code-block"><span class="code-brace">{</span>
+  <span class="code-key">"name"</span>: <span class="code-str">"Core Workflow Built &amp; Internally Tested"</span>,
+  <span class="code-key">"time_estimate"</span>: <span class="code-str">"28800000"</span>,
+  <span class="code-key">"assignees"</span>: [<span class="code-str">"[user_id]"</span>],
+  <span class="code-key">"tags"</span>: [<span class="code-str">"Milestone"</span>]
+<span class="code-brace">}</span></pre></div>
+        <div class="card"><div class="card-title">❌ Common Mistakes</div><pre class="code-block" style="color:var(--red);">"M3 — Core Workflow Built"  ❌
+time_estimate: 28800000     ❌
+time_estimate: "8h"         ❌
+time_estimate: 480          ❌</pre></div>
+      </div>
+    </div>
+
+    <div class="card"><div class="card-title">📋 Pre-Entry Checklist</div><div class="checklist">☐ Roadmap approved by client and Plus 1 PM<br>☐ ClickUp Space/Folder URL documented above<br>☐ All phase names cleaned (no prefixes)<br>☐ All milestone names cleaned (no prefixes)<br>☐ All time estimates converted to milliseconds as quoted strings<br>☐ Assignees mapped to ClickUp user IDs<br>☐ Due dates entered as Unix timestamps (if using API)<br>☐ Milestone tag confirmed in ClickUp tag list<br>☐ Task Breakdown Prompt output ready for task entry</div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       RESOURCES
+  ══════════════════════════════════════════ -->
+  <div id="tab-resources" class="tab-panel">
+    <div class="section-title">Project Resources</div>
+    <div class="section-desc">Centralized links to every document, system, and reference needed for this engagement. Keep this updated throughout the project lifecycle.</div>
+
+    <!-- DISCOVERY & KICKOFF -->
+    <div class="card">
+      <div class="card-title"><span>🔍</span> Discovery &amp; Kickoff Documents</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:4px;">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">📋 Discovery Call Notes</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Initial discovery notes, pain points, workflow inventory, tool stack</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[Paste link — SharePoint / ClickUp Doc]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🚀 Kickoff Agenda &amp; Notes</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Kickoff meeting agenda, decisions made, open items captured</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[Paste link — SharePoint / ClickUp Doc]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">📐 Workflow Logic Diagram</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Approved workflow map — trigger, steps, decisions, outputs</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[Miro / Lucidchart / SharePoint link]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:4px;">📝 Signed SOW / Contract</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Executed statement of work with AI scope defined</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[ConnectWise]</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUILD & TECHNICAL DOCS -->
+    <div class="card">
+      <div class="card-title"><span>🔧</span> Build &amp; Technical Documents</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:4px;">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🤖 As-Built Workflow Documentation</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Complete automation architecture, node-by-node documentation</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint — Post-Build]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">💬 Prompt Library</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">All prompts used in the build with version history and notes</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint / ClickUp Doc]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🔑 Integration &amp; Credential Map</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">All API connections, auth types, and where credentials are stored</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint — Internal Only]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🛠 Maintenance Runbook</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">How to monitor, troubleshoot, update, and roll back the automation</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint — Post-Deploy]</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUIDELINES & SOPs -->
+    <div class="card">
+      <div class="card-title"><span>📖</span> Guidelines, SOPs &amp; User Guides</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:4px;">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🎫 ClickUp User Guide — Client</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">How the client submits tickets, views project status, and uses ClickUp</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[ClickUp Doc / SharePoint link]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">👤 End User AI Tool Guide</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">How end users interact with the automation — what it does, what it doesn't, and who to contact</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SOP / SharePoint link]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🔒 Data &amp; Security Guidelines</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Data handling policy, PII rules, acceptable use for AI tools</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint / ClickUp Doc link]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">📞 Escalation &amp; Support Guide</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">What to do when the automation fails — who to call, when, and how</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[Client-facing guide link]</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULL RESOURCE INDEX -->
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);display:flex;align-items:center;gap:8px;">📋 Full Resource Index</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Document / Resource</th><th>Type</th><th>Location</th><th>Last Updated</th><th>Owner</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Discovery Call Notes</td><td><span class="tag tag-blue">Discovery</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Link]</a></td><td>[Date]</td><td>[PM Name]</td></tr>
+          <tr><td>Kickoff Agenda &amp; Notes</td><td><span class="tag tag-blue">Discovery</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Link]</a></td><td>[Date]</td><td>[PM Name]</td></tr>
+          <tr><td>Workflow Logic Diagram</td><td><span class="tag tag-cyan">Technical</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Miro/Lucid]</a></td><td>[Date]</td><td>[AI Architect]</td></tr>
+          <tr><td>Signed SOW / Contract</td><td><span class="tag tag-gray">Contract</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[ConnectWise]</a></td><td>[Date]</td><td>Marc</td></tr>
+          <tr><td>Client Profile</td><td><span class="tag tag-cyan">Client</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[ClickUp]</a></td><td>[Date]</td><td>[PM Name]</td></tr>
+          <tr><td>As-Built Workflow Documentation</td><td><span class="tag tag-teal" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr);">Technical</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint — TBD]</a></td><td>Post-build</td><td>[AI Architect]</td></tr>
+          <tr><td>Prompt Library</td><td><span class="tag tag-teal" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr);">Technical</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint — TBD]</a></td><td>Post-build</td><td>[AI Architect]</td></tr>
+          <tr><td>Integration &amp; Credential Map</td><td><span class="tag tag-red">Credentials</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Passportal / Internal]</a></td><td>Live</td><td>[PM Name]</td></tr>
+          <tr><td>Maintenance Runbook</td><td><span class="tag tag-teal" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr);">Technical</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint — TBD]</a></td><td>Post-deploy</td><td>[AI Architect]</td></tr>
+          <tr><td>UAT Sign-Off Document</td><td><span class="tag tag-green">Sign-Off</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>[Date]</td><td>[PM Name]</td></tr>
+          <tr><td>ConnectWise Company Record</td><td><span class="tag tag-gray">System</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[ConnectWise]</a></td><td>Live</td><td>Mike</td></tr>
+          <tr><td>ClickUp Project Folder</td><td><span class="tag tag-blue">Project</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[ClickUp]</a></td><td>Live</td><td>[PM Name]</td></tr>
+          <tr><td>SharePoint Client Folder</td><td><span class="tag tag-gray">System</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>Live</td><td>[PM Name]</td></tr>
+          <tr><td>End User AI Tool Guide</td><td><span class="tag tag-cyan">Guide</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Link]</a></td><td>[Date]</td><td>[PM Name]</td></tr>
+          <tr><td>Data &amp; Security Guidelines</td><td><span class="tag tag-yellow">Compliance</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>[Date]</td><td>Mike</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SHAREPOINT FOLDERS -->
+    <div class="card">
+      <div class="card-title"><span>📁</span> SharePoint Folder Structure</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:4px;">
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:18px;">📁</span>
+          <div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">01 — Contracts &amp; SOW</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div>
+        </div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:18px;">📁</span>
+          <div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">02 — Discovery &amp; Workflow Docs</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div>
+        </div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:18px;">📁</span>
+          <div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">03 — Build &amp; Technical Docs</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div>
+        </div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:18px;">📁</span>
+          <div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">04 — UAT &amp; Sign-Off</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div>
+        </div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:18px;">📁</span>
+          <div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">05 — Training &amp; User Guides</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div>
+        </div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:18px;">📁</span>
+          <div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">06 — Compliance &amp; Security</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <strong>Plus 1 Technology</strong> · AI Implementation Roadmap for <strong>[Client Name]</strong> · [Month Year] · Confidential — Do Not Distribute
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    if (btn) {
+      btn.classList.add('active');
+      const bar = document.getElementById('tabsBar');
+      const btnLeft = btn.offsetLeft;
+      const btnRight = btnLeft + btn.offsetWidth;
+      const barLeft = bar.scrollLeft;
+      const barRight = barLeft + bar.clientWidth;
+      if (btnLeft < barLeft + 40) bar.scrollTo({ left: btnLeft - 40, behavior: 'smooth' });
+      else if (btnRight > barRight - 40) bar.scrollTo({ left: btnRight - bar.clientWidth + 40, behavior: 'smooth' });
+    }
+    updateScrollBtns();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function scrollTabs(dir) {
+    const bar = document.getElementById('tabsBar');
+    bar.scrollBy({ left: dir * 200, behavior: 'smooth' });
+    setTimeout(updateScrollBtns, 250);
+  }
+
+  function updateScrollBtns() {
+    const bar = document.getElementById('tabsBar');
+    const lBtn = document.getElementById('scrollLeft');
+    const rBtn = document.getElementById('scrollRight');
+    if (!bar || !lBtn || !rBtn) return;
+    const atStart = bar.scrollLeft <= 2;
+    const atEnd   = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 2;
+    lBtn.classList.toggle('hidden', atStart);
+    rBtn.classList.toggle('hidden', atEnd);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const bar = document.getElementById('tabsBar');
+    if (bar) {
+      bar.addEventListener('scroll', updateScrollBtns);
+      updateScrollBtns();
+    }
+  });
+</script>
+</body>
+</html>
