@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Project Roadmap Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --surface3: #21262d;
+    --border: #30363d;
+    --border2: #21262d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --text-subtle: #656d76;
+    --accent: #2f81f7;
+    --accent-dim: #1c3d6b;
+    --accent-glow: rgba(47,129,247,0.15);
+    --green: #3fb950;
+    --green-dim: #1a3827;
+    --yellow: #d29922;
+    --yellow-dim: #362e0d;
+    --red: #f85149;
+    --red-dim: #3d1a1a;
+    --orange: #e3843c;
+    --orange-dim: #3d2011;
+    --purple: #a371f7;
+    --purple-dim: #2a1f4a;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ─── LAYOUT ─── */
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s;
+  }
+  .sidebar-logo {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    display: inline-block;
+  }
+  .sidebar-logo h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: .02em; }
+  .sidebar-logo p { font-size: 11px; color: var(--text-subtle); margin-top: 2px; }
+
+  .nav-section { padding: 12px 12px 4px; }
+  .nav-section-label { font-size: 10px; font-weight: 600; color: var(--text-subtle); letter-spacing: .08em; text-transform: uppercase; padding: 0 8px 6px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all .15s;
+    cursor: pointer;
+    border: none; background: none; width: 100%; text-align: left;
+  }
+  .nav-link:hover, .nav-link.active { background: var(--surface3); color: var(--text); }
+  .nav-link.active { color: var(--accent); }
+  .nav-link .icon { font-size: 14px; width: 18px; text-align: center; }
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-subtle);
+  }
+
+  .main { flex: 1; min-width: 0; }
+
+  /* ─── HEADER ─── */
+  .hero {
+    background: linear-gradient(135deg, var(--surface) 0%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 48px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 0%, rgba(47,129,247,.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: .03em;
+  }
+  .tag-blue { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(47,129,247,.3); }
+  .tag-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+  .tag-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(210,153,34,.3); }
+  .tag-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+  .tag-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(227,132,60,.3); }
+  .tag-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(163,113,247,.3); }
+  .tag-gray { background: var(--surface3); color: var(--text-muted); border: 1px solid var(--border); }
+
+  .hero h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+  .hero-stats { display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+  .stat-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  .stat-pill .icon { font-size: 14px; }
+  .stat-pill strong { color: var(--text); font-weight: 600; }
+  .stat-pill span { color: var(--text-muted); }
+
+  /* ─── CONTENT ─── */
+  .content { padding: 32px 48px 64px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-header { margin-bottom: 24px; }
+  .section-title { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+  .section-desc { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .card p { font-size: 14px; color: var(--text); line-height: 1.7; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px; }
+  .metric-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .metric-label { font-size: 11px; color: var(--text-subtle); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .metric-value { font-size: 22px; font-weight: 700; color: var(--text); }
+  .metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ─── GOAL ITEMS ─── */
+  .goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .goal-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .goal-icon { font-size: 20px; margin-bottom: 8px; }
+  .goal-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .goal-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─── CHECKPOINTS ─── */
+  .checkpoint-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+  .checkpoint { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .checkpoint-badge { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 8px; }
+  .checkpoint h4 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .checkpoint ul { font-size: 12px; color: var(--text-muted); line-height: 1.8; padding-left: 14px; }
+  .checkpoint ul li::marker { color: var(--accent); }
+
+  /* ─── SCOPE ─── */
+  .scope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .scope-col { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .scope-col-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+  .scope-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .scope-item-icon { font-size: 13px; margin-top: 2px; flex-shrink: 0; width: 18px; }
+  .scope-item-content { font-size: 13px; line-height: 1.5; }
+  .scope-item-content strong { display: block; color: var(--text); margin-bottom: 2px; }
+  .scope-item-content span { color: var(--text-muted); font-size: 12px; }
+
+  /* ─── PHASES ─── */
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .phase-header {
+    padding: 18px 24px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .phase-header:hover { background: var(--surface2); }
+  .phase-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .phase-header-text { flex: 1; }
+  .phase-header-text h3 { font-size: 15px; font-weight: 600; }
+  .phase-header-text p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .phase-header-right { display: flex; gap: 8px; align-items: center; }
+  .phase-body { padding: 20px 24px; display: none; }
+  .phase-body.open { display: block; }
+  .phase-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .phase-list-title { font-size: 11px; font-weight: 600; color: var(--text-subtle); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .phase-list li { font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 4px; }
+  .phase-list li::marker { color: var(--accent); }
+  .criteria-list li { font-size: 13px; color: var(--text-muted); line-height: 1.8; list-style: none; padding-left: 0; }
+  .criteria-list li::before { content: '✓ '; color: var(--green); }
+  .phase-meta { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .phase-meta-item { font-size: 12px; display: flex; gap: 6px; align-items: center; }
+  .phase-meta-item .label { color: var(--text-subtle); }
+  .phase-meta-item .value { color: var(--text); font-weight: 500; }
+
+  /* ─── MILESTONES ─── */
+  .milestone-grid { display: flex; flex-direction: column; gap: 12px; }
+  .milestone {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 16px;
+    align-items: start;
+  }
+  .milestone-num {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--surface3);
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600;
+  }
+  .milestone-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .milestone-output { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+  .milestone-criteria { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .milestone-meta { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; font-size: 11px; text-align: right; min-width: 120px; }
+  .milestone-meta .meta-row { display: flex; flex-direction: column; gap: 1px; }
+  .milestone-meta .meta-label { color: var(--text-subtle); }
+  .milestone-meta .meta-value { color: var(--text); font-weight: 500; }
+
+  /* ─── BLOCKERS ─── */
+  .critical-path {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  .cp-flow { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .cp-node {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-family: var(--mono);
+    white-space: nowrap;
+  }
+  .cp-node.blocked { border-color: rgba(248,81,73,.4); background: var(--red-dim); color: var(--red); }
+  .cp-node.client { border-color: rgba(210,153,34,.4); background: var(--yellow-dim); color: var(--yellow); }
+  .cp-node.done { border-color: rgba(63,185,80,.4); background: var(--green-dim); color: var(--green); }
+  .cp-arrow { color: var(--text-subtle); font-size: 12px; }
+
+  /* ─── TABLES ─── */
+  .table-wrap { overflow-x: auto; margin-bottom: 16px; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--surface2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 11px 14px; border-bottom: 1px solid var(--border2); color: var(--text-muted); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+  td strong { color: var(--text); font-weight: 500; }
+  td small { font-size: 11px; color: var(--text-subtle); display: block; margin-top: 2px; }
+
+  /* ─── RISK ─── */
+  .risk-grid { display: flex; flex-direction: column; gap: 12px; }
+  .risk-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; border-left: 3px solid var(--border); }
+  .risk-card.high { border-left-color: var(--red); }
+  .risk-card.medium { border-left-color: var(--yellow); }
+  .risk-card.low { border-left-color: var(--green); }
+  .risk-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .risk-title { font-size: 14px; font-weight: 600; }
+  .risk-badges { display: flex; gap: 6px; flex-shrink: 0; }
+  .risk-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .risk-section-title { font-size: 11px; font-weight: 600; color: var(--text-subtle); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  .risk-section-body { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ─── OPEN ITEMS ─── */
+  .open-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; border-left: 3px solid var(--border); }
+  .open-item.blocking { border-left-color: var(--red); }
+  .open-item-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .open-item-id { font-family: var(--mono); font-size: 10px; background: var(--surface3); color: var(--text-muted); padding: 2px 7px; border-radius: 4px; }
+  .open-item-title { font-size: 14px; font-weight: 600; }
+  .open-item-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
+  .open-item-footer { display: flex; gap: 16px; flex-wrap: wrap; }
+  .oi-meta { font-size: 11px; display: flex; gap: 5px; }
+  .oi-meta .label { color: var(--text-subtle); }
+  .oi-meta .value { color: var(--text); font-weight: 500; }
+
+  /* ─── TIMELINE ─── */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-dot { position: absolute; left: -24px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface3); border: 2px solid var(--border); }
+  .tl-dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .tl-dot.done { background: var(--green); border-color: var(--green); }
+  .tl-dot.blocked { background: var(--red); border-color: var(--red); }
+  .tl-label { font-size: 11px; font-weight: 600; color: var(--text-subtle); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  .tl-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .tl-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ─── NEXT ACTIONS ─── */
+  .action-list { display: flex; flex-direction: column; gap: 12px; }
+  .action-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; display: grid; grid-template-columns: 32px 1fr auto; gap: 14px; align-items: start; }
+  .action-num { width: 28px; height: 28px; border-radius: 6px; background: var(--accent-dim); color: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .action-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .action-body p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .action-meta { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; min-width: 110px; font-size: 11px; }
+  .action-meta .meta-label { color: var(--text-subtle); }
+  .action-meta .meta-value { color: var(--text); font-weight: 500; text-align: right; }
+  .action-item.blocking { border-left: 3px solid var(--red); }
+
+  /* ─── INTAKE FORM ─── */
+  .form-shell { max-width: 760px; }
+  .form-section { margin-bottom: 28px; }
+  .form-section-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+  .form-input, .form-textarea, .form-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); }
+  .form-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+  .form-select { cursor: pointer; }
+  .form-help { font-size: 11px; color: var(--text-subtle); }
+  .alert {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .alert-yellow { background: var(--yellow-dim); border: 1px solid rgba(210,153,34,.3); color: var(--yellow); }
+  .alert-red { background: var(--red-dim); border: 1px solid rgba(248,81,73,.3); color: var(--red); }
+  .alert-blue { background: var(--accent-glow); border: 1px solid rgba(47,129,247,.3); color: var(--accent); }
+  .alert-green { background: var(--green-dim); border: 1px solid rgba(63,185,80,.3); color: var(--green); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #388bfd; }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-ghost { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--surface3); color: var(--text); }
+
+  /* ─── LOADING ─── */
+  .loading-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(13,17,23,.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    backdrop-filter: blur(4px);
+  }
+  .loading-overlay.show { display: flex; }
+  .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 14px; color: var(--text-muted); }
+  .loading-sub { font-size: 12px; color: var(--text-subtle); }
+
+  /* ─── STATUS DOT ─── */
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .dot-red { background: var(--red); }
+  .dot-yellow { background: var(--yellow); }
+  .dot-green { background: var(--green); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .hero { padding: 24px 24px 20px; }
+    .content { padding: 20px 24px 48px; }
+    .phase-cols { grid-template-columns: 1fr; }
+    .checkpoint-grid { grid-template-columns: 1fr; }
+    .risk-body { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* ─── UTIL ─── */
+  .mt-0 { margin-top: 0; } .mt-4 { margin-top: 4px; } .mt-8 { margin-top: 8px; } .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
+  .mb-0 { margin-bottom: 0; }
+  .flex { display: flex; } .items-center { align-items: center; } .gap-8 { gap: 8px; } .gap-12 { gap: 12px; }
+  .text-muted { color: var(--text-muted); } .text-subtle { color: var(--text-subtle); }
+  strong { color: var(--text); font-weight: 600; }
+  .mono { font-family: var(--mono); font-size: 12px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+  .print-hide { }
+  @media print {
+    .sidebar, .print-hide { display: none; }
+    .section { display: block !important; }
+    body { background: white; color: black; }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Generating your project roadmap…</div>
+  <div class="loading-sub">This may take 30–60 seconds</div>
+</div>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="badge">Roadmap v1.0</div>
+      <h2 id="sidebarClient">Project Roadmap</h2>
+      <p id="sidebarProject" class="text-subtle">AI Automation Delivery</p>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Sections</div>
+      <button class="nav-link" onclick="showSection('howto')" id="nav-howto">
+        <span class="icon">📖</span> How to Use
+      </button>
+      <button class="nav-link active" onclick="showSection('intake')" id="nav-intake">
+        <span class="icon">⚡</span> Project Intake
+      </button>
+      <button class="nav-link" onclick="showSection('summary')" id="nav-summary">
+        <span class="icon">📋</span> Summary & Goals
+      </button>
+      <button class="nav-link" onclick="showSection('scope')" id="nav-scope">
+        <span class="icon">🔲</span> Scope
+      </button>
+      <button class="nav-link" onclick="showSection('phases')" id="nav-phases">
+        <span class="icon">🏗</span> Phased Plan
+      </button>
+      <button class="nav-link" onclick="showSection('milestones')" id="nav-milestones">
+        <span class="icon">🎯</span> Milestones
+      </button>
+      <button class="nav-link" onclick="showSection('blockers')" id="nav-blockers">
+        <span class="icon">🚧</span> Blockers & Critical Path
+      </button>
+      <button class="nav-link" onclick="showSection('risks')" id="nav-risks">
+        <span class="icon">⚠️</span> Risk Register
+      </button>
+      <button class="nav-link" onclick="showSection('open')" id="nav-open">
+        <span class="icon">❓</span> Open Items
+      </button>
+      <button class="nav-link" onclick="showSection('timeline')" id="nav-timeline">
+        <span class="icon">📅</span> Timeline & Resources
+      </button>
+      <button class="nav-link" onclick="showSection('actions')" id="nav-actions">
+        <span class="icon">⚡</span> Next Actions
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <div>Plus1 Technology</div>
+      <div class="text-subtle mt-4" id="sidebarDate">Delivery Roadmap · Confidential</div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="tag tag-blue" id="heroVersion">Roadmap v1.0</span>
+        <span class="tag tag-gray" id="heroStatus">Draft</span>
+        <span class="tag tag-yellow" id="heroPhase">Pending Generation</span>
+      </div>
+      <h1 id="heroTitle">AI Project Roadmap <span>Generator</span></h1>
+      <div class="hero-sub" id="heroSub">Plus1 Technology delivery roadmap — Complete the intake form to generate your roadmap</div>
+      <div class="hero-stats">
+        <div class="stat-pill"><span class="icon">🚀</span><div><strong id="statKickoff">–</strong><span>Kickoff</span></div></div>
+        <div class="stat-pill"><span class="icon">⏱</span><div><strong id="statDuration">–</strong><span>Duration</span></div></div>
+        <div class="stat-pill"><span class="icon">🗓</span><div><strong id="statTimeline">–</strong><span>Timeline</span></div></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ─── HOW TO USE ─── -->
+      <div class="section active" id="section-howto">
+        <div class="section-header">
+          <div class="section-title">How to Use This Roadmap Tool</div>
+          <div class="section-desc">Two ways to generate your project roadmap — pick the one that fits your workflow.</div>
+        </div>
+
+        <!-- WHEN TO USE -->
+        <div class="card">
+          <div class="card-title"><span>🕐</span> When to Use</div>
+          <p>After discovery is complete and the project is moving forward. Use when the engagement involves AI, automation, n8n, APIs, or any intelligent workflow build. This is your <strong>scoping and planning deliverable</strong> — the document you'd share with the client before any build work begins.</p>
+        </div>
+
+        <!-- WHAT YOU NEED -->
+        <div class="card">
+          <div class="card-title"><span>📋</span> What You Need Before Starting</div>
+          <div class="goal-grid" style="margin-bottom:0">
+            <div class="goal-item">
+              <div class="goal-icon">📞</div>
+              <div class="goal-title">Completed Discovery</div>
+              <div class="goal-desc">Call notes, pain points, confirmed tools, and key decisions from discovery sessions.</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-icon">🔲</div>
+              <div class="goal-title">Agreed Scope</div>
+              <div class="goal-desc">Even a rough scope works — what's in, what's out, what's deferred. Flag gaps if uncertain.</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-icon">👥</div>
+              <div class="goal-title">Team Assignments</div>
+              <div class="goal-desc">Who's building, who's the client lead, who owns decisions. Roles don't need to be finalized.</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-icon">🔗</div>
+              <div class="goal-title">ClickUp Link (Optional)</div>
+              <div class="goal-desc">The ClickUp list or folder URL where this project lives. Add before entering milestones.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TWO OPTIONS -->
+        <div class="card-grid">
+
+          <!-- OPTION A -->
+          <div style="background:var(--surface2);border:2px solid var(--accent-dim);border-radius:12px;padding:22px 24px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;right:0;background:var(--accent-dim);color:var(--accent);font-size:10px;font-weight:700;padding:4px 12px;border-bottom-left-radius:8px;letter-spacing:.06em">OPTION A — INTERACTIVE</div>
+            <div style="font-size:20px;margin-bottom:10px;margin-top:14px">⚡</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Use This Template Directly</div>
+            <div style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:16px">Fill in the Project Intake form — Claude generates all 10 sections automatically. No copy-pasting required. Best when you want an interactive, shareable roadmap document.</div>
+            <div style="font-size:12px;color:var(--text-subtle);margin-bottom:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Steps</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+                <span>Click <strong>Project Intake</strong> in the sidebar</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+                <span>Fill in project details — paste call notes, pain points, confirmed tools, scope, and open questions</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+                <span>Click <strong>Generate Roadmap</strong> — Claude builds all 10 sections from your inputs</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+                <span>Review each section — anything marked <strong>Pending</strong> means a required input is missing</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+                <span>Share the live URL with your client or use it as your internal planning document</span>
+              </div>
+            </div>
+            <div style="margin-top:16px">
+              <button class="btn btn-primary" onclick="showSection('intake')" style="width:100%;justify-content:center">⚡ Go to Project Intake →</button>
+            </div>
+          </div>
+
+          <!-- OPTION B -->
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:22px 24px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;right:0;background:var(--surface3);color:var(--text-muted);font-size:10px;font-weight:700;padding:4px 12px;border-bottom-left-radius:8px;letter-spacing:.06em">OPTION B — CLASSIC</div>
+            <div style="font-size:20px;margin-bottom:10px;margin-top:14px">🤖</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Paste Prompt into Claude</div>
+            <div style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:16px">Copy the full system prompt, paste it into a new Claude conversation, then paste your discovery notes. Claude generates all 10 sections as markdown. Best when you want to work directly in Claude.ai or build a custom document.</div>
+            <div style="font-size:12px;color:var(--text-subtle);margin-bottom:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Steps</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--surface3);color:var(--text-muted);border:1px solid var(--border);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
+                <span>Open a new conversation in <strong>Claude.ai</strong></span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--surface3);color:var(--text-muted);border:1px solid var(--border);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
+                <span>Paste in the full <strong>AI Project Roadmap Prompt</strong> (the system prompt document)</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--surface3);color:var(--text-muted);border:1px solid var(--border);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
+                <span>Paste your <strong>discovery notes, call summaries, and confirmed decisions</strong> below the prompt</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--surface3);color:var(--text-muted);border:1px solid var(--border);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
+                <span>Claude generates all 10 sections — review for <strong>Pending</strong> gaps and fill them in</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+                <span style="background:var(--surface3);color:var(--text-muted);border:1px solid var(--border);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
+                <span>Fill in the <strong>ClickUp Roadmap Link</strong> at the top before entering milestones to ClickUp</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- WHAT YOU GET -->
+        <div class="card">
+          <div class="card-title"><span>📦</span> What You Get Out</div>
+          <p style="margin-bottom:16px">A complete, client-ready project roadmap covering all 10 sections:</p>
+          <div class="goal-grid" style="margin-bottom:0">
+            <div class="goal-item"><div class="goal-icon">📋</div><div class="goal-title">Summary & Goals</div><div class="goal-desc">Project narrative, business + technical goals, and 30/60/90-day success checkpoints.</div></div>
+            <div class="goal-item"><div class="goal-icon">🔲</div><div class="goal-title">Scope Boundaries</div><div class="goal-desc">Explicit in-scope, out-of-scope, and deferred items — no ambiguity.</div></div>
+            <div class="goal-item"><div class="goal-icon">🏗</div><div class="goal-title">Phased Build Plan</div><div class="goal-desc">3–4 phases with entry/exit criteria, risk levels, and deliverables.</div></div>
+            <div class="goal-item"><div class="goal-icon">🎯</div><div class="goal-title">Milestone Tracker</div><div class="goal-desc">Every milestone with testable acceptance criteria and ClickUp time estimates in milliseconds.</div></div>
+            <div class="goal-item"><div class="goal-icon">🚧</div><div class="goal-title">Blocker & Critical Path Map</div><div class="goal-desc">Visual critical path chain and sequenced blocker table with workarounds.</div></div>
+            <div class="goal-item"><div class="goal-icon">⚠️</div><div class="goal-title">Risk Register</div><div class="goal-desc">Impact/likelihood ratings, mitigations, contingencies, and assumptions table.</div></div>
+            <div class="goal-item"><div class="goal-icon">❓</div><div class="goal-title">Open Decisions & Gaps</div><div class="goal-desc">Build-blocking items flagged in red with owners and target resolution dates.</div></div>
+            <div class="goal-item"><div class="goal-icon">📅</div><div class="goal-title">Timeline & Resources</div><div class="goal-desc">Week-by-week schedule, resource table, client commitments, and infra access requirements.</div></div>
+            <div class="goal-item"><div class="goal-icon">⚡</div><div class="goal-title">Next Actions</div><div class="goal-desc">Prioritized action list with owners, deadlines, and a full responsibility matrix.</div></div>
+          </div>
+        </div>
+
+        <!-- CLICKUP ENTRY -->
+        <div class="card">
+          <div class="card-title"><span>🔗</span> Entering to ClickUp</div>
+          <p style="margin-bottom:14px">Once the roadmap is approved, follow these rules when entering to ClickUp:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Structure</div>
+              <div style="font-size:13px;color:var(--text-muted);line-height:1.8">
+                <span style="color:var(--green)">Phases</span> → Create as <strong>Folders</strong> in the ClickUp Space<br>
+                <span style="color:var(--blue,var(--accent))">Milestones</span> → Create as <strong>Tasks</strong> inside each Phase folder, tagged as Milestone<br>
+                <span style="color:var(--purple)">Tasks</span> → Created separately using Task Breakdown Prompt output
+              </div>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Time Estimates (milliseconds)</div>
+              <div style="font-family:var(--mono);font-size:12px;color:var(--text-muted);line-height:1.9;background:var(--surface3);padding:10px 14px;border-radius:6px;border:1px solid var(--border)">
+                "3600000"  = 1h<br>
+                "7200000"  = 2h<br>
+                "14400000" = 4h<br>
+                "28800000" = 8h / 1 day<br>
+                "57600000" = 16h / 2 days<br>
+                "86400000" = 24h / 3 days
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Naming Rules</div>
+            <div style="display:flex;gap:24px;font-size:13px">
+              <div>
+                <div style="color:var(--red);margin-bottom:4px">❌ Don't</div>
+                <div style="color:var(--text-subtle);font-family:var(--mono);font-size:12px;line-height:1.8">"Phase 1: Foundation"<br>"M1 — Credential Setup"</div>
+              </div>
+              <div>
+                <div style="color:var(--green);margin-bottom:4px">✅ Do</div>
+                <div style="color:var(--text-subtle);font-family:var(--mono);font-size:12px;line-height:1.8">"Foundation"<br>"Credential Setup"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEPLOY NOTE -->
+        <div class="card">
+          <div class="card-title"><span>🌐</span> Deploy as a Live GitHub Page</div>
+          <p style="margin-bottom:14px">To publish this roadmap as a shareable live URL, use the <strong>OneDrive → GitHub Pages</strong> n8n workflow:</p>
+          <div style="background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--text-muted)">
+            1. Upload the HTML file to <strong style="color:var(--text)">OneDrive</strong> with the matching filename<br>
+            2. Fire the webhook with this body (swap the three values for each new file):<br><br>
+            <span style="color:var(--accent)">{</span><br>
+            &nbsp;&nbsp;<span style="color:var(--green)">"fileName"</span>: <span style="color:var(--yellow)">"YourFile.html"</span>,<br>
+            &nbsp;&nbsp;<span style="color:var(--green)">"repoPath"</span>: <span style="color:var(--yellow)">"YourFile.html"</span>,<br>
+            &nbsp;&nbsp;<span style="color:var(--green)">"commitMessage"</span>: <span style="color:var(--yellow)">"Add your file description"</span>,<br>
+            &nbsp;&nbsp;<span style="color:var(--green)">"mimeType"</span>: <span style="color:var(--yellow)">"text/html"</span><br>
+            <span style="color:var(--accent)">}</span><br><br>
+            <span style="color:var(--text-subtle)">mimeType stays "text/html" for all HTML pages. OneDrive upload must happen first.</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─── INTAKE ─── -->
+      <div class="section" id="section-intake">
+        <div class="section-header">
+          <div class="section-title">Project Intake</div>
+          <div class="section-desc">Provide project details below. The more context you give, the more precise your roadmap will be.</div>
+        </div>
+
+        <div class="alert alert-blue print-hide">
+          <span>ℹ️</span>
+          <div>Fill in all fields you have information for. Flag unknown items — the generator will surface gaps explicitly rather than invent details.</div>
+        </div>
+
+        <div class="form-shell">
+          <div class="form-section">
+            <div class="form-section-title">Project Header</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Client Name *</label>
+                <input class="form-input" id="f_client" placeholder="e.g. Acme Corp" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Project Name / Brief Description *</label>
+                <input class="form-input" id="f_project" placeholder="e.g. AI Invoice Processing Automation" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Start Date</label>
+                <input class="form-input" id="f_start" placeholder="e.g. Apr 7, 2026 or TBD" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">End Date / Target</label>
+                <input class="form-input" id="f_end" placeholder="e.g. Jul 31, 2026 or ~12 weeks" />
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Team Members & Roles</label>
+                <input class="form-input" id="f_team" placeholder="e.g. Jessica Peaden (AI Engineer), Marc Umstead (PM), Joe Smith (Client Lead)" />
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">ClickUp Roadmap Link (optional)</label>
+                <input class="form-input" id="f_clickup" placeholder="https://app.clickup.com/..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Discovery & Problem Statement</div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Pain Points / Problem Being Solved *</label>
+                <textarea class="form-textarea" id="f_pain" placeholder="Describe the current state, pain points, and what's broken. Include any call notes or confirmed decisions from discovery." style="min-height:100px"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Proposed Solution Approach</label>
+                <textarea class="form-textarea" id="f_solution" placeholder="What tools, platforms, and methods will be used? e.g. n8n + Claude + OpenAI Structured Outputs for invoice extraction pipeline"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Expected Outcome / ROI</label>
+                <textarea class="form-textarea" id="f_outcome" placeholder="What does success look like? Time saved, error reduction, cost savings, efficiency gains, etc."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Scope & Constraints</div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">What's In Scope</label>
+                <textarea class="form-textarea" id="f_inscope" placeholder="List the systems, workflows, automations, and deliverables confirmed as in scope"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">What's Out of Scope</label>
+                <textarea class="form-textarea" id="f_outscope" placeholder="Explicit exclusions, hard walls (e.g. no ERP API), client-managed items"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Hard Constraints</label>
+                <textarea class="form-textarea" id="f_constraints" placeholder="Budget limits, vendor dependencies, no-custom-dev requirements, compliance requirements, etc." style="min-height:70px"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Technical Details</div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Confirmed Tools & APIs</label>
+                <textarea class="form-textarea" id="f_tools" placeholder="List confirmed tools, platforms, APIs, and their status (confirmed / pending / blocked)" style="min-height:70px"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Access Status / Blockers</label>
+                <textarea class="form-textarea" id="f_access" placeholder="What credentials, APIs, or access is still needed? What's blocking?" style="min-height:70px"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Open Items & Known Risks</div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Open Questions / Unresolved Items</label>
+                <textarea class="form-textarea" id="f_open" placeholder="List any unresolved questions, pending decisions, or known unknowns that could affect delivery" style="min-height:80px"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Known Risks</label>
+                <textarea class="form-textarea" id="f_risks" placeholder="List any risks you're already aware of — technical, client-side, timeline, etc." style="min-height:70px"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Additional Context</div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Anything Else (call notes, emails, context)</label>
+                <textarea class="form-textarea" id="f_notes" placeholder="Paste in any call notes, email excerpts, or other context that would help generate an accurate roadmap" style="min-height:90px"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="formError" class="alert alert-red" style="display:none">
+            <span>⛔</span><div id="formErrorMsg">Please fill in the required fields.</div>
+          </div>
+
+          <button class="btn btn-primary" onclick="generateRoadmap()" id="generateBtn">
+            <span>⚡</span> Generate Roadmap
+          </button>
+          <button class="btn btn-ghost" style="margin-left:10px" onclick="loadDemo()">Load Demo Data</button>
+        </div>
+      </div>
+
+      <!-- ─── SUMMARY ─── -->
+      <div class="section" id="section-summary">
+        <div class="section-header">
+          <div class="section-title">Project Summary &amp; Goals</div>
+          <div class="section-desc">What we are building, why it matters, and what success looks like at every checkpoint.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>📋</span> Project Summary</div>
+          <div id="out-summary" class="card p" style="padding:0; background:none; border:none;"></div>
+        </div>
+        <div class="card-grid" id="out-metrics-cards"></div>
+        <div class="card">
+          <div class="card-title"><span>⚡</span> Business Goals</div>
+          <div class="goal-grid" id="out-business-goals"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>🔧</span> Technical Goals</div>
+          <div class="goal-grid" id="out-tech-goals"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>🎯</span> Success Metrics — Checkpoints</div>
+          <div class="checkpoint-grid" id="out-checkpoints"></div>
+        </div>
+        <div class="table-wrap" id="out-metrics-table-wrap" style="display:none">
+          <table id="out-metrics-table"></table>
+        </div>
+      </div>
+
+      <!-- ─── SCOPE ─── -->
+      <div class="section" id="section-scope">
+        <div class="section-header">
+          <div class="section-title">Scope Boundaries</div>
+          <div class="section-desc">What is built, what is excluded, and what is deferred to post-MVP.</div>
+        </div>
+        <div id="out-scope-alert" class="alert alert-green" style="display:none"></div>
+        <div class="scope-grid" id="out-scope-grid"></div>
+      </div>
+
+      <!-- ─── PHASES ─── -->
+      <div class="section" id="section-phases">
+        <div class="section-header">
+          <div class="section-title">Phased Build Plan</div>
+          <div class="section-desc">Phase-by-phase delivery structure with entry/exit criteria and risk levels.</div>
+        </div>
+        <div id="out-phases"></div>
+      </div>
+
+      <!-- ─── MILESTONES ─── -->
+      <div class="section" id="section-milestones">
+        <div class="section-header">
+          <div class="section-title">Milestone &amp; Acceptance Criteria Tracker</div>
+          <div class="section-desc">Each milestone has a tangible output and testable acceptance criteria. Vague milestones are not milestones.</div>
+        </div>
+        <div id="out-milestone-note" class="alert alert-blue" style="display:none"></div>
+        <div class="milestone-grid" id="out-milestones"></div>
+      </div>
+
+      <!-- ─── BLOCKERS ─── -->
+      <div class="section" id="section-blockers">
+        <div class="section-header">
+          <div class="section-title">Blockers &amp; Critical Path</div>
+          <div class="section-desc">The longest dependent sequence to go-live, and every blocker that could derail it.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>🔗</span> Critical Path</div>
+          <div class="cp-flow" id="out-critical-path"></div>
+        </div>
+        <div id="out-blockers-alert" class="alert alert-red" style="display:none"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Blocker</th><th>What It Blocks</th><th>Owner</th><th>Target</th><th>Workaround</th></tr></thead>
+            <tbody id="out-blockers-table"></tbody>
+          </table>
+        </div>
+        <div class="card mt-16">
+          <div class="card-title"><span>🛡</span> Buffer Recommendations</div>
+          <div id="out-buffers"></div>
+        </div>
+      </div>
+
+      <!-- ─── RISKS ─── -->
+      <div class="section" id="section-risks">
+        <div class="section-header">
+          <div class="section-title">Risk Register</div>
+          <div class="section-desc">Known risks, their probability, and planned mitigation and contingency for each.</div>
+        </div>
+        <div class="risk-grid" id="out-risks"></div>
+        <div class="card mt-16">
+          <div class="card-title"><span>📋</span> Assumptions</div>
+          <div class="table-wrap mb-0" style="margin-bottom:0">
+            <table>
+              <thead><tr><th>Assumption</th><th>Impact If Wrong</th><th>How to Validate</th></tr></thead>
+              <tbody id="out-assumptions"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── OPEN ITEMS ─── -->
+      <div class="section" id="section-open">
+        <div class="section-header">
+          <div class="section-title">Open Decisions &amp; Gaps</div>
+          <div class="section-desc">Unresolved questions that affect delivery. Red items are build-blocking.</div>
+        </div>
+        <div id="out-open-alert" class="alert alert-red" style="display:none"></div>
+        <div id="out-open-items"></div>
+      </div>
+
+      <!-- ─── TIMELINE ─── -->
+      <div class="section" id="section-timeline">
+        <div class="section-header">
+          <div class="section-title">Timeline &amp; Resources</div>
+          <div class="section-desc">Week-by-week schedule, resource allocation, and client-side commitments required.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span>📅</span> Delivery Timeline</div>
+          <div class="timeline" id="out-timeline"></div>
+        </div>
+        <div class="table-wrap mt-16">
+          <table>
+            <thead><tr><th>Role</th><th>Estimated Effort</th><th>Peak Demand</th></tr></thead>
+            <tbody id="out-resources"></tbody>
+          </table>
+        </div>
+        <div class="card mt-16">
+          <div class="card-title"><span>🤝</span> Client-Side Commitments Required</div>
+          <div class="table-wrap mb-0">
+            <table>
+              <thead><tr><th>What Client Must Do</th><th>When</th><th>Risk If Late</th></tr></thead>
+              <tbody id="out-client-commitments"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card mt-16">
+          <div class="card-title"><span>🔧</span> Infrastructure &amp; Tool Access</div>
+          <div class="table-wrap mb-0">
+            <table>
+              <thead><tr><th>Tool / Service</th><th>Status</th><th>Action Required</th></tr></thead>
+              <tbody id="out-infra"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── ACTIONS ─── -->
+      <div class="section" id="section-actions">
+        <div class="section-header">
+          <div class="section-title">Next Actions</div>
+          <div class="section-desc">The actions that must happen in the next 5 business days to stay on schedule.</div>
+        </div>
+        <div id="out-actions-alert" class="alert alert-red" style="display:none"></div>
+        <div class="action-list" id="out-actions"></div>
+        <div class="card mt-16">
+          <div class="card-title"><span>📊</span> Responsibility Matrix</div>
+          <div class="table-wrap mb-0">
+            <table>
+              <thead><tr><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th><th>Risk If Missed</th></tr></thead>
+              <tbody id="out-raci"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="sidebar-footer mt-24" style="border-top: 1px solid var(--border); padding-top: 16px; border-left:none; border-right:none; border-bottom:none; padding-bottom:0">
+          <div id="out-footer">Plus1 Technology · Prepared for [Client] · Confidential — Do Not Distribute</div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// ─── NAV ───────────────────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+// Default to howto on load
+document.getElementById('nav-howto').classList.add('active');
+
+// ─── PHASE TOGGLE ───────────────────────────────────────────
+function togglePhase(id) {
+  const body = document.getElementById('pb-' + id);
+  if (body) body.classList.toggle('open');
+}
+
+// ─── DEMO DATA ──────────────────────────────────────────────
+function loadDemo() {
+  document.getElementById('f_client').value = 'Acme Property Group';
+  document.getElementById('f_project').value = 'AI Lease Abstraction & Contract Intelligence System';
+  document.getElementById('f_start').value = 'Apr 14, 2026';
+  document.getElementById('f_end').value = '~14 weeks (Jul 31, 2026)';
+  document.getElementById('f_team').value = 'Jessica Peaden (AI Engineer), Marc Umstead (PM / Client Lead), Sarah Chen (Acme – Project Sponsor), David Kim (Acme – Legal Ops)';
+  document.getElementById('f_clickup').value = '';
+  document.getElementById('f_pain').value = 'Acme manages 2,400+ commercial leases across 18 states. Legal and asset management teams manually review and extract key lease data (rent schedules, CAM caps, termination clauses, renewal options) from PDF lease documents. Current process takes 4–6 hours per lease for initial abstraction, 2–3 hours for annual review. Error rate is ~12% on critical financial terms. Teams are 6–8 weeks behind on new lease onboarding. Discovery call April 3 confirmed: primary pain is rent commencement and CAM reconciliation errors causing ~$2.1M in missed billing annually.';
+  document.getElementById('f_solution').value = 'Build an AI-powered lease abstraction pipeline using Claude (vision + structured extraction), OpenAI Structured Outputs for schema normalization, and an n8n orchestration layer. Two-pass extraction: document classification → section isolation → clause-level extraction → normalization → confidence scoring → human review queue. Phase 0 pilot validates accuracy on 50 sample leases before any production deployment.';
+  document.getElementById('f_outcome').value = 'Target: reduce lease abstraction from 4–6 hrs to under 20 minutes per lease. >90% field-level accuracy on standard lease types. Auto-approve threshold of 0.92 confidence for clean leases. Recovery of ~$2.1M/yr in missed billing through accurate CAM and rent schedule extraction. Estimated 3.2x ROI at production scale within 12 months.';
+  document.getElementById('f_inscope').value = 'PDF lease ingestion and page classification. Clause extraction for 22 standard lease fields (rent schedule, CAM cap, term dates, renewal options, TI allowances, termination rights, assignment clauses, SNDA requirements). Confidence scoring and review queue routing. n8n pilot orchestration (Phase 0). API payload contract for Acme\'s Yardi integration. Canonical lease data model. Training dataset from 50 sample leases. Human-in-the-loop review UI specs (not built by Plus1 — specs only).';
+  document.getElementById('f_outscope').value = 'Yardi integration build (Acme dev team owns). Review UI development (Acme owns). Legal interpretation or legal advice. Custom development outside the n8n + Python stack. Non-English lease documents. Leases older than 1990 (scanned image quality too poor — deferred).';
+  document.getElementById('f_constraints').value = 'No direct database access to Yardi — API only, Acme provides endpoint docs. Budget cap: $48,000 fixed bid (signed). No cloud storage of lease PDFs beyond processing window — data privacy requirement. All extraction logic must produce an auditable source reference (page + paragraph).';
+  document.getElementById('f_tools').value = 'Confirmed: Claude Sonnet (extraction), OpenAI GPT-4o mini (normalization), n8n (self-hosted, server already provisioned by Marc), PyMuPDF (open source). Pending: Anthropic API key (Marc provisioning), OpenAI API key (Marc provisioning), LlamaParse trial (evaluating for table detection in exhibit schedules). Acme Yardi API docs — David Kim to provide by Apr 10.';
+  document.getElementById('f_access').value = 'Awaiting: 50 sample lease PDFs from David Kim (promised by Apr 10). Reference abstraction files (Excel) — David confirmed these exist but need internal cleanup. Yardi API endpoint documentation. Confirmation on data residency requirements (Sarah to confirm with legal by Apr 7).';
+  document.getElementById('f_open').value = 'Are rent schedule exhibits (sometimes as separate Excel attachments) in scope? David mentioned this on the call — unclear if Plus1 should handle or Acme pre-processes. What confidence threshold triggers mandatory human review vs. auto-approve? Acme has not defined this. Does Acme want Plus1 to push results to Yardi or will Acme pull from Plus1\'s endpoint? Push vs. pull architecture not decided. Data residency: can lease PDFs touch US-based cloud APIs or must processing stay on-prem?';
+  document.getElementById('f_risks').value = 'Older leases (pre-2000) are scanned images, not digital PDFs — extraction accuracy will be significantly lower. Reference file quality unknown — if files have errors, ground truth comparison is unreliable. Yardi API may have rate limits that affect production throughput. Scope creep risk: Acme may want to expand to 40+ fields after pilot — fixed bid must hold.';
+  document.getElementById('f_notes').value = 'Discovery call April 3: Sarah Chen (sponsor), David Kim (legal ops), Marc Umstead attended. David said "we just need something that doesn\'t miss the CAM cap — that\'s the one that kills us every year." Sarah confirmed budget approved, contract can be signed this week. Quote sent April 4. David will send sample leases by April 10. Marc to follow up April 8 if not received. Sarah asked about a dashboard for tracking review queue — noted as post-MVP consideration.';
+}
+
+// ─── GENERATE ───────────────────────────────────────────────
+async function generateRoadmap() {
+  const client = document.getElementById('f_client').value.trim();
+  const project = document.getElementById('f_project').value.trim();
+  const pain = document.getElementById('f_pain').value.trim();
+
+  if (!client || !project || !pain) {
+    const err = document.getElementById('formError');
+    document.getElementById('formErrorMsg').textContent = 'Client name, project name, and pain points are required to generate a roadmap.';
+    err.style.display = 'flex';
+    return;
+  }
+  document.getElementById('formError').style.display = 'none';
+
+  const projectData = {
+    client, project,
+    start: document.getElementById('f_start').value,
+    end: document.getElementById('f_end').value,
+    team: document.getElementById('f_team').value,
+    clickup: document.getElementById('f_clickup').value,
+    pain, solution: document.getElementById('f_solution').value,
+    outcome: document.getElementById('f_outcome').value,
+    inscope: document.getElementById('f_inscope').value,
+    outscope: document.getElementById('f_outscope').value,
+    constraints: document.getElementById('f_constraints').value,
+    tools: document.getElementById('f_tools').value,
+    access: document.getElementById('f_access').value,
+    open: document.getElementById('f_open').value,
+    risks: document.getElementById('f_risks').value,
+    notes: document.getElementById('f_notes').value,
+  };
+
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.getElementById('generateBtn').disabled = true;
+
+  const systemPrompt = `You are a Senior Delivery Architect and Project Manager generating a structured AI/automation project roadmap in strict JSON format. Return ONLY valid JSON — no markdown, no backticks, no preamble. The JSON must match this exact schema:
+
+{
+  "header": {
+    "client": string,
+    "project": string,
+    "timeline": string,
+    "kickoff": string,
+    "duration": string,
+    "totalTimeline": string,
+    "status": string,
+    "version": string
+  },
+  "summary": string (3-5 sentences, HTML allowed with <strong> tags),
+  "metrics": [{ "label": string, "value": string, "sub": string }],
+  "businessGoals": [{ "icon": string, "title": string, "desc": string }],
+  "techGoals": [{ "icon": string, "title": string, "desc": string }],
+  "checkpoints": [
+    { "label": "30-Day Checkpoint", "color": "blue", "items": [string] },
+    { "label": "60-Day Checkpoint", "color": "purple", "items": [string] },
+    { "label": "90-Day Checkpoint", "color": "green", "items": [string] }
+  ],
+  "metricsTable": [{ "metric": string, "baseline": string, "phase0": string, "production": string }],
+  "scopeConfirmed": string or null,
+  "inScope": [{ "icon": string, "title": string, "desc": string }],
+  "outScope": [{ "icon": string, "title": string, "desc": string }],
+  "future": [{ "icon": string, "title": string, "desc": string }],
+  "phases": [
+    {
+      "id": string,
+      "name": string,
+      "subtitle": string,
+      "status": string,
+      "duration": string,
+      "riskLevel": "HIGH" | "MEDIUM" | "LOW",
+      "riskNote": string,
+      "deliverables": [string],
+      "activities": [string],
+      "entryCriteria": [string],
+      "exitCriteria": [string],
+      "metaPhase": string,
+      "metaOwner": string,
+      "metaDuration": string
+    }
+  ],
+  "milestoneNote": string or null,
+  "milestones": [
+    {
+      "id": string,
+      "title": string,
+      "output": string,
+      "criteria": string,
+      "phase": string,
+      "owner": string,
+      "target": string,
+      "blocker": string or null,
+      "timeEstimate": string,
+      "msValue": string,
+      "status": "Pending" | "In Progress" | "Done" | "Blocked"
+    }
+  ],
+  "criticalPath": [
+    { "label": string, "type": "blocked" | "client" | "build" | "done" | "normal" }
+  ],
+  "blockersAlert": string or null,
+  "blockers": [
+    { "id": string, "title": string, "desc": string, "blocks": string, "owner": string, "target": string, "workaround": string, "severity": "critical" | "warning" | "info" }
+  ],
+  "buffers": [{ "title": string, "desc": string }],
+  "risks": [
+    {
+      "title": string,
+      "impact": "HIGH" | "MEDIUM" | "LOW",
+      "likelihood": "HIGH" | "MEDIUM" | "LOW",
+      "owner": string,
+      "description": string,
+      "mitigation": string,
+      "contingency": string
+    }
+  ],
+  "assumptions": [{ "assumption": string, "impact": string, "validate": string }],
+  "openItemsAlert": string or null,
+  "openItems": [
+    {
+      "id": string,
+      "title": string,
+      "desc": string,
+      "impact": string,
+      "owner": string,
+      "target": string,
+      "category": string,
+      "blocking": boolean
+    }
+  ],
+  "timeline": [
+    { "label": string, "title": string, "desc": string, "status": "active" | "done" | "blocked" | "pending" }
+  ],
+  "resources": [{ "role": string, "effort": string, "peak": string }],
+  "clientCommitments": [{ "what": string, "when": string, "risk": string }],
+  "infra": [{ "tool": string, "status": string, "action": string }],
+  "actionsAlert": string or null,
+  "actions": [
+    { "title": string, "desc": string, "owner": string, "target": string, "risk": string, "blocking": boolean }
+  ],
+  "raci": [{ "action": string, "owner": string, "deadline": string, "status": string, "risk": string }]
+}
+
+RULES:
+- Do NOT invent information not provided. Flag gaps with "Pending: [reason]"
+- Be specific — vague milestones are not milestones
+- All ClickUp time estimates: hours × 3600000 = milliseconds, passed as quoted string
+- Milestone names: clean titles only, no prefixes like "M1 —" or "Phase 1:"
+- 3–4 phases for contained projects
+- Surface blockers early and in sequence
+- Every acceptance criterion must be testable
+- Flag missing required items explicitly`;
+
+  const userMessage = `Generate a complete project roadmap for this project:
+
+CLIENT: ${projectData.client}
+PROJECT: ${projectData.project}
+TIMELINE: ${projectData.start || 'TBD'} → ${projectData.end || 'TBD'}
+TEAM: ${projectData.team || 'Not specified'}
+
+PAIN POINTS / CURRENT STATE:
+${projectData.pain}
+
+PROPOSED SOLUTION:
+${projectData.solution || 'Not specified — flag as gap'}
+
+EXPECTED OUTCOME / ROI:
+${projectData.outcome || 'Not specified — flag as gap'}
+
+IN SCOPE:
+${projectData.inscope || 'Not specified — flag as gap'}
+
+OUT OF SCOPE:
+${projectData.outscope || 'Not specified'}
+
+CONSTRAINTS:
+${projectData.constraints || 'None stated'}
+
+CONFIRMED TOOLS & APIs:
+${projectData.tools || 'Not specified — flag as gap'}
+
+ACCESS STATUS / BLOCKERS:
+${projectData.access || 'Not specified'}
+
+OPEN QUESTIONS:
+${projectData.open || 'None stated'}
+
+KNOWN RISKS:
+${projectData.risks || 'None stated'}
+
+ADDITIONAL CONTEXT / NOTES:
+${projectData.notes || 'None provided'}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 8000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMessage }]
+      })
+    });
+
+    const data = await resp.json();
+    const raw = data.content?.filter(c => c.type === 'text').map(c => c.text).join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const roadmap = JSON.parse(clean);
+    renderRoadmap(roadmap, projectData);
+    showSection('summary');
+  } catch(e) {
+    document.getElementById('loadingOverlay').classList.remove('show');
+    document.getElementById('generateBtn').disabled = false;
+    const err = document.getElementById('formError');
+    document.getElementById('formErrorMsg').textContent = 'Generation failed. Check your network and try again. (' + e.message + ')';
+    err.style.display = 'flex';
+    console.error(e);
+  }
+}
+
+// ─── RENDER ─────────────────────────────────────────────────
+function renderRoadmap(r, pd) {
+  // Header
+  const h = r.header || {};
+  document.getElementById('sidebarClient').textContent = h.client || pd.client;
+  document.getElementById('sidebarProject').textContent = h.project || pd.project;
+  document.getElementById('sidebarDate').textContent = 'Delivery Roadmap · ' + (h.version || 'v1.0');
+  document.getElementById('heroTitle').innerHTML = (h.client || pd.client) + ' · <span>' + (h.project || pd.project) + '</span>';
+  document.getElementById('heroSub').textContent = 'Plus1 Technology delivery roadmap — ' + (h.timeline || pd.start + ' through ' + pd.end);
+  document.getElementById('heroVersion').textContent = h.version || 'Roadmap v1.0';
+  document.getElementById('heroStatus').textContent = h.status || 'Draft';
+  document.getElementById('heroPhase').textContent = 'Phase 0 Kickoff';
+  document.getElementById('statKickoff').textContent = h.kickoff || pd.start || '–';
+  document.getElementById('statDuration').textContent = h.duration || '–';
+  document.getElementById('statTimeline').textContent = h.totalTimeline || '–';
+
+  // Summary
+  el('out-summary').innerHTML = '<p>' + r.summary + '</p>';
+
+  // Metric cards
+  const mc = el('out-metrics-cards');
+  mc.innerHTML = '';
+  (r.metrics || []).forEach(m => {
+    mc.innerHTML += `<div class="metric-card"><div class="metric-label">${m.label}</div><div class="metric-value">${m.value}</div><div class="metric-sub">${m.sub}</div></div>`;
+  });
+
+  // Business Goals
+  const bg = el('out-business-goals'); bg.innerHTML = '';
+  (r.businessGoals || []).forEach(g => {
+    bg.innerHTML += `<div class="goal-item"><div class="goal-icon">${g.icon}</div><div class="goal-title">${g.title}</div><div class="goal-desc">${g.desc}</div></div>`;
+  });
+
+  // Tech Goals
+  const tg = el('out-tech-goals'); tg.innerHTML = '';
+  (r.techGoals || []).forEach(g => {
+    tg.innerHTML += `<div class="goal-item"><div class="goal-icon">${g.icon}</div><div class="goal-title">${g.title}</div><div class="goal-desc">${g.desc}</div></div>`;
+  });
+
+  // Checkpoints
+  const cpGrid = el('out-checkpoints'); cpGrid.innerHTML = '';
+  const cpColors = { blue: 'tag-blue', purple: 'tag-purple', green: 'tag-green', yellow: 'tag-yellow' };
+  (r.checkpoints || []).forEach(cp => {
+    cpGrid.innerHTML += `<div class="checkpoint"><span class="checkpoint-badge ${cpColors[cp.color] || 'tag-gray'}">${cp.label}</span><h4>"Working" means:</h4><ul>${(cp.items||[]).map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+  });
+
+  // Metrics Table
+  if (r.metricsTable && r.metricsTable.length) {
+    el('out-metrics-table-wrap').style.display = 'block';
+    el('out-metrics-table').innerHTML = `<thead><tr><th>Metric</th><th>Baseline</th><th>Phase 0 Target</th><th>Production Target</th></tr></thead><tbody>${r.metricsTable.map(m=>`<tr><td><strong>${m.metric}</strong></td><td>${m.baseline}</td><td>${m.phase0}</td><td>${m.production}</td></tr>`).join('')}</tbody>`;
+  }
+
+  // Scope
+  if (r.scopeConfirmed) { el('out-scope-alert').style.display='flex'; el('out-scope-alert').innerHTML = '<span>✅</span><div>'+r.scopeConfirmed+'</div>'; }
+  const sg = el('out-scope-grid'); sg.innerHTML = '';
+  const scopeCols = [
+    { key: 'inScope', header: '✅ In Scope — We Build', icon: '🔵', colorClass: 'tag-blue' },
+    { key: 'outScope', header: '❌ Out of Scope — Explicit Exclusions', icon: '🔴', colorClass: 'tag-red' },
+    { key: 'future', header: '🔮 Future Considerations', icon: '🟡', colorClass: 'tag-yellow' }
+  ];
+  scopeCols.forEach(col => {
+    const items = r[col.key] || [];
+    if (!items.length) return;
+    sg.innerHTML += `<div class="scope-col"><div class="scope-col-header"><span>${col.header}</span></div>${items.map(i=>`<div class="scope-item"><div class="scope-item-icon">${i.icon||col.icon}</div><div class="scope-item-content"><strong>${i.title}</strong><span>${i.desc}</span></div></div>`).join('')}</div>`;
+  });
+
+  // Phases
+  const ph = el('out-phases'); ph.innerHTML = '';
+  (r.phases || []).forEach((p, idx) => {
+    const risk = p.riskLevel || 'LOW';
+    const riskTag = risk === 'HIGH' ? 'tag-red' : risk === 'MEDIUM' ? 'tag-yellow' : 'tag-green';
+    ph.innerHTML += `<div class="phase-card">
+      <div class="phase-header" onclick="togglePhase('${idx}')">
+        <div class="phase-num">${p.id || idx+1}</div>
+        <div class="phase-header-text">
+          <h3>${p.name}</h3>
+          <p>${p.subtitle || ''}</p>
+        </div>
+        <div class="phase-header-right">
+          <span class="tag ${riskTag}">${risk} RISK</span>
+          <span class="tag tag-gray">${p.duration || '–'}</span>
+        </div>
+      </div>
+      <div class="phase-body" id="pb-${idx}">
+        <div class="phase-cols">
+          <div>
+            <div class="phase-list-title">Deliverables</div>
+            <ul class="phase-list">${(p.deliverables||[]).map(d=>`<li>${d}</li>`).join('')}</ul>
+            <div class="phase-list-title mt-16">Key Activities</div>
+            <ul class="phase-list">${(p.activities||[]).map(d=>`<li>${d}</li>`).join('')}</ul>
+          </div>
+          <div>
+            <div class="phase-list-title">Entry Criteria</div>
+            <ul class="criteria-list">${(p.entryCriteria||[]).map(d=>`<li>${d}</li>`).join('')}</ul>
+            <div class="phase-list-title mt-16">Exit Criteria (Testable)</div>
+            <ul class="criteria-list">${(p.exitCriteria||[]).map(d=>`<li>${d}</li>`).join('')}</ul>
+          </div>
+        </div>
+        ${p.riskNote ? `<div class="alert alert-${risk==='HIGH'?'red':risk==='MEDIUM'?'yellow':'green'} mt-16"><span>${risk==='HIGH'?'🔴':'🟡'}</span><div><strong>${risk}</strong> — ${p.riskNote}</div></div>` : ''}
+        <div class="phase-meta">
+          <div class="phase-meta-item"><span class="label">Phase:</span><span class="value">${p.metaPhase||'–'}</span></div>
+          <div class="phase-meta-item"><span class="label">Owner:</span><span class="value">${p.metaOwner||'–'}</span></div>
+          <div class="phase-meta-item"><span class="label">Duration:</span><span class="value">${p.metaDuration||p.duration||'–'}</span></div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // Milestones
+  if (r.milestoneNote) { el('out-milestone-note').style.display='flex'; el('out-milestone-note').innerHTML = '<span>ℹ️</span><div>'+r.milestoneNote+'</div>'; }
+  const mg = el('out-milestones'); mg.innerHTML = '';
+  (r.milestones||[]).forEach((m, i) => {
+    const statusTag = m.status === 'Blocked' ? 'tag-red' : m.status === 'Done' ? 'tag-green' : m.status === 'In Progress' ? 'tag-blue' : 'tag-gray';
+    mg.innerHTML += `<div class="milestone">
+      <div class="milestone-num">${m.id || 'M'+(i+1)}</div>
+      <div class="milestone-body">
+        <h4>${m.title}</h4>
+        <div class="milestone-output">OUTPUT: ${m.output}</div>
+        <div class="milestone-criteria">${m.criteria}</div>
+        ${m.blocker ? `<div class="mt-8"><span class="tag tag-yellow">⚠️ ${m.blocker}</span></div>` : ''}
+      </div>
+      <div class="milestone-meta">
+        <span class="tag ${statusTag}">${m.status||'Pending'}</span>
+        <div class="meta-row"><div class="meta-label">Phase</div><div class="meta-value">${m.phase}</div></div>
+        <div class="meta-row"><div class="meta-label">Owner</div><div class="meta-value">${m.owner}</div></div>
+        <div class="meta-row"><div class="meta-label">Target</div><div class="meta-value">${m.target}</div></div>
+        <div class="meta-row"><div class="meta-label mono">ClickUp ms</div><div class="meta-value mono">${m.msValue||'–'}</div></div>
+      </div>
+    </div>`;
+  });
+
+  // Critical Path
+  const cp = el('out-critical-path'); cp.innerHTML = '';
+  (r.criticalPath||[]).forEach((node, i) => {
+    if (i > 0) cp.innerHTML += '<span class="cp-arrow">→</span>';
+    const cls = node.type === 'blocked' ? 'blocked' : node.type === 'client' ? 'client' : node.type === 'done' ? 'done' : '';
+    cp.innerHTML += `<span class="cp-node ${cls}">${node.label}</span>`;
+  });
+
+  // Blockers alert
+  if (r.blockersAlert) { el('out-blockers-alert').style.display='flex'; el('out-blockers-alert').innerHTML = '<span>🔴</span><div>'+r.blockersAlert+'</div>'; }
+  const bt = el('out-blockers-table'); bt.innerHTML = '';
+  (r.blockers||[]).forEach(b => {
+    const sev = b.severity === 'critical' ? '⛔' : b.severity === 'warning' ? '⚠️' : 'ℹ️';
+    bt.innerHTML += `<tr><td><strong>${b.id}</strong></td><td>${sev} <strong>${b.title}</strong><small>${b.desc}</small></td><td>${b.blocks}</td><td>${b.owner}</td><td>${b.target}</td><td>${b.workaround}</td></tr>`;
+  });
+
+  // Buffers
+  const bf = el('out-buffers'); bf.innerHTML = '';
+  (r.buffers||[]).forEach(b => { bf.innerHTML += `<div style="margin-bottom:12px"><strong>${b.title}</strong><p style="font-size:13px;color:var(--text-muted);margin-top:4px">${b.desc}</p></div>`; });
+
+  // Risks
+  const rg = el('out-risks'); rg.innerHTML = '';
+  (r.risks||[]).forEach(risk => {
+    const impCls = risk.impact === 'HIGH' ? 'high' : risk.impact === 'MEDIUM' ? 'medium' : 'low';
+    const impTag = risk.impact === 'HIGH' ? 'tag-red' : risk.impact === 'MEDIUM' ? 'tag-yellow' : 'tag-green';
+    const lhTag = risk.likelihood === 'HIGH' ? 'tag-red' : risk.likelihood === 'MEDIUM' ? 'tag-yellow' : 'tag-green';
+    rg.innerHTML += `<div class="risk-card ${impCls}">
+      <div class="risk-header">
+        <div class="risk-title">${risk.title}</div>
+        <div class="risk-badges">
+          <span class="tag ${impTag}">${risk.impact} impact</span>
+          <span class="tag ${lhTag}">${risk.likelihood} likelihood</span>
+        </div>
+      </div>
+      <div class="text-subtle" style="font-size:11px;margin-bottom:10px">Owner: ${risk.owner}</div>
+      <div class="risk-body">
+        <div><div class="risk-section-title">Description</div><div class="risk-section-body">${risk.description}</div>
+             <div class="risk-section-title mt-12">Mitigation</div><div class="risk-section-body">${risk.mitigation}</div></div>
+        <div><div class="risk-section-title">Contingency</div><div class="risk-section-body">${risk.contingency}</div></div>
+      </div>
+    </div>`;
+  });
+
+  // Assumptions
+  const at = el('out-assumptions'); at.innerHTML = '';
+  (r.assumptions||[]).forEach(a => {
+    at.innerHTML += `<tr><td>${a.assumption}</td><td>${a.impact}</td><td>${a.validate}</td></tr>`;
+  });
+
+  // Open Items
+  if (r.openItemsAlert) { el('out-open-alert').style.display='flex'; el('out-open-alert').innerHTML = '<span>🔴</span><div>'+r.openItemsAlert+'</div>'; }
+  const oi = el('out-open-items'); oi.innerHTML = '';
+  (r.openItems||[]).forEach(item => {
+    const cats = { Scope: 'tag-blue', Access: 'tag-yellow', Tooling: 'tag-purple', Security: 'tag-red', Ownership: 'tag-gray' };
+    oi.innerHTML += `<div class="open-item ${item.blocking ? 'blocking' : ''}">
+      <div class="open-item-header">
+        <span class="open-item-id">${item.id}</span>
+        ${item.blocking ? '<span class="tag tag-red">⛔ BUILD-BLOCKING</span>' : ''}
+        <div class="open-item-title">${item.title}</div>
+      </div>
+      <div class="open-item-desc">${item.desc}</div>
+      <div class="open-item-desc text-subtle" style="font-size:12px">Impact: ${item.impact}</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">${item.owner}</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">${item.target}</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag ${cats[item.category]||'tag-gray'} " style="font-size:10px;padding:1px 7px">${item.category}</span></span></div>
+      </div>
+    </div>`;
+  });
+
+  // Timeline
+  const tl = el('out-timeline'); tl.innerHTML = '';
+  (r.timeline||[]).forEach(t => {
+    const dotCls = t.status === 'active' ? 'active' : t.status === 'done' ? 'done' : t.status === 'blocked' ? 'blocked' : '';
+    tl.innerHTML += `<div class="tl-item"><div class="tl-dot ${dotCls}"></div><div class="tl-label">${t.label}</div><div class="tl-title">${t.title}</div><div class="tl-desc">${t.desc}</div></div>`;
+  });
+
+  // Resources
+  const res = el('out-resources'); res.innerHTML = '';
+  (r.resources||[]).forEach(r2 => { res.innerHTML += `<tr><td><strong>${r2.role}</strong></td><td>${r2.effort}</td><td>${r2.peak}</td></tr>`; });
+
+  // Client Commitments
+  const cc = el('out-client-commitments'); cc.innerHTML = '';
+  (r.clientCommitments||[]).forEach(c => { cc.innerHTML += `<tr><td><strong>${c.what}</strong></td><td>${c.when}</td><td><span style="color:var(--red)">${c.risk}</span></td></tr>`; });
+
+  // Infra
+  const infra = el('out-infra'); infra.innerHTML = '';
+  (r.infra||[]).forEach(i => {
+    const statTag = i.status.toLowerCase().includes('pending') ? 'tag-yellow' : i.status.toLowerCase().includes('ready') || i.status.toLowerCase().includes('done') ? 'tag-green' : 'tag-gray';
+    infra.innerHTML += `<tr><td><strong>${i.tool}</strong></td><td><span class="tag ${statTag}">${i.status}</span></td><td>${i.action}</td></tr>`;
+  });
+
+  // Actions
+  if (r.actionsAlert) { el('out-actions-alert').style.display='flex'; el('out-actions-alert').innerHTML = '<span>🔴</span><div>'+r.actionsAlert+'</div>'; }
+  const ac = el('out-actions'); ac.innerHTML = '';
+  (r.actions||[]).forEach((a, i) => {
+    ac.innerHTML += `<div class="action-item ${a.blocking ? 'blocking' : ''}">
+      <div class="action-num">${i+1}</div>
+      <div class="action-body">
+        <h4>${a.title}</h4>
+        <p>${a.desc}</p>
+        ${a.blocking ? '<div class="mt-8"><span class="tag tag-red">⛔ Build-blocking if delayed</span></div>' : ''}
+      </div>
+      <div class="action-meta">
+        <div class="meta-row"><div class="meta-label">Owner</div><div class="meta-value">${a.owner}</div></div>
+        <div class="meta-row"><div class="meta-label">Target</div><div class="meta-value">${a.target}</div></div>
+        ${a.risk ? `<div class="meta-row"><div class="meta-label" style="color:var(--yellow)">Risk</div><div class="meta-value" style="color:var(--yellow);font-size:10px;text-align:right">${a.risk}</div></div>` : ''}
+      </div>
+    </div>`;
+  });
+
+  // RACI
+  const raci = el('out-raci'); raci.innerHTML = '';
+  (r.raci||[]).forEach(row => {
+    const st = row.status.toLowerCase().includes('progress') ? 'tag-blue' : row.status.toLowerCase().includes('pending') ? 'tag-yellow' : row.status.toLowerCase().includes('done') ? 'tag-green' : 'tag-gray';
+    raci.innerHTML += `<tr><td>${row.action}</td><td><strong>${row.owner}</strong></td><td>${row.deadline}</td><td><span class="tag ${st}">${row.status}</span></td><td style="color:var(--red)">${row.risk}</td></tr>`;
+  });
+
+  // Footer
+  el('out-footer').textContent = `Plus1 Technology · Prepared for ${pd.client} · ${new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})} · Confidential — Do Not Distribute`;
+
+  // Open first phase
+  const firstPb = document.getElementById('pb-0');
+  if (firstPb) firstPb.classList.add('open');
+
+  document.getElementById('loadingOverlay').classList.remove('show');
+  document.getElementById('generateBtn').disabled = false;
+}
+
+function el(id) { return document.getElementById(id); }
+</script>
+</body>
+</html>
