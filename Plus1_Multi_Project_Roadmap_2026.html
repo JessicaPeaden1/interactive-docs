@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Plus 1 Technology — Multi-Project Engagement Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #1e2d8a;
+  --navy-dim:   #e8ecf8;
+  --navy-mid:   #c5ceed;
+  --cyan:       #29abe2;
+  --cyan-dim:   #e0f4fc;
+  --cyan-mid:   #a8ddf5;
+  --accent:     var(--navy);
+  --accent2:    var(--cyan);
+  --bg:         #f4f6fb;
+  --bg2:        #ffffff;
+  --bg3:        #eef1f8;
+  --bg4:        #f9fafd;
+  --border:     #dce2f0;
+  --border2:    #c8d0e8;
+  --text:       #1a2040;
+  --muted:      #5a6589;
+  --subtle:     #8e9ab8;
+  --green:      #16a34a;
+  --green-bg:   #f0fdf4;
+  --green-bdr:  #bbf7d0;
+  --yellow:     #b45309;
+  --yellow-bg:  #fffbeb;
+  --yellow-bdr: #fde68a;
+  --red:        #dc2626;
+  --red-bg:     #fef2f2;
+  --red-bdr:    #fecaca;
+  --purple:     #7c3aed;
+  --purple-bg:  #f5f3ff;
+  --purple-bdr: #ddd6fe;
+  --teal:       #0f766e;
+  --teal-bg:    #f0fdfa;
+  --teal-bdr:   #99f6e4;
+  --orange:     #c2410c;
+  --orange-bg:  #fff7ed;
+  --orange-bdr: #fed7aa;
+  /* Project accent colors */
+  --p1-color:   #1e2d8a;
+  --p2-color:   #0ea5e9;
+  --p3-color:   #c2410c;
+  --p4-color:   #7c3aed;
+  --p5-color:   #0f766e;
+  --p6-color:   #b45309;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.65; min-height: 100vh; }
+
+/* ── HEADER ── */
+.site-header { background: var(--navy); padding: 0 32px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(30,45,138,0.18); display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.2); }
+.header-label { color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; }
+.header-meta { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.55); font-size: 12px; }
+.header-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+.version-badge { background: rgba(41,171,226,0.25); color: #a8ddf5; border: 1px solid rgba(41,171,226,0.3); border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
+
+/* ── HERO ── */
+.hero { background: linear-gradient(135deg, #1a2560 0%, #1e2d8a 55%, #1a4a7a 100%); padding: 28px 32px; }
+.hero-inner { max-width: 1400px; margin: 0 auto; }
+.project-header-grid { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; margin-bottom: 16px; }
+.engagement-title { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 6px; }
+.engagement-subtitle { font-size: 13px; color: rgba(255,255,255,0.65); }
+.stats-grid { display: flex; gap: 10px; }
+.stat-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px 18px; text-align: center; min-width: 88px; }
+.s-label { font-size: 10px; color: rgba(255,255,255,0.55); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.s-value { font-size: 18px; font-weight: 700; color: #fff; line-height: 1.2; margin: 2px 0; }
+.s-sub { font-size: 10px; color: rgba(255,255,255,0.45); }
+.meta-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.meta-item { font-size: 12px; color: rgba(255,255,255,0.7); }
+.meta-item strong { color: rgba(255,255,255,0.9); }
+.clickup-link { margin-left: auto; background: rgba(41,171,226,0.2); border: 1px solid rgba(41,171,226,0.4); color: #a8ddf5; padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; }
+
+/* ── PROJECT SWITCHER ── */
+.project-switcher { background: #fff; border-bottom: 2px solid var(--border); padding: 0 32px; position: sticky; top: 56px; z-index: 190; box-shadow: 0 2px 8px rgba(30,45,138,0.06); }
+.switcher-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: stretch; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.switcher-inner::-webkit-scrollbar { display: none; }
+.project-pill { display: flex; align-items: center; gap: 10px; padding: 12px 20px; border: none; background: none; cursor: pointer; font-family: var(--sans); border-bottom: 3px solid transparent; transition: all 0.15s; flex-shrink: 0; color: var(--muted); }
+.project-pill:hover { background: var(--bg3); color: var(--text); }
+.project-pill.active { color: var(--navy); border-bottom-color: var(--navy); background: var(--navy-dim); }
+.project-pill.active .pill-dot { opacity: 1; }
+.pill-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.pill-info { text-align: left; }
+.pill-label { font-size: 13px; font-weight: 600; line-height: 1.2; }
+.pill-sub { font-size: 11px; color: var(--subtle); }
+.pill-type-badge { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; margin-top: 2px; display: inline-block; }
+.engagement-pill { background: none; }
+.engagement-pill.active { border-bottom-color: var(--cyan); background: var(--cyan-dim); color: #0369a1; }
+.switcher-divider { width: 1px; background: var(--border); margin: 8px 4px; flex-shrink: 0; }
+.add-project-btn { display: flex; align-items: center; gap: 6px; padding: 12px 16px; border: none; background: none; cursor: pointer; font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--cyan); border-bottom: 3px solid transparent; flex-shrink: 0; white-space: nowrap; }
+.add-project-btn:hover { background: var(--cyan-dim); }
+.hidden-pill { display: none; }
+
+/* ── TABS ── */
+.tabs-nav { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 32px; position: sticky; top: 104px; z-index: 180; display: flex; align-items: center; }
+.tabs-bar { flex: 1; overflow: hidden; }
+.tabs-inner { display: flex; overflow-x: auto; scrollbar-width: none; }
+.tabs-inner::-webkit-scrollbar { display: none; }
+.tab-btn { display: flex; align-items: center; gap: 6px; padding: 12px 16px; border: none; background: none; cursor: pointer; font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); font-weight: 600; }
+.tab-icon { font-size: 13px; }
+.tabs-scroll-btn { background: none; border: none; cursor: pointer; padding: 0 8px; font-size: 20px; color: var(--muted); flex-shrink: 0; }
+.tabs-scroll-btn.hidden { visibility: hidden; }
+
+/* ── CONTENT AREA ── */
+.content-area { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
+.project-panels { display: none; }
+.project-panels.active { display: block; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── SECTION TITLES ── */
+.section-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: -0.02em; }
+.section-desc { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+/* ── CARDS ── */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 900px) { .card-grid, .two-col, .three-col { grid-template-columns: 1fr; } .project-header-grid { grid-template-columns: 1fr; } }
+
+/* ── NOTICES ── */
+.notice { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+.notice.info { background: var(--navy-dim); border: 1px solid var(--navy-mid); color: var(--navy); }
+.notice.warn { background: var(--yellow-bg); border: 1px solid var(--yellow-bdr); color: var(--yellow); }
+.notice.success { background: var(--green-bg); border: 1px solid var(--green-bdr); color: var(--green); }
+.notice.danger { background: var(--red-bg); border: 1px solid var(--red-bdr); color: var(--red); }
+.n-icon { font-size: 15px; flex-shrink: 0; }
+
+/* ── PROJECT TYPE CHECKLIST ── */
+.type-checklist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 12px; }
+.type-checkbox-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; background: var(--bg4); }
+.type-checkbox-item:hover { border-color: var(--border2); background: var(--bg3); }
+.type-checkbox-item.checked { border-color: var(--navy); background: var(--navy-dim); }
+.type-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.type-checkbox-item input { display: none; }
+.type-name { font-size: 12px; font-weight: 500; color: var(--text); }
+
+/* ── PROJECT CONFIGURATION CARDS ── */
+.project-config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+.project-config-card { border: 2px solid var(--border); border-radius: 10px; padding: 16px; background: var(--bg4); }
+.project-config-card.active { border-color: var(--navy); background: var(--navy-dim); }
+.config-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.config-dot { width: 12px; height: 12px; border-radius: 50%; }
+.config-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.config-field { margin-bottom: 8px; }
+.config-field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 2px; }
+.config-field .val { font-size: 13px; color: var(--text); font-weight: 500; font-family: var(--mono); }
+
+/* ── PROJECT MAP / GANTT ── */
+.gantt-container { overflow-x: auto; }
+.gantt-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.gantt-table th { background: var(--bg3); padding: 8px 12px; font-weight: 600; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.gantt-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.gantt-bar-cell { min-width: 400px; }
+.gantt-bar-wrap { display: flex; align-items: center; gap: 6px; }
+.gantt-bar { height: 18px; border-radius: 4px; opacity: 0.85; display: inline-block; position: relative; }
+.gantt-bar-label { font-size: 10px; font-weight: 600; color: #fff; position: absolute; left: 6px; top: 50%; transform: translateY(-50%); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 8px); }
+.gantt-week-header { display: flex; gap: 0; font-size: 10px; color: var(--muted); font-weight: 600; }
+.gantt-week { min-width: 50px; text-align: center; padding: 4px; border-right: 1px solid var(--border); }
+
+/* ── PROJECT TAG LABELS (for combined views) ── */
+.project-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.02em; white-space: nowrap; }
+.project-tag .t-dot { width: 6px; height: 6px; border-radius: 50%; }
+.ptag-1 { background: #e8ecf8; color: #1e2d8a; }
+.ptag-1 .t-dot { background: #1e2d8a; }
+.ptag-2 { background: #e0f2fe; color: #0369a1; }
+.ptag-2 .t-dot { background: #0ea5e9; }
+.ptag-3 { background: #fff7ed; color: #c2410c; }
+.ptag-3 .t-dot { background: #c2410c; }
+.ptag-4 { background: #f5f3ff; color: #7c3aed; }
+.ptag-4 .t-dot { background: #7c3aed; }
+.ptag-shared { background: #f0fdf4; color: #16a34a; }
+.ptag-shared .t-dot { background: #16a34a; }
+
+/* ── GOAL GRID ── */
+.goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.goal-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 9px; padding: 14px; }
+.gi-icon { font-size: 20px; margin-bottom: 6px; }
+.gi-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.gi-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── TABLES ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { background: var(--bg3); padding: 9px 14px; font-weight: 600; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+.data-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--bg4); }
+.data-table small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+/* ── TAGS ── */
+.tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+.tag-green { background: var(--green-bg); color: var(--green); }
+.tag-yellow { background: var(--yellow-bg); color: var(--yellow); }
+.tag-red { background: var(--red-bg); color: var(--red); }
+.tag-blue { background: var(--cyan-dim); color: #0369a1; }
+.tag-gray { background: var(--bg3); color: var(--muted); }
+.tag-purple { background: var(--purple-bg); color: var(--purple); }
+
+/* ── BLOCKER ITEMS ── */
+.blocker-sev { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-bottom: 4px; }
+.blocker-sev.build { background: var(--red-bg); color: var(--red); }
+.blocker-sev.warn { background: var(--yellow-bg); color: var(--yellow); }
+.blocker-sev.vendor { background: var(--purple-bg); color: var(--purple); }
+.blocker-sev.client { background: var(--orange-bg); color: var(--orange); }
+.blocker-flag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow-bdr); padding: 3px 8px; border-radius: 6px; margin-top: 6px; }
+.build-block-banner { display: flex; align-items: center; gap: 10px; background: var(--red-bg); border: 1px solid var(--red-bdr); border-radius: 8px; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--red); margin-bottom: 14px; }
+
+/* ── MILESTONE ITEMS ── */
+.milestone-item { display: grid; grid-template-columns: 36px 1fr auto; gap: 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; align-items: start; }
+.m-num { width: 36px; height: 36px; background: var(--navy); color: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.m-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.m-output { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-style: italic; }
+.m-criteria { font-size: 12px; color: var(--text); line-height: 1.6; }
+.m-side { text-align: right; flex-shrink: 0; }
+.m-phase { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.m-owner { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.m-target { font-size: 12px; color: var(--cyan); font-weight: 600; margin-bottom: 4px; }
+.m-time { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+/* ── PHASES ── */
+.phase-block { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.phase-header { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; padding: 16px 20px; background: var(--bg3); border-bottom: 1px solid var(--border); }
+.phase-num { width: 32px; height: 32px; background: var(--navy); color: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.phase-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.phase-duration { font-size: 12px; color: var(--muted); font-weight: 500; }
+.phase-risk { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+.risk-high { background: var(--red-bg); color: var(--red); }
+.risk-med { background: var(--yellow-bg); color: var(--yellow); }
+.risk-low { background: var(--green-bg); color: var(--green); }
+.phase-body { padding: 16px 20px; background: var(--bg2); }
+.phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.phase-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 6px; }
+.phase-list { list-style: none; }
+.phase-list li { font-size: 13px; color: var(--text); padding: 3px 0; padding-left: 16px; position: relative; }
+.phase-list li::before { content: '→'; position: absolute; left: 0; color: var(--cyan); font-size: 11px; }
+.criteria-box { background: var(--green-bg); border: 1px solid var(--green-bdr); border-radius: 7px; padding: 10px 14px; font-size: 12px; color: var(--text); }
+
+/* ── CRITICAL PATH ── */
+.cp-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; }
+.cp-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
+.cp-step { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--text); }
+.cp-step.client { border-color: var(--yellow-bdr); background: var(--yellow-bg); color: var(--yellow); }
+.cp-step.gate { border-color: var(--green-bdr); background: var(--green-bg); color: var(--green); }
+.cp-arrow { font-size: 14px; color: var(--muted); }
+
+/* ── RISK REGISTER ── */
+.risk-item { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: start; border: 1px solid var(--border); border-radius: 9px; padding: 14px; margin-bottom: 10px; background: var(--bg2); }
+.risk-desc { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.risk-detail { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.risk-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.impact-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 8px; }
+.imp-high { background: var(--red-bg); color: var(--red); }
+.imp-med { background: var(--yellow-bg); color: var(--yellow); }
+.imp-low { background: var(--green-bg); color: var(--green); }
+
+/* ── OPEN ITEMS ── */
+.open-item { display: grid; grid-template-columns: auto 1fr; gap: 12px; border: 1px solid var(--border); border-radius: 9px; padding: 14px; margin-bottom: 10px; background: var(--bg2); }
+.oi-num { width: 28px; height: 28px; background: var(--yellow-bg); border: 1px solid var(--yellow-bdr); color: var(--yellow); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.oi-question { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.oi-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 6px; }
+.oi-cat { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 8px; background: var(--purple-bg); color: var(--purple); }
+
+/* ── CHECKLIST ── */
+.checklist { font-size: 13px; color: var(--text); line-height: 2.2; font-family: var(--mono); }
+
+/* ── CODE BLOCKS ── */
+.code-block { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: var(--mono); font-size: 12px; color: var(--text); line-height: 1.8; overflow-x: auto; }
+.code-key { color: var(--navy); }
+.code-str { color: var(--teal); }
+.code-brace { color: var(--muted); }
+
+/* ── STEPS ── */
+.cu-step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+.cu-step-num { width: 28px; height: 28px; background: var(--navy); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+.cu-step h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.cu-step p { font-size: 12px; color: var(--muted); }
+.step-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 13px; color: var(--text); }
+.step-num-a { width: 22px; height: 22px; background: var(--navy); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+.step-num-b { width: 22px; height: 22px; background: var(--bg3); border: 1px solid var(--border2); color: var(--muted); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+.steps-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 8px; margin-top: 12px; }
+
+/* ── OPTION BLOCKS ── */
+.option-block { border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--bg4); }
+.option-block.primary { border-color: var(--navy); background: var(--navy-dim); }
+.option-label { font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+.option-label.a { color: var(--navy); }
+.option-label.b { color: var(--muted); }
+.option-icon { font-size: 28px; margin-bottom: 8px; }
+.option-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.option-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ── SPACERS ── */
+.spacer-16 { height: 16px; }
+
+/* ── METRICS TABLE ── */
+.ms-ref-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ms-ref-table th { background: var(--bg3); padding: 7px 12px; font-weight: 600; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); text-align: left; }
+.ms-ref-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); font-family: var(--mono); }
+.ms-ref-table tbody tr:last-child td { border-bottom: none; }
+
+/* ── DEPENDENCY ARROWS ── */
+.dep-row { display: flex; align-items: center; gap: 6px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.dep-row:last-child { border-bottom: none; }
+.dep-from { font-weight: 600; }
+.dep-arrow { color: var(--muted); }
+.dep-to { color: var(--navy); font-weight: 600; }
+
+/* ── RESOURCE LINKS ── */
+.resource-link-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.resource-link-card .r-title { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 4px; }
+.resource-link-card .r-desc { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.resource-link-card a { font-family: var(--mono); font-size: 11px; color: var(--navy); text-decoration: underline; word-break: break-all; }
+
+/* ── SHARED BLOCKER HIGHLIGHT ── */
+.shared-blocker { border-left: 3px solid var(--green); }
+.cross-tag { font-size: 10px; font-weight: 700; background: var(--green-bg); color: var(--green); padding: 2px 7px; border-radius: 8px; }
+
+/* ── PROCUREMENT TRACK ── */
+.proc-track { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+.proc-step { background: var(--bg2); padding: 14px 16px; text-align: center; }
+.proc-step.done { background: var(--green-bg); }
+.proc-step.active { background: var(--navy-dim); }
+.proc-step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 4px; }
+.proc-step-val { font-size: 12px; font-weight: 600; color: var(--text); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="header-brand">
+      <svg viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg" fill="white" style="height:36px;width:auto">
+        <text x="0" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">PLUS</text>
+        <circle cx="208" cy="36" r="34" fill="none" stroke="white" stroke-width="7"/>
+        <text x="200" y="47" font-family="Arial Black, sans-serif" font-weight="900" font-size="26" fill="white">+1</text>
+        <text x="243" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">NE</text>
+        <text x="18" y="78" font-family="Arial, sans-serif" font-weight="400" font-size="13" letter-spacing="8">TECHNOLOGY</text>
+      </svg>
+    <div class="header-divider"></div>
+    <span class="header-label">Multi-Project Engagement Roadmap</span>
+  </div>
+  <div class="header-meta">
+    <span class="version-badge">Engagement v1.0</span>
+    <span class="header-dot"></span>
+    <span id="header-client">[CLIENT NAME]</span>
+    <span class="header-dot"></span>
+    <span>Confidential</span>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="project-header-grid">
+      <div>
+        <div class="engagement-title">[CLIENT NAME] — Multi-Project Engagement</div>
+        <div class="engagement-subtitle">Plus 1 Technology · <span>[START DATE]</span> through <span>[END DATE]</span> · Confidential — Do Not Distribute</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="s-label">Projects</div><div class="s-value" id="active-count">4</div><div class="s-sub">Active</div></div>
+        <div class="stat-card"><div class="s-label">Go-Live</div><div class="s-value">~[DATE]</div><div class="s-sub">First Target</div></div>
+        <div class="stat-card"><div class="s-label">Duration</div><div class="s-value">[X] wks</div><div class="s-sub">Engagement</div></div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item">👤 <strong>Client:</strong> [CLIENT NAME]</div>
+      <div class="meta-item">📋 <strong>PM:</strong> [PROJECT MANAGER]</div>
+      <div class="meta-item">🔧 <strong>Lead Eng:</strong> [LEAD ENGINEER]</div>
+      <div class="meta-item">📅 <strong>Kickoff:</strong> [KICKOFF DATE]</div>
+      <div class="meta-item">📍 <strong>Site:</strong> [SITE / LOCATION]</div>
+      <a class="clickup-link" href="#" target="_blank">🔗 View in ClickUp</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROJECT SWITCHER ═══ -->
+<div class="project-switcher">
+  <div class="switcher-inner">
+
+    <!-- ENGAGEMENT OVERVIEW -->
+    <button class="project-pill engagement-pill active" data-project="engagement" onclick="switchProject('engagement', this)">
+      <span style="font-size:18px">🏢</span>
+      <div class="pill-info">
+        <div class="pill-label">Engagement</div>
+        <div class="pill-sub">Overview &amp; Setup</div>
+      </div>
+    </button>
+
+    <div class="switcher-divider"></div>
+
+    <!-- PROJECT 1 -->
+    <button class="project-pill" data-project="p1" onclick="switchProject('p1', this)">
+      <div class="pill-dot" style="background:var(--p1-color)"></div>
+      <div class="pill-info">
+        <div class="pill-label">[Project 1 Name]</div>
+        <div class="pill-sub" style="color:#1e2d8a;font-weight:600">[Project Type]</div>
+      </div>
+    </button>
+
+    <!-- PROJECT 2 -->
+    <button class="project-pill" data-project="p2" onclick="switchProject('p2', this)">
+      <div class="pill-dot" style="background:var(--p2-color)"></div>
+      <div class="pill-info">
+        <div class="pill-label">[Project 2 Name]</div>
+        <div class="pill-sub" style="color:#0369a1;font-weight:600">[Project Type]</div>
+      </div>
+    </button>
+
+    <!-- PROJECT 3 -->
+    <button class="project-pill" data-project="p3" onclick="switchProject('p3', this)">
+      <div class="pill-dot" style="background:var(--p3-color)"></div>
+      <div class="pill-info">
+        <div class="pill-label">[Project 3 Name]</div>
+        <div class="pill-sub" style="color:#c2410c;font-weight:600">[Project Type]</div>
+      </div>
+    </button>
+
+    <!-- PROJECT 4 -->
+    <button class="project-pill" data-project="p4" onclick="switchProject('p4', this)">
+      <div class="pill-dot" style="background:var(--p4-color)"></div>
+      <div class="pill-info">
+        <div class="pill-label">[Project 4 Name]</div>
+        <div class="pill-sub" style="color:#7c3aed;font-weight:600">[Project Type]</div>
+      </div>
+    </button>
+
+    <!-- PROJECT 5 (hidden until added) -->
+    <button class="project-pill hidden-pill" id="pill-p5" data-project="p5" onclick="switchProject('p5', this)">
+      <div class="pill-dot" style="background:var(--p5-color)"></div>
+      <div class="pill-info">
+        <div class="pill-label">[Project 5 Name]</div>
+        <div class="pill-sub" style="color:#0f766e;font-weight:600">[Project Type]</div>
+      </div>
+    </button>
+
+    <!-- PROJECT 6 (hidden until added) -->
+    <button class="project-pill hidden-pill" id="pill-p6" data-project="p6" onclick="switchProject('p6', this)">
+      <div class="pill-dot" style="background:var(--p6-color)"></div>
+      <div class="pill-info">
+        <div class="pill-label">[Project 6 Name]</div>
+        <div class="pill-sub" style="color:#b45309;font-weight:600">[Project Type]</div>
+      </div>
+    </button>
+
+    <button class="add-project-btn" onclick="addProject()" id="addProjectBtn">+ Add Project</button>
+  </div>
+</div>
+
+<!-- ═══ TABS ═══ -->
+<nav class="tabs-nav" id="tabsNav">
+  <button class="tabs-scroll-btn left hidden" id="scrollLeft" onclick="scrollTabsLeft()">&#8249;</button>
+  <div class="tabs-bar"><div class="tabs-inner" id="tabsInner"></div></div>
+  <button class="tabs-scroll-btn right hidden" id="scrollRight" onclick="scrollTabsRight()">&#8250;</button>
+</nav>
+
+<!-- ═══ CONTENT ═══ -->
+<main style="padding: 0 0 60px;">
+<div class="content-area">
+
+<!-- ══════════════════════════════════
+     ENGAGEMENT PANELS
+══════════════════════════════════ -->
+<div class="project-panels active" id="panels-engagement">
+
+  <!-- HOW TO USE -->
+  <div class="tab-panel active" data-tab="howto">
+    <div class="section-title">How to Use This Multi-Project Engagement Roadmap</div>
+    <div class="section-desc">Two ways to build this roadmap — pick the one that fits your workflow. Both approaches work for single or multi-project engagements.</div>
+
+    <div class="card">
+      <div class="card-title"><span>🕐</span> When to Use This Template</div>
+      <p style="font-size:13px;line-height:1.8">Use this template when a client engagement involves <strong>two or more concurrent or sequential projects</strong> that share a team, a change window, or overlapping timelines. This is your <strong>engagement-level planning document</strong> — covering everything from the shared change window and cross-project blockers down to individual project milestones, procurement, and next actions. It is designed to be shared with the client and used as the internal delivery reference throughout the engagement.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🗂</span> How This Template Is Structured</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">There are two levels of navigation — the <strong>Project Switcher</strong> (top bar) and the <strong>Tab Bar</strong> below it.</p>
+      <div class="goal-grid" style="margin-bottom:0">
+        <div class="goal-item">
+          <div class="gi-icon">🏢</div>
+          <div class="gi-title">Engagement Tab</div>
+          <div class="gi-desc">Shared setup, project map, combined timeline, cross-project blockers, shared procurement, all actions, ClickUp setup, and resources. Fill this in first.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">📁</div>
+          <div class="gi-title">Project Tabs (P1–P4+)</div>
+          <div class="gi-desc">Each project gets its own tab in the switcher with 10 sections: Summary, Scope, Phases, Milestones, Blockers, Risks, Open Items, Procurement, Timeline, and Next Actions.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">➕</div>
+          <div class="gi-title">Adding Projects</div>
+          <div class="gi-desc">4 projects are active by default. Click "+ Add Project" in the switcher to reveal P5 and P6. Maximum 6 projects per engagement.</div>
+        </div>
+        <div class="goal-item">
+          <div class="gi-icon">🔗</div>
+          <div class="gi-title">Cross-Project Items</div>
+          <div class="gi-desc">Shared blockers, procurement, and actions appear in both the Engagement tab (combined view) and the relevant project tab. Green highlights = cross-project items.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📋</span> What You Need Before Starting</div>
+      <div class="goal-grid" style="margin-bottom:0">
+        <div class="goal-item"><div class="gi-icon">📞</div><div class="gi-title">Completed Discovery</div><div class="gi-desc">Call notes, pain points, current environment details for each project, and key decisions. Site survey notes if available.</div></div>
+        <div class="goal-item"><div class="gi-icon">🔲</div><div class="gi-title">Agreed Scope (Per Project)</div><div class="gi-desc">Even rough scope per project — what's in, out, deferred. Flag gaps if uncertain. The template surfaces them explicitly.</div></div>
+        <div class="goal-item"><div class="gi-icon">📦</div><div class="gi-title">Hardware &amp; Procurement Info</div><div class="gi-desc">Vendor quotes, PO status, lead times — even if not finalized. Flag TBD items explicitly per project.</div></div>
+        <div class="goal-item"><div class="gi-icon">👥</div><div class="gi-title">Team Assignments</div><div class="gi-desc">Who leads each project, client contacts, key holder per site. Which engineers are shared across projects.</div></div>
+        <div class="goal-item"><div class="gi-icon">🕐</div><div class="gi-title">Shared Change Window</div><div class="gi-desc">Whether projects share a maintenance window or each need their own. This is often the single biggest cross-project dependency.</div></div>
+        <div class="goal-item"><div class="gi-icon">🔗</div><div class="gi-title">ClickUp Links (Optional)</div><div class="gi-desc">One ClickUp Space per engagement. Each project gets its own Folder. Enter links in Engagement Setup and per-project ClickUp tabs.</div></div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="option-block primary">
+        <div class="option-label a">OPTION A — INTERACTIVE</div>
+        <div class="option-icon">⚡</div>
+        <div class="option-title">Fill In This Template Directly</div>
+        <div class="option-desc">Replace every <code style="font-family:var(--mono);background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:12px;color:var(--navy)">[bracket]</code> placeholder in each tab with your project details. Best when you want a shareable, client-ready document you can publish or share as a live link.</div>
+        <div class="steps-label">Steps</div>
+        <div class="step-row"><span class="step-num-a">1</span><span>Start with <strong>Engagement Setup</strong> — fill in client info, team roster, shared change window, and active project configs</span></div>
+        <div class="step-row"><span class="step-num-a">2</span><span>Fill the <strong>Project Map</strong> — update Gantt bars and cross-project dependencies for your actual timeline</span></div>
+        <div class="step-row"><span class="step-num-a">3</span><span>Switch to each <strong>Project tab</strong> (P1–P4) and fill in Summary, Scope, Phases, Milestones, Blockers, and Procurement</span></div>
+        <div class="step-row"><span class="step-num-a">4</span><span>Update <strong>Shared Blockers, Shared Procurement, and All Actions</strong> in the Engagement tab with cross-project items</span></div>
+        <div class="step-row"><span class="step-num-a">5</span><span>Review <strong>ClickUp Setup</strong>, add folder links per project, and share the live URL with your client or team</span></div>
+        <div style="margin-top:14px">
+          <button onclick="switchProject('engagement', document.querySelector('[data-project=engagement]')); showTab('setup')" style="background:var(--navy);color:#fff;border:none;border-radius:7px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);width:100%">⚡ Go to Engagement Setup →</button>
+        </div>
+      </div>
+
+      <div class="option-block">
+        <div class="option-label b">OPTION B — AI GENERATED</div>
+        <div class="option-icon">🤖</div>
+        <div class="option-title">Generate with Claude</div>
+        <div class="option-desc">Paste the <strong>Plus 1 Multi-Project Engagement Roadmap Prompt</strong> into Claude along with your discovery notes for each project. Claude generates all sections — paste the output into this template.</div>
+        <div class="steps-label">Steps</div>
+        <div class="step-row"><span class="step-num-b">1</span><span>Open a new conversation in <strong>Claude.ai</strong></span></div>
+        <div class="step-row"><span class="step-num-b">2</span><span>Paste in the full <strong>Plus 1 Multi-Project Engagement Roadmap Prompt</strong></span></div>
+        <div class="step-row"><span class="step-num-b">3</span><span>Paste your <strong>discovery notes for all projects</strong> — call summaries, confirmed decisions, known gaps, team assignments</span></div>
+        <div class="step-row"><span class="step-num-b">4</span><span>Claude generates all sections per project — review <strong>Pending</strong> gaps and fill them in</span></div>
+        <div class="step-row"><span class="step-num-b">5</span><span>Enter <strong>ClickUp Folder links</strong> per project before entering milestones to ClickUp</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📦</span> What This Template Covers</div>
+      <div class="goal-grid" style="margin-bottom:0">
+        <div class="goal-item"><div class="gi-icon">🏢</div><div class="gi-title">Engagement Setup</div><div class="gi-desc">Shared client info, team roster, site access, shared change window, and project type checklist.</div></div>
+        <div class="goal-item"><div class="gi-icon">🗺️</div><div class="gi-title">Project Map</div><div class="gi-desc">Status per project, visual Gantt timeline, cross-project dependencies, and shared critical items.</div></div>
+        <div class="goal-item"><div class="gi-icon">📅</div><div class="gi-title">Combined Timeline</div><div class="gi-desc">All projects week-by-week, resource allocation, and client commitments across the engagement.</div></div>
+        <div class="goal-item"><div class="gi-icon">🚧</div><div class="gi-title">Shared Blockers</div><div class="gi-desc">All blockers across all projects with cross-project tagging for items that affect multiple workstreams.</div></div>
+        <div class="goal-item"><div class="gi-icon">📦</div><div class="gi-title">Shared Procurement</div><div class="gi-desc">All hardware and PO items across every project in one table, tagged by project.</div></div>
+        <div class="goal-item"><div class="gi-icon">⚡</div><div class="gi-title">All Actions</div><div class="gi-desc">Combined next actions sorted by deadline, tagged by project, with risk-if-late for each.</div></div>
+        <div class="goal-item"><div class="gi-icon">📋</div><div class="gi-title">Per-Project: Summary &amp; Goals</div><div class="gi-desc">Project narrative, business goals, technical goals, and go-live / 30-day / 60-day success checkpoints.</div></div>
+        <div class="goal-item"><div class="gi-icon">🏗</div><div class="gi-title">Per-Project: Phases &amp; Milestones</div><div class="gi-desc">4-phase delivery plan with entry/exit criteria and milestone tracker with testable acceptance criteria.</div></div>
+        <div class="goal-item"><div class="gi-icon">⚠️</div><div class="gi-title">Per-Project: Risks &amp; Open Items</div><div class="gi-desc">Risk register with mitigations and open decision log with build-blocking flags.</div></div>
+        <div class="goal-item"><div class="gi-icon">✅</div><div class="gi-title">ClickUp Setup</div><div class="gi-desc">Folder structure, naming rules, millisecond reference chart, and pre-entry checklist for all projects.</div></div>
+      </div>
+    </div>
+  </div><!-- /howto -->
+
+  <!-- ENGAGEMENT SETUP -->
+  <div class="tab-panel" data-tab="setup">
+    <div class="section-title">Engagement Setup</div>
+    <div class="section-desc">Shared information that applies across all active projects. Define once — all projects inherit.</div>
+
+    <!-- SHARED CLIENT INFO -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span>👤</span> Client &amp; Engagement</div>
+        <table class="data-table">
+          <tbody>
+            <tr><td style="font-weight:600;width:140px">Client Name</td><td>[CLIENT NAME]</td></tr>
+            <tr><td style="font-weight:600">Engagement Type</td><td>[Multi-project / Phased / Concurrent]</td></tr>
+            <tr><td style="font-weight:600">Primary Contact</td><td>[CLIENT CONTACT NAME + TITLE]</td></tr>
+            <tr><td style="font-weight:600">Client IT Lead</td><td>[NAME + EMAIL]</td></tr>
+            <tr><td style="font-weight:600">Kickoff Date</td><td>[DATE]</td></tr>
+            <tr><td style="font-weight:600">Estimated End</td><td>[DATE]</td></tr>
+            <tr><td style="font-weight:600">ClickUp Workspace</td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:12px">[Paste ClickUp link]</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>👥</span> Shared Team Roster</div>
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Role</th><th>Projects</th></tr></thead>
+          <tbody>
+            <tr><td>[Name]</td><td>Project Manager</td><td>All</td></tr>
+            <tr><td>[Name]</td><td>Lead Engineer</td><td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span> <span class="project-tag ptag-2"><span class="t-dot"></span>P2</span></td></tr>
+            <tr><td>[Name]</td><td>Field Engineer</td><td><span class="project-tag ptag-3"><span class="t-dot"></span>P3</span> <span class="project-tag ptag-4"><span class="t-dot"></span>P4</span></td></tr>
+            <tr><td>[Name]</td><td>Client IT Lead</td><td>All (Client)</td></tr>
+            <tr><td>[Name]</td><td>Key Holder / Site Access</td><td>All (Client)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SHARED SITE & ACCESS -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span>🏢</span> Site &amp; Physical Access (Shared)</div>
+        <table class="data-table">
+          <thead><tr><th>Requirement</th><th>Status</th><th>Owner</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Physical site access</td><td><span class="tag tag-yellow">Pending</span></td><td>[Client]</td><td>[Notes]</td></tr>
+            <tr><td>Key holder confirmed</td><td><span class="tag tag-yellow">Pending</span></td><td>[Client]</td><td>[Name / Contact]</td></tr>
+            <tr><td>Admin credentials</td><td><span class="tag tag-yellow">Pending</span></td><td>[Client IT]</td><td>[Systems affected]</td></tr>
+            <tr><td>Change window approved</td><td><span class="tag tag-red">Not Started</span></td><td>[Client Exec]</td><td>[Target date]</td></tr>
+            <tr><td>End users notified</td><td><span class="tag tag-gray">Open</span></td><td>[PM + Client]</td><td>[Date to notify by]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🕐</span> Shared Change Window</div>
+        <div class="notice warn"><span class="n-icon">⚠️</span><span><strong>Change window not yet approved.</strong> All installation work across all projects must fall within the approved maintenance window. This is a critical path item.</span></div>
+        <table class="data-table">
+          <tbody>
+            <tr><td style="font-weight:600;width:160px">Requested Window</td><td>[Date] [Start Time] – [End Time]</td></tr>
+            <tr><td style="font-weight:600">Duration Available</td><td>[X hours]</td></tr>
+            <tr><td style="font-weight:600">Approval Status</td><td><span class="tag tag-yellow">Pending Client Exec</span></td></tr>
+            <tr><td style="font-weight:600">Rollback Time Built In</td><td>[Yes / No — X min buffer]</td></tr>
+            <tr><td style="font-weight:600">Projects Affected</td><td>P1, P2, P3, P4</td></tr>
+            <tr><td style="font-weight:600">Confirmed By</td><td>[Name + date confirmed]</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROJECT TYPE CHECKLIST -->
+    <div class="card">
+      <div class="card-title"><span>📋</span> Project Type Checklist — Check All That Apply to This Engagement</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:8px">Check every project type present in this engagement. This helps scope the roadmap and aligns with ClickUp project tags.</p>
+      <div class="type-checklist-grid" id="typeChecklist">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ACTIVE PROJECT CONFIGURATION -->
+    <div class="card">
+      <div class="card-title"><span>🗂</span> Active Project Configuration</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Define each project in this engagement. Each project gets its own tab above. Update the project switcher names to match your project titles.</p>
+      <div class="project-config-grid">
+        <div class="project-config-card">
+          <div class="config-header"><div class="config-dot" style="background:var(--p1-color)"></div><span class="config-label">Project 1</span></div>
+          <div class="config-field"><label>Project Name</label><div class="val">[PROJECT 1 NAME]</div></div>
+          <div class="config-field"><label>Project Type</label><div class="val">[e.g. Infrastructure]</div></div>
+          <div class="config-field"><label>Lead Engineer</label><div class="val">[NAME]</div></div>
+          <div class="config-field"><label>ClickUp Folder URL</label><div class="val" style="font-size:11px">[URL]</div></div>
+          <div class="config-field"><label>Est. Go-Live</label><div class="val">[DATE]</div></div>
+        </div>
+        <div class="project-config-card">
+          <div class="config-header"><div class="config-dot" style="background:var(--p2-color)"></div><span class="config-label">Project 2</span></div>
+          <div class="config-field"><label>Project Name</label><div class="val">[PROJECT 2 NAME]</div></div>
+          <div class="config-field"><label>Project Type</label><div class="val">[e.g. New Equipment]</div></div>
+          <div class="config-field"><label>Lead Engineer</label><div class="val">[NAME]</div></div>
+          <div class="config-field"><label>ClickUp Folder URL</label><div class="val" style="font-size:11px">[URL]</div></div>
+          <div class="config-field"><label>Est. Go-Live</label><div class="val">[DATE]</div></div>
+        </div>
+        <div class="project-config-card">
+          <div class="config-header"><div class="config-dot" style="background:var(--p3-color)"></div><span class="config-label">Project 3</span></div>
+          <div class="config-field"><label>Project Name</label><div class="val">[PROJECT 3 NAME]</div></div>
+          <div class="config-field"><label>Project Type</label><div class="val">[e.g. Migration]</div></div>
+          <div class="config-field"><label>Lead Engineer</label><div class="val">[NAME]</div></div>
+          <div class="config-field"><label>ClickUp Folder URL</label><div class="val" style="font-size:11px">[URL]</div></div>
+          <div class="config-field"><label>Est. Go-Live</label><div class="val">[DATE]</div></div>
+        </div>
+        <div class="project-config-card">
+          <div class="config-header"><div class="config-dot" style="background:var(--p4-color)"></div><span class="config-label">Project 4</span></div>
+          <div class="config-field"><label>Project Name</label><div class="val">[PROJECT 4 NAME]</div></div>
+          <div class="config-field"><label>Project Type</label><div class="val">[e.g. Onboarding]</div></div>
+          <div class="config-field"><label>Lead Engineer</label><div class="val">[NAME]</div></div>
+          <div class="config-field"><label>ClickUp Folder URL</label><div class="val" style="font-size:11px">[URL]</div></div>
+          <div class="config-field"><label>Est. Go-Live</label><div class="val">[DATE]</div></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /setup -->
+
+  <!-- PROJECT MAP -->
+  <div class="tab-panel" data-tab="projectmap">
+    <div class="section-title">Project Map</div>
+    <div class="section-desc">All active projects, their dependencies, sequencing, and the visual timeline showing overlapping delivery.</div>
+
+    <!-- STATUS CARDS -->
+    <div class="three-col" style="grid-template-columns: repeat(auto-fit, minmax(240px,1fr))">
+      <div class="card" style="border-left:4px solid var(--p1-color)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:10px;height:10px;border-radius:50%;background:var(--p1-color)"></div><span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Project 1</span></div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">[PROJECT 1 NAME]</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">[Project Type] · [Lead Engineer]</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>Go-Live: <strong>[DATE]</strong></span><span class="tag tag-yellow">Planning</span></div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--p2-color)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:10px;height:10px;border-radius:50%;background:var(--p2-color)"></div><span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Project 2</span></div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">[PROJECT 2 NAME]</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">[Project Type] · [Lead Engineer]</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>Go-Live: <strong>[DATE]</strong></span><span class="tag tag-gray">Not Started</span></div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--p3-color)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:10px;height:10px;border-radius:50%;background:var(--p3-color)"></div><span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Project 3</span></div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">[PROJECT 3 NAME]</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">[Project Type] · [Lead Engineer]</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>Go-Live: <strong>[DATE]</strong></span><span class="tag tag-gray">Not Started</span></div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--p4-color)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:10px;height:10px;border-radius:50%;background:var(--p4-color)"></div><span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Project 4</span></div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">[PROJECT 4 NAME]</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">[Project Type] · [Lead Engineer]</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>Go-Live: <strong>[DATE]</strong></span><span class="tag tag-gray">Not Started</span></div>
+      </div>
+    </div>
+
+    <!-- GANTT STRIP -->
+    <div class="card">
+      <div class="card-title"><span>📅</span> Visual Timeline — All Projects</div>
+      <div class="gantt-container">
+        <!-- Week headers -->
+        <div style="display:flex;padding:0 0 4px 160px;gap:0">
+          <div class="gantt-week">Wk 1</div><div class="gantt-week">Wk 2</div><div class="gantt-week">Wk 3</div>
+          <div class="gantt-week">Wk 4</div><div class="gantt-week">Wk 5</div><div class="gantt-week">Wk 6</div>
+          <div class="gantt-week">Wk 7</div><div class="gantt-week">Wk 8</div><div class="gantt-week">Wk 9</div>
+          <div class="gantt-week">Wk 10</div><div class="gantt-week">Wk 11</div><div class="gantt-week">Wk 12</div>
+        </div>
+        <!-- Project rows -->
+        <div id="ganttRows">
+          <div style="display:flex;align-items:center;margin-bottom:6px">
+            <div style="width:160px;flex-shrink:0;font-size:12px;font-weight:600;padding-right:12px;color:var(--p1-color)">[Project 1]</div>
+            <div style="flex:1;display:flex;gap:0;position:relative">
+              <div style="width:450px;height:22px;background:var(--p1-color);border-radius:5px;opacity:.8;display:flex;align-items:center;padding:0 8px">
+                <span style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap">[Planning → Go-Live]</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;margin-bottom:6px">
+            <div style="width:160px;flex-shrink:0;font-size:12px;font-weight:600;padding-right:12px;color:var(--p2-color)">[Project 2]</div>
+            <div style="flex:1">
+              <div style="margin-left:100px;width:350px;height:22px;background:var(--p2-color);border-radius:5px;opacity:.8;display:flex;align-items:center;padding:0 8px">
+                <span style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap">[Staging → Go-Live]</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;margin-bottom:6px">
+            <div style="width:160px;flex-shrink:0;font-size:12px;font-weight:600;padding-right:12px;color:var(--p3-color)">[Project 3]</div>
+            <div style="flex:1">
+              <div style="margin-left:50px;width:500px;height:22px;background:var(--p3-color);border-radius:5px;opacity:.8;display:flex;align-items:center;padding:0 8px">
+                <span style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap">[Discovery → Installation]</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;margin-bottom:6px">
+            <div style="width:160px;flex-shrink:0;font-size:12px;font-weight:600;padding-right:12px;color:var(--p4-color)">[Project 4]</div>
+            <div style="flex:1">
+              <div style="margin-left:200px;width:300px;height:22px;background:var(--p4-color);border-radius:5px;opacity:.8;display:flex;align-items:center;padding:0 8px">
+                <span style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap">[Setup → Handoff]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">⬆ Adjust bar widths and margin-left values to reflect actual project start weeks. Each gantt-week column = 50px.</div>
+      </div>
+    </div>
+
+    <!-- DEPENDENCIES -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span>🔗</span> Cross-Project Dependencies</div>
+        <div class="dep-row"><span class="dep-from"><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span> [Project 1 Name]</span><span class="dep-arrow">→ must complete before →</span><span class="dep-to"><span class="project-tag ptag-2"><span class="t-dot"></span>P2</span> [Project 2 Name]</span></div>
+        <div class="dep-row"><span style="font-size:12px;color:var(--muted)">Reason: [e.g. Server must be racked before network config can begin]</span></div>
+        <div style="margin-top:14px"><div class="dep-row"><span class="dep-from"><span class="project-tag ptag-2"><span class="t-dot"></span>P2</span> [Project 2 Name]</span><span class="dep-arrow">→ runs parallel with →</span><span class="dep-to"><span class="project-tag ptag-3"><span class="t-dot"></span>P3</span> [Project 3 Name]</span></div>
+        <div class="dep-row"><span style="font-size:12px;color:var(--muted)">Reason: [e.g. Network upgrade and PC rollout share same change window]</span></div></div>
+        <div style="margin-top:14px"><div class="dep-row"><span class="dep-from">All Projects</span><span class="dep-arrow">→ depend on →</span><span class="dep-to">Change Window Approval</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>⚠️</span> Shared Critical Items</div>
+        <div class="notice warn"><span class="n-icon">⚠️</span><span>These items are critical path for <strong>multiple projects</strong>. A delay in any of these affects the entire engagement.</span></div>
+        <ul class="phase-list" style="margin-top:8px">
+          <li style="margin-bottom:8px"><strong>Change Window:</strong> Blocks P1, P2, P3, P4 installation — must be confirmed by [DATE]</li>
+          <li style="margin-bottom:8px"><strong>Admin Credentials:</strong> Required for staging in P1 and P2 — must be obtained by [DATE]</li>
+          <li style="margin-bottom:8px"><strong>Hardware Delivery (P1):</strong> P2 network config cannot start until P1 server is racked</li>
+          <li style="margin-bottom:8px"><strong>Client IT Availability:</strong> Required for go-live day across all projects — confirm [NAME] is available</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /projectmap -->
+
+  <!-- COMBINED TIMELINE -->
+  <div class="tab-panel" data-tab="timeline">
+    <div class="section-title">Combined Timeline</div>
+    <div class="section-desc">All projects week-by-week, resource allocation across the full engagement, and shared client commitments.</div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>Week</th><th>Date Range</th><th><span class="project-tag ptag-1"><span class="t-dot"></span>Project 1</span></th><th><span class="project-tag ptag-2"><span class="t-dot"></span>Project 2</span></th><th><span class="project-tag ptag-3"><span class="t-dot"></span>Project 3</span></th><th><span class="project-tag ptag-4"><span class="t-dot"></span>Project 4</span></th><th>Client Gate</th></tr></thead>
+        <tbody>
+          <tr><td>Wk 1</td><td>[DATE]</td><td>Discovery / Scope</td><td>—</td><td>Discovery</td><td>—</td><td>Kickoff call</td></tr>
+          <tr><td>Wk 2</td><td>[DATE]</td><td>PO Submission</td><td>Planning</td><td>Planning</td><td>—</td><td>PO approval needed</td></tr>
+          <tr><td>Wk 3</td><td>[DATE]</td><td>Staging Begins</td><td>Procurement</td><td>Vendor Quote</td><td>Planning</td><td>—</td></tr>
+          <tr><td>Wk 4</td><td>[DATE]</td><td>Staging Complete</td><td>Staging</td><td>Staging</td><td>Staging</td><td>Change window confirm</td></tr>
+          <tr><td>Wk 5</td><td>[DATE]</td><td style="color:var(--green);font-weight:700">GO-LIVE ✓</td><td style="color:var(--green);font-weight:700">GO-LIVE ✓</td><td>Install Day</td><td>Install Day</td><td>Install day sign-off</td></tr>
+          <tr><td>Wk 6</td><td>[DATE]</td><td>Handoff</td><td>Handoff</td><td style="color:var(--green);font-weight:700">GO-LIVE ✓</td><td style="color:var(--green);font-weight:700">GO-LIVE ✓</td><td>30-day check-in</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span>👥</span> Resource Allocation by Week</div>
+        <table class="data-table">
+          <thead><tr><th>Role</th><th>Wk 1–2</th><th>Wk 3–4</th><th>Wk 5 (Install)</th><th>Wk 6+</th></tr></thead>
+          <tbody>
+            <tr><td>PM</td><td>8h</td><td>4h</td><td>8h</td><td>4h</td></tr>
+            <tr><td>Lead Engineer</td><td>4h</td><td>16h</td><td>16h</td><td>8h</td></tr>
+            <tr><td>Field Engineer</td><td>—</td><td>8h</td><td>16h</td><td>4h</td></tr>
+            <tr><td><strong>Total</strong></td><td><strong>12h</strong></td><td><strong>28h</strong></td><td><strong>40h</strong></td><td><strong>16h</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>📌</span> Client Commitments — All Projects</div>
+        <table class="data-table">
+          <thead><tr><th>What Client Must Do</th><th>Project</th><th>By When</th><th>Risk If Late</th></tr></thead>
+          <tbody>
+            <tr><td>Approve PO for hardware</td><td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span></td><td>[DATE]</td><td>Go-live delay</td></tr>
+            <tr><td>Confirm change window</td><td>All</td><td>[DATE]</td><td>Build-blocking</td></tr>
+            <tr><td>Provide admin credentials</td><td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span> <span class="project-tag ptag-2"><span class="t-dot"></span>P2</span></td><td>[DATE]</td><td>Staging blocked</td></tr>
+            <tr><td>Notify end users</td><td><span class="project-tag ptag-3"><span class="t-dot"></span>P3</span> <span class="project-tag ptag-4"><span class="t-dot"></span>P4</span></td><td>[DATE]</td><td>Adoption delay</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /timeline -->
+
+  <!-- SHARED BLOCKERS -->
+  <div class="tab-panel" data-tab="blockers">
+    <div class="section-title">Shared Blockers</div>
+    <div class="section-desc">All blockers across all active projects. Green-highlighted rows affect multiple projects simultaneously.</div>
+
+    <div class="notice danger"><span class="n-icon">🔴</span><span><strong>[X] Build-Blocking Items</strong> across this engagement. Items marked <span class="cross-tag">Cross-Project</span> delay multiple workstreams simultaneously.</span></div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Blocker</th><th>Project(s)</th><th>What It Blocks</th><th>Owner</th><th>Target</th><th>Workaround</th></tr></thead>
+        <tbody>
+          <tr class="shared-blocker">
+            <td>B1</td>
+            <td><span class="blocker-sev build">⛔ Build-Blocking</span><span class="cross-tag" style="margin-left:4px">Cross-Project</span><br><strong>Change window not approved</strong><small>Affects all 4 installation workstreams — no install date can be locked.</small></td>
+            <td>All</td>
+            <td>Install dates for all projects</td>
+            <td>[Client Exec / PM]</td>
+            <td>[DATE]</td>
+            <td>None — must resolve</td>
+          </tr>
+          <tr>
+            <td>B2</td>
+            <td><span class="blocker-sev build">⛔ Build-Blocking</span><br><strong>[Hardware order not placed — P1]</strong><small>Vendor lead time is [X] weeks. P2 config cannot begin until P1 hardware is racked.</small></td>
+            <td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span> <span class="project-tag ptag-2"><span class="t-dot"></span>P2</span></td>
+            <td>Staging + P2 network config</td>
+            <td>[PM]</td>
+            <td>[DATE]</td>
+            <td>Pre-config in lab environment</td>
+          </tr>
+          <tr class="shared-blocker">
+            <td>B3</td>
+            <td><span class="blocker-sev client">⚠️ Client Action</span><span class="cross-tag" style="margin-left:4px">Cross-Project</span><br><strong>Admin credentials not obtained</strong><small>Required for P1 staging and P2 network config.</small></td>
+            <td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span> <span class="project-tag ptag-2"><span class="t-dot"></span>P2</span></td>
+            <td>Staging cannot proceed</td>
+            <td>[Client IT]</td>
+            <td>[DATE]</td>
+            <td>Partial config on-site</td>
+          </tr>
+          <tr>
+            <td>B4</td>
+            <td><span class="blocker-sev warn">⚠️ Warning</span><br><strong>[Vendor / ISP dependency — P3]</strong><small>[Circuit or licensing pending.]</small></td>
+            <td><span class="project-tag ptag-3"><span class="t-dot"></span>P3</span></td>
+            <td>[What is blocked]</td>
+            <td>[Plus 1 / Vendor]</td>
+            <td>[DATE]</td>
+            <td>[Mitigation]</td>
+          </tr>
+          <tr>
+            <td>B5</td>
+            <td><span class="blocker-sev warn">⚠️ Warning</span><br><strong>[Open item — P4]</strong><small>[Description]</small></td>
+            <td><span class="project-tag ptag-4"><span class="t-dot"></span>P4</span></td>
+            <td>[What it blocks]</td>
+            <td>[Owner]</td>
+            <td>[DATE]</td>
+            <td>[Workaround]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- /blockers -->
+
+  <!-- SHARED PROCUREMENT -->
+  <div class="tab-panel" data-tab="procurement">
+    <div class="section-title">Shared Procurement</div>
+    <div class="section-desc">All hardware and procurement items across this engagement in one view. See individual project tabs for detailed staging checklists.</div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>Project</th><th>Item</th><th>Qty</th><th>Vendor</th><th>PO Status</th><th>Est. Ship</th><th>Arrives</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span></td><td>[Hardware Item — e.g. Dell PowerEdge R750]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-yellow">Pending PO</span></td><td>[DATE]</td><td>[DATE]</td><td>[Notes]</td></tr>
+          <tr><td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span></td><td>[Hardware Item — e.g. Switches]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-yellow">Pending PO</span></td><td>[DATE]</td><td>[DATE]</td><td>[Notes]</td></tr>
+          <tr><td><span class="project-tag ptag-2"><span class="t-dot"></span>P2</span></td><td>[Hardware Item — e.g. Workstations]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-gray">Not Started</span></td><td>[DATE]</td><td>[DATE]</td><td>[Notes]</td></tr>
+          <tr><td><span class="project-tag ptag-3"><span class="t-dot"></span>P3</span></td><td>[Hardware / Licensing]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-gray">Not Started</span></td><td>[DATE]</td><td>[DATE]</td><td>[Notes]</td></tr>
+          <tr><td><span class="project-tag ptag-4"><span class="t-dot"></span>P4</span></td><td>[Hardware Item]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-gray">Not Started</span></td><td>[DATE]</td><td>[DATE]</td><td>[Notes]</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- /procurement -->
+
+  <!-- ALL ACTIONS -->
+  <div class="tab-panel" data-tab="actions">
+    <div class="section-title">All Next Actions</div>
+    <div class="section-desc">Combined next actions across all projects, sorted by deadline. See individual project tabs for full action details.</div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>Project</th><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th><th>Risk If Missed</th></tr></thead>
+        <tbody>
+          <tr><td><span class="project-tag ptag-shared"><span class="t-dot"></span>All</span></td><td>Confirm change window in writing</td><td>[Client Exec]</td><td>[DATE]</td><td><span class="tag tag-red">Overdue</span></td><td style="color:var(--red)">Build-blocking all projects</td></tr>
+          <tr><td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span></td><td>Submit PO for server hardware</td><td>[PM]</td><td>[DATE]</td><td><span class="tag tag-yellow">In Progress</span></td><td>Lead time grows</td></tr>
+          <tr><td><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span> <span class="project-tag ptag-2"><span class="t-dot"></span>P2</span></td><td>Obtain admin credentials from client IT</td><td>[Client IT]</td><td>[DATE]</td><td><span class="tag tag-yellow">Pending</span></td><td>Staging blocked</td></tr>
+          <tr><td><span class="project-tag ptag-2"><span class="t-dot"></span>P2</span></td><td>Finalize equipment spec with client</td><td>[PM + Client]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>Order delay</td></tr>
+          <tr><td><span class="project-tag ptag-3"><span class="t-dot"></span>P3</span></td><td>Vendor quote approval</td><td>[Client]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>Procurement delay</td></tr>
+          <tr><td><span class="project-tag ptag-4"><span class="t-dot"></span>P4</span></td><td>Notify end users of project timeline</td><td>[PM + Client]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>Adoption delay</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- /actions -->
+
+  <!-- CLICKUP SETUP -->
+  <div class="tab-panel" data-tab="clickup">
+    <div class="section-title">ClickUp Setup</div>
+    <div class="section-desc">Entry rules for all projects. Each project gets its own Folder in ClickUp. Rules apply identically to each.</div>
+
+    <div class="card">
+      <div class="cu-step"><div class="cu-step-num">1</div><div><h4>One ClickUp Space per Engagement</h4><p>Create or confirm one ClickUp Space for this client engagement. All project Folders live inside it.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">2</div><div><h4>Phases → Folders inside each Project Folder</h4><p>Create a parent Folder per project, then sub-Folders for each phase. Clean titles only — no prefixes.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">3</div><div><h4>Milestones → Tasks tagged "Milestone"</h4><p>Each milestone becomes a Task inside its Phase Folder, tagged as <strong>Milestone</strong>.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">4</div><div><h4>Naming — Clean titles. No prefixes.</h4><p>❌ <code style="font-family:var(--mono);background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:3px;font-size:12px">"Phase 1: Installation"</code> &nbsp; ✅ <code style="font-family:var(--mono);background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:3px;font-size:12px">"Installation"</code></p></div></div>
+      <div class="cu-step"><div class="cu-step-num">5</div><div><h4>Time Estimates → Milliseconds as quoted strings</h4><p>Formula: hours × 3,600,000. Always pass as a quoted string: ✅ "28800000" ❌ 28800000 ❌ "8h"</p></div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px">⏱ Millisecond Reference</div>
+        <table class="ms-ref-table">
+          <thead><tr><th>Readable</th><th>Milliseconds</th></tr></thead>
+          <tbody>
+            <tr><td>30 min</td><td>"1800000"</td></tr>
+            <tr><td>1 hour</td><td>"3600000"</td></tr>
+            <tr><td>2 hours</td><td>"7200000"</td></tr>
+            <tr><td>4 hours</td><td>"14400000"</td></tr>
+            <tr><td>8 hours</td><td>"28800000"</td></tr>
+            <tr><td>16 hours</td><td>"57600000"</td></tr>
+            <tr><td>24 hours</td><td>"86400000"</td></tr>
+            <tr><td>40 hours</td><td>"144000000"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title">Project Folder Links</div>
+          <div style="margin-bottom:8px"><span class="project-tag ptag-1"><span class="t-dot"></span>P1</span> <a href="#" style="font-family:var(--mono);font-size:12px;color:var(--navy)">[ClickUp Folder URL]</a></div>
+          <div style="margin-bottom:8px"><span class="project-tag ptag-2"><span class="t-dot"></span>P2</span> <a href="#" style="font-family:var(--mono);font-size:12px;color:var(--navy)">[ClickUp Folder URL]</a></div>
+          <div style="margin-bottom:8px"><span class="project-tag ptag-3"><span class="t-dot"></span>P3</span> <a href="#" style="font-family:var(--mono);font-size:12px;color:var(--navy)">[ClickUp Folder URL]</a></div>
+          <div style="margin-bottom:8px"><span class="project-tag ptag-4"><span class="t-dot"></span>P4</span> <a href="#" style="font-family:var(--mono);font-size:12px;color:var(--navy)">[ClickUp Folder URL]</a></div>
+        </div>
+        <div class="card">
+          <div class="card-title">✅ Pre-Entry Checklist</div>
+          <div class="checklist">☐ Roadmap approved by client and PM<br>☐ All project Folder URLs confirmed<br>☐ Phase names cleaned (no prefixes)<br>☐ Milestone names cleaned (no prefixes)<br>☐ Time estimates converted to ms strings<br>☐ Assignees mapped to ClickUp user IDs<br>☐ Milestone tag in ClickUp tag list confirmed</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /clickup -->
+
+  <!-- RESOURCES -->
+  <div class="tab-panel" data-tab="resources">
+    <div class="section-title">Project Resources</div>
+    <div class="section-desc">Centralized links to all documents, systems, and references for this engagement.</div>
+    <div class="card">
+      <div class="card-title"><span>🔍</span> Discovery &amp; Kickoff</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:4px">
+        <div class="resource-link-card"><div class="r-title">📋 Discovery Call Notes</div><div class="r-desc">Initial discovery session notes, pain points, environment details</div><a href="#">[Paste link — SharePoint / ClickUp Doc]</a></div>
+        <div class="resource-link-card"><div class="r-title">📦 Hardware Quotes</div><div class="r-desc">Vendor quotes and procurement documents</div><a href="#">[Paste link]</a></div>
+        <div class="resource-link-card"><div class="r-title">🔗 ClickUp Workspace</div><div class="r-desc">Main ClickUp space for this client engagement</div><a href="#">[Paste link]</a></div>
+        <div class="resource-link-card"><div class="r-title">📐 Site Survey / Network Diagram</div><div class="r-desc">Current environment documentation</div><a href="#">[Paste link]</a></div>
+      </div>
+    </div>
+  </div><!-- /resources -->
+
+</div><!-- /panels-engagement -->
+
+
+<!-- ══════════════════════════════════
+     PROJECT 1 PANELS
+══════════════════════════════════ -->
+<div class="project-panels" id="panels-p1">
+
+  <!-- SUMMARY & GOALS -->
+  <div class="tab-panel active" data-tab="summary">
+    <div class="section-title">[PROJECT 1 NAME] — Summary &amp; Goals</div>
+    <div class="section-desc">Project narrative, business goals, technical goals, and post-install success checkpoints.</div>
+    <div class="notice info"><span class="n-icon">ℹ️</span><span><strong>Project Type:</strong> [Project Type] &nbsp;·&nbsp; <strong>Engineer:</strong> [NAME] &nbsp;·&nbsp; <strong>Go-Live Target:</strong> [DATE]</span></div>
+
+    <div class="card">
+      <div class="card-title"><span>📋</span> Project Summary</div>
+      <p style="font-size:13px;line-height:1.8;color:var(--text)">[3–5 sentence project narrative. Describe the problem being solved, the solution approach, the expected outcome, and any hard constraints such as change windows, lead times, or site access restrictions. Be specific. Do not use vague language.]</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span>💼</span> Business Goals</div>
+        <ul class="phase-list">
+          <li>[Operational improvement — uptime, reliability, capacity]</li>
+          <li>[Cost impact — savings, avoided costs]</li>
+          <li>[User experience improvement]</li>
+          <li>[Compliance or security requirement met]</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>⚙️</span> Technical Goals</div>
+        <ul class="phase-list">
+          <li>[Systems and infrastructure being delivered]</li>
+          <li>[Integration or migration target]</li>
+          <li>[Performance, reliability, or capacity requirement]</li>
+          <li>[Configuration or security standard]</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📊</span> Success Metrics</div>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Current State</th><th>Target at Go-Live</th><th>30-Day Post-Install</th></tr></thead>
+        <tbody>
+          <tr><td>[Metric 1 — e.g. Server uptime]</td><td>[Today's baseline]</td><td>[Go-live target]</td><td>[Post-install target]</td></tr>
+          <tr><td>[Metric 2]</td><td>[Baseline]</td><td>[Target]</td><td>[Post-install]</td></tr>
+          <tr><td>[Metric 3]</td><td>[Baseline]</td><td>[Target]</td><td>[Post-install]</td></tr>
+        </tbody>
+      </table>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px">
+        <div style="background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:8px;padding:12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px">GO-LIVE CHECKPOINT</div><div style="font-size:12px;color:var(--text)">[What "done" looks like on installation day — specific and testable]</div></div>
+        <div style="background:var(--cyan-dim);border:1px solid var(--cyan-mid);border-radius:8px;padding:12px"><div style="font-size:11px;font-weight:700;color:#0369a1;margin-bottom:6px">30-DAY CHECKPOINT</div><div style="font-size:12px;color:var(--text)">[What "stable" looks like 30 days post go-live]</div></div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px"><div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px">60-DAY CHECKPOINT</div><div style="font-size:12px;color:var(--text)">[What full adoption looks like at 60 days]</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCOPE -->
+  <div class="tab-panel" data-tab="scope">
+    <div class="section-title">Scope Boundaries</div>
+    <div class="section-desc">Explicit in-scope, out-of-scope, and future considerations. No ambiguity for client or team.</div>
+    <div class="three-col">
+      <div class="card" style="border-top:3px solid var(--green)">
+        <div class="card-title" style="color:var(--green)">✅ In Scope</div>
+        <ul class="phase-list">
+          <li>[Specific equipment or systems being delivered]</li>
+          <li>[Configuration and setup included]</li>
+          <li>[Locations and physical sites covered]</li>
+          <li>[End-user groups impacted]</li>
+          <li>[Training and documentation included]</li>
+          <li>[Warranty and support handoff]</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--red)">
+        <div class="card-title" style="color:var(--red)">❌ Out of Scope</div>
+        <ul class="phase-list">
+          <li>[Explicit exclusions]</li>
+          <li>[Client-managed items not being touched]</li>
+          <li>[Equipment not included in this engagement]</li>
+          <li>[Work requiring separate quotes]</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--purple)">
+        <div class="card-title" style="color:var(--purple)">🔮 Future Considerations</div>
+        <ul class="phase-list">
+          <li>[Phase 2 enhancements]</li>
+          <li>[Deferred items and why]</li>
+          <li>[Upgrade paths or expansion opportunities]</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASED PLAN -->
+  <div class="tab-panel" data-tab="phases">
+    <div class="section-title">Phased Delivery Plan</div>
+    <div class="section-desc">4 standard phases for hardware/installation projects. Each phase has testable entry and exit criteria.</div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div><div class="phase-name">Planning &amp; Procurement</div><div style="font-size:12px;color:var(--muted)">[Purpose — 1–2 sentences on what this phase delivers and why it comes first]</div></div>
+        <div style="text-align:right"><div class="phase-duration">[X] weeks</div><div class="phase-risk risk-med">Med Risk</div></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div><div class="phase-section-label">Deliverables</div><ul class="phase-list"><li>[Signed SOW]</li><li>[Site survey complete]</li><li>[Hardware spec approved]</li><li>[PO submitted]</li><li>[Change window requested]</li></ul></div>
+          <div><div class="phase-section-label">Key Activities</div><ul class="phase-list"><li>[Discovery / site survey]</li><li>[Vendor quote / PO]</li><li>[Change window scheduling]</li><li>[Credential collection]</li></ul></div>
+          <div><div class="phase-section-label">Entry Criteria</div><ul class="phase-list"><li>[Discovery call complete]</li><li>[Scope agreed in principle]</li><li>[Client contact confirmed]</li></ul></div>
+          <div><div class="phase-section-label">Exit Criteria</div><div class="criteria-box"><ul class="phase-list" style="margin:0"><li>SOW signed by client</li><li>PO placed with vendor</li><li>Change window requested</li><li>All credentials documented or flagged</li></ul></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div><div class="phase-name">Staging &amp; Pre-Configuration</div><div style="font-size:12px;color:var(--muted)">Hardware received, bench tested, firmware updated, and base config applied before site visit.</div></div>
+        <div style="text-align:right"><div class="phase-duration">[X] weeks</div><div class="phase-risk risk-med">Med Risk</div></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div><div class="phase-section-label">Deliverables</div><ul class="phase-list"><li>[All hardware received and verified]</li><li>[Firmware updated]</li><li>[Base config applied]</li><li>[Bench connectivity tested]</li></ul></div>
+          <div><div class="phase-section-label">Key Activities</div><ul class="phase-list"><li>[Receive and inspect hardware]</li><li>[Update firmware]</li><li>[Apply staging config]</li><li>[Bench test]</li></ul></div>
+          <div><div class="phase-section-label">Entry Criteria</div><ul class="phase-list"><li>[Hardware delivered to Plus 1 staging bench]</li><li>[Admin credentials obtained]</li><li>[Config template approved]</li></ul></div>
+          <div><div class="phase-section-label">Exit Criteria</div><div class="criteria-box"><ul class="phase-list" style="margin:0"><li>Zero DOA units</li><li>Firmware at approved version</li><li>Base config applied and tested</li><li>Ready for site deployment</li></ul></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div><div class="phase-name">Installation &amp; Go-Live</div><div style="font-size:12px;color:var(--muted)">On-site installation, production config deployment, end-user validation, and client sign-off.</div></div>
+        <div style="text-align:right"><div class="phase-duration">[X] days</div><div class="phase-risk risk-high">High Risk</div></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div><div class="phase-section-label">Deliverables</div><ul class="phase-list"><li>[All equipment racked and cabled]</li><li>[Production config deployed]</li><li>[Connectivity tests pass]</li><li>[Client sign-off obtained]</li></ul></div>
+          <div><div class="phase-section-label">Key Activities</div><ul class="phase-list"><li>[Physical installation]</li><li>[Production config push]</li><li>[Connectivity and failover testing]</li><li>[End-user validation]</li></ul></div>
+          <div><div class="phase-section-label">Entry Criteria</div><ul class="phase-list"><li>[Change window confirmed in writing]</li><li>[Staging complete]</li><li>[Key holder on-site]</li><li>[Client IT available]</li></ul></div>
+          <div><div class="phase-section-label">Exit Criteria</div><div class="criteria-box"><ul class="phase-list" style="margin:0"><li>All systems operational</li><li>No rollback required</li><li>Client IT confirms in writing</li><li>End-user validation passes</li></ul></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div><div class="phase-name">Handoff &amp; Support</div><div style="font-size:12px;color:var(--muted)">Documentation delivered, warranty confirmed, training complete, and project closed in ClickUp.</div></div>
+        <div style="text-align:right"><div class="phase-duration">[X] days</div><div class="phase-risk risk-low">Low Risk</div></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-grid">
+          <div><div class="phase-section-label">Deliverables</div><ul class="phase-list"><li>[As-built diagram]</li><li>[Config documentation]</li><li>[Warranty registration confirmed]</li><li>[30-day check-in scheduled]</li></ul></div>
+          <div><div class="phase-section-label">Key Activities</div><ul class="phase-list"><li>[Create as-built diagram]</li><li>[Deliver documentation]</li><li>[Confirm warranty active]</li><li>[End-user training]</li><li>[Close project in ClickUp]</li></ul></div>
+          <div><div class="phase-section-label">Entry Criteria</div><ul class="phase-list"><li>[Go-live confirmed successful]</li><li>[No open critical issues]</li></ul></div>
+          <div><div class="phase-section-label">Exit Criteria</div><div class="criteria-box"><ul class="phase-list" style="margin:0"><li>All documentation delivered</li><li>Warranty active and confirmed</li><li>30-day check-in on calendar</li><li>Project closed in ClickUp</li></ul></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MILESTONES -->
+  <div class="tab-panel" data-tab="milestones">
+    <div class="section-title">Milestone Tracker</div>
+    <div class="section-desc">Every milestone with a tangible output and testable acceptance criteria. Vague milestones are not milestones.</div>
+    <div class="notice info"><span class="n-icon">ℹ️</span><span>Timeline anchored to <strong>[Kickoff Date]</strong>. Weeks are business weeks. Blockers in the Blockers tab must clear before staging begins.</span></div>
+
+    <div class="milestone-item">
+      <div class="m-num">M1</div>
+      <div class="m-main"><div class="m-title">Scope &amp; Discovery Confirmed</div><div class="m-output">OUTPUT: Signed SOW, site survey complete, hardware spec approved</div><div class="m-criteria"><strong>Acceptance:</strong> Client has signed SOW. Site survey notes reviewed with client IT. Hardware spec matches environment requirements. All credentials documented or flagged. No open scope questions remain.</div><span class="blocker-flag">⚠️ Blocker: [site survey not yet scheduled]</span></div>
+      <div class="m-side"><div class="m-phase">Phase 1</div><div class="m-owner">[Owner]</div><div class="m-target">[Week / Date]</div><div class="m-time">8h → "28800000"</div></div>
+    </div>
+    <div class="milestone-item">
+      <div class="m-num">M2</div>
+      <div class="m-main"><div class="m-title">Hardware Ordered &amp; PO Confirmed</div><div class="m-output">OUTPUT: PO issued, vendor confirms ship date in writing</div><div class="m-criteria"><strong>Acceptance:</strong> PO submitted to vendor. Vendor has confirmed ship date in writing. Lead time reviewed against timeline. Staging date blocked on calendar.</div></div>
+      <div class="m-side"><div class="m-phase">Phase 1</div><div class="m-owner">[Owner]</div><div class="m-target">[Week / Date]</div><div class="m-time">2h → "7200000"</div></div>
+    </div>
+    <div class="milestone-item">
+      <div class="m-num">M3</div>
+      <div class="m-main"><div class="m-title">Change Window Confirmed</div><div class="m-output">OUTPUT: Written confirmation of approved maintenance window</div><div class="m-criteria"><strong>Acceptance:</strong> Client IT and decision maker confirm change window in writing. Date/time and duration confirmed as sufficient. Rollback time factored in. Key holder confirmed available.</div><span class="blocker-flag">⚠️ Blocker: [Approval pending client leadership]</span></div>
+      <div class="m-side"><div class="m-phase">Phase 1</div><div class="m-owner">[Client IT / PM]</div><div class="m-target">[Week / Date]</div><div class="m-time">1h → "3600000"</div></div>
+    </div>
+    <div class="milestone-item">
+      <div class="m-num">M4</div>
+      <div class="m-main"><div class="m-title">Hardware Received &amp; Staging Complete</div><div class="m-output">OUTPUT: All equipment bench-tested, firmware updated, base config applied</div><div class="m-criteria"><strong>Acceptance:</strong> All hardware received and verified against PO. No DOA units. Firmware updated. Base configuration applied. Bench connectivity test passed.</div></div>
+      <div class="m-side"><div class="m-phase">Phase 2</div><div class="m-owner">[Engineer]</div><div class="m-target">[Week / Date]</div><div class="m-time">8h → "28800000"</div></div>
+    </div>
+    <div class="milestone-item">
+      <div class="m-num">M5</div>
+      <div class="m-main"><div class="m-title">Installation Complete — Go-Live</div><div class="m-output">OUTPUT: All systems operational, client sign-off obtained in writing</div><div class="m-criteria"><strong>Acceptance:</strong> All equipment installed. Production config deployed. All tests pass. End-user validation passes. Client IT confirms in writing. No rollback required.</div></div>
+      <div class="m-side"><div class="m-phase">Phase 3</div><div class="m-owner">[Engineer + PM]</div><div class="m-target">[Install Date]</div><div class="m-time">16h → "57600000"</div></div>
+    </div>
+    <div class="milestone-item">
+      <div class="m-num">M6</div>
+      <div class="m-main"><div class="m-title">Documentation &amp; Handoff Delivered</div><div class="m-output">OUTPUT: As-built diagram, config docs, warranty confirmation, support contacts</div><div class="m-criteria"><strong>Acceptance:</strong> As-built diagram delivered. Configuration documentation delivered. Warranty active and confirmed. 30-day check-in on calendar. Project closed in ClickUp.</div></div>
+      <div class="m-side"><div class="m-phase">Phase 4</div><div class="m-owner">[PM]</div><div class="m-target">[Date]</div><div class="m-time">4h → "14400000"</div></div>
+    </div>
+  </div>
+
+  <!-- BLOCKERS -->
+  <div class="tab-panel" data-tab="blockers">
+    <div class="section-title">Blockers &amp; Critical Path</div>
+    <div class="section-desc">The longest dependent chain to go-live and every blocker that could derail it.</div>
+    <div class="cp-box">
+      <div class="card-title" style="margin-bottom:0">🔗 Critical Path Chain</div>
+      <div class="cp-chain">
+        <span class="cp-step client">Change Window ⚠️</span><span class="cp-arrow">→</span>
+        <span class="cp-step client">PO / Hardware Order ⚠️</span><span class="cp-arrow">→</span>
+        <span class="cp-step">Hardware Delivery</span><span class="cp-arrow">→</span>
+        <span class="cp-step">Staging &amp; Pre-Config</span><span class="cp-arrow">→</span>
+        <span class="cp-step">On-Site Install</span><span class="cp-arrow">→</span>
+        <span class="cp-step gate">Go-Live ✓</span>
+      </div>
+    </div>
+    <div class="build-block-banner"><span>🔴</span><span><strong>[X] Build-Blocking Items</strong> — Hardware order and change window must clear before staging begins.</span></div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Blocker</th><th>What It Blocks</th><th>Owner</th><th>Target</th><th>Workaround</th></tr></thead>
+        <tbody>
+          <tr><td>B1</td><td><span class="blocker-sev build">⛔ Build-Blocking</span><strong>[Hardware order not placed]</strong><small>Lead time is [X] weeks.</small></td><td>Staging cannot begin</td><td>[PM]</td><td>[DATE]</td><td>Pre-stage config in lab</td></tr>
+          <tr><td>B2</td><td><span class="blocker-sev build">⛔ Build-Blocking</span><strong>[Change window not approved]</strong><small>Install date cannot be locked.</small></td><td>Installation date</td><td>[Client IT / PM]</td><td>[DATE]</td><td>None — must resolve</td></tr>
+          <tr><td>B3</td><td><span class="blocker-sev warn">⚠️ Warning</span><strong>[Admin credentials not obtained]</strong></td><td>Staging config blocked</td><td>[Client IT]</td><td>[DATE]</td><td>Partial config; complete on-site</td></tr>
+          <tr><td>B4</td><td><span class="blocker-sev vendor">📦 Vendor</span><strong>[ISP / vendor dependency]</strong></td><td>[What is blocked]</td><td>[Plus 1 / Vendor]</td><td>[DATE]</td><td>[Mitigation]</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RISKS -->
+  <div class="tab-panel" data-tab="risks">
+    <div class="section-title">Risk Register</div>
+    <div class="section-desc">Impact, likelihood, mitigation, and contingency for every identified risk.</div>
+    <div class="risk-item"><div><div class="risk-desc">DOA or incorrect hardware received</div><div class="risk-detail"><strong>Mitigation:</strong> Verify against PO immediately on receipt. Photo document all items.<br><strong>Contingency:</strong> Expedite RMA. Notify client of delay immediately. Assess go-live impact.</div><div class="risk-badges"><span class="impact-badge imp-high">High Impact</span><span class="impact-badge imp-med">Low Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[Engineer]</div></div></div>
+    <div class="risk-item"><div><div class="risk-desc">Hardware lead time delay pushes go-live</div><div class="risk-detail"><strong>Mitigation:</strong> Order early. Monitor ship status weekly. Build buffer into timeline.<br><strong>Contingency:</strong> Negotiate expedited shipping. Communicate revised go-live to client.</div><div class="risk-badges"><span class="impact-badge imp-high">High Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[PM]</div></div></div>
+    <div class="risk-item"><div><div class="risk-desc">Change window cancelled or shortened by client</div><div class="risk-detail"><strong>Mitigation:</strong> Get written confirmation early. Confirm duration is sufficient including rollback time.<br><strong>Contingency:</strong> Reschedule — assess impact on go-live. Partial install if window allows.</div><div class="risk-badges"><span class="impact-badge imp-med">Med Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[PM + Client]</div></div></div>
+    <div class="risk-item"><div><div class="risk-desc">Admin credentials not available on install day</div><div class="risk-detail"><strong>Mitigation:</strong> Collect credentials during staging phase. Validate access before go-live day.<br><strong>Contingency:</strong> Escalate to client exec. Pause install until resolved.</div><div class="risk-badges"><span class="impact-badge imp-high">High Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[Client IT / PM]</div></div></div>
+    <div class="risk-item"><div><div class="risk-desc">Scope creep — client requests additions during install</div><div class="risk-detail"><strong>Mitigation:</strong> Document scope boundaries explicitly. Review SOW at kickoff.<br><strong>Contingency:</strong> Capture as change request. Do not start without approval.</div><div class="risk-badges"><span class="impact-badge imp-med">Med Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[PM]</div></div></div>
+  </div>
+
+  <!-- OPEN ITEMS -->
+  <div class="tab-panel" data-tab="openitems">
+    <div class="section-title">Open Decisions &amp; Gaps</div>
+    <div class="section-desc">Build-blocking and install-blocking items flagged explicitly. Nothing invented — gaps surfaced here.</div>
+    <div class="open-item"><div class="oi-num">1</div><div><div class="oi-question">[Open question or gap description]</div><div style="font-size:12px;color:var(--muted);margin-top:4px"><strong>Impact if unresolved:</strong> [What is blocked or at risk]</div><div class="oi-meta"><span>Owner: [Name]</span><span>Target: [DATE]</span><span class="oi-cat">[Scope / Hardware / Access / Vendor / Licensing]</span></div></div></div>
+    <div class="open-item"><div class="oi-num">2</div><div><div class="oi-question">[Open question or gap description]</div><div style="font-size:12px;color:var(--muted);margin-top:4px"><strong>Impact if unresolved:</strong> [What is blocked or at risk]</div><div class="oi-meta"><span>Owner: [Name]</span><span>Target: [DATE]</span><span class="oi-cat">[Category]</span></div></div></div>
+    <div class="open-item"><div class="oi-num">3</div><div><div class="oi-question">[Open question or gap description]</div><div style="font-size:12px;color:var(--muted);margin-top:4px"><strong>Impact if unresolved:</strong> [What is blocked or at risk]</div><div class="oi-meta"><span>Owner: [Name]</span><span>Target: [DATE]</span><span class="oi-cat">[Category]</span></div></div></div>
+  </div>
+
+  <!-- PROCUREMENT -->
+  <div class="tab-panel" data-tab="procurement">
+    <div class="section-title">Procurement Track</div>
+    <div class="section-desc">Hardware pipeline, staging checklist, and procurement timeline for this project.</div>
+    <div class="proc-track">
+      <div class="proc-step"><div class="proc-step-label">PO Submitted</div><div class="proc-step-val">[DATE / Pending]</div></div>
+      <div class="proc-step"><div class="proc-step-label">Est. Ship</div><div class="proc-step-val">[DATE / TBD]</div></div>
+      <div class="proc-step"><div class="proc-step-label">Arrives Plus 1</div><div class="proc-step-val">[DATE / TBD]</div></div>
+      <div class="proc-step"><div class="proc-step-label">Staging Done</div><div class="proc-step-val">[DATE / TBD]</div></div>
+      <div class="proc-step"><div class="proc-step-label">Site Ready</div><div class="proc-step-val">[DATE / TBD]</div></div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px">📦 Equipment List</div>
+      <table class="data-table">
+        <thead><tr><th>Item</th><th>Model / SKU</th><th>Qty</th><th>Vendor</th><th>Unit Cost</th><th>PO Status</th><th>Lead Time</th></tr></thead>
+        <tbody>
+          <tr><td>[Item 1]</td><td>[Model]</td><td>[Qty]</td><td>[Vendor]</td><td>$[Amount]</td><td><span class="tag tag-yellow">Pending</span></td><td>[X] weeks</td></tr>
+          <tr><td>[Item 2]</td><td>[Model]</td><td>[Qty]</td><td>[Vendor]</td><td>$[Amount]</td><td><span class="tag tag-yellow">Pending</span></td><td>[X] weeks</td></tr>
+          <tr><td>[Item 3]</td><td>[Model]</td><td>[Qty]</td><td>[Vendor]</td><td>$[Amount]</td><td><span class="tag tag-gray">Not Started</span></td><td>[X] weeks</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Staging Checklist</div>
+      <div class="checklist">☐ Hardware received — verify against PO<br>☐ All items photographed and documented<br>☐ No DOA units confirmed<br>☐ Firmware updated to approved version<br>☐ Base configuration applied from template<br>☐ Bench connectivity test passed<br>☐ Admin credentials tested and working<br>☐ Ready for site deployment — PM notified</div>
+    </div>
+  </div>
+
+  <!-- TIMELINE & RESOURCES -->
+  <div class="tab-panel" data-tab="timeline">
+    <div class="section-title">Timeline &amp; Resources</div>
+    <div class="section-desc">Week-by-week schedule, resource requirements, and client commitments for this project.</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>Week</th><th>Phase</th><th>Key Activities</th><th>Milestone</th><th>Client Gate</th></tr></thead>
+        <tbody>
+          <tr><td>Wk 1</td><td>Phase 1</td><td>Discovery, scope agreement, SOW</td><td>M1 – Scope Confirmed</td><td>SOW signature</td></tr>
+          <tr><td>Wk 2</td><td>Phase 1</td><td>PO submission, hardware order, change window request</td><td>M2 – PO Confirmed</td><td>PO authorization</td></tr>
+          <tr><td>Wk 3</td><td>Phase 2</td><td>Hardware receives, staging begins, firmware update</td><td>—</td><td>Credentials needed</td></tr>
+          <tr><td>Wk 4</td><td>Phase 2</td><td>Staging complete, site prep, pre-install walkthrough</td><td>M4 – Staging Complete</td><td>Change window confirm</td></tr>
+          <tr><td>Wk 5</td><td>Phase 3</td><td>On-site install, production config, testing, go-live</td><td>M5 – Go-Live</td><td>Install day sign-off</td></tr>
+          <tr><td>Wk 6</td><td>Phase 4</td><td>Documentation, as-built, training, warranty handoff</td><td>M6 – Handoff</td><td>30-day check-in confirm</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span>👥</span> Resource Requirements</div>
+        <table class="data-table">
+          <thead><tr><th>Role</th><th>Estimated Effort</th><th>Peak Demand</th></tr></thead>
+          <tbody>
+            <tr><td>Project Manager</td><td>[Xh total]</td><td>Week 5 (install day)</td></tr>
+            <tr><td>Lead Engineer</td><td>[Xh total]</td><td>Week 4–5 (staging + install)</td></tr>
+            <tr><td>Field Engineer</td><td>[Xh total]</td><td>Week 5 (install day)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>📌</span> Client-Side Commitments</div>
+        <table class="data-table">
+          <thead><tr><th>What Client Must Do</th><th>When</th><th>Risk If Late</th></tr></thead>
+          <tbody>
+            <tr><td>Authorize PO</td><td>[DATE]</td><td>Build-blocking</td></tr>
+            <tr><td>Confirm change window</td><td>[DATE]</td><td>Build-blocking</td></tr>
+            <tr><td>Provide admin credentials</td><td>[DATE]</td><td>Staging blocked</td></tr>
+            <tr><td>Key holder on-site for install</td><td>[Install Date]</td><td>Install cannot proceed</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT ACTIONS -->
+  <div class="tab-panel" data-tab="actions">
+    <div class="section-title">Next Actions</div>
+    <div class="section-desc">5–7 prioritized actions. Every action has an owner, deadline, and consequence if delayed.</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Action</th><th>Owner</th><th>Dependency</th><th>Deadline</th><th>Risk If Late</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Obtain written change window approval from client executive</td><td>[Client Exec]</td><td>—</td><td>[DATE]</td><td style="color:var(--red)">Build-blocking</td></tr>
+          <tr><td>2</td><td>Submit hardware PO to vendor</td><td>[PM]</td><td>Client PO authorization</td><td>[DATE]</td><td>Lead time grows</td></tr>
+          <tr><td>3</td><td>Collect admin credentials from client IT</td><td>[Client IT]</td><td>PO placed</td><td>[DATE]</td><td>Staging blocked</td></tr>
+          <tr><td>4</td><td>Complete site survey / confirm rack space</td><td>[Engineer + Client IT]</td><td>Site access confirmed</td><td>[DATE]</td><td>Config errors</td></tr>
+          <tr><td>5</td><td>Schedule staging bench time at Plus 1</td><td>[PM]</td><td>Ship date confirmed</td><td>[DATE]</td><td>Timeline slip</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="spacer-16"></div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px">📊 Responsibility Matrix</div>
+      <table class="data-table">
+        <thead><tr><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th><th>Risk If Missed</th></tr></thead>
+        <tbody>
+          <tr><td>Change window approved</td><td>[Client Exec]</td><td>[DATE]</td><td><span class="tag tag-yellow">Pending</span></td><td style="color:var(--red)">Build-blocking</td></tr>
+          <tr><td>PO placed with vendor</td><td>[PM]</td><td>[DATE]</td><td><span class="tag tag-blue">In Progress</span></td><td>Lead time grows</td></tr>
+          <tr><td>Admin credentials obtained</td><td>[Client IT]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>Staging blocked</td></tr>
+          <tr><td>Site survey completed</td><td>[Engineer + Client]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>Config errors</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /panels-p1 -->
+
+
+<!-- ══════════════════════════════════
+     PROJECT 2 PANELS
+══════════════════════════════════ -->
+<div class="project-panels" id="panels-p2">
+  <div class="tab-panel active" data-tab="summary">
+    <div class="section-title">[PROJECT 2 NAME] — Summary &amp; Goals</div>
+    <div class="notice info"><span class="n-icon">ℹ️</span><span><strong>Project Type:</strong> [Project Type] &nbsp;·&nbsp; <strong>Engineer:</strong> [NAME] &nbsp;·&nbsp; <strong>Go-Live Target:</strong> [DATE]</span></div>
+    <div class="card"><div class="card-title"><span>📋</span> Project Summary</div><p style="font-size:13px;line-height:1.8">[Project 2 narrative — 3–5 sentences. Problem, solution approach, expected outcome, hard constraints.]</p></div>
+    <div class="two-col"><div class="card"><div class="card-title"><span>💼</span> Business Goals</div><ul class="phase-list"><li>[Business goal 1]</li><li>[Business goal 2]</li><li>[Business goal 3]</li></ul></div><div class="card"><div class="card-title"><span>⚙️</span> Technical Goals</div><ul class="phase-list"><li>[Technical goal 1]</li><li>[Technical goal 2]</li><li>[Technical goal 3]</li></ul></div></div>
+    <div class="card"><div class="card-title"><span>📊</span> Success Metrics</div><table class="data-table"><thead><tr><th>Metric</th><th>Current State</th><th>Target at Go-Live</th><th>30-Day Post-Install</th></tr></thead><tbody><tr><td>[Metric 1]</td><td>[Baseline]</td><td>[Target]</td><td>[Post-install]</td></tr><tr><td>[Metric 2]</td><td>[Baseline]</td><td>[Target]</td><td>[Post-install]</td></tr></tbody></table></div>
+  </div>
+  <div class="tab-panel" data-tab="scope"><div class="section-title">Scope Boundaries</div><div class="three-col"><div class="card" style="border-top:3px solid var(--green)"><div class="card-title" style="color:var(--green)">✅ In Scope</div><ul class="phase-list"><li>[In scope item 1]</li><li>[In scope item 2]</li><li>[In scope item 3]</li></ul></div><div class="card" style="border-top:3px solid var(--red)"><div class="card-title" style="color:var(--red)">❌ Out of Scope</div><ul class="phase-list"><li>[Out of scope 1]</li><li>[Out of scope 2]</li></ul></div><div class="card" style="border-top:3px solid var(--purple)"><div class="card-title" style="color:var(--purple)">🔮 Future</div><ul class="phase-list"><li>[Future item 1]</li><li>[Future item 2]</li></ul></div></div></div>
+  <div class="tab-panel" data-tab="phases"><div class="section-title">Phased Delivery Plan</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in phases using the Phase 1–4 structure from Project 1 as a template. Adjust phase names for this project type if needed.</span></div><div class="phase-block"><div class="phase-header"><div class="phase-num">1</div><div><div class="phase-name">Planning &amp; Procurement</div><div style="font-size:12px;color:var(--muted)">[Purpose]</div></div><div style="text-align:right"><div class="phase-duration">[X] weeks</div><div class="phase-risk risk-med">Med Risk</div></div></div><div class="phase-body"><div class="phase-grid"><div><div class="phase-section-label">Deliverables</div><ul class="phase-list"><li>[Deliverable 1]</li><li>[Deliverable 2]</li></ul></div><div><div class="phase-section-label">Key Activities</div><ul class="phase-list"><li>[Activity 1]</li><li>[Activity 2]</li></ul></div><div><div class="phase-section-label">Entry Criteria</div><ul class="phase-list"><li>[Entry 1]</li></ul></div><div><div class="phase-section-label">Exit Criteria</div><div class="criteria-box">[Testable exit criteria]</div></div></div></div></div><div class="phase-block"><div class="phase-header"><div class="phase-num">2</div><div><div class="phase-name">Staging &amp; Pre-Configuration</div></div><div style="text-align:right"><div class="phase-duration">[X] weeks</div><div class="phase-risk risk-med">Med Risk</div></div></div><div class="phase-body"><div class="phase-grid"><div><div class="phase-section-label">Deliverables</div><ul class="phase-list"><li>[Deliverable]</li></ul></div><div><div class="phase-section-label">Key Activities</div><ul class="phase-list"><li>[Activity]</li></ul></div><div><div class="phase-section-label">Entry Criteria</div><ul class="phase-list"><li>[Entry]</li></ul></div><div><div class="phase-section-label">Exit Criteria</div><div class="criteria-box">[Testable exit criteria]</div></div></div></div></div><div class="phase-block"><div class="phase-header"><div class="phase-num">3</div><div><div class="phase-name">Installation &amp; Go-Live</div></div><div style="text-align:right"><div class="phase-duration">[X] days</div><div class="phase-risk risk-high">High Risk</div></div></div><div class="phase-body"><div class="notice info" style="margin:0"><span class="n-icon">ℹ️</span><span>Fill in activities and criteria specific to this project type.</span></div></div></div><div class="phase-block"><div class="phase-header"><div class="phase-num">4</div><div><div class="phase-name">Handoff &amp; Support</div></div><div style="text-align:right"><div class="phase-duration">[X] days</div><div class="phase-risk risk-low">Low Risk</div></div></div><div class="phase-body"><div class="notice info" style="margin:0"><span class="n-icon">ℹ️</span><span>Fill in handoff activities specific to this project type.</span></div></div></div></div>
+  <div class="tab-panel" data-tab="milestones"><div class="section-title">Milestone Tracker</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add milestones specific to Project 2. Use the M1–M6 structure from Project 1 as your template.</span></div><div class="milestone-item"><div class="m-num">M1</div><div class="m-main"><div class="m-title">[Milestone 1 Name]</div><div class="m-output">OUTPUT: [Tangible deliverable]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria — not "it works"]</div></div><div class="m-side"><div class="m-phase">Phase 1</div><div class="m-owner">[Owner]</div><div class="m-target">[Week / Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div><div class="milestone-item"><div class="m-num">M2</div><div class="m-main"><div class="m-title">[Milestone 2 Name]</div><div class="m-output">OUTPUT: [Tangible deliverable]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria]</div></div><div class="m-side"><div class="m-phase">Phase 2</div><div class="m-owner">[Owner]</div><div class="m-target">[Week / Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div><div class="milestone-item"><div class="m-num">M3</div><div class="m-main"><div class="m-title">Installation Complete — Go-Live</div><div class="m-output">OUTPUT: [Tangible deliverable]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria]</div></div><div class="m-side"><div class="m-phase">Phase 3</div><div class="m-owner">[Engineer + PM]</div><div class="m-target">[Install Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div><div class="milestone-item"><div class="m-num">M4</div><div class="m-main"><div class="m-title">Documentation &amp; Handoff Delivered</div><div class="m-output">OUTPUT: [Deliverables]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria]</div></div><div class="m-side"><div class="m-phase">Phase 4</div><div class="m-owner">[PM]</div><div class="m-target">[Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div></div>
+  <div class="tab-panel" data-tab="blockers"><div class="section-title">Blockers &amp; Critical Path</div><div class="cp-box"><div class="card-title" style="margin-bottom:0">🔗 Critical Path Chain</div><div class="cp-chain"><span class="cp-step client">[Blocker 1] ⚠️</span><span class="cp-arrow">→</span><span class="cp-step">[Dependency]</span><span class="cp-arrow">→</span><span class="cp-step">[Key Step]</span><span class="cp-arrow">→</span><span class="cp-step gate">Go-Live ✓</span></div></div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>#</th><th>Blocker</th><th>What It Blocks</th><th>Owner</th><th>Target</th><th>Workaround</th></tr></thead><tbody><tr><td>B1</td><td><span class="blocker-sev build">⛔ Build-Blocking</span><strong>[Blocker description]</strong></td><td>[What it blocks]</td><td>[Owner]</td><td>[DATE]</td><td>[Workaround]</td></tr><tr><td>B2</td><td><span class="blocker-sev warn">⚠️ Warning</span><strong>[Blocker description]</strong></td><td>[What it blocks]</td><td>[Owner]</td><td>[DATE]</td><td>[Workaround]</td></tr></tbody></table></div></div>
+  <div class="tab-panel" data-tab="risks"><div class="section-title">Risk Register</div><div class="risk-item"><div><div class="risk-desc">[Risk 1]</div><div class="risk-detail"><strong>Mitigation:</strong> [Mitigation]<br><strong>Contingency:</strong> [Contingency]</div><div class="risk-badges"><span class="impact-badge imp-high">High Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[Owner]</div></div></div><div class="risk-item"><div><div class="risk-desc">[Risk 2]</div><div class="risk-detail"><strong>Mitigation:</strong> [Mitigation]<br><strong>Contingency:</strong> [Contingency]</div><div class="risk-badges"><span class="impact-badge imp-med">Med Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[Owner]</div></div></div></div>
+  <div class="tab-panel" data-tab="openitems"><div class="section-title">Open Decisions &amp; Gaps</div><div class="open-item"><div class="oi-num">1</div><div><div class="oi-question">[Open question]</div><div style="font-size:12px;color:var(--muted);margin-top:4px"><strong>Impact:</strong> [What is blocked]</div><div class="oi-meta"><span>Owner: [Name]</span><span>Target: [DATE]</span><span class="oi-cat">[Category]</span></div></div></div><div class="open-item"><div class="oi-num">2</div><div><div class="oi-question">[Open question]</div><div style="font-size:12px;color:var(--muted);margin-top:4px"><strong>Impact:</strong> [What is blocked]</div><div class="oi-meta"><span>Owner: [Name]</span><span>Target: [DATE]</span><span class="oi-cat">[Category]</span></div></div></div></div>
+  <div class="tab-panel" data-tab="procurement"><div class="section-title">Procurement Track</div><div class="proc-track"><div class="proc-step"><div class="proc-step-label">PO Submitted</div><div class="proc-step-val">[DATE / Pending]</div></div><div class="proc-step"><div class="proc-step-label">Est. Ship</div><div class="proc-step-val">[DATE / TBD]</div></div><div class="proc-step"><div class="proc-step-label">Arrives Plus 1</div><div class="proc-step-val">[DATE / TBD]</div></div><div class="proc-step"><div class="proc-step-label">Staging Done</div><div class="proc-step-val">[DATE / TBD]</div></div><div class="proc-step"><div class="proc-step-label">Site Ready</div><div class="proc-step-val">[DATE / TBD]</div></div></div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>Item</th><th>Model / SKU</th><th>Qty</th><th>Vendor</th><th>PO Status</th><th>Lead Time</th></tr></thead><tbody><tr><td>[Item 1]</td><td>[Model]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-yellow">Pending</span></td><td>[X] weeks</td></tr><tr><td>[Item 2]</td><td>[Model]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-gray">Not Started</span></td><td>[X] weeks</td></tr></tbody></table></div></div>
+  <div class="tab-panel" data-tab="timeline"><div class="section-title">Timeline &amp; Resources</div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>Week</th><th>Phase</th><th>Key Activities</th><th>Milestone</th><th>Client Gate</th></tr></thead><tbody><tr><td>Wk 1</td><td>Phase 1</td><td>[Activities]</td><td>[Milestone]</td><td>[Gate]</td></tr><tr><td>Wk 2</td><td>Phase 1</td><td>[Activities]</td><td>[Milestone]</td><td>[Gate]</td></tr><tr><td>Wk 3</td><td>Phase 2</td><td>[Activities]</td><td>[Milestone]</td><td>[Gate]</td></tr><tr><td>Wk 4</td><td>Phase 3</td><td>[Go-Live]</td><td>Go-Live</td><td>[Sign-off]</td></tr></tbody></table></div><div class="two-col"><div class="card"><div class="card-title">Resource Requirements</div><table class="data-table"><thead><tr><th>Role</th><th>Effort</th><th>Peak</th></tr></thead><tbody><tr><td>[Role]</td><td>[Xh]</td><td>[Week]</td></tr><tr><td>[Role]</td><td>[Xh]</td><td>[Week]</td></tr></tbody></table></div><div class="card"><div class="card-title">Client Commitments</div><table class="data-table"><thead><tr><th>What</th><th>When</th><th>Risk</th></tr></thead><tbody><tr><td>[Action]</td><td>[DATE]</td><td>[Risk]</td></tr><tr><td>[Action]</td><td>[DATE]</td><td>[Risk]</td></tr></tbody></table></div></div></div>
+  <div class="tab-panel" data-tab="actions"><div class="section-title">Next Actions</div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>#</th><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th><th>Risk If Late</th></tr></thead><tbody><tr><td>1</td><td>[Action 1]</td><td>[Owner]</td><td>[DATE]</td><td><span class="tag tag-yellow">Pending</span></td><td>[Risk]</td></tr><tr><td>2</td><td>[Action 2]</td><td>[Owner]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>[Risk]</td></tr><tr><td>3</td><td>[Action 3]</td><td>[Owner]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>[Risk]</td></tr></tbody></table></div></div>
+</div><!-- /panels-p2 -->
+
+
+<!-- ══════════════════════════════════
+     PROJECT 3 PANELS (same structure as P2)
+══════════════════════════════════ -->
+<div class="project-panels" id="panels-p3">
+  <div class="tab-panel active" data-tab="summary"><div class="section-title">[PROJECT 3 NAME] — Summary &amp; Goals</div><div class="notice info"><span class="n-icon">ℹ️</span><span><strong>Project Type:</strong> [Project Type] &nbsp;·&nbsp; <strong>Engineer:</strong> [NAME] &nbsp;·&nbsp; <strong>Go-Live Target:</strong> [DATE]</span></div><div class="card"><div class="card-title"><span>📋</span> Project Summary</div><p style="font-size:13px;line-height:1.8">[Project 3 narrative — 3–5 sentences.]</p></div><div class="two-col"><div class="card"><div class="card-title"><span>💼</span> Business Goals</div><ul class="phase-list"><li>[Business goal 1]</li><li>[Business goal 2]</li></ul></div><div class="card"><div class="card-title"><span>⚙️</span> Technical Goals</div><ul class="phase-list"><li>[Technical goal 1]</li><li>[Technical goal 2]</li></ul></div></div><div class="card"><div class="card-title"><span>📊</span> Success Metrics</div><table class="data-table"><thead><tr><th>Metric</th><th>Current State</th><th>Target at Go-Live</th><th>30-Day Post-Install</th></tr></thead><tbody><tr><td>[Metric 1]</td><td>[Baseline]</td><td>[Target]</td><td>[Post-install]</td></tr></tbody></table></div></div>
+  <div class="tab-panel" data-tab="scope"><div class="section-title">Scope Boundaries</div><div class="three-col"><div class="card" style="border-top:3px solid var(--green)"><div class="card-title" style="color:var(--green)">✅ In Scope</div><ul class="phase-list"><li>[In scope item 1]</li><li>[In scope item 2]</li></ul></div><div class="card" style="border-top:3px solid var(--red)"><div class="card-title" style="color:var(--red)">❌ Out of Scope</div><ul class="phase-list"><li>[Out of scope 1]</li></ul></div><div class="card" style="border-top:3px solid var(--purple)"><div class="card-title" style="color:var(--purple)">🔮 Future</div><ul class="phase-list"><li>[Future item]</li></ul></div></div></div>
+  <div class="tab-panel" data-tab="phases"><div class="section-title">Phased Delivery Plan</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in phases for Project 3. Use the standard 4-phase structure: Planning → Staging → Installation → Handoff.</span></div></div>
+  <div class="tab-panel" data-tab="milestones"><div class="section-title">Milestone Tracker</div><div class="milestone-item"><div class="m-num">M1</div><div class="m-main"><div class="m-title">[Milestone 1]</div><div class="m-output">OUTPUT: [Deliverable]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria]</div></div><div class="m-side"><div class="m-phase">Phase 1</div><div class="m-owner">[Owner]</div><div class="m-target">[Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div><div class="milestone-item"><div class="m-num">M2</div><div class="m-main"><div class="m-title">Installation Complete — Go-Live</div><div class="m-output">OUTPUT: [Deliverable]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria]</div></div><div class="m-side"><div class="m-phase">Phase 3</div><div class="m-owner">[Engineer + PM]</div><div class="m-target">[Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div></div>
+  <div class="tab-panel" data-tab="blockers"><div class="section-title">Blockers &amp; Critical Path</div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>#</th><th>Blocker</th><th>What It Blocks</th><th>Owner</th><th>Target</th><th>Workaround</th></tr></thead><tbody><tr><td>B1</td><td><span class="blocker-sev build">⛔ Build-Blocking</span><strong>[Blocker]</strong></td><td>[What it blocks]</td><td>[Owner]</td><td>[DATE]</td><td>[Workaround]</td></tr></tbody></table></div></div>
+  <div class="tab-panel" data-tab="risks"><div class="section-title">Risk Register</div><div class="risk-item"><div><div class="risk-desc">[Risk 1]</div><div class="risk-detail"><strong>Mitigation:</strong> [Mitigation]<br><strong>Contingency:</strong> [Contingency]</div><div class="risk-badges"><span class="impact-badge imp-high">High Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[Owner]</div></div></div></div>
+  <div class="tab-panel" data-tab="openitems"><div class="section-title">Open Decisions &amp; Gaps</div><div class="open-item"><div class="oi-num">1</div><div><div class="oi-question">[Open question]</div><div class="oi-meta"><span>Owner: [Name]</span><span>Target: [DATE]</span><span class="oi-cat">[Category]</span></div></div></div></div>
+  <div class="tab-panel" data-tab="procurement"><div class="section-title">Procurement Track</div><div class="proc-track"><div class="proc-step"><div class="proc-step-label">PO Submitted</div><div class="proc-step-val">[Pending]</div></div><div class="proc-step"><div class="proc-step-label">Est. Ship</div><div class="proc-step-val">[TBD]</div></div><div class="proc-step"><div class="proc-step-label">Arrives Plus 1</div><div class="proc-step-val">[TBD]</div></div><div class="proc-step"><div class="proc-step-label">Staging Done</div><div class="proc-step-val">[TBD]</div></div><div class="proc-step"><div class="proc-step-label">Site Ready</div><div class="proc-step-val">[TBD]</div></div></div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>Item</th><th>Model / SKU</th><th>Qty</th><th>Vendor</th><th>PO Status</th><th>Lead Time</th></tr></thead><tbody><tr><td>[Item]</td><td>[Model]</td><td>[Qty]</td><td>[Vendor]</td><td><span class="tag tag-gray">Not Started</span></td><td>[X] weeks</td></tr></tbody></table></div></div>
+  <div class="tab-panel" data-tab="timeline"><div class="section-title">Timeline &amp; Resources</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in the week-by-week schedule for Project 3.</span></div></div>
+  <div class="tab-panel" data-tab="actions"><div class="section-title">Next Actions</div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>#</th><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th><th>Risk If Late</th></tr></thead><tbody><tr><td>1</td><td>[Action 1]</td><td>[Owner]</td><td>[DATE]</td><td><span class="tag tag-yellow">Pending</span></td><td>[Risk]</td></tr><tr><td>2</td><td>[Action 2]</td><td>[Owner]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>[Risk]</td></tr></tbody></table></div></div>
+</div><!-- /panels-p3 -->
+
+
+<!-- ══════════════════════════════════
+     PROJECT 4 PANELS
+══════════════════════════════════ -->
+<div class="project-panels" id="panels-p4">
+  <div class="tab-panel active" data-tab="summary"><div class="section-title">[PROJECT 4 NAME] — Summary &amp; Goals</div><div class="notice info"><span class="n-icon">ℹ️</span><span><strong>Project Type:</strong> [Project Type] &nbsp;·&nbsp; <strong>Engineer:</strong> [NAME] &nbsp;·&nbsp; <strong>Go-Live Target:</strong> [DATE]</span></div><div class="card"><div class="card-title"><span>📋</span> Project Summary</div><p style="font-size:13px;line-height:1.8">[Project 4 narrative — 3–5 sentences.]</p></div><div class="two-col"><div class="card"><div class="card-title"><span>💼</span> Business Goals</div><ul class="phase-list"><li>[Business goal 1]</li><li>[Business goal 2]</li></ul></div><div class="card"><div class="card-title"><span>⚙️</span> Technical Goals</div><ul class="phase-list"><li>[Technical goal 1]</li><li>[Technical goal 2]</li></ul></div></div></div>
+  <div class="tab-panel" data-tab="scope"><div class="section-title">Scope Boundaries</div><div class="three-col"><div class="card" style="border-top:3px solid var(--green)"><div class="card-title" style="color:var(--green)">✅ In Scope</div><ul class="phase-list"><li>[In scope]</li></ul></div><div class="card" style="border-top:3px solid var(--red)"><div class="card-title" style="color:var(--red)">❌ Out of Scope</div><ul class="phase-list"><li>[Out of scope]</li></ul></div><div class="card" style="border-top:3px solid var(--purple)"><div class="card-title" style="color:var(--purple)">🔮 Future</div><ul class="phase-list"><li>[Future item]</li></ul></div></div></div>
+  <div class="tab-panel" data-tab="phases"><div class="section-title">Phased Delivery Plan</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in phases for Project 4.</span></div></div>
+  <div class="tab-panel" data-tab="milestones"><div class="section-title">Milestone Tracker</div><div class="milestone-item"><div class="m-num">M1</div><div class="m-main"><div class="m-title">[Milestone 1]</div><div class="m-output">OUTPUT: [Deliverable]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria]</div></div><div class="m-side"><div class="m-phase">Phase 1</div><div class="m-owner">[Owner]</div><div class="m-target">[Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div><div class="milestone-item"><div class="m-num">M2</div><div class="m-main"><div class="m-title">Installation Complete — Go-Live</div><div class="m-output">OUTPUT: [Deliverable]</div><div class="m-criteria"><strong>Acceptance:</strong> [Testable criteria]</div></div><div class="m-side"><div class="m-phase">Phase 3</div><div class="m-owner">[Engineer + PM]</div><div class="m-target">[Date]</div><div class="m-time">[Xh] → "[ms]"</div></div></div></div>
+  <div class="tab-panel" data-tab="blockers"><div class="section-title">Blockers &amp; Critical Path</div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>#</th><th>Blocker</th><th>What It Blocks</th><th>Owner</th><th>Target</th><th>Workaround</th></tr></thead><tbody><tr><td>B1</td><td><span class="blocker-sev warn">⚠️ Warning</span><strong>[Blocker]</strong></td><td>[What it blocks]</td><td>[Owner]</td><td>[DATE]</td><td>[Workaround]</td></tr></tbody></table></div></div>
+  <div class="tab-panel" data-tab="risks"><div class="section-title">Risk Register</div><div class="risk-item"><div><div class="risk-desc">[Risk 1]</div><div class="risk-detail"><strong>Mitigation:</strong> [Mitigation]<br><strong>Contingency:</strong> [Contingency]</div><div class="risk-badges"><span class="impact-badge imp-med">Med Impact</span><span class="impact-badge imp-med">Med Likelihood</span></div></div><div></div><div><div style="font-size:12px;font-weight:600;color:var(--muted)">Owner</div><div style="font-size:13px">[Owner]</div></div></div></div>
+  <div class="tab-panel" data-tab="openitems"><div class="section-title">Open Decisions &amp; Gaps</div><div class="open-item"><div class="oi-num">1</div><div><div class="oi-question">[Open question]</div><div class="oi-meta"><span>Owner: [Name]</span><span>Target: [DATE]</span><span class="oi-cat">[Category]</span></div></div></div></div>
+  <div class="tab-panel" data-tab="procurement"><div class="section-title">Procurement Track</div><div class="proc-track"><div class="proc-step"><div class="proc-step-label">PO Submitted</div><div class="proc-step-val">[Pending]</div></div><div class="proc-step"><div class="proc-step-label">Est. Ship</div><div class="proc-step-val">[TBD]</div></div><div class="proc-step"><div class="proc-step-label">Arrives Plus 1</div><div class="proc-step-val">[TBD]</div></div><div class="proc-step"><div class="proc-step-label">Staging Done</div><div class="proc-step-val">[TBD]</div></div><div class="proc-step"><div class="proc-step-label">Site Ready</div><div class="proc-step-val">[TBD]</div></div></div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add equipment items specific to Project 4.</span></div></div>
+  <div class="tab-panel" data-tab="timeline"><div class="section-title">Timeline &amp; Resources</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in the week-by-week schedule for Project 4.</span></div></div>
+  <div class="tab-panel" data-tab="actions"><div class="section-title">Next Actions</div><div class="card" style="padding:0;overflow:hidden"><table class="data-table"><thead><tr><th>#</th><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th><th>Risk If Late</th></tr></thead><tbody><tr><td>1</td><td>[Action 1]</td><td>[Owner]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>[Risk]</td></tr><tr><td>2</td><td>[Action 2]</td><td>[Owner]</td><td>[DATE]</td><td><span class="tag tag-gray">Open</span></td><td>[Risk]</td></tr></tbody></table></div></div>
+</div><!-- /panels-p4 -->
+
+
+<!-- ══════════════════════════════════
+     PROJECT 5 & 6 (hidden until added)
+══════════════════════════════════ -->
+<div class="project-panels" id="panels-p5" style="display:none">
+  <div class="tab-panel active" data-tab="summary"><div class="section-title">[PROJECT 5 NAME] — Summary &amp; Goals</div><div class="notice info"><span class="n-icon">ℹ️</span><span><strong>Project Type:</strong> [Project Type] &nbsp;·&nbsp; <strong>Engineer:</strong> [NAME] &nbsp;·&nbsp; <strong>Go-Live Target:</strong> [DATE]</span></div><div class="card"><div class="card-title">Project Summary</div><p style="font-size:13px;line-height:1.8">[Project 5 narrative]</p></div></div>
+  <div class="tab-panel" data-tab="scope"><div class="section-title">Scope Boundaries</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in scope for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="phases"><div class="section-title">Phased Delivery Plan</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in phases for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="milestones"><div class="section-title">Milestone Tracker</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add milestones for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="blockers"><div class="section-title">Blockers &amp; Critical Path</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add blockers for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="risks"><div class="section-title">Risk Register</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add risks for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="openitems"><div class="section-title">Open Decisions &amp; Gaps</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add open items for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="procurement"><div class="section-title">Procurement Track</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add procurement items for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="timeline"><div class="section-title">Timeline &amp; Resources</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add timeline for Project 5.</span></div></div>
+  <div class="tab-panel" data-tab="actions"><div class="section-title">Next Actions</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add next actions for Project 5.</span></div></div>
+</div><!-- /panels-p5 -->
+
+<div class="project-panels" id="panels-p6" style="display:none">
+  <div class="tab-panel active" data-tab="summary"><div class="section-title">[PROJECT 6 NAME] — Summary &amp; Goals</div><div class="notice info"><span class="n-icon">ℹ️</span><span><strong>Project Type:</strong> [Project Type] &nbsp;·&nbsp; <strong>Engineer:</strong> [NAME] &nbsp;·&nbsp; <strong>Go-Live Target:</strong> [DATE]</span></div><div class="card"><div class="card-title">Project Summary</div><p style="font-size:13px;line-height:1.8">[Project 6 narrative]</p></div></div>
+  <div class="tab-panel" data-tab="scope"><div class="section-title">Scope Boundaries</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in scope for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="phases"><div class="section-title">Phased Delivery Plan</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Fill in phases for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="milestones"><div class="section-title">Milestone Tracker</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add milestones for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="blockers"><div class="section-title">Blockers &amp; Critical Path</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add blockers for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="risks"><div class="section-title">Risk Register</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add risks for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="openitems"><div class="section-title">Open Decisions &amp; Gaps</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add open items for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="procurement"><div class="section-title">Procurement Track</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add procurement items for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="timeline"><div class="section-title">Timeline &amp; Resources</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add timeline for Project 6.</span></div></div>
+  <div class="tab-panel" data-tab="actions"><div class="section-title">Next Actions</div><div class="notice info"><span class="n-icon">ℹ️</span><span>Add next actions for Project 6.</span></div></div>
+</div><!-- /panels-p6 -->
+
+
+</div><!-- /content-area -->
+</main>
+
+<script>
+// ── PROJECT TYPES (from ClickUp) ──
+const PROJECT_TYPES = [
+  { name: 'Onboarding',           color: '#f472b6' },
+  { name: 'Offboarding',          color: '#f97316' },
+  { name: 'Migration',            color: '#3b82f6' },
+  { name: 'Implementation',       color: '#a855f7' },
+  { name: 'Upgrade',              color: '#06b6d4' },
+  { name: 'Security Project',     color: '#0ea5e9' },
+  { name: 'Network Project',      color: '#eab308' },
+  { name: 'Infrastructure',       color: '#6366f1' },
+  { name: 'Compliance',           color: '#22c55e' },
+  { name: 'Office Move',          color: '#8b5cf6' },
+  { name: 'Mergers/Acquisitions', color: '#60a5fa' },
+  { name: 'Optimization',         color: '#c084fc' },
+  { name: 'AI & Automation',      color: '#ec4899' },
+  { name: 'Other',                color: '#9ca3af' },
+  { name: 'PC Replacement',       color: '#a78bfa' },
+  { name: 'Initial Add',          color: '#fb923c' },
+  { name: 'MSA',                  color: '#84cc16' },
+  { name: 'New Equipment',        color: '#818cf8' },
+];
+
+// ── TAB DEFINITIONS ──
+const ENGAGEMENT_TABS = [
+  { id: 'howto',       icon: '📖',  label: 'How to Use' },
+  { id: 'setup',       icon: '⚙️',  label: 'Engagement Setup' },
+  { id: 'projectmap',  icon: '🗺️',  label: 'Project Map' },
+  { id: 'timeline',    icon: '📅',  label: 'Combined Timeline' },
+  { id: 'blockers',    icon: '🚧',  label: 'Shared Blockers' },
+  { id: 'procurement', icon: '📦',  label: 'Shared Procurement' },
+  { id: 'actions',     icon: '⚡',  label: 'All Actions' },
+  { id: 'clickup',     icon: '✅',  label: 'ClickUp Setup' },
+  { id: 'resources',   icon: '📎',  label: 'Resources' },
+];
+
+const PROJECT_TABS = [
+  { id: 'summary',     icon: '📋',  label: 'Summary & Goals' },
+  { id: 'scope',       icon: '🔲',  label: 'Scope' },
+  { id: 'phases',      icon: '🏗',  label: 'Phased Plan' },
+  { id: 'milestones',  icon: '🎯',  label: 'Milestones' },
+  { id: 'blockers',    icon: '🚧',  label: 'Blockers' },
+  { id: 'risks',       icon: '⚠️',  label: 'Risk Register' },
+  { id: 'openitems',   icon: '❓',  label: 'Open Items' },
+  { id: 'procurement', icon: '📦',  label: 'Procurement' },
+  { id: 'timeline',    icon: '📅',  label: 'Timeline' },
+  { id: 'actions',     icon: '⚡',  label: 'Next Actions' },
+];
+
+// ── STATE ──
+let currentProject = 'engagement';
+let savedTabs = {};
+let addedProjects = 0;
+
+// ── RENDER CHECKLIST ──
+function renderChecklist() {
+  const container = document.getElementById('typeChecklist');
+  container.innerHTML = PROJECT_TYPES.map(t => `
+    <label class="type-checkbox-item" onclick="toggleType(this)">
+      <input type="checkbox" style="display:none">
+      <span class="type-dot" style="background:${t.color}"></span>
+      <span class="type-name">${t.name}</span>
+    </label>
+  `).join('');
+}
+
+function toggleType(el) {
+  el.classList.toggle('checked');
+}
+
+// ── RENDER TABS ──
+function renderTabs(projectId) {
+  const defs = projectId === 'engagement' ? ENGAGEMENT_TABS : PROJECT_TABS;
+  const savedTab = savedTabs[projectId] || defs[0].id;
+  const tabsInner = document.getElementById('tabsInner');
+  tabsInner.innerHTML = defs.map(t => `
+    <button class="tab-btn${t.id === savedTab ? ' active' : ''}" onclick="showTab('${t.id}', this)">
+      <span class="tab-icon">${t.icon}</span> ${t.label}
+    </button>
+  `).join('');
+}
+
+// ── SWITCH PROJECT ──
+function switchProject(projectId, btn) {
+  // Update pills
+  document.querySelectorAll('.project-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Hide all panels
+  document.querySelectorAll('.project-panels').forEach(p => {
+    p.classList.remove('active');
+    if (!p.id.startsWith('panels-p5') && !p.id.startsWith('panels-p6')) {
+      p.style.display = '';
+    }
+  });
+
+  // Show target panels
+  const target = document.getElementById('panels-' + projectId);
+  if (target) {
+    target.style.display = 'block';
+    target.classList.add('active');
+  }
+
+  currentProject = projectId;
+  renderTabs(projectId);
+
+  // Show saved or first tab
+  const defs = projectId === 'engagement' ? ENGAGEMENT_TABS : PROJECT_TABS;
+  const tabId = savedTabs[projectId] || defs[0].id;
+  showTab(tabId);
+}
+
+// ── SHOW TAB ──
+function showTab(tabId, btn) {
+  const container = document.getElementById('panels-' + currentProject);
+  if (!container) return;
+
+  container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const panel = container.querySelector(`[data-tab="${tabId}"]`);
+  if (panel) panel.classList.add('active');
+
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    const allBtns = document.querySelectorAll('.tab-btn');
+    allBtns.forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${tabId}'`)) {
+        b.classList.add('active');
+      }
+    });
+  }
+
+  savedTabs[currentProject] = tabId;
+}
+
+// ── ADD PROJECT ──
+function addProject() {
+  if (addedProjects >= 2) {
+    alert('Maximum 6 projects per engagement. Contact your PM if you need more.');
+    return;
+  }
+  addedProjects++;
+  const num = 4 + addedProjects;
+  const pillEl = document.getElementById('pill-p' + num);
+  if (pillEl) {
+    pillEl.classList.remove('hidden-pill');
+    pillEl.style.display = '';
+  }
+  const panelEl = document.getElementById('panels-p' + num);
+  if (panelEl) panelEl.style.display = '';
+
+  // Update counter
+  document.getElementById('active-count').textContent = 4 + addedProjects;
+
+  if (addedProjects >= 2) {
+    document.getElementById('addProjectBtn').style.opacity = '0.4';
+    document.getElementById('addProjectBtn').style.pointerEvents = 'none';
+  }
+}
+
+// ── TABS SCROLL ──
+function scrollTabsLeft() {
+  document.getElementById('tabsInner').scrollBy({ left: -200, behavior: 'smooth' });
+}
+function scrollTabsRight() {
+  document.getElementById('tabsInner').scrollBy({ left: 200, behavior: 'smooth' });
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  renderChecklist();
+  renderTabs('engagement');
+
+  // Set engagement as active
+  const engPanel = document.getElementById('panels-engagement');
+  if (engPanel) engPanel.classList.add('active');
+
+  // Show scroll buttons if tabs overflow
+  const tabsInner = document.getElementById('tabsInner');
+  const checkScroll = () => {
+    const scrollLeft = document.getElementById('scrollLeft');
+    const scrollRight = document.getElementById('scrollRight');
+    if (!scrollLeft || !scrollRight) return;
+    scrollLeft.classList.toggle('hidden', tabsInner.scrollLeft <= 0);
+    scrollRight.classList.toggle('hidden', tabsInner.scrollLeft + tabsInner.clientWidth >= tabsInner.scrollWidth - 1);
+  };
+  tabsInner.addEventListener('scroll', checkScroll);
+  setTimeout(checkScroll, 100);
+});
+</script>
+</body>
+</html>
