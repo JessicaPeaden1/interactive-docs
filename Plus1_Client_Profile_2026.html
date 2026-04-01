@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Plus 1 Technology — Client Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:       #1e2d8a;
+    --navy-dim:   #e8ecf8;
+    --navy-mid:   #c5ceed;
+    --cyan:       #29abe2;
+    --cyan-dim:   #e0f4fc;
+    --cyan-mid:   #a8ddf5;
+    --accent:     var(--navy);
+    --accent2:    var(--cyan);
+    --bg:         #f4f6fb;
+    --bg2:        #ffffff;
+    --bg3:        #eef1f8;
+    --bg4:        #f9fafd;
+    --border:     #dce2f0;
+    --border2:    #c8d0e8;
+    --text:       #1a2040;
+    --muted:      #5a6589;
+    --subtle:     #8e9ab8;
+    --green:      #16a34a;
+    --green-bg:   #f0fdf4;
+    --green-bdr:  #bbf7d0;
+    --yellow:     #b45309;
+    --yellow-bg:  #fffbeb;
+    --yellow-bdr: #fde68a;
+    --red:        #dc2626;
+    --red-bg:     #fef2f2;
+    --red-bdr:    #fecaca;
+    --purple:     #7c3aed;
+    --purple-bg:  #f5f3ff;
+    --purple-bdr: #ddd6fe;
+    --teal:       #0f766e;
+    --teal-bg:    #f0fdfa;
+    --teal-bdr:   #99f6e4;
+    --orange:     #c2410c;
+    --orange-bg:  #fff7ed;
+    --orange-bdr: #fed7aa;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.65; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .site-header { background: var(--navy); padding: 0 32px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(30,45,138,0.18); }
+  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 24px; }
+  .logo-block { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .logo-svg { height: 28px; width: auto; }
+  .header-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.2); }
+  .header-label { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500; letter-spacing: 0.03em; }
+  .header-meta { display: flex; align-items: center; gap: 16px; font-size: 12px; color: rgba(255,255,255,0.65); }
+  .version-badge { background: rgba(41,171,226,0.25); color: #7dd3fc; border: 1px solid rgba(41,171,226,0.4); border-radius: 20px; padding: 2px 10px; font-family: var(--mono); font-size: 11px; font-weight: 500; }
+  .header-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+
+  /* ── HERO ── */
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, #2a3ea8 60%, #1a5fa8 100%); border-bottom: 3px solid var(--cyan); padding: 32px 32px 0; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 85% 0%, rgba(41,171,226,0.15) 0%, transparent 60%); pointer-events: none; }
+  .hero-inner { max-width: 1200px; margin: 0 auto; }
+  .project-header-grid { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; margin-bottom: 20px; }
+  .project-type-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .type-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; border: 1px solid; font-family: var(--mono); }
+  .type-badge.active   { color: #86efac; border-color: rgba(134,239,172,0.4); background: rgba(134,239,172,0.1); }
+  .type-badge.atrisk   { color: #fca5a5; border-color: rgba(252,165,165,0.4); background: rgba(252,165,165,0.1); }
+  .type-badge.onhold   { color: #fde68a; border-color: rgba(253,230,138,0.4); background: rgba(253,230,138,0.1); }
+  .type-badge.premium  { color: #c4b5fd; border-color: rgba(196,181,253,0.4); background: rgba(196,181,253,0.1); }
+  .type-badge.standard { color: #93c5fd; border-color: rgba(147,197,253,0.4); background: rgba(147,197,253,0.1); }
+  .type-badge.basic    { color: #5eead4; border-color: rgba(94,234,212,0.4); background: rgba(94,234,212,0.1); }
+  .type-badge.msp      { color: #7dd3fc; border-color: rgba(125,211,252,0.4); background: rgba(125,211,252,0.1); }
+  .project-title { font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #fff; margin-bottom: 6px; }
+  .project-subtitle { color: rgba(255,255,255,0.65); font-size: 13px; }
+  .project-subtitle span { color: rgba(255,255,255,0.9); font-weight: 500; }
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; min-width: 260px; }
+  .stat-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 14px; text-align: center; backdrop-filter: blur(4px); }
+  .stat-card .s-label { font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+  .stat-card .s-value { font-weight: 700; font-size: 14px; color: var(--cyan); }
+  .stat-card .s-sub   { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+  .meta-row { display: flex; gap: 20px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.12); font-size: 12px; color: rgba(255,255,255,0.6); flex-wrap: wrap; align-items: center; }
+  .meta-row .meta-item { display: flex; align-items: center; gap: 6px; }
+  .meta-row .meta-item strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+  .meta-row .clickup-link { margin-left: auto; display: flex; align-items: center; gap: 6px; color: #7dd3fc; text-decoration: none; font-size: 12px; padding: 4px 12px; border: 1px solid rgba(125,211,252,0.35); border-radius: 6px; background: rgba(125,211,252,0.08); transition: all 0.15s; }
+  .meta-row .clickup-link:hover { background: rgba(125,211,252,0.16); }
+
+  /* ── TABS ── */
+  .tabs-nav { background: var(--bg2); border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(30,45,138,0.06); position: relative; display: flex; align-items: stretch; }
+  .tabs-scroll-btn { flex-shrink: 0; width: 36px; display: flex; align-items: center; justify-content: center; background: var(--bg2); border: none; cursor: pointer; color: var(--muted); font-size: 16px; z-index: 2; transition: all 0.15s; border-bottom: 1px solid transparent; }
+  .tabs-scroll-btn:hover { color: var(--navy); background: var(--bg3); }
+  .tabs-scroll-btn.left  { border-right: 1px solid var(--border); box-shadow:  3px 0 8px rgba(30,45,138,0.06); }
+  .tabs-scroll-btn.right { border-left:  1px solid var(--border); box-shadow: -3px 0 8px rgba(30,45,138,0.06); }
+  .tabs-scroll-btn.hidden { opacity: 0; pointer-events: none; }
+  .tabs-bar { flex: 1; overflow-x: auto; scrollbar-width: none; }
+  .tabs-bar::-webkit-scrollbar { display: none; }
+  .tabs-inner { display: flex; gap: 0; width: max-content; min-width: 100%; }
+  .tab-btn { display: flex; align-items: center; gap: 6px; padding: 13px 16px; font-size: 13px; font-weight: 500; color: var(--muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: var(--sans); }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+  .tab-icon { font-size: 13px; }
+
+  /* ── CONTENT ── */
+  .content-area { max-width: 1200px; margin: 0 auto; padding: 28px 32px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Section headers */
+  .section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--navy); margin-bottom: 4px; }
+  .section-desc { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+
+  /* Cards */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(30,45,138,0.05); }
+  .card-title { font-weight: 600; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .card p { color: var(--muted); font-size: 13px; line-height: 1.75; }
+  .card p strong { color: var(--text); }
+
+  /* Grids */
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px; }
+
+  /* Goal cards */
+  .goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .goal-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .goal-item .gi-icon  { font-size: 20px; margin-bottom: 8px; }
+  .goal-item .gi-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--text); }
+  .goal-item .gi-desc  { color: var(--muted); font-size: 12px; line-height: 1.55; }
+
+  /* Data table */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: var(--bg3); color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .data-table td:first-child { color: var(--text); font-weight: 500; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--bg4); }
+  .data-table td strong { color: var(--text); font-size: 13px; display: block; margin-bottom: 2px; }
+  .data-table td small  { color: var(--muted); font-size: 11px; display: block; }
+
+  /* Tags / Pills */
+  .tag { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 500; letter-spacing: 0.03em; display: inline-block; }
+  .tag-blue   { background: var(--navy-dim); color: var(--navy); border: 1px solid var(--navy-mid); }
+  .tag-cyan   { background: var(--cyan-dim); color: #0369a1; border: 1px solid var(--cyan-mid); }
+  .tag-green  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bdr); }
+  .tag-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bdr); }
+  .tag-red    { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-bdr); }
+  .tag-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-bdr); }
+  .tag-gray   { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
+  .tag-teal   { background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-bdr); }
+  .tag-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-bdr); }
+
+  /* Notice banners */
+  .notice { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; line-height: 1.6; }
+  .notice.info    { background: var(--cyan-dim);  border: 1px solid var(--cyan-mid);   color: #0369a1; }
+  .notice.warn    { background: var(--yellow-bg); border: 1px solid var(--yellow-bdr); color: var(--yellow); }
+  .notice.danger  { background: var(--red-bg);    border: 1px solid var(--red-bdr);    color: var(--red); }
+  .notice.success { background: var(--green-bg);  border: 1px solid var(--green-bdr);  color: var(--green); }
+  .notice .n-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Risk cards */
+  .risk-card { background: var(--bg2); border: 1px solid var(--border); border-left-width: 4px; border-radius: 10px; padding: 18px 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .risk-card.high   { border-left-color: var(--red); }
+  .risk-card.medium { border-left-color: var(--yellow); }
+  .risk-card.low    { border-left-color: var(--green); }
+  .risk-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+  .risk-title  { font-weight: 600; font-size: 14px; color: var(--text); }
+  .risk-badges { display: flex; gap: 6px; flex-shrink: 0; }
+  .risk-owner  { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .risk-body   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .risk-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 3px; margin-top: 10px; }
+  .risk-section-title:first-child { margin-top: 0; }
+  .risk-section-body  { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* Scope items */
+  .scope-section { margin-bottom: 22px; }
+  .scope-section-header { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .scope-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .scope-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; gap: 10px; align-items: flex-start; }
+  .scope-item .si-icon  { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .scope-item .si-title { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 3px; }
+  .scope-item .si-body  { color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .oos-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .oos-item { background: var(--red-bg); border: 1px solid var(--red-bdr); border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--muted); }
+  .oos-item strong { display: block; color: var(--red); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+
+  /* Procurement */
+  .proc-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; margin-top: 16px; }
+  .proc-step { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; text-align: center; }
+  .proc-step.done   { border-color: var(--green-bdr); background: var(--green-bg); }
+  .proc-step.active { border-color: var(--cyan-mid);  background: var(--cyan-dim); }
+  .proc-step .ps-icon   { font-size: 20px; margin-bottom: 6px; }
+  .proc-step .ps-label  { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .proc-step .ps-date   { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+  .proc-step .ps-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 6px; }
+  .proc-step.done .ps-status   { color: var(--green); }
+  .proc-step.active .ps-status { color: #0369a1; }
+  .proc-step .ps-status.pending { color: var(--muted); }
+
+  /* Action / open items */
+  .open-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; }
+  .open-item.blocking { border-left: 3px solid var(--red); }
+  .open-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .open-item-id    { font-family: var(--mono); font-size: 11px; color: var(--navy); font-weight: 600; }
+  .open-item-title { font-weight: 600; font-size: 13px; color: var(--text); }
+  .open-item-desc  { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+  .open-item-footer { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .oi-meta { font-size: 12px; display: flex; gap: 5px; }
+  .oi-meta .label { color: var(--muted); }
+  .oi-meta .value { color: var(--text); font-weight: 500; }
+
+  /* How to Use option blocks */
+  .option-block { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; position: relative; overflow: hidden; }
+  .option-block.primary { border-color: var(--navy-mid); border-width: 2px; }
+  .option-label { position: absolute; top: 0; right: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 4px 12px; border-bottom-left-radius: 8px; }
+  .option-label.a { background: var(--navy-dim); color: var(--navy); }
+  .option-label.b { background: var(--bg3); color: var(--muted); }
+  .option-icon  { font-size: 22px; margin-bottom: 10px; margin-top: 14px; }
+  .option-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .option-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .steps-label  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 12px; }
+  .step-row { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; margin-bottom: 10px; }
+  .step-num-a { width: 20px; height: 20px; border-radius: 50%; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .step-row span { color: var(--muted); line-height: 1.5; }
+  .step-row strong { color: var(--text); }
+
+  /* RACI */
+  .raci-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .raci-table th { background: var(--navy); color: #fff; font-size: 11px; font-weight: 600; padding: 10px 12px; text-align: center; border: 1px solid rgba(255,255,255,0.15); }
+  .raci-table th.process-col { text-align: left; min-width: 160px; }
+  .raci-table td { padding: 9px 12px; border: 1px solid var(--border); text-align: center; color: var(--muted); background: var(--bg2); vertical-align: middle; }
+  .raci-table td.process-label { text-align: left; font-weight: 500; color: var(--text); background: var(--bg3); }
+  .raci-table tr:hover td { background: var(--bg4); }
+  .raci-table tr:hover td.process-label { background: var(--navy-dim); }
+  .raci-r { background: var(--navy-dim); color: var(--navy); border: 1px solid var(--navy-mid); border-radius: 4px; padding: 2px 7px; font-weight: 700; font-size: 11px; font-family: var(--mono); display: inline-block; }
+  .raci-a { background: var(--cyan-dim); color: #0369a1; border: 1px solid var(--cyan-mid); border-radius: 4px; padding: 2px 7px; font-weight: 700; font-size: 11px; font-family: var(--mono); display: inline-block; }
+  .raci-c { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bdr); border-radius: 4px; padding: 2px 7px; font-weight: 700; font-size: 11px; font-family: var(--mono); display: inline-block; }
+  .raci-i { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-weight: 700; font-size: 11px; font-family: var(--mono); display: inline-block; }
+
+  /* Checklist service rows */
+  .svc-check { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+  .svc-check input[type=checkbox] { accent-color: var(--navy); width: 14px; height: 14px; cursor: pointer; }
+
+  /* Contact cards */
+  .contact-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .contact-avatar { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--navy), #2a3ea8); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #fff; flex-shrink: 0; }
+  .contact-main .c-name  { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 2px; }
+  .contact-main .c-role  { font-size: 12px; color: var(--cyan); margin-bottom: 6px; }
+  .contact-main .c-resp  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .contact-side { text-align: right; flex-shrink: 0; margin-left: auto; }
+  .contact-side .c-auth  { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+
+  /* Checkpoint/summary cards */
+  .checkpoint-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(30,45,138,0.05); }
+  .checkpoint-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .checkpoint-card.c1::before { background: var(--cyan); }
+  .checkpoint-card.c2::before { background: var(--navy); }
+  .checkpoint-card.c3::before { background: var(--green); }
+  .checkpoint-card.c4::before { background: var(--yellow); }
+  .checkpoint-card .cp-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
+  .checkpoint-card .cp-title { font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text); }
+  .checkpoint-card ul { color: var(--muted); font-size: 12px; padding-left: 14px; }
+  .checkpoint-card ul li { margin-bottom: 3px; line-height: 1.5; }
+  .checkpoint-card ul li::marker { color: var(--cyan); }
+
+  /* Decision log */
+  .decision-card { background: var(--bg2); border: 1px solid var(--border); border-left: 4px solid var(--navy); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .decision-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+  .decision-id    { font-family: var(--mono); font-size: 11px; color: var(--navy); font-weight: 600; margin-bottom: 3px; }
+  .decision-title { font-weight: 600; font-size: 14px; color: var(--text); }
+  .decision-body  { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 10px; }
+  .decision-meta  { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
+  .decision-meta span strong { color: var(--text); }
+
+  /* Active project rows */
+  .project-row { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; display: grid; grid-template-columns: auto 1fr auto auto; gap: 16px; align-items: start; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .project-row .pr-icon { font-size: 20px; }
+  .project-row .pr-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .project-row .pr-goal  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .project-row .pr-owner { font-size: 12px; font-weight: 500; color: var(--text); text-align: right; }
+  .project-row .pr-link  { font-size: 11px; color: var(--cyan); text-decoration: none; }
+  .project-row .pr-link:hover { text-decoration: underline; }
+
+  /* Status legend */
+  .status-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 18px; }
+  .legend-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: flex-start; }
+  .legend-item .l-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .legend-item .l-label { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 2px; }
+  .legend-item .l-desc  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* Escalation path */
+  .esc-level { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .esc-level:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .esc-num { width: 32px; height: 32px; border-radius: 8px; background: var(--navy-dim); border: 1px solid var(--navy-mid); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 12px; color: var(--navy); flex-shrink: 0; }
+  .esc-content h4 { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .esc-content p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Comm channel */
+  .comm-channel { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; }
+  .comm-icon { font-size: 20px; flex-shrink: 0; }
+  .comm-label { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 3px; }
+  .comm-desc  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .comm-badge { margin-left: auto; flex-shrink: 0; }
+
+  /* Info field rows */
+  .field-row { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); align-items: baseline; }
+  .field-row:last-child { border-bottom: none; }
+  .field-label { font-size: 12px; color: var(--muted); font-weight: 500; min-width: 180px; flex-shrink: 0; }
+  .field-value { font-size: 13px; color: var(--text); }
+  .field-placeholder { font-size: 13px; color: var(--subtle); font-style: italic; font-family: var(--mono); }
+
+  /* Resources */
+  .resource-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+  .resource-item .r-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .resource-item .r-title { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .resource-item .r-link  { font-family: var(--mono); font-size: 11px; color: var(--navy); opacity: 0.7; text-decoration: underline; }
+  .resource-item .r-link:hover { opacity: 1; }
+  .resource-item .r-note  { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* Folder row */
+  .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
+  .folder-item { background: var(--navy-dim); border: 1px solid var(--navy-mid); border-radius: 8px; padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px; }
+  .folder-item .f-title { font-weight: 600; font-size: 12px; color: var(--navy); margin-bottom: 2px; }
+  .folder-item .f-link  { font-family: var(--mono); font-size: 10px; color: var(--navy); opacity: 0.7; text-decoration: underline; }
+
+  /* Footer */
+  .site-footer { background: var(--navy); border-top: 3px solid var(--cyan); padding: 18px 32px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 40px; }
+  .site-footer strong { color: rgba(255,255,255,0.85); }
+
+  .spacer-16 { height: 16px; }
+  .spacer-24 { height: 24px; }
+
+  @media (max-width: 900px) {
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .project-header-grid { grid-template-columns: 1fr; }
+    .scope-items, .oos-items { grid-template-columns: 1fr; }
+    .proc-steps { grid-template-columns: repeat(3, 1fr); }
+    .risk-body { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
+    .project-row { grid-template-columns: auto 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-block">
+      <svg class="logo-svg" viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg" fill="white">
+        <text x="0" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">PLUS</text>
+        <circle cx="208" cy="36" r="34" fill="none" stroke="white" stroke-width="7"/>
+        <text x="200" y="47" font-family="Arial Black, sans-serif" font-weight="900" font-size="26" fill="white">+1</text>
+        <text x="243" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">NE</text>
+        <text x="18" y="78" font-family="Arial, sans-serif" font-weight="400" font-size="13" letter-spacing="8">TECHNOLOGY</text>
+      </svg>
+      <div class="header-divider"></div>
+      <span class="header-label">Client Profile</span>
+    </div>
+    <div class="header-meta">
+      <span class="version-badge">Profile v1.0</span>
+      <span class="header-dot"></span>
+      <span>[Client Name] · MSP Account</span>
+      <span class="header-dot"></span>
+      <span>Confidential</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="project-header-grid">
+      <div>
+        <div class="project-type-badges">
+          <span class="type-badge active">Active</span>
+          <!-- <span class="type-badge atrisk">At Risk</span> -->
+          <!-- <span class="type-badge onhold">On Hold</span> -->
+          <span class="type-badge msp">MSP</span>
+          <!-- <span class="type-badge premium">Premium</span> -->
+          <span class="type-badge standard">Standard</span>
+          <!-- <span class="type-badge basic">Basic Support</span> -->
+        </div>
+        <div class="project-title">[Client Company Name] — Client Profile</div>
+        <div class="project-subtitle">
+          Plus 1 Technology account record ·
+          Client since <span>[Start Date]</span> ·
+          Confidential — Internal Use Only
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="s-label">Users</div><div class="s-value">[##]</div><div class="s-sub">Supported</div></div>
+        <div class="stat-card"><div class="s-label">Tier</div><div class="s-value">[Tier]</div><div class="s-sub">Service Level</div></div>
+        <div class="stat-card"><div class="s-label">Renewal</div><div class="s-value">[Mo/Yr]</div><div class="s-sub">Contract End</div></div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item">🏢 <strong>Client:</strong> [Company Name]</div>
+      <div class="meta-item">📋 <strong>AM:</strong> [Account Manager]</div>
+      <div class="meta-item">🔧 <strong>Engineer:</strong> [Lead Tech]</div>
+      <div class="meta-item">💼 <strong>Industry:</strong> [Industry]</div>
+      <div class="meta-item">📍 <strong>Location:</strong> [City, State]</div>
+      <a class="clickup-link" href="#" target="_blank">🔗 View in ClickUp</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABS ═══ -->
+<nav class="tabs-nav" id="tabsNav">
+  <button class="tabs-scroll-btn left hidden" id="scrollLeft" onclick="scrollTabs(-1)" title="Scroll left">&#8249;</button>
+  <div class="tabs-bar" id="tabsBar">
+    <div class="tabs-inner">
+      <button class="tab-btn active" onclick="showTab('howto',this)"><span class="tab-icon">📖</span> How to Use</button>
+      <button class="tab-btn" onclick="showTab('overview',this)"><span class="tab-icon">📋</span> Overview</button>
+      <button class="tab-btn" onclick="showTab('resources',this)"><span class="tab-icon">📎</span> Resources &amp; Docs</button>
+      <button class="tab-btn" onclick="showTab('people',this)"><span class="tab-icon">👥</span> People &amp; Contacts</button>
+      <button class="tab-btn" onclick="showTab('raci',this)"><span class="tab-icon">📊</span> RACI Matrix</button>
+      <button class="tab-btn" onclick="showTab('procurement',this)"><span class="tab-icon">📦</span> Procurement Track</button>
+      <button class="tab-btn" onclick="showTab('environment',this)"><span class="tab-icon">🖥️</span> IT Environment</button>
+      <button class="tab-btn" onclick="showTab('tools',this)"><span class="tab-icon">🛠️</span> Tools &amp; Systems</button>
+      <button class="tab-btn" onclick="showTab('services',this)"><span class="tab-icon">✅</span> Services &amp; SLA</button>
+      <button class="tab-btn" onclick="showTab('strategy',this)"><span class="tab-icon">🎯</span> Strategy &amp; Goals</button>
+      <button class="tab-btn" onclick="showTab('painpoints',this)"><span class="tab-icon">⚠️</span> Pain Points &amp; Gaps</button>
+      <button class="tab-btn" onclick="showTab('risks',this)"><span class="tab-icon">🛡️</span> Risk Register</button>
+      <button class="tab-btn" onclick="showTab('decisions',this)"><span class="tab-icon">📋</span> Decisions Log</button>
+      <button class="tab-btn" onclick="showTab('projects',this)"><span class="tab-icon">🚀</span> Active Projects</button>
+      <button class="tab-btn" onclick="showTab('escalation',this)"><span class="tab-icon">🚨</span> Escalation</button>
+      <button class="tab-btn" onclick="showTab('comms',this)"><span class="tab-icon">📅</span> Comms &amp; Meetings</button>
+    </div>
+  </div>
+  <button class="tabs-scroll-btn right" id="scrollRight" onclick="scrollTabs(1)" title="Scroll right">&#8250;</button>
+</nav>
+
+<!-- ═══ CONTENT ═══ -->
+<main style="padding: 0 0 60px;">
+<div class="content-area">
+
+  <!-- ══════════════════════════════════
+       TAB 1 — HOW TO USE
+  ══════════════════════════════════ -->
+  <div id="tab-howto" class="tab-panel active">
+    <div class="section-title">How to Use This Client Profile</div>
+    <div class="section-desc">A living account record for every Plus 1 Technology client — keep it current, keep it complete.</div>
+
+    <div class="card">
+      <div class="card-title">🗂️ What This Document Is</div>
+      <p>The Client Profile is the <strong>single source of truth</strong> for every client relationship at Plus 1 Technology. It captures everything your team needs to support, manage, and grow an account — from contact info and IT infrastructure to strategic goals, active projects, escalation paths, and decisions made over time. This is an internal document and should not be shared with clients directly.</p>
+    </div>
+
+    <div class="goal-grid">
+      <div class="goal-item">
+        <div class="gi-icon">📋</div>
+        <div class="gi-title">Overview</div>
+        <div class="gi-desc">Basic company info, service tier, contract dates, and key quick-reference stats. Fill this first.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">📎</div>
+        <div class="gi-title">Resources &amp; Docs</div>
+        <div class="gi-desc">Centralized links to all contracts, network diagrams, DR plans, ClickUp folders, and SharePoint resources.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">👥</div>
+        <div class="gi-title">People &amp; Contacts</div>
+        <div class="gi-desc">Plus 1 team assignments and all client stakeholders with decision authority and preferred contact methods.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">📊</div>
+        <div class="gi-title">RACI Matrix</div>
+        <div class="gi-desc">Who is Responsible, Accountable, Consulted, and Informed for every key IT process for this client.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">📦</div>
+        <div class="gi-title">Procurement Track</div>
+        <div class="gi-desc">Active and historical hardware/software procurement for this client — PO status, vendor, warranty, and delivery.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">🖥️</div>
+        <div class="gi-title">IT Environment</div>
+        <div class="gi-desc">Full infrastructure snapshot — network, servers, cloud services, applications, security profile, and backup/DR.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">✅</div>
+        <div class="gi-title">Services &amp; SLA</div>
+        <div class="gi-desc">What Plus 1 provides for this client, what's out of scope, and the SLA response/resolution targets.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">🎯</div>
+        <div class="gi-title">Strategy &amp; Goals</div>
+        <div class="gi-desc">Client's top IT priorities, known challenges, compliance requirements, and budget/growth planning.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">⚠️</div>
+        <div class="gi-title">Pain Points &amp; Gaps</div>
+        <div class="gi-desc">Operational gaps identified — what's broken, the impact, and our recommendation for each issue.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">🛡️</div>
+        <div class="gi-title">Risk Register</div>
+        <div class="gi-desc">Forward-looking risk tracking — likelihood, impact, mitigation strategy, and contingency plan per risk.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">📋</div>
+        <div class="gi-title">Decisions Log</div>
+        <div class="gi-desc">Record of key decisions made with or for the client — vendor choices, architecture calls, contract decisions.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">🚀</div>
+        <div class="gi-title">Active Projects</div>
+        <div class="gi-desc">Current workstreams and initiatives with status, owner, goal, and links to Project Roadmap docs.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">🚨</div>
+        <div class="gi-title">Escalation</div>
+        <div class="gi-desc">Internal and client-facing escalation paths for every issue type — plus after-hours emergency contacts.</div>
+      </div>
+      <div class="goal-item">
+        <div class="gi-icon">📅</div>
+        <div class="gi-title">Comms &amp; Meetings</div>
+        <div class="gi-desc">Meeting cadence, communication channel preferences, and how this client likes to be engaged.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 How to Fill This In</div>
+      <div class="step-row"><span class="step-num-a">1</span><span>Start with <strong>Overview</strong> — company name, status, tier, contract dates, and location. This populates the hero bar above.</span></div>
+      <div class="step-row"><span class="step-num-a">2</span><span>Go to <strong>Resources &amp; Docs</strong> immediately — paste in all known links so nothing gets lost. This is the most-referenced tab by the team.</span></div>
+      <div class="step-row"><span class="step-num-a">3</span><span>Fill <strong>People &amp; Contacts</strong> and <strong>RACI Matrix</strong> — critical for onboarding new team members and managing escalations correctly.</span></div>
+      <div class="step-row"><span class="step-num-a">4</span><span>Complete <strong>IT Environment</strong> and <strong>Tools &amp; Systems</strong> — required for any support, project, or procurement work.</span></div>
+      <div class="step-row"><span class="step-num-a">5</span><span>Fill <strong>Services &amp; SLA</strong> — check the boxes for active services and confirm the SLA tiers with the contract.</span></div>
+      <div class="step-row"><span class="step-num-a">6</span><span>Keep <strong>Risk Register</strong>, <strong>Decisions Log</strong>, and <strong>Active Projects</strong> updated after every QBR, major change, or project milestone.</span></div>
+    </div>
+
+    <div class="notice info">
+      <span class="n-icon">ℹ️</span>
+      <span><strong>Living Document:</strong> This profile should be reviewed and updated quarterly at minimum — ideally after every QBR. Stale client profiles cause onboarding friction, missed escalations, and support gaps.</span>
+    </div>
+
+    <div style="text-align:center;margin-top:22px;">
+      <button onclick="showTab('overview', document.querySelectorAll('.tab-btn')[1])" style="background:var(--navy);color:#fff;border:none;border-radius:7px;padding:11px 28px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);">📋 Go to Overview →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 2 — OVERVIEW
+  ══════════════════════════════════ -->
+  <div id="tab-overview" class="tab-panel">
+    <div class="section-title">Client Overview</div>
+    <div class="section-desc">Core account information and quick-reference details for this client.</div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🏢 Basic Information</div>
+        <div class="field-row"><span class="field-label">Company Name</span><span class="field-placeholder">[Company Name]</span></div>
+        <div class="field-row"><span class="field-label">Client Status</span><span class="field-placeholder">[Active / At Risk / On Hold / Offboarded]</span></div>
+        <div class="field-row"><span class="field-label">Service Tier</span><span class="field-placeholder">[Basic / Standard / Premium / Custom]</span></div>
+        <div class="field-row"><span class="field-label">Client Since</span><span class="field-placeholder">[Start Date]</span></div>
+        <div class="field-row"><span class="field-label">Contract End Date</span><span class="field-placeholder">[End Date]</span></div>
+        <div class="field-row"><span class="field-label">Contract Type</span><span class="field-placeholder">[MSA / Project-Based / Recurring / Hybrid]</span></div>
+        <div class="field-row"><span class="field-label">Industry</span><span class="field-placeholder">[Healthcare / Finance / Manufacturing / etc.]</span></div>
+        <div class="field-row"><span class="field-label">Website</span><span class="field-placeholder">[https://]</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📍 Location &amp; Operations</div>
+        <div class="field-row"><span class="field-label">Primary HQ Address</span><span class="field-placeholder">[Full address]</span></div>
+        <div class="field-row"><span class="field-label">Additional Sites</span><span class="field-placeholder">[Remote offices, warehouses, retail]</span></div>
+        <div class="field-row"><span class="field-label">Employee Count</span><span class="field-placeholder">[Total users supported]</span></div>
+        <div class="field-row"><span class="field-label">Business Hours</span><span class="field-placeholder">[M–F 8am–5pm / 24/7 / etc.]</span></div>
+        <div class="field-row"><span class="field-label">Time Zone</span><span class="field-placeholder">[ET / CT / PT / etc.]</span></div>
+        <div class="field-row"><span class="field-label">After-Hours Coverage</span><span class="field-placeholder">[Yes / No — see Escalation tab]</span></div>
+        <div class="field-row"><span class="field-label">On-Site Visits</span><span class="field-placeholder">[As needed / Monthly / Weekly]</span></div>
+        <div class="field-row"><span class="field-label">Building Access Notes</span><span class="field-placeholder">[Key code, badge, contact to let in]</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📌 Account Notes</div>
+      <p><span class="field-placeholder">[Free-form account context — background on the client relationship, how we won the account, any important history, sensitivities, or things every Plus 1 team member should know before engaging this client.]</span></p>
+    </div>
+
+    <div class="three-col">
+      <div class="checkpoint-card c1">
+        <div class="cp-label">Account Manager</div>
+        <div class="cp-title">[Name]</div>
+        <ul><li>Primary relationship owner</li><li>QBR lead</li><li>Contract renewals</li></ul>
+      </div>
+      <div class="checkpoint-card c2">
+        <div class="cp-label">Lead Engineer</div>
+        <div class="cp-title">[Name]</div>
+        <ul><li>Technical escalation point</li><li>Project execution lead</li><li>Environment owner</li></ul>
+      </div>
+      <div class="checkpoint-card c3">
+        <div class="cp-label">Help Desk Coverage</div>
+        <div class="cp-title">[Name / Team]</div>
+        <ul><li>Day-to-day ticket handling</li><li>First-line support</li><li>User onboarding/offboarding</li></ul>
+      </div>
+    </div>
+
+    <div class="notice info">
+      <span class="n-icon">📁</span>
+      <span><strong>Where This Lives:</strong> Projects Space → [Company Name] Folder → Client Profile &amp; Resources List. Keep this doc in ClickUp and link it in the Resources tab.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 3 — RESOURCES & DOCS
+  ══════════════════════════════════ -->
+  <div id="tab-resources" class="tab-panel">
+    <div class="section-title">Resources &amp; Docs</div>
+    <div class="section-desc">Centralized links to all key documentation, credentials, and tools for this client account.</div>
+
+    <div class="notice warn">
+      <span class="n-icon">🔐</span>
+      <span><strong>Credentials &amp; Passwords:</strong> All passwords, credentials, and sensitive access keys are maintained in <strong>Passportal</strong>. Never store credentials in this document. Link to the Passportal record below.</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📄 Key Documents</div>
+      <div class="resource-item"><span class="r-icon">📝</span><div><div class="r-title">Signed Contract / MSA</div><a class="r-link" href="#">[ConnectWise or SharePoint link]</a><div class="r-note">Current agreement — confirm version and renewal date</div></div></div>
+      <div class="resource-item"><span class="r-icon">🗺️</span><div><div class="r-title">Network Diagram</div><a class="r-link" href="#">[SharePoint folder link]</a><div class="r-note">Last updated: [Date] — update after any network change</div></div></div>
+      <div class="resource-item"><span class="r-icon">🔄</span><div><div class="r-title">Disaster Recovery Plan</div><a class="r-link" href="#">[SharePoint folder link]</a><div class="r-note">Last tested: [Date] — must be tested annually at minimum</div></div></div>
+      <div class="resource-item"><span class="r-icon">📖</span><div><div class="r-title">User Guide for Client</div><a class="r-link" href="#">[SharePoint folder link]</a><div class="r-note">How to submit tickets, escalation path for end users</div></div></div>
+      <div class="resource-item"><span class="r-icon">📋</span><div><div class="r-title">SOP Library</div><a class="r-link" href="#">[SharePoint folder link]</a><div class="r-note">Client-specific SOPs, onboarding/offboarding checklists</div></div></div>
+      <div class="resource-item"><span class="r-icon">📊</span><div><div class="r-title">QBR Presentations</div><a class="r-link" href="#">[SharePoint folder link]</a><div class="r-note">Historical quarterly business reviews — all years</div></div></div>
+      <div class="resource-item"><span class="r-icon">🔒</span><div><div class="r-title">Compliance Documentation</div><a class="r-link" href="#">[SharePoint folder link]</a><div class="r-note">HIPAA, PCI, FTC Safeguards, audit reports</div></div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🔗 Systems &amp; Platforms</div>
+        <div class="resource-item" style="margin-bottom:6px;"><span class="r-icon">✅</span><div><div class="r-title">ClickUp Project Folder</div><a class="r-link" href="#">[ClickUp internal link]</a><div class="r-note">All active and archived projects for this client</div></div></div>
+        <div class="resource-item" style="margin-bottom:6px;"><span class="r-icon">🎫</span><div><div class="r-title">ConnectWise Company Record</div><a class="r-link" href="#">[CW direct link]</a><div class="r-note">Tickets, time entries, billing, agreements</div></div></div>
+        <div class="resource-item" style="margin-bottom:6px;"><span class="r-icon">🔑</span><div><div class="r-title">Passportal</div><a class="r-link" href="#">[Passportal client link]</a><div class="r-note">All credentials — never store passwords here</div></div></div>
+        <div class="resource-item" style="margin-bottom:0;"><span class="r-icon">🌐</span><div><div class="r-title">Client SharePoint / M365 Tenant</div><a class="r-link" href="#">[Admin portal link]</a><div class="r-note">M365 admin access — see Passportal for credentials</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📁 SharePoint Folder Structure</div>
+        <div class="folder-grid">
+          <div class="folder-item"><span style="font-size:18px;">📁</span><div><div class="f-title">01 — Contracts &amp; MSA</div><a class="f-link" href="#">[Link]</a></div></div>
+          <div class="folder-item"><span style="font-size:18px;">📁</span><div><div class="f-title">02 — Network &amp; Infrastructure</div><a class="f-link" href="#">[Link]</a></div></div>
+          <div class="folder-item"><span style="font-size:18px;">📁</span><div><div class="f-title">03 — Backup &amp; DR</div><a class="f-link" href="#">[Link]</a></div></div>
+          <div class="folder-item"><span style="font-size:18px;">📁</span><div><div class="f-title">04 — QBR &amp; Meeting Docs</div><a class="f-link" href="#">[Link]</a></div></div>
+          <div class="folder-item"><span style="font-size:18px;">📁</span><div><div class="f-title">05 — Compliance &amp; Audits</div><a class="f-link" href="#">[Link]</a></div></div>
+          <div class="folder-item"><span style="font-size:18px;">📁</span><div><div class="f-title">06 — SOPs &amp; User Guides</div><a class="f-link" href="#">[Link]</a></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 Additional Links &amp; Notes</div>
+      <table class="data-table">
+        <thead><tr><th>Document / Resource</th><th>Location / Link</th><th>Last Updated</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>[Document Name]</td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Link]</a></td><td><span class="tag tag-gray">TBD</span></td><td style="color:var(--muted);font-size:12px;">[Notes]</td></tr>
+          <tr><td>[Document Name]</td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Link]</a></td><td><span class="tag tag-gray">TBD</span></td><td style="color:var(--muted);font-size:12px;">[Notes]</td></tr>
+          <tr><td>[Document Name]</td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Link]</a></td><td><span class="tag tag-gray">TBD</span></td><td style="color:var(--muted);font-size:12px;">[Notes]</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 4 — PEOPLE & CONTACTS
+  ══════════════════════════════════ -->
+  <div id="tab-people" class="tab-panel">
+    <div class="section-title">People &amp; Contacts</div>
+    <div class="section-desc">Plus 1 team assignments and all client-side stakeholders with contact details and decision authority.</div>
+
+    <div class="card">
+      <div class="card-title">🏠 Plus 1 Team Assigned</div>
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>Role</th><th>Primary Responsibility</th><th>Contact</th></tr></thead>
+        <tbody>
+          <tr><td>Marc</td><td><span class="tag tag-blue">CEO</span></td><td>Executive oversight, major decisions, contract issues</td><td style="font-family:var(--mono);font-size:11px;color:var(--muted);">marc@plus1tech.com</td></tr>
+          <tr><td>Mike</td><td><span class="tag tag-blue">Head of Operations</span></td><td>Project management, technical escalations, client escalations</td><td style="font-family:var(--mono);font-size:11px;color:var(--muted);">mike@plus1tech.com</td></tr>
+          <tr><td>Charlotte</td><td><span class="tag tag-cyan">Onboarding Specialist</span></td><td>New client setup, project coordination, documentation</td><td style="font-family:var(--mono);font-size:11px;color:var(--muted);">charlotte@plus1tech.com</td></tr>
+          <tr><td>Nate</td><td><span class="tag tag-cyan">Project Engineer</span></td><td>Technical implementation, project delivery</td><td style="font-family:var(--mono);font-size:11px;color:var(--muted);">nate@plus1tech.com</td></tr>
+          <tr><td>Jessica</td><td><span class="tag tag-purple">AI Implementation Engineer</span></td><td>Automation, AI workflows, process optimization</td><td style="font-family:var(--mono);font-size:11px;color:var(--muted);">jessica@plus1tech.com</td></tr>
+          <tr><td>[Tech Name]</td><td><span class="tag tag-gray">Help Desk Technician</span></td><td>Day-to-day support tickets, Tier 1 resolution</td><td style="font-family:var(--mono);font-size:11px;color:var(--muted);">[email]</td></tr>
+          <tr><td>[Tech Name]</td><td><span class="tag tag-gray">Field Technician</span></td><td>On-site visits, hardware installations, break/fix</td><td style="font-family:var(--mono);font-size:11px;color:var(--muted);">[email]</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏢 Client Stakeholders</div>
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>Title</th><th>Role / Responsibility</th><th>Contact Info</th><th>Decision Authority</th><th>Preferred Contact</th></tr></thead>
+        <tbody>
+          <tr><td>[Name]</td><td>CEO / Owner</td><td>Executive decisions, budget approval, contract authority</td><td style="font-family:var(--mono);font-size:11px;">[phone / email]</td><td><span class="tag tag-green">✅ Final Authority</span></td><td>[Email / Phone]</td></tr>
+          <tr><td>[Name]</td><td>IT Manager</td><td>Day-to-day IT oversight, technical approvals</td><td style="font-family:var(--mono);font-size:11px;">[phone / email]</td><td><span class="tag tag-cyan">✅ Technical Decisions</span></td><td>[Email / Phone]</td></tr>
+          <tr><td>[Name]</td><td>Office Manager</td><td>User requests, facilities, user onboarding coordination</td><td style="font-family:var(--mono);font-size:11px;">[phone / email]</td><td><span class="tag tag-gray">❌ Operational</span></td><td>[Email / Phone]</td></tr>
+          <tr><td>[Name]</td><td>Finance / CFO</td><td>Billing approvals, contract renewals, budget authority</td><td style="font-family:var(--mono);font-size:11px;">[phone / email]</td><td><span class="tag tag-green">✅ Budget Authority</span></td><td>[Email]</td></tr>
+          <tr><td>[Name]</td><td>Primary End User Contact</td><td>Submits tickets, coordinates end-user access and requests</td><td style="font-family:var(--mono);font-size:11px;">[phone / email]</td><td><span class="tag tag-gray">❌ Daily Operations</span></td><td>[Email / Portal]</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📣 Communication Preferences</div>
+      <div class="two-col">
+        <div>
+          <div class="field-row"><span class="field-label">Urgent Issues — Primary Channel</span><span class="field-placeholder">[Phone / Email / Text]</span></div>
+          <div class="field-row"><span class="field-label">Routine Updates</span><span class="field-placeholder">[Email / Slack / Portal]</span></div>
+          <div class="field-row"><span class="field-label">Best Time to Reach</span><span class="field-placeholder">[Morning / Afternoon / After hours]</span></div>
+        </div>
+        <div>
+          <div class="field-row"><span class="field-label">Response Time Expectation</span><span class="field-placeholder">[Immediate / Same day / 24–48 hrs]</span></div>
+          <div class="field-row"><span class="field-label">Preferred Meeting Platform</span><span class="field-placeholder">[Zoom / Teams / In-person]</span></div>
+          <div class="field-row"><span class="field-label">Special Notes</span><span class="field-placeholder">[Any client quirks or preferences]</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 5 — RACI MATRIX
+  ══════════════════════════════════ -->
+  <div id="tab-raci" class="tab-panel">
+    <div class="section-title">RACI Matrix</div>
+    <div class="section-desc">Defines roles and responsibilities for key IT processes across the Plus 1 team and client stakeholders.</div>
+
+    <div class="card" style="padding:0;overflow:auto;">
+      <table class="raci-table">
+        <thead>
+          <tr>
+            <th class="process-col">Process / Activity</th>
+            <th>Marc</th><th>Mike</th><th>Charlotte</th><th>Nate</th><th>Tech Team</th><th>Client IT Mgr</th><th>Client CEO</th><th>Client User</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="process-label">New User Onboarding</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">User Offboarding</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Helpdesk Tickets</td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-r">R</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td></tr>
+          <tr><td class="process-label">After-Hours Support</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-r">R</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td></tr>
+          <tr><td class="process-label">Firewall Changes</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-c">C</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Backup Monitoring</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Software Updates / Patches</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td><td><span class="raci-r">R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">New Equipment Procurement</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-c">C</span></td><td><span class="raci-r">R</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Server Maintenance</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Security Incidents</td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td><td><span class="raci-r">R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Network Changes</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-c">C</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Vendor Coordination</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Documentation Updates</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Quarterly Business Reviews</td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Contract Renewals</td><td><span class="raci-a">A</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Budget Approvals</td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Project Kickoffs</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td></tr>
+          <tr><td class="process-label">Major IT Changes</td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-c">C</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-i">I</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col" style="margin-top:14px;">
+      <div class="card">
+        <div class="card-title">📖 RACI Legend</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:baseline;">
+          <span class="raci-r" style="text-align:center;">R</span><span style="font-size:13px;color:var(--muted);"><strong style="color:var(--text);">Responsible</strong> — does the work</span>
+          <span class="raci-a" style="text-align:center;">A</span><span style="font-size:13px;color:var(--muted);"><strong style="color:var(--text);">Accountable</strong> — final authority, approves</span>
+          <span class="raci-c" style="text-align:center;">C</span><span style="font-size:13px;color:var(--muted);"><strong style="color:var(--text);">Consulted</strong> — provides input before/during</span>
+          <span class="raci-i" style="text-align:center;">I</span><span style="font-size:13px;color:var(--muted);"><strong style="color:var(--text);">Informed</strong> — kept in the loop after</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📝 Custom RACI Notes</div>
+        <p><span class="field-placeholder">[Add client-specific responsibilities, exceptions, or override notes here. Example: "Client's IT Manager handles all Tier 2 tickets internally before escalating to Plus 1." ]</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 6 — PROCUREMENT TRACK
+  ══════════════════════════════════ -->
+  <div id="tab-procurement" class="tab-panel">
+    <div class="section-title">Procurement Track</div>
+    <div class="section-desc">Active and historical hardware and software procurement for this client — track from quote to delivery.</div>
+
+    <div class="card">
+      <div class="card-title">📦 Procurement Pipeline Status</div>
+      <div class="proc-steps">
+        <div class="proc-step"><div class="ps-icon">📋</div><div class="ps-label">Quote &amp; Approval</div><div class="ps-date">[Date]</div><div class="ps-status pending">Pending</div></div>
+        <div class="proc-step"><div class="ps-icon">🛒</div><div class="ps-label">PO Issued</div><div class="ps-date">[Date]</div><div class="ps-status pending">Pending</div></div>
+        <div class="proc-step"><div class="ps-icon">🏭</div><div class="ps-label">Vendor Ordered</div><div class="ps-date">[Date]</div><div class="ps-status pending">Pending</div></div>
+        <div class="proc-step"><div class="ps-icon">🚚</div><div class="ps-label">Shipped / In Transit</div><div class="ps-date">[Date]</div><div class="ps-status pending">Pending</div></div>
+        <div class="proc-step"><div class="ps-icon">✅</div><div class="ps-label">Received &amp; Staged</div><div class="ps-date">[Date]</div><div class="ps-status pending">Pending</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🖥️ Active &amp; Recent Procurement Items</div>
+      <table class="data-table">
+        <thead><tr><th>Item / Model</th><th>Category</th><th>Qty</th><th>Vendor</th><th>PO #</th><th>Est. Delivery</th><th>Warranty</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>[Item Name / Model]</strong><small>[Brief description]</small></td>
+            <td><span class="tag tag-blue">Hardware</span></td>
+            <td>1</td><td>[Vendor]</td><td style="font-family:var(--mono);font-size:11px;">[PO-####]</td><td style="font-family:var(--mono);font-size:11px;">[Date]</td><td style="font-family:var(--mono);font-size:11px;">[X yr]</td>
+            <td><span class="tag tag-yellow">Ordered</span></td>
+          </tr>
+          <tr>
+            <td><strong>[Item Name / Model]</strong><small>[Brief description]</small></td>
+            <td><span class="tag tag-purple">Software</span></td>
+            <td>1</td><td>[Vendor]</td><td style="font-family:var(--mono);font-size:11px;">[PO-####]</td><td style="font-family:var(--mono);font-size:11px;">[Date]</td><td style="font-family:var(--mono);font-size:11px;">N/A</td>
+            <td><span class="tag tag-gray">Quote Stage</span></td>
+          </tr>
+          <tr>
+            <td><strong>[Item Name / Model]</strong><small>[Brief description]</small></td>
+            <td><span class="tag tag-blue">Hardware</span></td>
+            <td>1</td><td>[Vendor]</td><td style="font-family:var(--mono);font-size:11px;">[PO-####]</td><td style="font-family:var(--mono);font-size:11px;">[Date]</td><td style="font-family:var(--mono);font-size:11px;">[X yr]</td>
+            <td><span class="tag tag-green">Delivered</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">📅 Upcoming Renewals &amp; Refresh Dates</div>
+        <table class="data-table">
+          <thead><tr><th>Item / License</th><th>Renewal Date</th><th>Cost Est.</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>[Software / License]</td><td style="font-family:var(--mono);font-size:11px;">[Date]</td><td style="font-family:var(--mono);font-size:11px;">$[###]</td><td><span class="tag tag-yellow">Notify Client</span></td></tr>
+            <tr><td>[Hardware Refresh]</td><td style="font-family:var(--mono);font-size:11px;">[Date]</td><td style="font-family:var(--mono);font-size:11px;">$[###]</td><td><span class="tag tag-gray">Planning</span></td></tr>
+            <tr><td>[Warranty Expiry]</td><td style="font-family:var(--mono);font-size:11px;">[Date]</td><td style="font-family:var(--mono);font-size:11px;">$[###]</td><td><span class="tag tag-red">Expired</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">📝 Procurement Notes</div>
+        <p><span class="field-placeholder">[Notes on preferred vendors, client purchasing process, approval chain for procurement, budget authority thresholds, or any standing agreements with vendors relevant to this client.]</span></p>
+        <div class="spacer-16"></div>
+        <div class="field-row"><span class="field-label">Preferred Vendor(s)</span><span class="field-placeholder">[Vendor names]</span></div>
+        <div class="field-row"><span class="field-label">Procurement Contact</span><span class="field-placeholder">[Client name / title]</span></div>
+        <div class="field-row"><span class="field-label">PO Required?</span><span class="field-placeholder">[Yes / No — threshold: $####]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 7 — IT ENVIRONMENT
+  ══════════════════════════════════ -->
+  <div id="tab-environment" class="tab-panel">
+    <div class="section-title">IT Environment</div>
+    <div class="section-desc">High-level view of the client's full technology infrastructure — network, servers, cloud, security, and backup/DR.</div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🌐 Network Infrastructure</div>
+        <div class="field-row"><span class="field-label">Internet Provider(s)</span><span class="field-placeholder">[Provider, speed, circuit ID]</span></div>
+        <div class="field-row"><span class="field-label">Secondary ISP / Failover</span><span class="field-placeholder">[Provider or "None"]</span></div>
+        <div class="field-row"><span class="field-label">Firewall</span><span class="field-placeholder">[Make / model / firmware version]</span></div>
+        <div class="field-row"><span class="field-label">Core Switch</span><span class="field-placeholder">[Make / model / managed]</span></div>
+        <div class="field-row"><span class="field-label">WiFi Access Points</span><span class="field-placeholder">[Make / model / controller / SSIDs]</span></div>
+        <div class="field-row"><span class="field-label">Router(s)</span><span class="field-placeholder">[Make / model / location]</span></div>
+        <div class="field-row"><span class="field-label">WAN / VPN</span><span class="field-placeholder">[Site-to-site connections, remote access VPN]</span></div>
+        <div class="field-row"><span class="field-label">Network Diagram</span><span class="field-placeholder">[Link to SharePoint — see Resources tab]</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔒 Security Profile</div>
+        <table class="data-table">
+          <thead><tr><th>Component</th><th>Solution</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Endpoint Protection</td><td style="color:var(--muted);font-size:12px;">[Antivirus vendor]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>Email Security</td><td style="color:var(--muted);font-size:12px;">[Solution]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>MFA</td><td style="color:var(--muted);font-size:12px;">[Duo / Azure MFA]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>Content Filtering</td><td style="color:var(--muted);font-size:12px;">[Web filter]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>SIEM / Monitoring</td><td style="color:var(--muted);font-size:12px;">[N-able / other]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>Compliance Scope</td><td style="color:var(--muted);font-size:12px;">[HIPAA / PCI / etc.]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🖥️ Server Environment</div>
+      <table class="data-table">
+        <thead><tr><th>Server Name</th><th>Role / Purpose</th><th>OS</th><th>Location</th><th>Specs</th><th>Backup Status</th></tr></thead>
+        <tbody>
+          <tr><td>Domain Controller</td><td style="color:var(--muted);font-size:12px;">[Primary DC, DNS, DHCP]</td><td style="font-family:var(--mono);font-size:11px;">[OS]</td><td>[On-prem / Cloud]</td><td style="font-family:var(--mono);font-size:11px;">[Specs]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+          <tr><td>File Server</td><td style="color:var(--muted);font-size:12px;">[Shared file storage]</td><td style="font-family:var(--mono);font-size:11px;">[OS]</td><td>[On-prem / Cloud]</td><td style="font-family:var(--mono);font-size:11px;">[Specs]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+          <tr><td>Application Server</td><td style="color:var(--muted);font-size:12px;">[LOB app hosting]</td><td style="font-family:var(--mono);font-size:11px;">[OS]</td><td>[On-prem / Cloud]</td><td style="font-family:var(--mono);font-size:11px;">[Specs]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+          <tr><td>[Server Name]</td><td style="color:var(--muted);font-size:12px;">[Role]</td><td style="font-family:var(--mono);font-size:11px;">[OS]</td><td>[Location]</td><td style="font-family:var(--mono);font-size:11px;">[Specs]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">☁️ Cloud Services</div>
+        <table class="data-table">
+          <thead><tr><th>Service</th><th>Provider</th><th>Purpose</th><th>Admin Access</th></tr></thead>
+          <tbody>
+            <tr><td>Microsoft 365</td><td>Microsoft</td><td style="font-size:12px;">Email, SharePoint, Teams</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>Azure</td><td>Microsoft</td><td style="font-size:12px;">Hosted VMs, SQL</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>Backup</td><td>[Vendor]</td><td style="font-size:12px;">DR backup target</td><td><span class="tag tag-gray">TBD</span></td></tr>
+            <tr><td>[Service]</td><td>[Provider]</td><td style="font-size:12px;">[Purpose]</td><td><span class="tag tag-gray">TBD</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">🔄 Backup &amp; Disaster Recovery</div>
+        <div class="field-row"><span class="field-label">Backup Solution</span><span class="field-placeholder">[Veeam / Datto / Azure Backup]</span></div>
+        <div class="field-row"><span class="field-label">What's Backed Up</span><span class="field-placeholder">[Servers, workstations, M365, databases]</span></div>
+        <div class="field-row"><span class="field-label">Backup Frequency</span><span class="field-placeholder">[Hourly / Daily / Weekly]</span></div>
+        <div class="field-row"><span class="field-label">Retention Period</span><span class="field-placeholder">[30 days / 90 days / 1 year]</span></div>
+        <div class="field-row"><span class="field-label">Backup Location(s)</span><span class="field-placeholder">[Local NAS / Cloud / Offsite]</span></div>
+        <div class="field-row"><span class="field-label">Last Tested Restore</span><span class="field-placeholder">[Date]</span></div>
+        <div class="field-row"><span class="field-label">RTO (Recovery Time)</span><span class="field-placeholder">[Target hours to restore]</span></div>
+        <div class="field-row"><span class="field-label">RPO (Recovery Point)</span><span class="field-placeholder">[Acceptable data loss window]</span></div>
+        <div class="field-row"><span class="field-label">DR Plan Documented</span><span class="field-placeholder">[Yes / No — link in Resources tab]</span></div>
+        <div class="field-row"><span class="field-label">DR Test Schedule</span><span class="field-placeholder">[Quarterly / Annually]</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💼 Key Applications</div>
+      <table class="data-table">
+        <thead><tr><th>Application</th><th>Vendor</th><th>Purpose</th><th>Hosted Where</th><th>Support Contact</th></tr></thead>
+        <tbody>
+          <tr><td>Accounting</td><td>QuickBooks</td><td style="font-size:12px;">Finance / bookkeeping</td><td>Cloud</td><td style="font-family:var(--mono);font-size:11px;">[Vendor support]</td></tr>
+          <tr><td>EHR / EMR</td><td>[Vendor]</td><td style="font-size:12px;">Healthcare records</td><td>On-prem</td><td style="font-family:var(--mono);font-size:11px;">[Vendor support]</td></tr>
+          <tr><td>CRM</td><td>[Vendor]</td><td style="font-size:12px;">Sales / client management</td><td>Cloud</td><td style="font-family:var(--mono);font-size:11px;">[Vendor support]</td></tr>
+          <tr><td>[LOB App]</td><td>[Vendor]</td><td style="font-size:12px;">[Industry-specific purpose]</td><td>[Location]</td><td style="font-family:var(--mono);font-size:11px;">[Contact]</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 8 — TOOLS & SYSTEMS
+  ══════════════════════════════════ -->
+  <div id="tab-tools" class="tab-panel">
+    <div class="section-title">Tools &amp; Systems</div>
+    <div class="section-desc">Complete inventory of systems and software the client uses across departments. Helps with automation planning, tech audits, and integration mapping.</div>
+
+    <div class="card">
+      <div class="card-title">🛠️ Tool Inventory</div>
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Tool / System</th><th>Version / Plan</th><th>Plus 1 Access?</th><th>Admin Location</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>CRM</td><td style="font-weight:400;">[Tool]</td><td style="font-family:var(--mono);font-size:11px;">[Version]</td><td><span class="tag tag-gray">TBD</span></td><td style="font-size:11px;">[Passportal / Client]</td><td style="font-size:12px;color:var(--muted);">[Notes]</td></tr>
+          <tr><td>Accounting</td><td style="font-weight:400;">QuickBooks / Xero</td><td style="font-family:var(--mono);font-size:11px;">[Version]</td><td><span class="tag tag-gray">TBD</span></td><td style="font-size:11px;">[Passportal / Client]</td><td style="font-size:12px;color:var(--muted);">Client manages billing access</td></tr>
+          <tr><td>Project Management</td><td style="font-weight:400;">[Tool]</td><td style="font-family:var(--mono);font-size:11px;">[Version]</td><td><span class="tag tag-red">No Access</span></td><td style="font-size:11px;">Client-side only</td><td style="font-size:12px;color:var(--muted);">[Notes]</td></tr>
+          <tr><td>Communication</td><td style="font-weight:400;">Teams / Slack</td><td style="font-family:var(--mono);font-size:11px;">[Plan]</td><td><span class="tag tag-gray">TBD</span></td><td style="font-size:11px;">[In workspace?]</td><td style="font-size:12px;color:var(--muted);">[Notes]</td></tr>
+          <tr><td>Document Storage</td><td style="font-weight:400;">SharePoint / Google Drive</td><td style="font-family:var(--mono);font-size:11px;">[Plan]</td><td><span class="tag tag-gray">TBD</span></td><td style="font-size:11px;">[Admin portal]</td><td style="font-size:12px;color:var(--muted);">[Notes]</td></tr>
+          <tr><td>Payroll / HR</td><td style="font-weight:400;">Gusto / ADP</td><td style="font-family:var(--mono);font-size:11px;">[Plan]</td><td><span class="tag tag-red">No Access</span></td><td style="font-size:11px;">Client manages</td><td style="font-size:12px;color:var(--muted);">Client manages internally</td></tr>
+          <tr><td>Industry-Specific</td><td style="font-weight:400;">[EHR / Practice Mgmt]</td><td style="font-family:var(--mono);font-size:11px;">[Version]</td><td><span class="tag tag-gray">TBD</span></td><td style="font-size:11px;">[Vendor support]</td><td style="font-size:12px;color:var(--muted);">Vendor-supported application</td></tr>
+          <tr><td>Security / Monitoring</td><td style="font-weight:400;">[N-able / Other]</td><td style="font-family:var(--mono);font-size:11px;">[Version]</td><td><span class="tag tag-green">Yes — Admin</span></td><td style="font-size:11px;">Plus 1 managed</td><td style="font-size:12px;color:var(--muted);">[Notes]</td></tr>
+          <tr><td>Backup</td><td style="font-weight:400;">[Veeam / Datto]</td><td style="font-family:var(--mono);font-size:11px;">[Version]</td><td><span class="tag tag-green">Yes — Admin</span></td><td style="font-size:11px;">Plus 1 managed</td><td style="font-size:12px;color:var(--muted);">[Notes]</td></tr>
+          <tr><td>[Other]</td><td style="font-weight:400;">[Tool]</td><td style="font-family:var(--mono);font-size:11px;">[Version]</td><td><span class="tag tag-gray">TBD</span></td><td style="font-size:11px;">[Location]</td><td style="font-size:12px;color:var(--muted);">[Notes]</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice info">
+      <span class="n-icon">💡</span>
+      <span><strong>Automation Planning Note:</strong> Flag any tools where Plus 1 has API access or admin credentials — these are integration candidates for AI and automation workflows. Document integration potential in the Notes column.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 9 — SERVICES & SLA
+  ══════════════════════════════════ -->
+  <div id="tab-services" class="tab-panel">
+    <div class="section-title">Services &amp; SLA</div>
+    <div class="section-desc">Active Plus 1 Technology services for this client and the applicable service level agreement.</div>
+
+    <div class="card">
+      <div class="card-title">✅ Services in Scope</div>
+      <table class="data-table">
+        <thead><tr><th>Service Category</th><th style="text-align:center;width:80px;">Active</th><th>Details / Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Help Desk Support</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/> </label></td><td style="font-size:12px;color:var(--muted);">Tier 1 &amp; 2, coverage hours, response SLA — [Hours of coverage]</td></tr>
+          <tr><td>Cybersecurity</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Firewall mgmt, endpoint protection, monitoring — [Details]</td></tr>
+          <tr><td>Backup &amp; Disaster Recovery</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Backup solution, frequency, retention, DR plan — [Details]</td></tr>
+          <tr><td>Microsoft 365 Management</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Licenses, SharePoint, Teams, email management — [License count]</td></tr>
+          <tr><td>IT Strategy &amp; vCIO</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Strategic planning, quarterly reviews, roadmapping</td></tr>
+          <tr><td>Cloud Services</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Azure, AWS, cloud migration, optimization — [Details]</td></tr>
+          <tr><td>Network Management</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Switches, WiFi, routers, proactive monitoring</td></tr>
+          <tr><td>VoIP / Phone Systems</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Phone system mgmt, support, provisioning — [Provider]</td></tr>
+          <tr><td>Compliance &amp; Security</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">HIPAA, PCI, FTC Safeguards, audit support</td></tr>
+          <tr><td>Server Management</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">On-prem servers, updates, health monitoring</td></tr>
+          <tr><td>Workstation Management</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Endpoint management, software deployment, patching</td></tr>
+          <tr><td>Project Work</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Migrations, implementations, special projects — [# hours/yr]</td></tr>
+          <tr><td>On-Site Support</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Field visits, installations — [# hours included / frequency]</td></tr>
+          <tr><td>After-Hours Support</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Emergency coverage, on-call rotation — [Contact method]</td></tr>
+          <tr><td>AI / Automation Services</td><td style="text-align:center;"><label class="svc-check"><input type="checkbox"/></label></td><td style="font-size:12px;color:var(--muted);">Workflow automation, AI implementation, process optimization</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🚫 Out of Scope</div>
+        <p style="margin-bottom:12px;"><span class="field-placeholder">[What Plus 1 does NOT provide for this client — be specific to avoid scope creep disputes.]</span></p>
+        <div class="oos-items">
+          <div class="oos-item"><strong>Out of Scope</strong>[Item — e.g., Physical security / CCTV]</div>
+          <div class="oos-item"><strong>Out of Scope</strong>[Item — e.g., Developer / app support]</div>
+          <div class="oos-item"><strong>Out of Scope</strong>[Item — e.g., Personal devices / BYOD]</div>
+          <div class="oos-item"><strong>Out of Scope</strong>[Item — e.g., Third-party vendor support]</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⏱️ SLA Summary</div>
+        <table class="data-table">
+          <thead><tr><th>Priority Level</th><th>Response Time</th><th>Resolution Target</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tag tag-red">Critical</span> System Down</td><td style="font-family:var(--mono);font-size:12px;color:var(--text);">15 minutes</td><td style="font-family:var(--mono);font-size:12px;color:var(--muted);">4 hours</td></tr>
+            <tr><td><span class="tag tag-orange">High</span> Major Impact</td><td style="font-family:var(--mono);font-size:12px;color:var(--text);">1 hour</td><td style="font-family:var(--mono);font-size:12px;color:var(--muted);">8 hours</td></tr>
+            <tr><td><span class="tag tag-yellow">Medium</span> Limited Impact</td><td style="font-family:var(--mono);font-size:12px;color:var(--text);">4 hours</td><td style="font-family:var(--mono);font-size:12px;color:var(--muted);">24 hours</td></tr>
+            <tr><td><span class="tag tag-gray">Low</span> Minimal Impact</td><td style="font-family:var(--mono);font-size:12px;color:var(--text);">8 hours</td><td style="font-family:var(--mono);font-size:12px;color:var(--muted);">48 hours</td></tr>
+          </tbody>
+        </table>
+        <div class="spacer-16"></div>
+        <div class="field-row"><span class="field-label">SLA Tier Applies To</span><span class="field-placeholder">[Business hours only / 24x7]</span></div>
+        <div class="field-row"><span class="field-label">CW Agreement Name</span><span class="field-placeholder">[ConnectWise agreement name]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 10 — STRATEGY & GOALS
+  ══════════════════════════════════ -->
+  <div id="tab-strategy" class="tab-panel">
+    <div class="section-title">Strategy &amp; Goals</div>
+    <div class="section-desc">Client's IT direction, business priorities, compliance requirements, and budget planning.</div>
+
+    <div class="card">
+      <div class="card-title">🎯 Top IT Priorities — Next 90 Days</div>
+      <div class="goal-grid">
+        <div class="goal-item"><div class="gi-icon">1️⃣</div><div class="gi-title">Priority One</div><div class="gi-desc"><span class="field-placeholder">[Describe the top IT priority — be specific with the desired outcome]</span></div></div>
+        <div class="goal-item"><div class="gi-icon">2️⃣</div><div class="gi-title">Priority Two</div><div class="gi-desc"><span class="field-placeholder">[Describe second priority]</span></div></div>
+        <div class="goal-item"><div class="gi-icon">3️⃣</div><div class="gi-title">Priority Three</div><div class="gi-desc"><span class="field-placeholder">[Describe third priority]</span></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚡ Known IT Challenges</div>
+      <table class="data-table">
+        <thead><tr><th>Challenge</th><th>Impact</th><th>Priority</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Outdated server infrastructure</td><td style="color:var(--muted);font-size:12px;">High risk of failure, business continuity threat</td><td><span class="tag tag-red">High</span></td><td><span class="tag tag-yellow">Planning</span></td></tr>
+          <tr><td>No backup / DR plan</td><td style="color:var(--muted);font-size:12px;">Business continuity risk, compliance gap</td><td><span class="tag tag-red">Critical</span></td><td><span class="tag tag-cyan">In Progress</span></td></tr>
+          <tr><td>Slow network performance</td><td style="color:var(--muted);font-size:12px;">User productivity, application latency</td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-gray">Investigating</span></td></tr>
+          <tr><td>[Challenge]</td><td style="color:var(--muted);font-size:12px;">[Impact description]</td><td><span class="tag tag-gray">TBD</span></td><td><span class="tag tag-gray">TBD</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🔒 Compliance Requirements</div>
+        <table class="data-table">
+          <thead><tr><th>Requirement</th><th>Applies?</th><th>Status</th><th>Next Audit</th></tr></thead>
+          <tbody>
+            <tr><td>HIPAA</td><td><span class="tag tag-gray">TBD</span></td><td><span class="tag tag-gray">TBD</span></td><td style="font-family:var(--mono);font-size:11px;">[Date]</td></tr>
+            <tr><td>PCI-DSS</td><td><span class="tag tag-gray">TBD</span></td><td><span class="tag tag-gray">TBD</span></td><td style="font-family:var(--mono);font-size:11px;">[Date]</td></tr>
+            <tr><td>FTC Safeguards</td><td><span class="tag tag-gray">TBD</span></td><td><span class="tag tag-gray">TBD</span></td><td style="font-family:var(--mono);font-size:11px;">[Date]</td></tr>
+            <tr><td>SOC 2</td><td><span class="tag tag-gray">TBD</span></td><td><span class="tag tag-gray">TBD</span></td><td style="font-family:var(--mono);font-size:11px;">[Date]</td></tr>
+            <tr><td>[Other]</td><td><span class="tag tag-gray">TBD</span></td><td><span class="tag tag-gray">TBD</span></td><td style="font-family:var(--mono);font-size:11px;">[Date]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">💰 Budget &amp; Planning</div>
+        <div class="field-row"><span class="field-label">Annual IT Budget</span><span class="field-placeholder">$[Amount]</span></div>
+        <div class="field-row"><span class="field-label">Capital Projects Planned</span><span class="field-placeholder">[Server refresh, network upgrade, etc.]</span></div>
+        <div class="field-row"><span class="field-label">Software Renewal Dates</span><span class="field-placeholder">[Major renewals coming up]</span></div>
+        <div class="field-row"><span class="field-label">Growth Plans</span><span class="field-placeholder">[Hiring, new locations, acquisitions]</span></div>
+        <div class="field-row"><span class="field-label">Budget Approval Threshold</span><span class="field-placeholder">[$### — requires CEO approval above this]</span></div>
+        <div class="field-row"><span class="field-label">Last QBR Date</span><span class="field-placeholder">[Date]</span></div>
+        <div class="field-row"><span class="field-label">Next QBR Date</span><span class="field-placeholder">[Date]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 11 — PAIN POINTS & GAPS
+  ══════════════════════════════════ -->
+  <div id="tab-painpoints" class="tab-panel">
+    <div class="section-title">Pain Points &amp; Gaps</div>
+    <div class="section-desc">Operational IT gaps and issues identified for this client — what's broken, the impact, and our recommendation.</div>
+
+    <div class="card">
+      <div class="card-title">⚠️ Identified Gaps &amp; Issues</div>
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Issue</th><th>Impact</th><th>Recommendation</th><th>Priority</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-blue">Infrastructure</span></td>
+            <td><strong>Servers 8+ years old</strong><small>High failure risk, no vendor support</small></td>
+            <td style="font-size:12px;color:var(--red);">High failure risk</td>
+            <td style="font-size:12px;color:var(--muted);">Plan server refresh Q1 2026</td>
+            <td><span class="tag tag-red">High</span></td>
+            <td><span class="tag tag-yellow">Planning</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">Security</span></td>
+            <td><strong>No MFA Implemented</strong><small>All accounts password-only</small></td>
+            <td style="font-size:12px;color:var(--red);">Breach risk</td>
+            <td style="font-size:12px;color:var(--muted);">Deploy Azure MFA immediately</td>
+            <td><span class="tag tag-red">Critical</span></td>
+            <td><span class="tag tag-cyan">In Progress</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-cyan">Backup</span></td>
+            <td><strong>Backups Not Tested</strong><small>No DR test in 2+ years</small></td>
+            <td style="font-size:12px;color:var(--yellow);">DR uncertainty</td>
+            <td style="font-size:12px;color:var(--muted);">Schedule DR test this quarter</td>
+            <td><span class="tag tag-red">High</span></td>
+            <td><span class="tag tag-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-gray">Process</span></td>
+            <td><strong>No User Onboarding SOP</strong><small>Inconsistent setup across employees</small></td>
+            <td style="font-size:12px;color:var(--muted);">Inconsistent configuration</td>
+            <td style="font-size:12px;color:var(--muted);">Create and document SOP in SharePoint</td>
+            <td><span class="tag tag-yellow">Medium</span></td>
+            <td><span class="tag tag-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">Network</span></td>
+            <td><strong>Single ISP, No Redundancy</strong><small>One circuit = single point of failure</small></td>
+            <td style="font-size:12px;color:var(--muted);">Downtime risk</td>
+            <td style="font-size:12px;color:var(--muted);">Add backup ISP or LTE failover</td>
+            <td><span class="tag tag-yellow">Medium</span></td>
+            <td><span class="tag tag-gray">Investigating</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-gray">[Category]</span></td>
+            <td><strong>[Issue Title]</strong><small>[Brief detail]</small></td>
+            <td style="font-size:12px;color:var(--muted);">[Impact]</td>
+            <td style="font-size:12px;color:var(--muted);">[Recommendation]</td>
+            <td><span class="tag tag-gray">TBD</span></td>
+            <td><span class="tag tag-gray">TBD</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice warn">
+      <span class="n-icon">💡</span>
+      <span><strong>Note:</strong> Pain Points &amp; Gaps captures operational issues we've already identified. For forward-looking risk tracking (things that could go wrong), use the <strong>Risk Register</strong> tab.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 12 — RISK REGISTER
+  ══════════════════════════════════ -->
+  <div id="tab-risks" class="tab-panel">
+    <div class="section-title">Risk Register</div>
+    <div class="section-desc">Forward-looking risk tracking — likelihood, impact, mitigation strategy, and contingency plan per risk item.</div>
+
+    <div class="risk-card high">
+      <div class="risk-header">
+        <div>
+          <div class="risk-title">Ransomware / Cyber Attack</div>
+          <div class="risk-owner">Owner: Nate · Last reviewed: [Date]</div>
+        </div>
+        <div class="risk-badges">
+          <span class="tag tag-red">High Impact</span>
+          <span class="tag tag-yellow">Medium Likelihood</span>
+        </div>
+      </div>
+      <div class="risk-body">
+        <div>
+          <div class="risk-section-title">Mitigation Strategy</div>
+          <div class="risk-section-body">Deploy MFA across all accounts, enforce endpoint protection, implement email security filtering, conduct annual security awareness training.</div>
+          <div class="risk-section-title">Trigger / Warning Signs</div>
+          <div class="risk-section-body">Unusual login activity, phishing attempt reports, endpoint alerts from security tools.</div>
+        </div>
+        <div>
+          <div class="risk-section-title">Contingency Plan</div>
+          <div class="risk-section-body">Activate DR plan, isolate affected systems, restore from last clean backup, engage cyber insurance carrier, notify Marc immediately.</div>
+          <div class="risk-section-title">Current Status</div>
+          <div class="risk-section-body"><span class="tag tag-yellow">Partially Mitigated</span> — MFA deployment in progress. Endpoint protection active.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <div>
+          <div class="risk-title">Key Personnel Dependency / Single Point of Failure</div>
+          <div class="risk-owner">Owner: Mike · Last reviewed: [Date]</div>
+        </div>
+        <div class="risk-badges">
+          <span class="tag tag-yellow">Medium Impact</span>
+          <span class="tag tag-yellow">Medium Likelihood</span>
+        </div>
+      </div>
+      <div class="risk-body">
+        <div>
+          <div class="risk-section-title">Mitigation Strategy</div>
+          <div class="risk-section-body">Document all critical processes in SOPs, maintain Passportal with current credentials, cross-train backup tech on client environment.</div>
+          <div class="risk-section-title">Trigger / Warning Signs</div>
+          <div class="risk-section-body">Primary tech extended leave, departure, or unavailability during a critical incident.</div>
+        </div>
+        <div>
+          <div class="risk-section-title">Contingency Plan</div>
+          <div class="risk-section-body">Transfer to backup tech using Passportal and documented SOPs. Escalate to Mike for oversight during transition.</div>
+          <div class="risk-section-title">Current Status</div>
+          <div class="risk-section-body"><span class="tag tag-red">Not Mitigated</span> — SOPs not yet documented for this client.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-card low">
+      <div class="risk-header">
+        <div>
+          <div class="risk-title">Contract Non-Renewal / Client Churn</div>
+          <div class="risk-owner">Owner: Marc · Last reviewed: [Date]</div>
+        </div>
+        <div class="risk-badges">
+          <span class="tag tag-yellow">Medium Impact</span>
+          <span class="tag tag-green">Low Likelihood</span>
+        </div>
+      </div>
+      <div class="risk-body">
+        <div>
+          <div class="risk-section-title">Mitigation Strategy</div>
+          <div class="risk-section-body">Proactive QBR cadence, demonstrate ROI in reviews, address dissatisfaction early, provide renewal incentive 90 days before expiry.</div>
+          <div class="risk-section-title">Trigger / Warning Signs</div>
+          <div class="risk-section-body">Missed QBRs, client complaints without resolution, slow ticket closure times, budget conversations initiated by client.</div>
+        </div>
+        <div>
+          <div class="risk-section-title">Contingency Plan</div>
+          <div class="risk-section-body">Marc to engage directly if warning signs appear. Offer service adjustment before formal non-renewal. Document offboarding process if needed.</div>
+          <div class="risk-section-title">Current Status</div>
+          <div class="risk-section-body"><span class="tag tag-green">Well Mitigated</span> — Regular QBR cadence active. Client satisfaction: [Score].</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <div>
+          <div class="risk-title">[Risk Title]</div>
+          <div class="risk-owner">Owner: [Name] · Last reviewed: [Date]</div>
+        </div>
+        <div class="risk-badges">
+          <span class="tag tag-gray">TBD Impact</span>
+          <span class="tag tag-gray">TBD Likelihood</span>
+        </div>
+      </div>
+      <div class="risk-body">
+        <div>
+          <div class="risk-section-title">Mitigation Strategy</div>
+          <div class="risk-section-body"><span class="field-placeholder">[Describe what we're doing to reduce likelihood or impact]</span></div>
+          <div class="risk-section-title">Trigger / Warning Signs</div>
+          <div class="risk-section-body"><span class="field-placeholder">[What signals this risk is materializing]</span></div>
+        </div>
+        <div>
+          <div class="risk-section-title">Contingency Plan</div>
+          <div class="risk-section-body"><span class="field-placeholder">[What we do if this risk occurs]</span></div>
+          <div class="risk-section-title">Current Status</div>
+          <div class="risk-section-body"><span class="tag tag-gray">Not Assessed</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 13 — DECISIONS LOG
+  ══════════════════════════════════ -->
+  <div id="tab-decisions" class="tab-panel">
+    <div class="section-title">Decisions Log</div>
+    <div class="section-desc">A permanent record of key decisions made for or with this client — vendor choices, architecture calls, scope changes, and contract decisions.</div>
+
+    <div class="notice info">
+      <span class="n-icon">ℹ️</span>
+      <span><strong>Why this matters:</strong> Decisions made early in a relationship often affect support, billing, and architecture months later. Logging them protects the team, sets expectations with the client, and ensures continuity when team members change.</span>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-header">
+        <div>
+          <div class="decision-id">DEC-001</div>
+          <div class="decision-title">Firewall Platform Selection — Fortinet over Cisco</div>
+        </div>
+        <span class="tag tag-green">Confirmed</span>
+      </div>
+      <div class="decision-body">Client chose Fortinet FortiGate after comparing three options. Decision was driven by cost, Plus 1's existing expertise with the platform, and the client's ISP compatibility requirements. Cisco Meraki was ruled out due to licensing cost. Decision approved by client CEO on [Date].</div>
+      <div class="decision-meta">
+        <span><strong>Date:</strong> [Date]</span>
+        <span><strong>Made By:</strong> [Client Name] + Mike</span>
+        <span><strong>Category:</strong> <span class="tag tag-blue">Vendor / Hardware</span></span>
+        <span><strong>Impact:</strong> Affects all future firewall work, support, and vendor escalation path</span>
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-header">
+        <div>
+          <div class="decision-id">DEC-002</div>
+          <div class="decision-title">Deferred Server Refresh to Q3 — Budget Constraint</div>
+        </div>
+        <span class="tag tag-yellow">Deferred</span>
+      </div>
+      <div class="decision-body">Client acknowledged server infrastructure is end-of-life but deferred hardware refresh to Q3 due to current fiscal year budget constraints. Risk was acknowledged in writing. Plus 1 recommended proceeding sooner given failure risk — client elected to defer with documented risk acknowledgment.</div>
+      <div class="decision-meta">
+        <span><strong>Date:</strong> [Date]</span>
+        <span><strong>Made By:</strong> [Client CEO] (client decision)</span>
+        <span><strong>Category:</strong> <span class="tag tag-yellow">Budget / Planning</span></span>
+        <span><strong>Impact:</strong> Elevated risk of server failure through Q3 — flagged in Risk Register</span>
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-header">
+        <div>
+          <div class="decision-id">DEC-003</div>
+          <div class="decision-title">[Decision Title]</div>
+        </div>
+        <span class="tag tag-gray">TBD</span>
+      </div>
+      <div class="decision-body"><span class="field-placeholder">[Describe the decision, what options were considered, why this option was chosen, and who approved it.]</span></div>
+      <div class="decision-meta">
+        <span><strong>Date:</strong> [Date]</span>
+        <span><strong>Made By:</strong> [Names]</span>
+        <span><strong>Category:</strong> <span class="tag tag-gray">[Category]</span></span>
+        <span><strong>Impact:</strong> [Downstream impact on support, billing, architecture, or scope]</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 14 — ACTIVE PROJECTS
+  ══════════════════════════════════ -->
+  <div id="tab-projects" class="tab-panel">
+    <div class="section-title">Active Projects</div>
+    <div class="section-desc">Current initiatives and workstreams for this client — linked to full Project Roadmap documents in ClickUp.</div>
+
+    <div class="status-legend">
+      <div class="legend-item"><div class="l-icon">🟢</div><div><div class="l-label">Planned</div><div class="l-desc">Scoped and ready to start, kickoff may be scheduled</div></div></div>
+      <div class="legend-item"><div class="l-icon">🔄</div><div><div class="l-label">In Progress</div><div class="l-desc">Actively being worked on, tasks in motion</div></div></div>
+      <div class="legend-item"><div class="l-icon">🕒</div><div><div class="l-label">Awaiting Feedback</div><div class="l-desc">Waiting on client or internal approval to proceed</div></div></div>
+      <div class="legend-item"><div class="l-icon">🟡</div><div><div class="l-label">Not Started</div><div class="l-desc">In queue or blocked by another dependency</div></div></div>
+      <div class="legend-item"><div class="l-icon">⛔</div><div><div class="l-label">Blocked</div><div class="l-desc">Cannot proceed until a major issue is resolved</div></div></div>
+      <div class="legend-item"><div class="l-icon">✅</div><div><div class="l-label">Complete</div><div class="l-desc">Fully delivered and reviewed</div></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🚀 Current Projects &amp; Initiatives</div>
+      <table class="data-table">
+        <thead><tr><th>Project / Initiative</th><th>Goal or Outcome</th><th>Owner</th><th>Status</th><th>Notes / Links</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>[Project Name]</strong><small>[Brief description]</small></td>
+            <td style="font-size:12px;color:var(--muted);">[Desired outcome or deliverable]</td>
+            <td>Nate</td>
+            <td><span style="white-space:nowrap;">🔄 <span class="tag tag-cyan">In Progress</span></span></td>
+            <td style="font-size:11px;"><a href="#" style="color:var(--navy);">Roadmap →</a> &nbsp; <a href="#" style="color:var(--navy);">ClickUp →</a></td>
+          </tr>
+          <tr>
+            <td><strong>[Project Name]</strong><small>[Brief description]</small></td>
+            <td style="font-size:12px;color:var(--muted);">[Desired outcome or deliverable]</td>
+            <td>Mike</td>
+            <td><span style="white-space:nowrap;">🟢 <span class="tag tag-green">Planned</span></span></td>
+            <td style="font-size:11px;"><a href="#" style="color:var(--navy);">Roadmap →</a> &nbsp; <a href="#" style="color:var(--navy);">ClickUp →</a></td>
+          </tr>
+          <tr>
+            <td><strong>[Project Name]</strong><small>[Brief description]</small></td>
+            <td style="font-size:12px;color:var(--muted);">[Desired outcome or deliverable]</td>
+            <td>Charlotte</td>
+            <td><span style="white-space:nowrap;">🕒 <span class="tag tag-yellow">Awaiting Feedback</span></span></td>
+            <td style="font-size:11px;"><a href="#" style="color:var(--navy);">Roadmap →</a> &nbsp; <a href="#" style="color:var(--navy);">ClickUp →</a></td>
+          </tr>
+          <tr>
+            <td><strong>[Project Name]</strong><small>[Brief description]</small></td>
+            <td style="font-size:12px;color:var(--muted);">[Desired outcome or deliverable]</td>
+            <td>Jessica</td>
+            <td><span style="white-space:nowrap;">✅ <span class="tag tag-green">Complete</span></span></td>
+            <td style="font-size:11px;"><a href="#" style="color:var(--navy);">Roadmap →</a> &nbsp; <a href="#" style="color:var(--navy);">ClickUp →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice info">
+      <span class="n-icon">🔗</span>
+      <span><strong>Full Project Details:</strong> Each project above has its own <strong>Project Roadmap</strong> and <strong>Task Plan</strong> in ClickUp. This tab is a summary view only. Link the Roadmap doc for each project in the Notes / Links column above.</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 15 — ESCALATION
+  ══════════════════════════════════ -->
+  <div id="tab-escalation" class="tab-panel">
+    <div class="section-title">Escalation Procedures</div>
+    <div class="section-desc">Who to contact, when, and how — for both Plus 1 internal escalations and client-facing escalation paths.</div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🏠 Plus 1 Internal Escalation Path</div>
+        <div class="esc-level">
+          <div class="esc-num">L1</div>
+          <div class="esc-content">
+            <h4>Help Desk Tech</h4>
+            <p><strong>When:</strong> Initial ticket submission, all Tier 1 issues<br/><strong>Contact:</strong> Portal, email, phone<br/><strong>Target:</strong> Respond within SLA window</p>
+          </div>
+        </div>
+        <div class="esc-level">
+          <div class="esc-num">L2</div>
+          <div class="esc-content">
+            <h4>Nate / Senior Tech</h4>
+            <p><strong>When:</strong> Ticket not resolved within SLA timeframe, complex technical issue<br/><strong>Contact:</strong> Internal escalation — Slack or direct<br/><strong>Target:</strong> Engage within 30 min of L1 escalation</p>
+          </div>
+        </div>
+        <div class="esc-level">
+          <div class="esc-num">L3</div>
+          <div class="esc-content">
+            <h4>Mike — Head of Operations</h4>
+            <p><strong>When:</strong> Major issue, client unhappy, project blockers, SLA breach risk<br/><strong>Contact:</strong> Direct call or text<br/><strong>Target:</strong> Engaged same day</p>
+          </div>
+        </div>
+        <div class="esc-level">
+          <div class="esc-num">L4</div>
+          <div class="esc-content">
+            <h4>Marc — CEO</h4>
+            <p><strong>When:</strong> Client threatening to leave, legal issue, contract dispute, PR risk<br/><strong>Contact:</strong> Direct call<br/><strong>Target:</strong> Immediate engagement</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏢 Client Escalation Procedures</div>
+        <table class="data-table">
+          <thead><tr><th>Issue Type</th><th>First Contact</th><th>If Not Resolved</th><th>After-Hours</th></tr></thead>
+          <tbody>
+            <tr><td>Routine Support</td><td style="font-size:12px;">Submit ticket via portal</td><td style="font-size:12px;">Call help desk</td><td style="font-size:12px;">After-hours line</td></tr>
+            <tr><td>Urgent Issue</td><td style="font-size:12px;">Call help desk</td><td style="font-size:12px;">Contact Mike</td><td style="font-size:12px;">After-hours line</td></tr>
+            <tr><td>Critical Outage</td><td style="font-size:12px;">Call help desk + Mike</td><td style="font-size:12px;">Contact Marc</td><td style="font-size:12px;">After-hours line</td></tr>
+            <tr><td>Billing / Contract</td><td style="font-size:12px;">Email Marc</td><td style="font-size:12px;">Call Marc</td><td style="font-size:12px;">N/A</td></tr>
+            <tr><td>Security Incident</td><td style="font-size:12px;">Call help desk + Mike immediately</td><td style="font-size:12px;">Contact Marc</td><td style="font-size:12px;">After-hours line</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🚨 After-Hours Emergency Contact</div>
+      <div class="three-col">
+        <div class="checkpoint-card c1">
+          <div class="cp-label">Emergency Line</div>
+          <div class="cp-title">[Phone Number]</div>
+          <ul><li>Available 24/7 for true emergencies</li><li>State company name when calling</li></ul>
+        </div>
+        <div class="checkpoint-card c4">
+          <div class="cp-label">What Qualifies as Emergency</div>
+          <div class="cp-title">Critical Criteria</div>
+          <ul><li>Full system or server down</li><li>Security breach / active attack</li><li>Data loss or corruption</li><li>Complete network outage</li></ul>
+        </div>
+        <div class="checkpoint-card c2">
+          <div class="cp-label">Does NOT Qualify</div>
+          <div class="cp-title">Non-Emergency Examples</div>
+          <ul><li>Single user can't log in</li><li>Printer not working</li><li>Software questions</li><li>General performance issues</li></ul>
+        </div>
+      </div>
+      <div class="spacer-16"></div>
+      <div class="field-row"><span class="field-label">After-Hours Contact Name</span><span class="field-placeholder">[On-call tech name]</span></div>
+      <div class="field-row"><span class="field-label">After-Hours Phone</span><span class="field-placeholder">[Number]</span></div>
+      <div class="field-row"><span class="field-label">After-Hours Email</span><span class="field-placeholder">[Email]</span></div>
+      <div class="field-row"><span class="field-label">Cyber Insurance Carrier</span><span class="field-placeholder">[Carrier name + policy # — for client if applicable]</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 16 — COMMS & MEETINGS
+  ══════════════════════════════════ -->
+  <div id="tab-comms" class="tab-panel">
+    <div class="section-title">Comms &amp; Meetings</div>
+    <div class="section-desc">Meeting cadence, communication channel preferences, and how this client likes to be engaged.</div>
+
+    <div class="card">
+      <div class="card-title">📅 Meeting Cadence</div>
+      <table class="data-table">
+        <thead><tr><th>Meeting Type</th><th>Frequency</th><th>Format / Platform</th><th>Participants</th><th>Purpose / Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Weekly Ops Sync</strong></td>
+            <td><span class="tag tag-cyan">Weekly</span></td>
+            <td style="font-size:12px;">[Zoom / Teams / Phone]</td>
+            <td style="font-size:12px;">[Names / roles]</td>
+            <td style="font-size:12px;color:var(--muted);">Ticket status, open items, upcoming work</td>
+          </tr>
+          <tr>
+            <td><strong>Monthly Strategy Review</strong></td>
+            <td><span class="tag tag-blue">Monthly</span></td>
+            <td style="font-size:12px;">[Zoom / In-person]</td>
+            <td style="font-size:12px;">[Names / roles]</td>
+            <td style="font-size:12px;color:var(--muted);">Project updates, roadmap alignment, issues</td>
+          </tr>
+          <tr>
+            <td><strong>Quarterly Business Review (QBR)</strong></td>
+            <td><span class="tag tag-purple">Quarterly</span></td>
+            <td style="font-size:12px;">[In-person / Zoom]</td>
+            <td style="font-size:12px;">Marc, Mike + Client CEO</td>
+            <td style="font-size:12px;color:var(--muted);">Full account review, KPIs, strategic planning, contract</td>
+          </tr>
+          <tr>
+            <td><strong>Ad Hoc Check-ins</strong></td>
+            <td><span class="tag tag-gray">As Needed</span></td>
+            <td style="font-size:12px;">[Preferred platform]</td>
+            <td style="font-size:12px;">[Relevant parties]</td>
+            <td style="font-size:12px;color:var(--muted);">Project decisions, urgent issues, scope questions</td>
+          </tr>
+          <tr>
+            <td><strong>Project Kickoff Calls</strong></td>
+            <td><span class="tag tag-gray">Per Project</span></td>
+            <td style="font-size:12px;">[Zoom / Teams]</td>
+            <td style="font-size:12px;">Full project team</td>
+            <td style="font-size:12px;color:var(--muted);">Scope alignment, timeline, roles, contacts confirmed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📣 Communication Channel Preferences</div>
+      <div class="comm-channel">
+        <span class="comm-icon">💬</span>
+        <div>
+          <div class="comm-label">Slack</div>
+          <div class="comm-desc">Real-time chats, async updates, quick questions. Tags preferred over DMs for traceability.</div>
+        </div>
+        <div class="comm-badge"><span class="tag tag-green">Preferred</span></div>
+      </div>
+      <div class="comm-channel">
+        <span class="comm-icon">📧</span>
+        <div>
+          <div class="comm-label">Email</div>
+          <div class="comm-desc">Formal communications, contracts, recap summaries, anything requiring a paper trail. Response time ~24–48 hrs.</div>
+        </div>
+        <div class="comm-badge"><span class="tag tag-green">Preferred</span></div>
+      </div>
+      <div class="comm-channel">
+        <span class="comm-icon">🎥</span>
+        <div>
+          <div class="comm-label">Zoom / Teams</div>
+          <div class="comm-desc">Strategy calls, QBRs, kickoffs, anything requiring screen share. Cameras optional for this client.</div>
+        </div>
+        <div class="comm-badge"><span class="tag tag-green">Preferred</span></div>
+      </div>
+      <div class="comm-channel">
+        <span class="comm-icon">📹</span>
+        <div>
+          <div class="comm-label">Loom</div>
+          <div class="comm-desc">Asynchronous walkthroughs, recorded tutorials, one-way explanations. Use only when async works better than live.</div>
+        </div>
+        <div class="comm-badge"><span class="tag tag-gray">Use Sparingly</span></div>
+      </div>
+      <div class="comm-channel">
+        <span class="comm-icon">📁</span>
+        <div>
+          <div class="comm-label">Shared Docs</div>
+          <div class="comm-desc">Meeting agendas, deliverables, SOP drafts. Maintained in Google Drive + ClickUp Docs.</div>
+        </div>
+        <div class="comm-badge"><span class="tag tag-green">Preferred</span></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">📝 Communication Notes</div>
+        <div class="field-row"><span class="field-label">Urgent Issues — Primary Channel</span><span class="field-placeholder">[Phone / Text / Email]</span></div>
+        <div class="field-row"><span class="field-label">Best Time to Reach</span><span class="field-placeholder">[Morning / Afternoon / Anytime]</span></div>
+        <div class="field-row"><span class="field-label">Response Time Expectation</span><span class="field-placeholder">[Immediate / Same day / 24–48 hrs]</span></div>
+        <div class="field-row"><span class="field-label">Primary Decision Contact</span><span class="field-placeholder">[Name — for fast decisions]</span></div>
+        <div class="field-row"><span class="field-label">CC on All Emails?</span><span class="field-placeholder">[Who to always CC]</span></div>
+        <div class="field-row"><span class="field-label">Special Preferences</span><span class="field-placeholder">[Any communication style notes]</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 QBR &amp; Reporting Preferences</div>
+        <div class="field-row"><span class="field-label">QBR Format Preferred</span><span class="field-placeholder">[Slide deck / Live dashboard / Document]</span></div>
+        <div class="field-row"><span class="field-label">Metrics Client Cares About</span><span class="field-placeholder">[Ticket vol, response time, uptime, etc.]</span></div>
+        <div class="field-row"><span class="field-label">Last QBR Date</span><span class="field-placeholder">[Date]</span></div>
+        <div class="field-row"><span class="field-label">Next QBR Date</span><span class="field-placeholder">[Date]</span></div>
+        <div class="field-row"><span class="field-label">QBR Deck Location</span><span class="field-placeholder">[SharePoint link — see Resources tab]</span></div>
+        <div class="field-row"><span class="field-label">NPS / Satisfaction Score</span><span class="field-placeholder">[Score / Date collected]</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content-area -->
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <strong>Plus 1 Technology</strong> · Client Profile for <strong>[Client Name]</strong> · Updated [Month Year] · Confidential — Internal Use Only
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    if (btn) {
+      btn.classList.add('active');
+      const bar = document.getElementById('tabsBar');
+      const btnLeft = btn.offsetLeft;
+      const btnRight = btnLeft + btn.offsetWidth;
+      const barLeft = bar.scrollLeft;
+      const barRight = barLeft + bar.clientWidth;
+      if (btnLeft < barLeft + 40) bar.scrollTo({ left: btnLeft - 40, behavior: 'smooth' });
+      else if (btnRight > barRight - 40) bar.scrollTo({ left: btnRight - bar.clientWidth + 40, behavior: 'smooth' });
+    }
+    updateScrollBtns();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function scrollTabs(dir) {
+    const bar = document.getElementById('tabsBar');
+    bar.scrollBy({ left: dir * 200, behavior: 'smooth' });
+    setTimeout(updateScrollBtns, 250);
+  }
+
+  function updateScrollBtns() {
+    const bar = document.getElementById('tabsBar');
+    const lBtn = document.getElementById('scrollLeft');
+    const rBtn = document.getElementById('scrollRight');
+    if (!bar || !lBtn || !rBtn) return;
+    const atStart = bar.scrollLeft <= 2;
+    const atEnd   = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 2;
+    lBtn.classList.toggle('hidden', atStart);
+    rBtn.classList.toggle('hidden', atEnd);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const bar = document.getElementById('tabsBar');
+    if (bar) {
+      bar.addEventListener('scroll', updateScrollBtns);
+      updateScrollBtns();
+    }
+  });
+</script>
+</body>
+</html>
