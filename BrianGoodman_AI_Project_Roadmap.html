@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Plus 1 Technology — Brian Goodman Tax &amp; Advisory AI Project Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:       #1e2d8a;
+    --navy-dim:   #e8ecf8;
+    --navy-mid:   #c5ceed;
+    --cyan:       #29abe2;
+    --cyan-dim:   #e0f4fc;
+    --cyan-mid:   #a8ddf5;
+    --accent:     var(--navy);
+    --accent2:    var(--cyan);
+    --bg:         #f4f6fb;
+    --bg2:        #ffffff;
+    --bg3:        #eef1f8;
+    --bg4:        #f9fafd;
+    --border:     #dce2f0;
+    --border2:    #c8d0e8;
+    --text:       #1a2040;
+    --muted:      #5a6589;
+    --subtle:     #8e9ab8;
+    --green:      #16a34a;
+    --green-bg:   #f0fdf4;
+    --green-bdr:  #bbf7d0;
+    --yellow:     #b45309;
+    --yellow-bg:  #fffbeb;
+    --yellow-bdr: #fde68a;
+    --red:        #dc2626;
+    --red-bg:     #fef2f2;
+    --red-bdr:    #fecaca;
+    --purple:     #7c3aed;
+    --purple-bg:  #f5f3ff;
+    --purple-bdr: #ddd6fe;
+    --teal:       #0f766e;
+    --teal-bg:    #f0fdfa;
+    --teal-bdr:   #99f6e4;
+    --orange:     #c2410c;
+    --orange-bg:  #fff7ed;
+    --orange-bdr: #fed7aa;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.65; min-height: 100vh; }
+
+  .site-header { background: var(--navy); padding: 0 32px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(30,45,138,0.18); }
+  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 24px; }
+  .logo-block { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .logo-svg { height: 28px; width: auto; }
+  .header-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.2); }
+  .header-label { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500; letter-spacing: 0.03em; }
+  .header-meta { display: flex; align-items: center; gap: 16px; font-size: 12px; color: rgba(255,255,255,0.65); }
+  .version-badge { background: rgba(41,171,226,0.25); color: #7dd3fc; border: 1px solid rgba(41,171,226,0.4); border-radius: 20px; padding: 2px 10px; font-family: var(--mono); font-size: 11px; font-weight: 500; }
+  .header-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, #2a3ea8 60%, #1a5fa8 100%); border-bottom: 3px solid var(--cyan); padding: 32px 32px 0; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 85% 0%, rgba(41,171,226,0.15) 0%, transparent 60%); pointer-events: none; }
+  .hero-inner { max-width: 1200px; margin: 0 auto; }
+  .project-header-grid { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; margin-bottom: 20px; }
+  .project-type-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .type-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; border: 1px solid; font-family: var(--mono); }
+  .type-badge.automation  { color: #7dd3fc; border-color: rgba(125,211,252,0.4); background: rgba(125,211,252,0.1); }
+  .type-badge.llm         { color: #c4b5fd; border-color: rgba(196,181,253,0.4); background: rgba(196,181,253,0.1); }
+  .type-badge.integration { color: #93c5fd; border-color: rgba(147,197,253,0.4); background: rgba(147,197,253,0.1); }
+  .type-badge.rag         { color: #fde68a; border-color: rgba(253,230,138,0.4); background: rgba(253,230,138,0.1); }
+  .project-title { font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #fff; margin-bottom: 6px; }
+  .project-subtitle { color: rgba(255,255,255,0.65); font-size: 13px; }
+  .project-subtitle span { color: rgba(255,255,255,0.9); font-weight: 500; }
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; min-width: 260px; }
+  .stat-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 14px; text-align: center; backdrop-filter: blur(4px); }
+  .stat-card .s-label { font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+  .stat-card .s-value { font-weight: 700; font-size: 14px; color: var(--cyan); }
+  .stat-card .s-sub   { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+  .meta-row { display: flex; gap: 20px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.12); font-size: 12px; color: rgba(255,255,255,0.6); flex-wrap: wrap; align-items: center; }
+  .meta-row .meta-item { display: flex; align-items: center; gap: 6px; }
+  .meta-row .meta-item strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+  .meta-row .clickup-link { margin-left: auto; display: flex; align-items: center; gap: 6px; color: #7dd3fc; text-decoration: none; font-size: 12px; padding: 4px 12px; border: 1px solid rgba(125,211,252,0.35); border-radius: 6px; background: rgba(125,211,252,0.08); transition: all 0.15s; }
+  .meta-row .clickup-link:hover { background: rgba(125,211,252,0.16); }
+
+  .tabs-nav { background: var(--bg2); border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(30,45,138,0.06); position: relative; display: flex; align-items: stretch; }
+  .tabs-scroll-btn { flex-shrink: 0; width: 36px; display: flex; align-items: center; justify-content: center; background: var(--bg2); border: none; cursor: pointer; color: var(--muted); font-size: 16px; z-index: 2; transition: all 0.15s; border-bottom: 1px solid transparent; }
+  .tabs-scroll-btn:hover { color: var(--navy); background: var(--bg3); }
+  .tabs-scroll-btn.left  { border-right: 1px solid var(--border); box-shadow:  3px 0 8px rgba(30,45,138,0.06); }
+  .tabs-scroll-btn.right { border-left:  1px solid var(--border); box-shadow: -3px 0 8px rgba(30,45,138,0.06); }
+  .tabs-scroll-btn.hidden { opacity: 0; pointer-events: none; }
+  .tabs-bar { flex: 1; overflow-x: auto; scrollbar-width: none; }
+  .tabs-bar::-webkit-scrollbar { display: none; }
+  .tabs-inner { display: flex; gap: 0; width: max-content; min-width: 100%; }
+  .tab-btn { display: flex; align-items: center; gap: 6px; padding: 13px 16px; font-size: 13px; font-weight: 500; color: var(--muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: var(--sans); }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+  .tab-icon { font-size: 13px; }
+
+  .content-area { max-width: 1200px; margin: 0 auto; padding: 28px 32px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--navy); margin-bottom: 4px; }
+  .section-desc { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(30,45,138,0.05); }
+  .card-title { font-weight: 600; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .card p { color: var(--muted); font-size: 13px; line-height: 1.75; }
+  .card p strong { color: var(--text); }
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px; }
+  .goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .goal-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .goal-item .gi-icon  { font-size: 20px; margin-bottom: 8px; }
+  .goal-item .gi-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--text); }
+  .goal-item .gi-desc  { color: var(--muted); font-size: 12px; line-height: 1.55; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: var(--bg3); color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .data-table td:first-child { color: var(--text); font-weight: 500; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--bg4); }
+  .data-table td strong { color: var(--text); font-size: 13px; display: block; margin-bottom: 2px; }
+  .data-table td small  { color: var(--muted); font-size: 11px; display: block; }
+  .data-table td:first-child { font-family: var(--mono); color: var(--navy); font-size: 11px; font-weight: 600; }
+
+  .checkpoint-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+  .checkpoint-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(30,45,138,0.05); }
+  .checkpoint-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .checkpoint-card.c1::before { background: var(--cyan); }
+  .checkpoint-card.c2::before { background: var(--navy); }
+  .checkpoint-card.c3::before { background: var(--green); }
+  .checkpoint-card .cp-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
+  .checkpoint-card .cp-title { font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--text); }
+  .checkpoint-card ul { color: var(--muted); font-size: 12px; padding-left: 14px; }
+  .checkpoint-card ul li { margin-bottom: 3px; line-height: 1.5; }
+  .checkpoint-card ul li::marker { color: var(--cyan); }
+
+  .scope-section { margin-bottom: 22px; }
+  .scope-section-header { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .scope-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .scope-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; gap: 10px; align-items: flex-start; }
+  .scope-item .si-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .scope-item .si-title { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 3px; }
+  .scope-item .si-body  { color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .oos-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .oos-item { background: var(--red-bg); border: 1px solid var(--red-bdr); border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--muted); }
+  .oos-item strong { display: block; color: var(--red); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+
+  .phase-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; margin-bottom: 14px; position: relative; overflow: hidden; box-shadow: 0 1px 4px rgba(30,45,138,0.06); }
+  .phase-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 12px 0 0 12px; }
+  .phase-card.low::before    { background: var(--green); }
+  .phase-card.medium::before { background: var(--yellow); }
+  .phase-card.high::before   { background: var(--red); }
+  .phase-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .phase-num { width: 32px; height: 32px; border-radius: 8px; background: var(--navy-dim); border: 1px solid var(--navy-mid); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 13px; color: var(--navy); flex-shrink: 0; margin-right: 12px; }
+  .phase-name { font-weight: 700; font-size: 16px; color: var(--text); }
+  .phase-purpose { color: var(--muted); font-size: 13px; margin-top: 3px; }
+  .phase-meta-right { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .risk-pill { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; font-family: var(--mono); }
+  .risk-pill.high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-bdr); }
+  .risk-pill.medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bdr); }
+  .risk-pill.low    { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-bdr); }
+  .duration-tag { font-size: 12px; color: var(--muted); background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; font-family: var(--mono); }
+  .phase-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  .phase-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+  .phase-col ul { padding-left: 14px; }
+  .phase-col ul li { font-size: 12px; color: var(--muted); margin-bottom: 4px; line-height: 1.5; }
+  .phase-col ul li::marker { color: var(--cyan); }
+  .criteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .criteria-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .criteria-box h5 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 5px; }
+  .criteria-box p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .milestone-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .m-num { width: 36px; height: 36px; border-radius: 8px; background: var(--navy-dim); border: 1px solid var(--navy-mid); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 12px; color: var(--navy); flex-shrink: 0; }
+  .m-main .m-title    { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .m-main .m-output   { color: var(--cyan); font-size: 12px; margin-bottom: 6px; font-style: italic; }
+  .m-main .m-criteria { color: var(--muted); font-size: 12px; line-height: 1.6; }
+  .m-side { text-align: right; flex-shrink: 0; }
+  .m-side .m-phase  { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+  .m-side .m-owner  { font-size: 12px; font-weight: 600; color: var(--text); }
+  .m-side .m-target { font-family: var(--mono); font-size: 11px; color: var(--navy); margin-top: 3px; }
+  .m-side .m-time   { font-family: var(--mono); font-size: 10px; color: var(--muted); background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; margin-top: 5px; display: inline-block; }
+  .blocker-flag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bdr); border-radius: 4px; padding: 2px 8px; margin-top: 5px; }
+
+  .cp-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(30,45,138,0.05); }
+  .cp-chain { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin-top: 12px; row-gap: 8px; }
+  .cp-step { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; }
+  .cp-step.blocker { border-color: var(--red-bdr);    background: var(--red-bg);    color: var(--red); }
+  .cp-step.client  { border-color: var(--yellow-bdr); background: var(--yellow-bg); color: var(--yellow); }
+  .cp-step.gate    { border-color: var(--green-bdr);  background: var(--green-bg);  color: var(--green); }
+  .cp-arrow { color: var(--muted); padding: 0 6px; font-size: 14px; }
+
+  .blocker-sev { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 4px; }
+  .blocker-sev.build  { background: var(--red-bg);    color: var(--red); }
+  .blocker-sev.warn   { background: var(--yellow-bg); color: var(--yellow); }
+  .blocker-sev.vendor { background: var(--purple-bg); color: var(--purple); }
+
+  .risk-card { background: var(--bg2); border: 1px solid var(--border); border-left-width: 4px; border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .risk-card.high   { border-left-color: var(--red); }
+  .risk-card.medium { border-left-color: var(--yellow); }
+  .risk-card.low    { border-left-color: var(--green); }
+  .risk-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .risk-id { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--navy); }
+  .risk-title { font-weight: 600; font-size: 13px; color: var(--text); flex: 1; }
+  .impact-pill { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px; font-family: var(--mono); }
+  .impact-pill.high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-bdr); }
+  .impact-pill.medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-bdr); }
+  .impact-pill.low    { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-bdr); }
+  .risk-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .risk-col h5 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 4px; }
+  .risk-col p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .build-block-banner { background: var(--red-bg); border: 1px solid var(--red-bdr); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--red); margin-bottom: 20px; }
+  .open-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .open-item.blocking { border-left: 4px solid var(--red); }
+  .open-item-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .open-item-id { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--navy); }
+  .open-item-title { font-weight: 600; font-size: 13px; color: var(--text); }
+  .open-item-desc { color: var(--muted); font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+  .open-item-footer { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+  .oi-meta { display: flex; gap: 5px; font-size: 11px; }
+  .oi-meta .label { color: var(--subtle); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .oi-meta .value { color: var(--text); }
+
+  .tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px; font-family: var(--mono); border: 1px solid; }
+  .tag-red    { background: var(--red-bg);    color: var(--red);    border-color: var(--red-bdr); }
+  .tag-yellow { background: var(--yellow-bg); color: var(--yellow); border-color: var(--yellow-bdr); }
+  .tag-green  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-bdr); }
+  .tag-blue   { background: var(--navy-dim);  color: var(--navy);   border-color: var(--navy-mid); }
+  .tag-cyan   { background: var(--cyan-dim);  color: #0077aa;       border-color: var(--cyan-mid); }
+  .tag-purple { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-bdr); }
+  .tag-gray   { background: var(--bg3);       color: var(--muted);  border-color: var(--border); }
+  .tag-teal   { background: var(--teal-bg);   color: var(--teal);   border-color: var(--teal-bdr); }
+  .tag-orange { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-bdr); }
+
+  .notice { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; border: 1px solid; }
+  .notice.warn    { background: var(--yellow-bg); border-color: var(--yellow-bdr); color: var(--yellow); }
+  .notice.info    { background: var(--cyan-dim);  border-color: var(--cyan-mid);  color: #0077aa; }
+  .notice.success { background: var(--green-bg);  border-color: var(--green-bdr); color: var(--green); }
+  .notice.error   { background: var(--red-bg);    border-color: var(--red-bdr);   color: var(--red); }
+  .notice .n-icon { font-size: 15px; flex-shrink: 0; }
+
+  .tool-steps { display: flex; align-items: stretch; gap: 0; margin: 16px 0; overflow-x: auto; }
+  .tool-step { flex: 1; min-width: 140px; background: var(--bg3); border: 1px solid var(--border); border-right: none; padding: 14px 16px; text-align: center; position: relative; }
+  .tool-step:last-child { border-right: 1px solid var(--border); border-radius: 0 8px 8px 0; }
+  .tool-step:first-child { border-radius: 8px 0 0 8px; }
+  .tool-step.done   { background: var(--green-bg);  border-color: var(--green-bdr); }
+  .tool-step.active { background: var(--cyan-dim);  border-color: var(--cyan-mid); }
+  .ts-icon  { font-size: 20px; margin-bottom: 6px; }
+  .ts-label { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 3px; }
+  .ts-date  { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .ts-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; color: var(--muted); }
+  .ts-status.done-s   { color: var(--green); }
+  .ts-status.active-s { color: #0077aa; }
+  .ts-status.pending  { color: var(--subtle); }
+
+  .timeline-track { padding: 4px 0; position: relative; margin-bottom: 20px; }
+  .tl-line { position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-week { position: relative; padding-left: 44px; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: 8px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg2); border: 3px solid var(--border); }
+  .tl-dot.pre    { border-color: var(--red); }
+  .tl-dot.active { border-color: var(--cyan); background: var(--cyan); }
+  .tl-dot.done   { border-color: var(--green); background: var(--green); }
+  .tl-week-label { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .tl-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px; background: var(--navy-dim); color: var(--navy); border: 1px solid var(--navy-mid); font-family: var(--mono); }
+  .tl-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(30,45,138,0.04); }
+  .tl-card h4 { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .tl-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .action-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; }
+  .a-num { width: 32px; height: 32px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 13px; font-weight: 700; color: white; flex-shrink: 0; }
+  .a-main .a-action { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+  .a-main .a-dep    { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .a-side { text-align: right; }
+  .a-side .a-owner  { font-weight: 600; font-size: 12px; color: var(--text); }
+  .a-side .a-target { font-family: var(--mono); font-size: 11px; color: var(--navy); margin-top: 3px; }
+  .a-side .a-risk   { font-size: 11px; color: var(--red); margin-top: 4px; }
+
+  .cu-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .cu-step:last-child { border-bottom: none; }
+  .cu-step-num { width: 28px; height: 28px; flex-shrink: 0; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; font-weight: 700; color: white; }
+  .cu-step h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .cu-step p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .ms-ref-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .ms-ref-table th { background: var(--bg3); color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .ms-ref-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  .ms-ref-table td:first-child { font-weight: 600; color: var(--text); }
+  .ms-ref-table td:nth-child(2) { font-family: var(--mono); color: var(--navy); }
+  .ms-ref-table tr:last-child td { border-bottom: none; }
+
+  .code-block { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 1.8; white-space: pre-wrap; }
+  .code-brace { color: var(--text); font-weight: 700; }
+  .code-key   { color: var(--navy); }
+  .code-str   { color: var(--green); }
+  .checklist { font-size: 12px; color: var(--muted); line-height: 2; }
+  .spacer-16 { height: 16px; }
+  .model-card { background: var(--purple-bg); border: 1px solid var(--purple-bdr); border-radius: 8px; padding: 14px 16px; }
+  .model-card .mc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--purple); margin-bottom: 4px; }
+  .model-card .mc-value { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .model-card .mc-sub   { font-size: 12px; color: var(--muted); }
+
+  .site-footer { background: var(--navy); color: rgba(255,255,255,0.55); text-align: center; font-size: 11px; padding: 14px 32px; }
+  .site-footer strong { color: rgba(255,255,255,0.85); }
+
+  @media (max-width: 768px) {
+    .project-header-grid { grid-template-columns: 1fr; }
+    .stats-grid           { grid-template-columns: repeat(3,1fr); min-width: 0; }
+    .checkpoint-grid      { grid-template-columns: 1fr; }
+    .two-col, .three-col  { grid-template-columns: 1fr; }
+    .phase-cols           { grid-template-columns: 1fr; }
+    .scope-items, .oos-items { grid-template-columns: 1fr; }
+    .milestone-item       { grid-template-columns: 1fr; }
+    .m-side, .a-side      { grid-column: 2; text-align: left; }
+    .risk-body            { grid-template-columns: 1fr; }
+    .card-grid            { grid-template-columns: 1fr; }
+    .content-area         { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-block">
+      <svg class="logo-svg" viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg" fill="white">
+        <text x="0" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">PLUS</text>
+        <circle cx="208" cy="36" r="34" fill="none" stroke="white" stroke-width="7"/>
+        <text x="200" y="47" font-family="Arial Black, sans-serif" font-weight="900" font-size="26" fill="white">+1</text>
+        <text x="243" y="62" font-family="Arial Black, sans-serif" font-weight="900" font-size="72" letter-spacing="-2">NE</text>
+        <text x="18" y="78" font-family="Arial, sans-serif" font-weight="400" font-size="13" letter-spacing="8">TECHNOLOGY</text>
+      </svg>
+      <div class="header-divider"></div>
+      <span class="header-label">AI Project Roadmap</span>
+    </div>
+    <div class="header-meta">
+      <span class="version-badge">AI Roadmap v1.0</span>
+      <span class="header-dot"></span>
+      <span>Brian Goodman Tax &amp; Advisory · AI Implementation</span>
+      <span class="header-dot"></span>
+      <span>Confidential</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="project-header-grid">
+      <div>
+        <div class="project-type-badges">
+          <span class="type-badge llm">LLM</span>
+          <span class="type-badge automation">Automation</span>
+          <span class="type-badge integration">Integration</span>
+        </div>
+        <div class="project-title">Brian Goodman Tax &amp; Advisory — Secure AI Tax Document Platform</div>
+        <div class="project-subtitle">
+          Plus 1 Technology AI implementation roadmap ·
+          <span>April 12, 2026</span> through <span>~September 2026</span> ·
+          Confidential — Do Not Distribute
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="s-label">Go-Live</div><div class="s-value">~May 2026</div><div class="s-sub">Phase 1 Target</div></div>
+        <div class="stat-card"><div class="s-label">Duration</div><div class="s-value">~23 wks</div><div class="s-sub">All 3 Phases</div></div>
+        <div class="stat-card"><div class="s-label">Est. Hours</div><div class="s-value">~62 hrs</div><div class="s-sub">Total Estimated</div></div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item">👤 <strong>Client:</strong> Brian Goodman Tax &amp; Advisory</div>
+      <div class="meta-item">📋 <strong>PM:</strong> Marc Umstead</div>
+      <div class="meta-item">🤖 <strong>AI Architect:</strong> Jessica Peaden</div>
+      <div class="meta-item">📅 <strong>Kickoff Demo:</strong> April 12, 2026</div>
+      <div class="meta-item">🔧 <strong>Platform:</strong> HatzAI + Canopy API (Phase 3)</div>
+      <a class="clickup-link" href="#" target="_blank">🔗 View in ClickUp</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TABS ═══ -->
+<nav class="tabs-nav" id="tabsNav">
+  <button class="tabs-scroll-btn left hidden" id="scrollLeft" onclick="scrollTabs(-1)" title="Scroll left">&#8249;</button>
+  <div class="tabs-bar" id="tabsBar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('howto',this)"><span class="tab-icon">📖</span> How to Use</button>
+    <button class="tab-btn" onclick="showTab('summary',this)"><span class="tab-icon">📋</span> Summary &amp; Goals</button>
+    <button class="tab-btn" onclick="showTab('scope',this)"><span class="tab-icon">🔲</span> Scope</button>
+    <button class="tab-btn" onclick="showTab('phases',this)"><span class="tab-icon">🏗</span> Phased Plan</button>
+    <button class="tab-btn" onclick="showTab('milestones',this)"><span class="tab-icon">🎯</span> Milestones</button>
+    <button class="tab-btn" onclick="showTab('blockers',this)"><span class="tab-icon">🚧</span> Blockers &amp; Critical Path</button>
+    <button class="tab-btn" onclick="showTab('risks',this)"><span class="tab-icon">⚠️</span> Risk Register</button>
+    <button class="tab-btn" onclick="showTab('openitems',this)"><span class="tab-icon">❓</span> Open Items</button>
+    <button class="tab-btn" onclick="showTab('tooltrack',this)"><span class="tab-icon">🔌</span> Tool &amp; Integration Track</button>
+    <button class="tab-btn" onclick="showTab('timeline',this)"><span class="tab-icon">📅</span> Timeline &amp; Resources</button>
+    <button class="tab-btn" onclick="showTab('actions',this)"><span class="tab-icon">⚡</span> Next Actions</button>
+    <button class="tab-btn" onclick="showTab('clickup',this)"><span class="tab-icon">✅</span> ClickUp Setup</button>
+    <button class="tab-btn" onclick="showTab('resources',this)"><span class="tab-icon">📎</span> Resources</button>
+  </div>
+  </div>
+  <button class="tabs-scroll-btn right" id="scrollRight" onclick="scrollTabs(1)" title="Scroll right">&#8250;</button>
+</nav>
+
+<!-- ═══ CONTENT ═══ -->
+<main style="padding: 0 0 60px;">
+<div class="content-area">
+
+  <!-- HOW TO USE -->
+  <div id="tab-howto" class="tab-panel active">
+    <div class="section-title">How to Use This AI Roadmap</div>
+    <div class="section-desc">This roadmap covers all three phases of the Brian Goodman Tax &amp; Advisory AI implementation. Share with Brian and the Plus 1 team as the primary planning and delivery reference.</div>
+    <div class="card">
+      <div class="card-title"><span>📦</span> What This Roadmap Covers</div>
+      <div class="goal-grid" style="margin-bottom:0">
+        <div class="goal-item"><div class="gi-icon">📋</div><div class="gi-title">Summary &amp; Goals</div><div class="gi-desc">Project narrative, business + technical goals, and 30/60/90-day success checkpoints.</div></div>
+        <div class="goal-item"><div class="gi-icon">🔲</div><div class="gi-title">Scope Boundaries</div><div class="gi-desc">What's in scope across all 3 phases, what's explicitly excluded, and what's deferred.</div></div>
+        <div class="goal-item"><div class="gi-icon">🏗</div><div class="gi-title">Phased Build Plan</div><div class="gi-desc">Foundation → Build → Test &amp; UAT → Integration &amp; Handoff with testable entry/exit criteria.</div></div>
+        <div class="goal-item"><div class="gi-icon">🎯</div><div class="gi-title">Milestone Tracker</div><div class="gi-desc">6 milestones with testable acceptance criteria and ClickUp time estimates in milliseconds.</div></div>
+        <div class="goal-item"><div class="gi-icon">🚧</div><div class="gi-title">Blockers &amp; Critical Path</div><div class="gi-desc">Sample tax return dependency, Canopy API confirmation, and governance policy sign-off.</div></div>
+        <div class="goal-item"><div class="gi-icon">🔌</div><div class="gi-title">Tool &amp; Integration Track</div><div class="gi-desc">HatzAI tenant pipeline, Canopy API status, credential tracking, and workflow diagram.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>🌐</span> Deploy as a Live GitHub Page</div>
+      <div class="code-block">1. Upload this file to <strong style="color:var(--text)">OneDrive</strong> as: BrianGoodman_AI_Project_Roadmap.html
+2. Fire the n8n webhook (Workflow ID: BZODkg2BdD8S7Txm):
+
+<span class="code-brace">{</span>
+  <span class="code-key">"fileName"</span>: <span class="code-str">"BrianGoodman_AI_Project_Roadmap.html"</span>,
+  <span class="code-key">"repoPath"</span>: <span class="code-str">"BrianGoodman_AI_Project_Roadmap.html"</span>,
+  <span class="code-key">"commitMessage"</span>: <span class="code-str">"Add Brian Goodman AI project roadmap"</span>,
+  <span class="code-key">"mimeType"</span>: <span class="code-str">"text/html"</span>
+<span class="code-brace">}</span>
+
+<span style="color:var(--muted)">Live URL: https://plus1tech.github.io/interactive-docs/BrianGoodman_AI_Project_Roadmap.html</span></div>
+    </div>
+  </div>
+
+  <!-- SUMMARY & GOALS -->
+  <div id="tab-summary" class="tab-panel">
+    <div class="section-title">Project Summary &amp; Goals</div>
+    <div class="section-desc">What we are building, why it matters, and what success looks like at every checkpoint.</div>
+
+    <div class="card">
+      <div class="card-title">🧩 Project Summary</div>
+      <p><strong>Brian Goodman Tax &amp; Advisory currently processes complex combined tax return PDFs manually</strong> — each file containing a 1040, two-year comparison, 8879, Pennsylvania return, Pennsylvania 8879, and local return — with no structured workflow for extracting or communicating insights to clients. The firm hesitates to use public AI tools like ChatGPT because <em>"I don't know where the information is going."</em> Plus 1 Technology is implementing <strong>HatzAI</strong> — a private, siloed AI platform — to allow Brian and his team to safely process confidential client tax data using multiple AI models (Claude, ChatGPT, Grok) without exposing information to the internet. The build delivers a prompt library for tax document summarization, form extraction, and tax research in Phase 1; advanced planning and year-over-year analysis prompts in Phase 2; and Canopy API integration plus QuickBooks financial insights in Phase 3. <strong>Hard constraints:</strong> all AI processing must remain within the HatzAI tenant; no client PII may be processed in free or unmanaged AI tools; Canopy integration requires API access confirmation before Phase 3 build begins.</p>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="section-title" style="font-size:16px;">Business Goals</div>
+    <div class="goal-grid" style="margin-top:12px;">
+      <div class="goal-item"><div class="gi-icon">🔒</div><div class="gi-title">Eliminate Data Security Risk</div><div class="gi-desc">Stop staff from using free ChatGPT or unmanaged Copilot for client tax data. All AI processing runs inside HatzAI's private, siloed environment — no client data leaves the tenant.</div></div>
+      <div class="goal-item"><div class="gi-icon">⚡</div><div class="gi-title">Reduce Tax Return Processing Time</div><div class="gi-desc">Convert manual PDF interpretation (currently 10+ summaries/day during tax season) into a repeatable 1-click prompt workflow. Brian uploads the PDF, hits the prompt, and gets a clean executive summary ready to send to the client.</div></div>
+      <div class="goal-item"><div class="gi-icon">📊</div><div class="gi-title">Deliver Better Client Communication</div><div class="gi-desc">Replace raw tax document delivery with clear, digital, client-friendly executive summaries. <em>"Break it down from just the one PDF form… to give the client back a more executive summary so that we can be more digital with them."</em></div></div>
+      <div class="goal-item"><div class="gi-icon">🔍</div><div class="gi-title">Structured Tax Research with Citations</div><div class="gi-desc">Replicate Tax GPT's citation behavior inside HatzAI — AI answers tax questions with IRS publication references. Evaluate whether Tax IQ subscription already covers this need to avoid duplicate spend.</div></div>
+      <div class="goal-item"><div class="gi-icon">💡</div><div class="gi-title">Surface Planning Opportunities</div><div class="gi-desc">Phase 2 builds prompts that review return data and surface potential deductions, planning flags, and advisory opportunities for next year — turning the annual return into a proactive advisory conversation.</div></div>
+      <div class="goal-item"><div class="gi-icon">🔗</div><div class="gi-title">Consolidate AI Into One Platform</div><div class="gi-desc">Replace fragmented use of free ChatGPT, free Copilot, and separate Tax GPT subscription with a single managed HatzAI tenant. One platform, one cost, all models, no data exposure risk.</div></div>
+    </div>
+
+    <div class="section-title" style="font-size:16px; margin-top:4px;">Technical Goals</div>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="goal-item"><div class="gi-icon">🤖</div><div class="gi-title">HatzAI Prompt Library with 5+ Tax Prompts</div><div class="gi-desc">Build, test, and store structured prompts for: Tax Return Executive Summary, Form/Page Extraction, Tax Research Assistant, Year-Over-Year Comparison, and Planning Opportunity Finder. Best-performing AI model pinned per prompt after testing.</div></div>
+      <div class="goal-item"><div class="gi-icon">🔌</div><div class="gi-title">Canopy API Integration (Phase 3)</div><div class="gi-desc">Design and build the connection that attaches AI-generated summaries to Canopy client files post-review. Requires Canopy API documentation review and endpoint mapping. Contingent on API access confirmation.</div></div>
+      <div class="goal-item"><div class="gi-icon">📐</div><div class="gi-title">QuickBooks Online Financial Insight Prompt (Phase 3)</div><div class="gi-desc">Build the prompt that reads QBO data and generates quarterly business performance summaries for advisory prep — surfacing what changed, what went up, what went down. Requires QBO migration from Desktop to be underway.</div></div>
+      <div class="goal-item"><div class="gi-icon">📋</div><div class="gi-title">AI Governance Policy</div><div class="gi-desc">Draft and get Brian's sign-off on a 1-page firm policy: approved tools, approved workflows, what never gets uploaded. Establishes safe AI usage standards before any prompts go into production use.</div></div>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="section-title" style="font-size:16px;">Success Metrics</div>
+    <div class="card" style="padding:0;overflow:hidden;margin-top:12px;">
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Baseline (Today)</th><th>30-Day Target</th><th>60-Day Target</th><th>90-Day Target</th></tr></thead>
+        <tbody>
+          <tr><td>Tax return summaries processed per day (peak season)</td><td>Manual — ~10/day, fully manual interpretation</td><td>10/day via HatzAI prompt, Brian reviews output</td><td>10/day, output meets Brian's quality standard consistently</td><td>10/day with advanced prompts; YOY and planning flags live</td></tr>
+          <tr><td>Staff using free/unmanaged AI for client data</td><td>Free ChatGPT used for general queries; risk present</td><td>Zero instances — governance policy signed and in effect</td><td>Zero instances confirmed via Brian at check-in</td><td>Zero instances; HatzAI is the firm's single AI platform</td></tr>
+          <tr><td>Prompt library size</td><td>0 stored prompts</td><td>3 prompts live (Summary, Form Extraction, Research)</td><td>5 prompts live (+ YOY Comparison, Planning Opportunities)</td><td>Full library organized; Phase 3 integration live</td></tr>
+          <tr><td>AI research response quality (citation accuracy)</td><td>General ChatGPT queries, no structured citations</td><td>Research Assistant prompt returns IRS-cited answers</td><td>Brian confirms citation quality meets Tax IQ standard</td><td>Tax IQ vs HatzAI decision made; subscriptions optimized</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="checkpoint-grid">
+      <div class="checkpoint-card c1">
+        <div class="cp-label">📍 30-Day Checkpoint</div>
+        <div class="cp-title">"Working" at 30 days</div>
+        <ul>
+          <li>HatzAI tenant live and governance policy signed</li>
+          <li>Tax Return Summary prompt tested on Brian's sample return</li>
+          <li>Form Extraction and Tax Research prompts complete</li>
+          <li>Brian has run the live demo and confirmed outputs meet expectations</li>
+          <li>No staff using free AI tools for client data</li>
+        </ul>
+      </div>
+      <div class="checkpoint-card c2">
+        <div class="cp-label">📍 60-Day Checkpoint</div>
+        <div class="cp-title">"Expanded and adopted" at 60 days</div>
+        <ul>
+          <li>Phase 2 prompts live: YOY Comparison and Planning Opportunity Finder</li>
+          <li>Prompt library organized and labeled in HatzAI</li>
+          <li>Summary formatting refined based on Phase 1 feedback</li>
+          <li>Brian and Kevin using HatzAI in regular workflow</li>
+          <li>Tax IQ evaluation complete — subscription decision made</li>
+        </ul>
+      </div>
+      <div class="checkpoint-card c3">
+        <div class="cp-label">📍 90-Day Checkpoint</div>
+        <div class="cp-title">Integration &amp; full handoff</div>
+        <ul>
+          <li>Canopy API access confirmed and integration architecture approved</li>
+          <li>AI summaries attaching to Canopy client files post-review</li>
+          <li>QBO Insight prompt operational (pending QBO migration)</li>
+          <li>End-to-end workflow documented and handed off</li>
+          <li>ROI measurable: time saved per return quantified</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCOPE -->
+  <div id="tab-scope" class="tab-panel">
+    <div class="section-title">Scope Boundaries</div>
+    <div class="section-desc">What is included across all three phases, what is explicitly excluded, and what is deferred to post-MVP.</div>
+
+    <div class="scope-section">
+      <div class="scope-section-header"><span>✅</span> In Scope</div>
+      <div class="scope-items">
+        <div class="scope-item"><div class="si-icon">🤖</div><div><div class="si-title">HatzAI Tenant Configuration</div><div class="si-body">Set up Brian's private HatzAI environment. Configure model access, document upload capability, and prompt library. Verify siloed operation — no client data sent to external model providers.</div></div></div>
+        <div class="scope-item"><div class="si-icon">📄</div><div><div class="si-title">Tax Return Executive Summary Prompt</div><div class="si-body">Build the core prompt that converts a full combined tax return PDF (1040, 2-year comparison, 8879, PA return, PA 8879, local return) into a 1-page client-friendly executive summary. Iterate until output meets Brian's quality bar.</div></div></div>
+        <div class="scope-item"><div class="si-icon">🔍</div><div><div class="si-title">Form Extraction Prompt</div><div class="si-body">Build the prompt that identifies and page-locates key forms from the combined PDF. Handles variability in tax return structure using section/form-based rather than fixed page-number logic.</div></div></div>
+        <div class="scope-item"><div class="si-icon">📚</div><div><div class="si-title">Tax Research Assistant Prompt</div><div class="si-body">Build prompt that answers tax questions with IRS publication citations — replicating Tax GPT's citation behavior inside HatzAI. Compare output quality against Tax IQ to inform subscription decision.</div></div></div>
+        <div class="scope-item"><div class="si-icon">📊</div><div><div class="si-title">Year-Over-Year Comparison Prompt (Phase 2)</div><div class="si-body">Build prompt that extracts prior vs. current year metrics and generates a plain-English narrative of what changed and why it matters — ready for client advisory conversations.</div></div></div>
+        <div class="scope-item"><div class="si-icon">💡</div><div><div class="si-title">Planning Opportunity Finder Prompt (Phase 2)</div><div class="si-body">Build prompt that reviews return data to surface potential deductions, planning flags, and advisory opportunities for the next year. Turns the annual return into a proactive planning touchpoint.</div></div></div>
+        <div class="scope-item"><div class="si-icon">📋</div><div><div class="si-title">AI Governance Policy</div><div class="si-body">Draft 1-page firm AI usage policy: approved tools (HatzAI only), approved workflows, what never gets uploaded (raw SSNs outside tenant, etc.). Reviewed and signed by Brian before go-live.</div></div></div>
+        <div class="scope-item"><div class="si-icon">🔗</div><div><div class="si-title">Canopy API Integration (Phase 3)</div><div class="si-body">Review Canopy API docs, confirm endpoint availability, design data flow from AI output to Canopy client file, and build the connection to attach AI summaries to client records post-Brian review. Contingent on API access confirmation.</div></div></div>
+        <div class="scope-item"><div class="si-icon">📈</div><div><div class="si-title">QuickBooks Online Financial Insight Prompt (Phase 3)</div><div class="si-body">Build prompt that reads QBO data and generates quarterly performance summaries — what changed, what went up, what went down. Supports Brian's advisory prep calls with clients. Requires QBO migration underway.</div></div></div>
+        <div class="scope-item"><div class="si-icon">🎓</div><div><div class="si-title">User Training &amp; Handoff</div><div class="si-body">Live demo sessions at end of each phase. Final walkthrough with Brian (and Kevin) confirming all workflows are understood. Prompt library organized, labeled, and accessible to the full team.</div></div></div>
+        <div class="scope-item"><div class="si-icon">📝</div><div><div class="si-title">Workflow Documentation</div><div class="si-body">Document the end-to-end workflow for each phase: ProSeries export → HatzAI upload → prompt trigger → Brian review → client delivery. Delivered at project close as a firm operations reference.</div></div></div>
+      </div>
+    </div>
+
+    <div class="scope-section">
+      <div class="scope-section-header"><span>❌</span> Out of Scope</div>
+      <div class="oos-items">
+        <div class="oos-item"><strong>Hard Wall</strong>Custom AI model training or fine-tuning. This engagement uses existing foundation models (Claude, ChatGPT, Grok) via HatzAI. No custom training.</div>
+        <div class="oos-item"><strong>Hard Wall</strong>Canopy integration build if API access is not confirmed. Phase 3 Canopy work is fully contingent on Marc obtaining API documentation and access confirmation.</div>
+        <div class="oos-item"><strong>Excluded</strong>QuickBooks Desktop integration. QBO integration only — Brian is migrating to QBO and that must be underway before the QBO Insight Prompt is built.</div>
+        <div class="oos-item"><strong>Excluded</strong>Tax IQ evaluation. Brian already subscribes to Tax IQ. This is an advisory comparison only — no build hours are scoped for Tax IQ configuration or integration.</div>
+        <div class="oos-item"><strong>Excluded</strong>Historical data migration or retroactive Canopy record population. Phase 3 integration applies to new AI-generated summaries going forward, not past records.</div>
+        <div class="oos-item"><strong>Client-Managed</strong>User access provisioning and account management inside HatzAI. Plus 1 configures the tenant; Brian manages team member access and permissions.</div>
+        <div class="oos-item"><strong>Excluded</strong>Custom UI or client-facing portal development. Clients receive summaries via Brian's existing channels (email, Turbo Clients portal).</div>
+        <div class="oos-item"><strong>Excluded</strong>Ongoing prompt maintenance or model updates post-handoff. Covered under a separate retainer arrangement if needed after project close.</div>
+      </div>
+    </div>
+
+    <div class="scope-section">
+      <div class="scope-section-header"><span>🔮</span> Future Considerations (Post-MVP)</div>
+      <div class="card-grid" style="margin-bottom:0">
+        <div class="goal-item"><div class="gi-icon">📱</div><div class="gi-title">Turbo Clients Portal Automation</div><div class="gi-desc">Once summaries are consistently generated, explore automating delivery directly to the Turbo Clients portal rather than manual email — requires portal API or integration capability review.</div></div>
+        <div class="goal-item"><div class="gi-icon">🧠</div><div class="gi-title">Advisory Report Automation</div><div class="gi-desc">Extend the QBO Insight Prompt into a full recurring advisory report — delivered monthly or quarterly to clients as a standalone engagement deliverable. Scoped post-Phase 3 stability.</div></div>
+        <div class="goal-item"><div class="gi-icon">👥</div><div class="gi-title">Team-Wide Prompt Access &amp; Training</div><div class="gi-desc">Once prompt library is stable, expand HatzAI access to additional staff with structured training. Prompts currently configured for Brian and Kevin; team rollout deferred until Phase 1 is proven.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASED PLAN -->
+  <div id="tab-phases" class="tab-panel">
+    <div class="section-title">Phased Build Plan</div>
+    <div class="section-desc">Four phases mapping to the 3-phase client engagement. Phase 1 (Foundation) covers tenant setup and governance. Phase 2 (Build) covers all prompt engineering. Phase 3 (Test &amp; UAT) covers Brian's sign-off cycles. Phase 4 (Integration &amp; Handoff) covers Canopy, QBO, and final delivery.</div>
+
+    <!-- PHASE 1 -->
+    <div class="phase-card low">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">1</div>
+          <div>
+            <div class="phase-name">Secure AI Foundation</div>
+            <div class="phase-purpose">Configure the HatzAI tenant, establish the AI governance policy, and collect the sample tax return from Brian — before any prompt engineering begins.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill low">Low Risk</span>
+          <span class="duration-tag">1–2 weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>HatzAI tenant configured and verified</li>
+            <li>AI governance policy drafted (Brian reviews)</li>
+            <li>Sample tax return received from Brian</li>
+            <li>Workflow documentation started</li>
+            <li>Model access confirmed (Claude, ChatGPT, Grok, Gemini)</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>HatzAI tenant setup (2–3 hrs)</li>
+            <li>Draft and review AI governance policy (1–2 hrs)</li>
+            <li>Brian sends sample standard blank tax return to Jessica</li>
+            <li>Document ProSeries → HatzAI upload workflow</li>
+            <li>Confirm model selection approach for prompt testing</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>April 12 demo completed and project confirmed</li>
+            <li>Brian and Kevin confirmed as primary users</li>
+            <li>HatzAI subscription active for Brian's firm</li>
+            <li>Marc has confirmed he will coordinate Canopy API info</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>HatzAI tenant is live and model access confirmed. Governance policy reviewed by Brian (email sign-off). Sample tax return received by Jessica. No access blockers remain.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>The most common Phase 1 delay is the client not sending the sample return. Prompt engineering cannot begin without it. Follow up with Brian within 48 hours of the April 12 demo if not received.</p></div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-card medium">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">2</div>
+          <div>
+            <div class="phase-name">Prompt Engineering &amp; Build</div>
+            <div class="phase-purpose">Build, iterate, and finalize all prompt library items for both Phase 1 (core 3 prompts) and Phase 2 (advanced 2 prompts) using the sample return as test data. Best-performing model is pinned per prompt.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill medium">Medium Risk</span>
+          <span class="duration-tag">5–7 weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>Tax Return Executive Summary prompt (tested)</li>
+            <li>Form Extraction prompt (tested)</li>
+            <li>Tax Research Assistant prompt (tested)</li>
+            <li>Year-Over-Year Comparison prompt</li>
+            <li>Planning Opportunity Finder prompt</li>
+            <li>Prompt library organized and labeled in HatzAI</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>Prompt engineering: Tax Return Summary (4–6 hrs)</li>
+            <li>Prompt engineering: Form Extraction (2–3 hrs)</li>
+            <li>Prompt engineering: Research Assistant (3–4 hrs)</li>
+            <li>Testing on sample return; model comparison</li>
+            <li>Phase 2 prompts: YOY + Planning (6–8 hrs)</li>
+            <li>Prompt library organization (1–2 hrs)</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>Phase 1 exit criteria met</li>
+            <li>Sample tax return received</li>
+            <li>HatzAI tenant live</li>
+            <li>Governance policy reviewed by Brian</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>All 5 prompts run end-to-end on the sample return without errors. Outputs reviewed internally and meet accuracy threshold. Best model pinned per prompt. Prompt library organized in HatzAI.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>Scope creep is highest in this phase. "Can you also add…" requests mid-prompt-build require a change request. Do not absorb undocumented additions into the current hours.</p></div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase-card medium">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">3</div>
+          <div>
+            <div class="phase-name">Live Demo, UAT &amp; Refinement</div>
+            <div class="phase-purpose">Brian reviews all prompt outputs live against real or redacted tax returns. Feedback is captured, refinements are made, and Brian signs off on Phase 1 and Phase 2 deliverables before integration begins.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill medium">Medium Risk</span>
+          <span class="duration-tag">2–3 weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>Phase 1 live demo session (1 hr) completed</li>
+            <li>All 3 core prompts refined based on Brian's feedback</li>
+            <li>Phase 2 review session completed (1 hr)</li>
+            <li>Advanced prompts refined and approved</li>
+            <li>Written sign-off from Brian to proceed to Phase 3</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>Live demo: walk Brian through full workflow</li>
+            <li>Capture feedback; refinement sprint (2–3 hrs)</li>
+            <li>Summary formatting improvements (2–3 hrs)</li>
+            <li>Research assistant enhancements (2–3 hrs)</li>
+            <li>Phase 2 review with Brian (1 hr)</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>Phase 2 exit criteria met</li>
+            <li>Brian available for demo session (1 hr min)</li>
+            <li>Real or redacted tax return ready for demo</li>
+            <li>Demo date confirmed in advance</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>Brian has reviewed all prompt outputs live. Feedback loop complete. All refinements applied. Brian provides written sign-off (email or ClickUp) to proceed to Canopy integration. Zero open feedback items.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>Brian's availability is the gate for this phase. If Brian is unavailable or delays the demo, Phase 3 start slides. Confirm demo date at the end of Phase 2 build — do not wait for Brian to initiate scheduling.</p></div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase-card low">
+      <div class="phase-header">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          <div class="phase-num">4</div>
+          <div>
+            <div class="phase-name">System Integration &amp; Handoff</div>
+            <div class="phase-purpose">Build and test the Canopy API integration and QuickBooks Online Insight Prompt. Complete end-to-end testing across all systems and deliver final documentation and handoff.</div>
+          </div>
+        </div>
+        <div class="phase-meta-right">
+          <span class="risk-pill low">Low Risk</span>
+          <span class="duration-tag">10–14 weeks</span>
+        </div>
+      </div>
+      <div class="phase-cols">
+        <div class="phase-col">
+          <h4>Deliverables</h4>
+          <ul>
+            <li>Canopy API discovery and architecture doc</li>
+            <li>AI Summary → Canopy integration live</li>
+            <li>Advisory Notes automation to Canopy</li>
+            <li>QuickBooks Online Financial Insight Prompt</li>
+            <li>End-to-end system test complete</li>
+            <li>Full workflow documentation and handoff</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>Canopy API discovery (2–3 hrs)</li>
+            <li>Integration architecture design (2–3 hrs)</li>
+            <li>Build AI Summary → Canopy link (6–8 hrs)</li>
+            <li>Advisory Notes automation (3–4 hrs)</li>
+            <li>QBO Insight Prompt build (4–5 hrs)</li>
+            <li>End-to-end testing + Phase 3 review (5–6 hrs)</li>
+          </ul>
+        </div>
+        <div class="phase-col">
+          <h4>Entry Criteria</h4>
+          <ul>
+            <li>Phase 3 sign-off received from Brian</li>
+            <li>Canopy API access confirmed by Marc</li>
+            <li>QBO migration underway (for QBO Insight Prompt)</li>
+            <li>Production credentials ready</li>
+          </ul>
+        </div>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-box"><h5>✅ Exit Criteria (Done When…)</h5><p>AI summary → Canopy integration working end-to-end in production. QBO Insight Prompt generating usable financial summaries. Full documentation delivered. Brian and Kevin confirm system is working as expected. 30-day support window starts.</p></div>
+        <div class="criteria-box"><h5>⚠️ Risk Note</h5><p>Canopy API access is the single biggest Phase 4 risk. Marc must initiate the API access conversation with Canopy before Phase 3 UAT ends. Phase 4 hours are preliminary and will be re-estimated once API documentation is reviewed.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MILESTONES -->
+  <div id="tab-milestones" class="tab-panel">
+    <div class="section-title">Milestone &amp; Acceptance Criteria Tracker</div>
+    <div class="section-desc">Six milestones spanning all three client phases. Each has a tangible output and a testable acceptance criterion. "It works" is not an acceptance criterion.</div>
+
+    <div class="milestone-item">
+      <div class="m-num">M1</div>
+      <div class="m-main">
+        <div class="m-title">HatzAI Tenant Configured &amp; Governance Policy Reviewed</div>
+        <div class="m-output">Output: Live HatzAI tenant with model access confirmed + AI governance policy reviewed by Brian</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Brian can log into HatzAI and access at least 3 AI models (Claude, ChatGPT, Grok). Governance policy reviewed by Brian via email or meeting. No pending configuration items. Sample tax return received by Jessica.</div>
+        <div class="blocker-flag">⚠️ Blocked on: Brian sends sample tax return to Jessica (due before/at April 12 demo)</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Foundation</div>
+        <div class="m-owner">Jessica Peaden</div>
+        <div class="m-target">Week 1–2</div>
+        <div class="m-time">~4h → "14400000"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M2</div>
+      <div class="m-main">
+        <div class="m-title">Core Prompt Library Built &amp; Internally Tested</div>
+        <div class="m-output">Output: Three tested prompts in HatzAI — Tax Return Summary, Form Extraction, Tax Research Assistant</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> All 3 prompts execute on the sample tax return without errors. Internal output review passes Jessica's quality check. Best-performing model identified and pinned for each prompt. Outputs are logically structured and ready for Brian review.</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Build</div>
+        <div class="m-owner">Jessica Peaden</div>
+        <div class="m-target">Week 2–4</div>
+        <div class="m-time">~11h → "39600000"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M3</div>
+      <div class="m-main">
+        <div class="m-title">Phase 1 Live Demo Signed Off by Brian</div>
+        <div class="m-output">Output: Brian reviews all 3 core prompts live and provides written approval to proceed</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> Brian walks through the full workflow live (ProSeries export → HatzAI upload → prompt run → output). All refinements from demo feedback are applied. Brian confirms output meets expectations via email or ClickUp comment. Workflow documentation delivered.</div>
+        <div class="blocker-flag">⚠️ Blocked on: Brian's availability for live demo session (~1 hr)</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Test &amp; UAT</div>
+        <div class="m-owner">Jessica Peaden / Marc Umstead</div>
+        <div class="m-target">Week 4–5</div>
+        <div class="m-time">~5h → "18000000"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M4</div>
+      <div class="m-main">
+        <div class="m-title">Phase 2 Prompt Library Complete &amp; Approved</div>
+        <div class="m-output">Output: Full 5-prompt library organized in HatzAI — all prompts described, labeled, and accessible to Brian and Kevin</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> YOY Comparison and Planning Opportunity Finder prompts generate usable output on a test return. Summary formatting improvements applied based on Phase 1 feedback. Prompt library fully organized with descriptions and usage notes. Brian confirms Phase 2 review session complete.</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Build / UAT</div>
+        <div class="m-owner">Jessica Peaden</div>
+        <div class="m-target">Week 8–10</div>
+        <div class="m-time">~14h → "50400000"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M5</div>
+      <div class="m-main">
+        <div class="m-title">Canopy Integration &amp; Advisory Notes Automation Live</div>
+        <div class="m-output">Output: AI-generated summaries automatically attaching to Canopy client records after Brian's review</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> End-to-end test: ProSeries PDF → HatzAI → AI summary → Brian review → summary attaches to Canopy client file. Advisory notes automation saving to Canopy post-delivery. Zero data loss in transfer. Integration tested on at least 3 client records.</div>
+        <div class="blocker-flag">⚠️ Blocked on: Canopy API access confirmed by Marc (PENDING)</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Integration</div>
+        <div class="m-owner">Jessica Peaden</div>
+        <div class="m-target">Week 16–19</div>
+        <div class="m-time">~19h → "68400000"</div>
+      </div>
+    </div>
+
+    <div class="milestone-item">
+      <div class="m-num">M6</div>
+      <div class="m-main">
+        <div class="m-title">QuickBooks Insight Prompt &amp; Final Handoff</div>
+        <div class="m-output">Output: QBO Financial Insight Prompt live + full system documented and handed off to Brian</div>
+        <div class="m-criteria"><strong>Acceptance:</strong> QBO Insight Prompt generates a quarterly performance summary with specific financial highlights (revenue, expenses, changes). End-to-end test across all systems passes. Final walkthrough completed with Brian. All documentation delivered to client SharePoint. 30-day support window begins.</div>
+      </div>
+      <div class="m-side">
+        <div class="m-phase">Integration / Handoff</div>
+        <div class="m-owner">Jessica Peaden / Marc Umstead</div>
+        <div class="m-target">Week 21–23</div>
+        <div class="m-time">~6h → "21600000"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCKERS & CRITICAL PATH -->
+  <div id="tab-blockers" class="tab-panel">
+    <div class="section-title">Blockers &amp; Critical Path</div>
+    <div class="section-desc">The longest dependent chain from today to full go-live. Client-action items are the highest-leverage items on this list.</div>
+
+    <div class="cp-box">
+      <div class="card-title" style="margin-bottom:8px;">🔗 Critical Path — Full Project</div>
+      <div class="cp-chain">
+        <div class="cp-step client">Brian sends sample tax return</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">HatzAI tenant configured</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">Core prompts built &amp; tested</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step client">Brian available for demo</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">Phase 1 sign-off</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">Phase 2 prompts built</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step client">Brian Phase 2 review</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step blocker">Canopy API confirmed</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step">Integration built &amp; tested</div>
+        <div class="cp-arrow">→</div>
+        <div class="cp-step gate">Full Go-Live</div>
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--muted);">
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:14px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);"></span> Client action required</span>
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:14px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--red-bg);border:1px solid var(--red-bdr);"></span> Build-blocking</span>
+        <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--green-bg);border:1px solid var(--green-bdr);"></span> Gate / approval</span>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">🚧 Full Blocker Table</div>
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Blocker</th><th>Severity</th><th>Owner</th><th>Due</th><th>Workaround</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>B-1</td>
+            <td><strong>Sample tax return not yet received</strong><small>Prompt engineering (Tax Return Summary, Form Extraction) cannot begin without a sample return to test against. Jessica needs the file before Phase 2 build starts.</small></td>
+            <td><span class="blocker-sev build">Build-Blocking</span></td>
+            <td>Brian Goodman</td>
+            <td>By Apr 12, 2026</td>
+            <td>None for Phase 2 — hard dependency</td>
+          </tr>
+          <tr>
+            <td>B-2</td>
+            <td><strong>Canopy API access not confirmed</strong><small>Phase 4 integration build cannot start without Canopy API documentation and access. Marc is responsible for initiating this with Canopy. Every week of delay pushes Phase 4 start.</small></td>
+            <td><span class="blocker-sev build">Build-Blocking</span></td>
+            <td>Marc Umstead</td>
+            <td>Before Phase 4 start (~Week 13)</td>
+            <td>Phase 4 hours re-estimated once API docs reviewed</td>
+          </tr>
+          <tr>
+            <td>B-3</td>
+            <td><strong>AI governance policy not yet signed off</strong><small>Prompts should not go into production use before Brian reviews and approves the governance policy. Prompts can be built in parallel but should not be used with live client data until sign-off.</small></td>
+            <td><span class="blocker-sev warn">Warning</span></td>
+            <td>Brian Goodman / Jessica Peaden</td>
+            <td>End of Phase 1</td>
+            <td>Build and test with sample data only until signed</td>
+          </tr>
+          <tr>
+            <td>B-4</td>
+            <td><strong>QuickBooks Desktop → QBO migration timeline unclear</strong><small>Brian expects to migrate to QBO "within the next year." The QBO Insight Prompt requires QBO to be populated with data. If migration is delayed, Phase 4 QBO work slides.</small></td>
+            <td><span class="blocker-sev vendor">Vendor / Timeline</span></td>
+            <td>Brian Goodman</td>
+            <td>Confirm by Phase 3 UAT</td>
+            <td>Proceed with other Phase 4 items; QBO prompt deferred if migration not ready</td>
+          </tr>
+          <tr>
+            <td>B-5</td>
+            <td><strong>Brian's demo/review session availability</strong><small>Both the Phase 1 demo and Phase 2 review session require Brian's time (1 hr each). If Brian is unavailable, UAT and sign-off slide, delaying Phase 4 start.</small></td>
+            <td><span class="blocker-sev warn">Warning</span></td>
+            <td>Marc Umstead (scheduling)</td>
+            <td>As each phase completes</td>
+            <td>Schedule sessions in advance; don't wait for Brian to initiate</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚠️ Critical Path Notes</div>
+      <p><strong>Longest delay chain:</strong> Sample return delay → build cannot start → demo pushes → Canopy API delay → Phase 4 start pushed → full go-live delayed. Brian's action on B-1 and Marc's action on B-2 are the two highest-leverage items.<br><br><strong>Buffer recommendation:</strong> Build a 2-week buffer between Phase 2 sign-off and Phase 4 integration start to allow Canopy API scope to be validated. Phase 4 hours are explicitly marked as preliminary until API documentation is reviewed.</p>
+    </div>
+  </div>
+
+  <!-- RISK REGISTER -->
+  <div id="tab-risks" class="tab-panel">
+    <div class="section-title">Risk Register</div>
+    <div class="section-desc">AI-specific risks evaluated for this engagement. High-impact items are escalated immediately — not documented and ignored.</div>
+
+    <div class="risk-card high">
+      <div class="risk-header">
+        <span class="risk-id">R-1</span>
+        <span class="risk-title">AI Output Accuracy / Hallucination in Tax Summaries</span>
+        <span class="impact-pill high">Impact: High</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: Medium</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>LLM generates incorrect numbers, fabricated deduction amounts, or inaccurate form references in tax summaries that Brian sends to clients. Tax data accuracy is non-negotiable — errors create client liability.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Brian reviews every AI-generated summary before client delivery. Prompts are designed to cite page/line sources ("I pulled this from page 8, line 12"). Accuracy threshold defined in UAT before live use.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Revert to manual summarization for that return. Engage in prompt re-engineering sprint. Document any errors and use them to improve the prompt. Do not send AI outputs to clients without Brian's explicit review.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>Jessica Peaden (prompt design) / Brian Goodman (review gate)</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card high">
+      <div class="risk-header">
+        <span class="risk-id">R-2</span>
+        <span class="risk-title">Staff Using Free/Unmanaged AI Tools for Client Data</span>
+        <span class="impact-pill high">Impact: High</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: Medium</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p><em>"I hesitate sending out tax return or posting tax returns to ChatGPT because I don't know where the information is going."</em> Without a governance policy and clear workflow, Brian or Kevin may continue using free ChatGPT or free Copilot for client data during the build period.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>AI governance policy signed by Brian before any client data is processed. HatzAI is the only approved tool. Policy explicitly states what is never to be uploaded to free tools. Communicated to Kevin as well.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>If free AI tool use is discovered with client data, treat as a data governance incident. Review what was shared, assess exposure, update policy. Accelerate governance policy sign-off.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>Brian Goodman (firm policy) / Marc Umstead (accountability)</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card high">
+      <div class="risk-header">
+        <span class="risk-id">R-3</span>
+        <span class="risk-title">Canopy API Access Delayed or Unavailable</span>
+        <span class="impact-pill high">Impact: High</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: Medium</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Canopy may not expose the API endpoints needed for the integration (client record access, summary attachment, advisory notes). Discovery call confirmed Canopy has an API but specific capabilities are unverified. If API does not support the required operations, Phase 4 integration scope changes significantly.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Marc initiates Canopy API documentation review as soon as Phase 3 sign-off is received. Phase 4 hours are explicitly marked as preliminary pending documentation review. Architecture is designed for this integration only after API is confirmed.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>If full integration is not possible, fall back to a manual export workflow: Brian copies AI summary and pastes to Canopy manually. Rescope Phase 4 integration hours. Notify Brian of constraint and revised timeline.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>Marc Umstead</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <span class="risk-id">R-4</span>
+        <span class="risk-title">Scope Creep — New Prompt Requests During Build</span>
+        <span class="impact-pill high">Impact: High</span>
+        <span class="impact-pill high" style="margin-left:4px;">Likelihood: High</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Once Brian sees what prompts can do, he will likely think of additional use cases ("can you also do a prompt for…"). The discovery call already surfaced QuickBooks insights as a spontaneous addition. Undocumented additions absorb hours that weren't scoped.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Reference the scope document at every check-in. New prompt requests go on a backlog, not into the current build. Anything outside the 5 scoped prompts requires a change request with cost/timeline impact stated before work begins.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Document the request and defer to post-Phase 3 or a separate retainer engagement. Marc communicates to Brian that additional prompts are welcome but require scoping — framed positively, not as a refusal.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>Marc Umstead / Jessica Peaden</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <span class="risk-id">R-5</span>
+        <span class="risk-title">Tax Return Format Variability Breaks Prompts</span>
+        <span class="impact-pill medium">Impact: Medium</span>
+        <span class="impact-pill high" style="margin-left:4px;">Likelihood: High</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Different clients have different return structures — different forms, different states, different number of pages. Prompts built on one sample return may not generalize. Form Extraction prompt designed using section/form-based logic (not page numbers) to handle this, but variability is still a real risk.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Jessica designed Form Extraction using section/form-based logic rather than fixed page numbers per Brian's guidance. Test prompts on at least 2–3 different return types during Phase 2. Edge cases documented and handled before Phase 3 sign-off.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>Add prompt branching logic for common variations (e.g., no local return included). Document known edge cases in the HatzAI prompt library. Brian flags any return type that doesn't work for a targeted refinement sprint.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>Jessica Peaden</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card medium">
+      <div class="risk-header">
+        <span class="risk-id">R-6</span>
+        <span class="risk-title">QBO Migration Delayed — Phase 4 QBO Insight Prompt Blocked</span>
+        <span class="impact-pill medium">Impact: Medium</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: Medium</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Brian confirmed migration from QuickBooks Desktop to QBO is expected "within the next year" but is not confirmed. The QBO Financial Insight Prompt requires QBO to be populated with data to be useful. If migration is delayed, this deliverable cannot be built or tested.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>Confirm QBO migration status at Phase 3 review. If QBO is live and populated, proceed with the Insight Prompt as scoped. Build Canopy integration first — QBO prompt can be added after migration is confirmed.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>If QBO migration is not underway by Phase 4 start, defer QBO Insight Prompt to a post-project retainer. Document as deferred in handoff notes. No additional cost to Brian for the deferral.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>Brian Goodman (migration decision) / Marc Umstead (tracking)</p></div>
+      </div>
+    </div>
+
+    <div class="risk-card low">
+      <div class="risk-header">
+        <span class="risk-id">R-7</span>
+        <span class="risk-title">Tax IQ Duplicate Subscription / Overlap with HatzAI Research Prompt</span>
+        <span class="impact-pill low">Impact: Low</span>
+        <span class="impact-pill medium" style="margin-left:4px;">Likelihood: High</span>
+      </div>
+      <div class="risk-body">
+        <div class="risk-col"><h5>Description</h5><p>Brian already subscribes to Tax IQ which includes a tax AI component. If the Tax Research Assistant prompt in HatzAI delivers equivalent quality, there may be a redundant subscription. This is an advisory decision, not a build decision, but should be surfaced clearly.</p></div>
+        <div class="risk-col"><h5>Mitigation</h5><p>After Phase 1 demo, run a side-by-side comparison: same tax question in HatzAI Research Prompt vs. Tax IQ AI. Compare citation quality, accuracy, and usability. Present Brian with a clear recommendation.</p></div>
+        <div class="risk-col"><h5>Contingency</h5><p>If Tax IQ is better, route tax research there and use HatzAI for document processing only. If HatzAI is equivalent or better, Brian can cancel Tax IQ and reduce subscription costs. This decision has no impact on the build timeline.</p></div>
+        <div class="risk-col"><h5>Owner</h5><p>Jessica Peaden (evaluation) / Brian Goodman (subscription decision)</p></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;margin-top:4px;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">📋 Assumptions Table</div>
+      <table class="data-table">
+        <thead><tr><th>Assumption</th><th>Impact if False</th><th>How to Confirm</th></tr></thead>
+        <tbody>
+          <tr><td>Brian provides a sample blank/redacted tax return before Phase 2 build</td><td>Prompt engineering cannot begin — all of Phase 2 delayed</td><td>Explicit request made at April 12 demo; follow up within 48 hrs</td></tr>
+          <tr><td>Canopy has an accessible API with client record write capabilities</td><td>Phase 4 integration scope changes significantly; may fall back to manual workflow</td><td>Marc reviews Canopy API docs and confirms endpoints by Phase 3</td></tr>
+          <tr><td>HatzAI operates in a genuinely siloed environment (no external model training)</td><td>Data governance policy and Brian's trust in the platform are undermined</td><td>Confirmed by Marc/Jessica in intro call; verify in HatzAI documentation</td></tr>
+          <tr><td>Brian and Kevin are the only users in Phase 1–2; team expansion is Phase 3+</td><td>Training and prompt access scope increases if more users are added mid-build</td><td>Confirm with Brian at Phase 1 kickoff</td></tr>
+          <tr><td>QBO migration is underway by Phase 4 start (~Week 13)</td><td>QBO Financial Insight Prompt cannot be built or tested; deferred</td><td>Ask Brian for migration status at Phase 3 review session</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- OPEN ITEMS -->
+  <div id="tab-openitems" class="tab-panel">
+    <div class="section-title">Open Decisions &amp; Gaps</div>
+    <div class="section-desc">Unresolved questions that affect delivery. Red items are build-blocking and must close before build starts.</div>
+    <div class="build-block-banner"><span>🔴</span><span><strong>2 Build-Blocking Items</strong> — Must resolve before Phase 2 prompt engineering begins.</span></div>
+
+    <div class="open-item blocking">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-1</span>
+        <span class="tag tag-red">⛔ BUILD-BLOCKING</span>
+        <div class="open-item-title">Sample tax return not yet sent by Brian</div>
+      </div>
+      <div class="open-item-desc">Jessica cannot begin prompt engineering for Tax Return Summary or Form Extraction without a sample standard blank tax return to test against. Brian confirmed he would send this before the April 12 demo. Without it, Milestone 2 cannot start.</div>
+      <div class="open-item-desc" style="color:var(--muted);font-size:12px;">Impact: Phase 2 build cannot start. Target: receive by April 12, 2026. If not received by demo date, follow up immediately.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">Brian Goodman</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">April 12, 2026</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-cyan">Access / Data</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item blocking">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-2</span>
+        <span class="tag tag-red">⛔ BUILD-BLOCKING</span>
+        <div class="open-item-title">Canopy API availability and endpoint capabilities not confirmed</div>
+      </div>
+      <div class="open-item-desc">Marc confirmed Canopy has an API, but specific endpoints (client record write, summary attachment) have not been reviewed. Phase 4 integration hours are marked as preliminary. Cannot architect or estimate Phase 4 work until API documentation is reviewed.</div>
+      <div class="open-item-desc" style="color:var(--muted);font-size:12px;">Impact: Phase 4 build cannot start; Phase 4 hours preliminary only. Target: Marc initiates Canopy API discovery before Phase 3 sign-off (~Week 12).</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">Marc Umstead</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">Before Week 13</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-purple">Tooling / Access</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-3</span>
+        <div class="open-item-title">AI governance policy not yet reviewed by Brian</div>
+      </div>
+      <div class="open-item-desc">Jessica will draft the 1-page firm AI usage policy in Phase 1. Brian needs to review and sign off before any prompts go into production use with live client data. This is not a hard build blocker (prompts can be built and tested on sample data) but must close before go-live.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">Jessica Peaden (draft) / Brian Goodman (sign-off)</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">End of Phase 1 (~Week 2)</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr);">Security</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-4</span>
+        <div class="open-item-title">Best AI model per prompt not yet determined</div>
+      </div>
+      <div class="open-item-desc">HatzAI supports Claude, ChatGPT, Grok, and Gemini. Marc described the approach: run 2–3 models against the task, compare outputs, pin the best one. This decision happens during Phase 2 testing, not before. No action required now — surfaces here as a reminder to document the model selection rationale per prompt.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">Jessica Peaden</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">During Phase 2 testing</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-purple">Tooling</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-5</span>
+        <div class="open-item-title">Tax IQ vs. HatzAI research prompt comparison — subscription decision pending</div>
+      </div>
+      <div class="open-item-desc">Brian already subscribes to Tax IQ which includes a tax AI component. After Phase 1 demo, run a side-by-side comparison to determine if Tax IQ provides sufficient research capability or if the HatzAI Research Prompt is equivalent or better. Advisory decision only — no build impact.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">Jessica Peaden (eval) / Brian Goodman (decision)</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">After Phase 1 demo (Week 5)</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-blue">Scope / Cost</span></span></div>
+      </div>
+    </div>
+
+    <div class="open-item">
+      <div class="open-item-header">
+        <span class="open-item-id">OI-6</span>
+        <div class="open-item-title">QuickBooks Desktop → QBO migration timeline not confirmed</div>
+      </div>
+      <div class="open-item-desc">Brian said migration is expected within the next year. QBO Insight Prompt in Phase 4 requires QBO to be populated with data. Need to confirm migration status at Phase 3 review. If QBO is not underway, this deliverable is deferred.</div>
+      <div class="open-item-footer">
+        <div class="oi-meta"><span class="label">Owner:</span><span class="value">Brian Goodman</span></div>
+        <div class="oi-meta"><span class="label">Target:</span><span class="value">Confirm at Phase 3 review (~Week 12)</span></div>
+        <div class="oi-meta"><span class="label">Category:</span><span class="value"><span class="tag tag-blue">Scope</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL & INTEGRATION TRACK -->
+  <div id="tab-tooltrack" class="tab-panel">
+    <div class="section-title">Tool &amp; Integration Track</div>
+    <div class="section-desc">Platform setup, credential pipeline, and architecture map. Phase 4 integration is contingent on Canopy API access confirmation by Marc.</div>
+    <div class="notice warn"><span class="n-icon">⚠️</span><span><strong>Canopy API access is on the Phase 4 critical path.</strong> Marc must initiate Canopy API documentation review <strong>before Phase 3 sign-off (Week 12)</strong>. Do not wait until Phase 4 starts to begin the API discovery conversation.</span></div>
+
+    <div class="card">
+      <div class="card-title">🔌 Integration &amp; Setup Pipeline</div>
+      <div class="tool-steps">
+        <div class="tool-step done"><div class="ts-icon">📞</div><div class="ts-label">Intro Call Completed</div><div class="ts-date">Mar 11, 2026</div><div class="ts-status done-s">✓ Done</div></div>
+        <div class="tool-step active"><div class="ts-icon">🖥️</div><div class="ts-label">HatzAI Demo &amp; Kickoff</div><div class="ts-date">Apr 12, 2026</div><div class="ts-status active-s">In Progress</div></div>
+        <div class="tool-step"><div class="ts-icon">🏠</div><div class="ts-label">HatzAI Tenant Live</div><div class="ts-date">~Apr 14</div><div class="ts-status pending">Pending</div></div>
+        <div class="tool-step"><div class="ts-icon">📄</div><div class="ts-label">Sample Return Received</div><div class="ts-date">By Apr 12</div><div class="ts-status pending">Pending</div></div>
+        <div class="tool-step"><div class="ts-icon">🤖</div><div class="ts-label">Prompts Built &amp; Tested</div><div class="ts-date">~May 2026</div><div class="ts-status pending">Pending</div></div>
+        <div class="tool-step"><div class="ts-icon">🔗</div><div class="ts-label">Canopy API Confirmed</div><div class="ts-date">~Week 12</div><div class="ts-status pending">Pending</div></div>
+        <div class="tool-step"><div class="ts-icon">🚀</div><div class="ts-label">Full Go-Live</div><div class="ts-date">~Sep 2026</div><div class="ts-status pending">Pending</div></div>
+      </div>
+    </div>
+
+    <!-- WORKFLOW DIAGRAM -->
+    <div class="card">
+      <div class="card-title">📐 Tax Document Processing Workflow — HatzAI</div>
+      <p style="margin-bottom:14px;font-size:12px;">Happy path: ProSeries → PDF → HatzAI upload → prompt selection → AI processing → Brian review → client delivery. Error path: flag for manual review.</p>
+      <div style="overflow-x:auto;">
+        <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;min-width:600px;display:block;">
+          <!-- Background -->
+          <rect width="900" height="260" rx="12" fill="#f4f6fb"/>
+          <!-- STEP 1: ProSeries -->
+          <rect x="20" y="100" width="110" height="60" rx="8" fill="#1e2d8a" stroke="#1e2d8a"/>
+          <text x="75" y="125" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="10" font-weight="700" fill="white">ProSeries</text>
+          <text x="75" y="139" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">Tax Software</text>
+          <text x="75" y="152" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)">Export PDF</text>
+          <!-- Arrow 1 -->
+          <line x1="130" y1="130" x2="155" y2="130" stroke="#8e9ab8" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- STEP 2: Combined PDF -->
+          <rect x="155" y="100" width="110" height="60" rx="8" fill="#e8ecf8" stroke="#c5ceed"/>
+          <text x="210" y="125" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="10" font-weight="700" fill="#1e2d8a">Combined PDF</text>
+          <text x="210" y="139" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">1040 · 8879 · YOY</text>
+          <text x="210" y="152" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">PA · Local returns</text>
+          <!-- Arrow 2 -->
+          <line x1="265" y1="130" x2="290" y2="130" stroke="#8e9ab8" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- STEP 3: HatzAI Upload -->
+          <rect x="290" y="100" width="120" height="60" rx="8" fill="#29abe2" stroke="#29abe2"/>
+          <text x="350" y="122" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="10" font-weight="700" fill="white">HatzAI</text>
+          <text x="350" y="136" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="rgba(255,255,255,0.85)">Upload PDF</text>
+          <text x="350" y="149" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="rgba(255,255,255,0.85)">Select Prompt</text>
+          <!-- Arrow 3 -->
+          <line x1="410" y1="130" x2="435" y2="130" stroke="#8e9ab8" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- STEP 4: AI Processing -->
+          <rect x="435" y="90" width="120" height="80" rx="8" fill="#f5f3ff" stroke="#ddd6fe"/>
+          <text x="495" y="115" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="10" font-weight="700" fill="#7c3aed">AI Processing</text>
+          <text x="495" y="129" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">Claude / GPT / Grok</text>
+          <text x="495" y="142" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">Siloed — no data</text>
+          <text x="495" y="155" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">leaves tenant</text>
+          <!-- Arrow 4 happy -->
+          <line x1="555" y1="120" x2="580" y2="120" stroke="#8e9ab8" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- Arrow 4 error path -->
+          <line x1="495" y1="170" x2="495" y2="200" stroke="#a32d2d" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowred)"/>
+          <rect x="435" y="200" width="120" height="40" rx="6" fill="#fef2f2" stroke="#fecaca"/>
+          <text x="495" y="217" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#dc2626" font-weight="600">Low Quality Output</text>
+          <text x="495" y="230" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#dc2626">→ Flag for Manual Review</text>
+          <!-- STEP 5: Brian Review -->
+          <rect x="580" y="90" width="120" height="80" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+          <text x="640" y="115" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="10" font-weight="700" fill="#b45309">Brian Review</text>
+          <text x="640" y="129" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">Human-in-the-loop</text>
+          <text x="640" y="142" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">Verify accuracy</text>
+          <text x="640" y="155" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">Approve output</text>
+          <!-- Arrow 5 -->
+          <line x1="700" y1="130" x2="725" y2="130" stroke="#8e9ab8" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- STEP 6: Client Delivery -->
+          <rect x="725" y="100" width="120" height="60" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+          <text x="785" y="125" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="10" font-weight="700" fill="#16a34a">Client Delivery</text>
+          <text x="785" y="139" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">Email / Turbo Clients</text>
+          <text x="785" y="152" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#5a6589">Executive Summary</text>
+          <!-- Phase 3: Canopy arrow (below main flow) -->
+          <line x1="640" y1="170" x2="640" y2="210" stroke="#29abe2" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowcyan)"/>
+          <rect x="580" y="210" width="120" height="36" rx="6" fill="#e0f4fc" stroke="#a8ddf5"/>
+          <text x="640" y="225" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#0077aa" font-weight="600">Phase 3: Canopy</text>
+          <text x="640" y="238" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#0077aa">Auto-attach to client record</text>
+          <!-- Labels -->
+          <text x="75" y="92" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#1e2d8a" font-weight="600">STEP 1</text>
+          <text x="210" y="92" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#1e2d8a" font-weight="600">STEP 2</text>
+          <text x="350" y="92" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#1e2d8a" font-weight="600">STEP 3</text>
+          <text x="495" y="82" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#1e2d8a" font-weight="600">STEP 4</text>
+          <text x="640" y="82" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#1e2d8a" font-weight="600">STEP 5</text>
+          <text x="785" y="92" text-anchor="middle" font-family="DM Sans,Arial,sans-serif" font-size="9" fill="#1e2d8a" font-weight="600">STEP 6</text>
+          <!-- Legend -->
+          <rect x="20" y="20" width="860" height="28" rx="6" fill="rgba(30,45,138,0.04)" stroke="#dce2f0"/>
+          <text x="30" y="39" font-family="DM Sans,Arial,sans-serif" font-size="10" fill="#5a6589" font-weight="500">Happy Path: ProSeries → Combined PDF → HatzAI Upload → AI Processing → Brian Review → Client Delivery</text>
+          <text x="30" y="59" font-family="DM Sans,Arial,sans-serif" font-size="10" fill="#dc2626">— — Error path (manual review)</text>
+          <text x="200" y="59" font-family="DM Sans,Arial,sans-serif" font-size="10" fill="#0077aa">— — Phase 3: Canopy auto-attach</text>
+          <!-- Markers -->
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8e9ab8"/></marker>
+            <marker id="arrowred" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#a32d2d"/></marker>
+            <marker id="arrowcyan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#29abe2"/></marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">🗂 Integration &amp; Credential Status Table</div>
+      <table class="data-table">
+        <thead><tr><th>System / Platform</th><th>Purpose</th><th>Auth Type</th><th>Provided By</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>HatzAI Tenant</td><td>Primary AI platform — all document processing and prompt execution</td><td>Account Login</td><td>Plus 1 Technology</td><td><span class="tag tag-yellow">Pending Setup</span></td></tr>
+          <tr><td>Claude (via HatzAI)</td><td>Primary LLM for document writing, SOPs, structured summaries</td><td>HatzAI-managed</td><td>Plus 1 Technology</td><td><span class="tag tag-yellow">Pending Tenant</span></td></tr>
+          <tr><td>ChatGPT (via HatzAI)</td><td>Outlining; cross-check against Claude output</td><td>HatzAI-managed</td><td>Plus 1 Technology</td><td><span class="tag tag-yellow">Pending Tenant</span></td></tr>
+          <tr><td>Grok (via HatzAI)</td><td>Up-to-date tax law queries and research</td><td>HatzAI-managed</td><td>Plus 1 Technology</td><td><span class="tag tag-yellow">Pending Tenant</span></td></tr>
+          <tr><td>ProSeries</td><td>Source — produces combined tax return PDFs for upload</td><td>N/A (PDF export only)</td><td>Brian Goodman</td><td><span class="tag tag-green">In Use</span></td></tr>
+          <tr><td>Canopy API</td><td>Phase 4: attach AI summaries to client records; advisory notes automation</td><td>API Key / OAuth (TBD)</td><td>Brian Goodman / Marc Umstead</td><td><span class="tag tag-gray">Not Started — Pending Marc</span></td></tr>
+          <tr><td>QuickBooks Online</td><td>Phase 4: source data for QBO Financial Insight Prompt</td><td>OAuth 2.0 (TBD)</td><td>Brian Goodman</td><td><span class="tag tag-gray">Pending QBO Migration</span></td></tr>
+          <tr><td>Microsoft 365 (Email)</td><td>Client communication — Brian sends summaries via Outlook</td><td>Existing account</td><td>Brian Goodman</td><td><span class="tag tag-green">In Use</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🧠 AI Model &amp; Platform Setup</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0;">
+          <div class="model-card"><div class="mc-label">AI Platform</div><div class="mc-value">HatzAI</div><div class="mc-sub">Private siloed tenant — no data sent to external model providers</div></div>
+          <div class="model-card"><div class="mc-label">Models Available</div><div class="mc-value">58 models</div><div class="mc-sub">Claude, ChatGPT, Grok, Gemini + others; pinned per prompt after testing</div></div>
+          <div class="model-card"><div class="mc-label">Hosting</div><div class="mc-value">HatzAI Cloud</div><div class="mc-sub">Plus 1-managed tenant; not self-hosted</div></div>
+          <div class="model-card"><div class="mc-label">Est. Monthly Cost</div><div class="mc-value">[PENDING]</div><div class="mc-sub">HatzAI subscription pricing TBD — confirm with Marc</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">✅ Connection Validation Checklist</div>
+        <div class="checklist">
+          ☐ HatzAI tenant created and Brian/Kevin have login access<br>
+          ☐ All AI models (Claude, ChatGPT, Grok, Gemini) confirmed available<br>
+          ☐ Document upload tested with PDF file type<br>
+          ☐ Prompt library storage verified — prompts saving correctly<br>
+          ☐ Confirm no data logging to external providers (privacy verification)<br>
+          ☐ Canopy API documentation obtained and endpoints documented (Phase 4)<br>
+          ☐ Canopy API test call returns successful response (Phase 4)<br>
+          ☐ QBO OAuth flow tested (Phase 4 — pending QBO migration)
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">📋 Go-Live Gate Requirements</div>
+        <p><strong>Phase 1 Go-Live:</strong> ~May 2, 2026<br><br>
+        <strong>Pre-Go-Live Requirements (Phase 1):</strong><br>
+        HatzAI tenant live and model access confirmed<br>
+        All 3 core prompts pass testing on sample return<br>
+        Governance policy reviewed and signed by Brian<br>
+        Live demo completed and Brian approves outputs<br>
+        Workflow documentation delivered<br><br>
+        <strong>Phase 4 Go-Live:</strong> ~September 2026<br><br>
+        <strong>Rollback Plan:</strong> Disable Canopy integration webhook. Brian reverts to manually copying AI summary to Canopy. No HatzAI prompts are affected — only the Canopy sync stops.<br><br>
+        <strong>Approved By:</strong> Brian Goodman (pending Phase 1 demo sign-off)</p>
+      </div>
+      <div class="card">
+        <div class="card-title">🔒 Security &amp; Compliance Notes</div>
+        <p><strong>PII in Workflow:</strong> Yes — confidential client tax data including SSNs, income figures, financial data, and personal information is uploaded to HatzAI for processing.<br><br>
+        <strong>HatzAI Data Handling:</strong> HatzAI operates in a siloed environment. It does not send client information to external models or use inputs for model training. Jessica confirmed: "it doesn't save your contact, it doesn't use it for training."<br><br>
+        <strong>Data Retention Policy:</strong> [PENDING: confirm HatzAI's data retention policy with Plus 1 team — how long are uploaded documents stored in the tenant?]<br><br>
+        <strong>Credential Storage:</strong> HatzAI tenant credentials stored in Plus 1's Passportal. Canopy API keys (Phase 4) stored in Passportal once obtained.<br><br>
+        <strong>Compliance:</strong> No HIPAA requirement identified. Standard tax data confidentiality applies. Governance policy drafted in Phase 1 establishes firm-level rules.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE & RESOURCES -->
+  <div id="tab-timeline" class="tab-panel">
+    <div class="section-title">Timeline &amp; Resources</div>
+    <div class="section-desc">Sprint-by-sprint schedule across all 3 client phases. Hard dates noted where confirmed; ranges used elsewhere pending blocker resolution.</div>
+    <div class="notice info"><span class="n-icon">📅</span><span>Kickoff demo anchored to <strong>April 12, 2026</strong>. Phase 1 starts immediately after. Phase 4 timeline re-estimated after Canopy API documentation is reviewed.</span></div>
+
+    <div class="timeline-track">
+      <div class="tl-line"></div>
+
+      <div class="tl-week">
+        <div class="tl-dot done"></div>
+        <div class="tl-week-label">March 11, 2026 <span class="tl-tag">Discovery Complete</span></div>
+        <div class="tl-card"><h4>✅ Intro Call &amp; Discovery — Completed</h4><p>Brian confirmed AI needs, security concerns, and tool stack. HatzAI proposed as secure AI platform. Follow-up demo scheduled for April 12. Brian to send sample tax return before demo.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot pre"></div>
+        <div class="tl-week-label">April 12, 2026 <span class="tl-tag">Gate: Demo + Kickoff</span></div>
+        <div class="tl-card"><h4>🔐 Pre-Build Gate — Demo &amp; Project Confirmation</h4><p>HatzAI demo with Brian and Kevin. Confirm project scope, phases, and timeline. Brian sends sample blank tax return to Jessica. Governance policy draft shared for review. Phase 1 build begins immediately after.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 1–2 (Apr 14 – Apr 25) <span class="tl-tag">Phase 1: Foundation</span></div>
+        <div class="tl-card"><h4>🏗 Secure AI Foundation — Tenant Setup &amp; Governance</h4><p>HatzAI tenant configured. Governance policy drafted and sent to Brian for review. Sample tax return analyzed by Jessica to identify page/form structure for prompt engineering. Workflow documentation started.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 2–7 (Apr 25 – Jun 5) <span class="tl-tag">Phase 2: Build</span></div>
+        <div class="tl-card"><h4>🔧 Prompt Engineering — All 5 Prompts Built &amp; Tested</h4><p>Core 3 prompts (Tax Return Summary, Form Extraction, Research Assistant) built and internally tested. Model comparison completed; best model pinned per prompt. Phase 2 prompts (YOY Comparison, Planning Opportunity Finder) built. Prompt library organized and labeled.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 7–10 (Jun 5 – Jun 26) <span class="tl-tag">Phase 3: UAT</span></div>
+        <div class="tl-card"><h4>🧪 Live Demo &amp; UAT — Brian Review Cycles</h4><p>Phase 1 live demo: full workflow walkthrough with Brian. Feedback captured; refinements applied. Phase 2 review session with Brian. Summary formatting and research prompt improvements. Brian provides written sign-off to proceed to Phase 4.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 10–13 (Jun 26 – Jul 17) <span class="tl-tag">Phase 4 Prep</span></div>
+        <div class="tl-card"><h4>🔍 Canopy API Discovery &amp; Architecture Design</h4><p>Marc obtains Canopy API documentation. Jessica reviews endpoints and confirms integration feasibility. Integration architecture designed and documented. Phase 4 hours re-estimated based on API findings. QBO migration status confirmed with Brian.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot active"></div>
+        <div class="tl-week-label">Week 13–21 (Jul 17 – Sep 4) <span class="tl-tag">Phase 4: Integration</span></div>
+        <div class="tl-card"><h4>🔌 System Integration Build — Canopy + QBO</h4><p>Canopy integration built and tested: AI summary → Canopy client record. Advisory notes automation. QBO Financial Insight Prompt built and tested (if migration underway). End-to-end system test across all workflows.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">Week 21–23 (Sep 4 – Sep 18) <span class="tl-tag">Handoff</span></div>
+        <div class="tl-card"><h4>🚀 Final Handoff &amp; Documentation</h4><p>Phase 3 review and handoff session with Brian and Kevin. Full workflow documentation delivered. Prompt library finalized. Maintenance runbook delivered. 30-day support window begins.</p></div>
+      </div>
+
+      <div class="tl-week">
+        <div class="tl-dot"></div>
+        <div class="tl-week-label">30 / 60 / 90 Days Post-Launch</div>
+        <div class="tl-card"><h4>📊 Post-Launch Checkpoints</h4><p>30-day: Phase 1 stability and adoption check. Tax season usage review. 60-day: Phase 2 prompts in active use. Tax IQ comparison decision made. 90-day: ROI measurable; Phase 4 integration stable.</p></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">👥 Resource Table</div>
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>Role</th><th>Allocation</th><th>Phase(s)</th><th>Responsibilities</th></tr></thead>
+        <tbody>
+          <tr><td>Marc Umstead</td><td>Project Manager</td><td>As needed</td><td>All</td><td>Client communication, milestone tracking, Canopy API discovery, blocker escalation</td></tr>
+          <tr><td>Jessica Peaden</td><td>AI Architect / Lead Builder</td><td>Primary</td><td>1, 2, 3, 4</td><td>HatzAI tenant setup, all prompt engineering, integration build, testing, documentation</td></tr>
+          <tr><td>Brian Goodman</td><td>Client Champion</td><td>1 hr/session</td><td>1, 2, 3</td><td>Sample return provider, workflow approval, demo review, UAT sign-off</td></tr>
+          <tr><td>Kevin (Associate)</td><td>Client End User</td><td>Demo &amp; training</td><td>3, 4</td><td>UAT participation, end-user of prompt library in production</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">📋 Client-Side Commitments Required</div>
+        <div class="checklist">
+          ☐ Brian emails sample blank tax return to Jessica by April 12, 2026<br>
+          ☐ Brian reviews and signs off on AI governance policy (end of Phase 1)<br>
+          ☐ Brian available for 1-hr Phase 1 live demo session (~Week 7)<br>
+          ☐ Brian available for 1-hr Phase 2 review session (~Week 10)<br>
+          ☐ Brian provides confirmation on QBO migration status (~Week 12)<br>
+          ☐ Marc obtains Canopy API documentation before Phase 4 start (~Week 13)<br>
+          ☐ Brian provides go-live approval sign-off at project close
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔧 Infrastructure &amp; Tool Access</div>
+        <table class="data-table" style="margin-top:0;">
+          <thead><tr><th>Tool / System</th><th>Access Type</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>HatzAI Platform</td><td>Tenant admin — Plus 1 managed</td><td><span class="tag tag-yellow">Pending Setup</span></td></tr>
+            <tr><td>Claude / ChatGPT / Grok (via HatzAI)</td><td>HatzAI-managed API</td><td><span class="tag tag-yellow">Pending Tenant</span></td></tr>
+            <tr><td>ProSeries</td><td>PDF export only — Brian's existing tool</td><td><span class="tag tag-green">Ready</span></td></tr>
+            <tr><td>Canopy API</td><td>API Key — Brian/Marc to obtain</td><td><span class="tag tag-gray">Not Started</span></td></tr>
+            <tr><td>QuickBooks Online</td><td>OAuth 2.0 — pending QBO migration</td><td><span class="tag tag-gray">Pending Migration</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT ACTIONS -->
+  <div id="tab-actions" class="tab-panel">
+    <div class="section-title">Next Actions</div>
+    <div class="section-desc">The 7 highest-leverage actions to advance the project right now. Actions 1 and 2 are build-blocking.</div>
+
+    <div class="action-item">
+      <div class="a-num">1</div>
+      <div class="a-main">
+        <div class="a-action">Brian emails sample standard blank tax return to Jessica before or at the April 12 demo</div>
+        <div class="a-dep">Required for: All Phase 2 prompt engineering. Without this file, Jessica cannot build or test the Tax Return Summary, Form Extraction, or Research Assistant prompts. Marc to confirm Brian received the request and has it on his calendar.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">Brian Goodman</div>
+        <div class="a-target">By Apr 12, 2026</div>
+        <div class="a-risk">🔴 Build-blocking if delayed</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">2</div>
+      <div class="a-main">
+        <div class="a-action">Marc initiates Canopy API documentation review — obtains API docs and confirms endpoint capabilities</div>
+        <div class="a-dep">Required for: Phase 4 integration architecture and hours estimate. Marc confirmed "Canopy does have an API" — now need to verify it supports client record write and summary attachment. This cannot wait until Phase 4 starts — initiate during Phase 2.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">Marc Umstead</div>
+        <div class="a-target">Before Week 13</div>
+        <div class="a-risk">🔴 Phase 4 gate dependency</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">3</div>
+      <div class="a-main">
+        <div class="a-action">Jessica configures HatzAI tenant — model access, document upload, and prompt library setup</div>
+        <div class="a-dep">Required for: Everything. Start immediately after April 12 demo confirmation. Verify all AI models (Claude, ChatGPT, Grok, Gemini) are accessible. Test PDF upload. Confirm siloed operation.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">Jessica Peaden</div>
+        <div class="a-target">Apr 14–16, 2026</div>
+        <div class="a-risk">⚠️ Foundation gate</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">4</div>
+      <div class="a-main">
+        <div class="a-action">Jessica drafts AI governance policy and sends to Brian for review</div>
+        <div class="a-dep">Required for: Production use of prompts with live client data. Policy covers: HatzAI is the only approved AI tool for client data; approved workflows; what is never uploaded. Must be reviewed by Brian before Phase 2 outputs are used in production.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">Jessica Peaden</div>
+        <div class="a-target">By Week 2</div>
+        <div class="a-risk">⚠️ Required before live client data use</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">5</div>
+      <div class="a-main">
+        <div class="a-action">Schedule Phase 1 live demo with Brian (~1 hr) — do not wait for Brian to initiate</div>
+        <div class="a-dep">Required for: Phase 1 sign-off and Phase 2 confirmation. Demo should be scheduled as soon as core 3 prompts pass internal testing. Marc to reach out to Brian directly with a proposed date. Do not let this float.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">Marc Umstead</div>
+        <div class="a-target">~Week 6</div>
+        <div class="a-risk">⚠️ Phase 1 completion gate</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">6</div>
+      <div class="a-main">
+        <div class="a-action">After Phase 1 demo: run Tax IQ vs. HatzAI Research Prompt side-by-side comparison and present recommendation to Brian</div>
+        <div class="a-dep">Required for: Brian's subscription decision. Same tax research question run through Tax IQ and the HatzAI Research Prompt. Compare citation quality, accuracy, and ease of use. Reduces Brian's costs if one subscription is redundant.</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">Jessica Peaden</div>
+        <div class="a-target">~Week 7</div>
+        <div class="a-risk">—</div>
+      </div>
+    </div>
+
+    <div class="action-item">
+      <div class="a-num">7</div>
+      <div class="a-main">
+        <div class="a-action">Create ClickUp project folder for Brian Goodman AI project — enter all phases, milestones, and initial tasks</div>
+        <div class="a-dep">Required for: Project tracking. Use the ClickUp Setup tab for naming rules and millisecond estimates. Enter after April 12 demo confirms project is active. Phases as Folders, milestones as Tasks tagged "milestone."</div>
+      </div>
+      <div class="a-side">
+        <div class="a-owner">Marc Umstead</div>
+        <div class="a-target">By Apr 14, 2026</div>
+        <div class="a-risk">—</div>
+      </div>
+    </div>
+
+    <div class="spacer-16"></div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">📊 Responsibility Matrix (RACI)</div>
+      <table class="data-table">
+        <thead><tr><th>Activity</th><th>Marc (PM)</th><th>Jessica (AI Architect)</th><th>Brian (Client)</th><th>Kevin (End User)</th></tr></thead>
+        <tbody>
+          <tr><td>Sample return provision</td><td>Accountable</td><td>Consulted</td><td><strong>Responsible</strong></td><td>—</td></tr>
+          <tr><td>HatzAI tenant setup</td><td>Informed</td><td><strong>Responsible</strong></td><td>Consulted</td><td>—</td></tr>
+          <tr><td>Governance policy</td><td>Consulted</td><td><strong>Responsible</strong> (draft)</td><td><strong>Responsible</strong> (sign-off)</td><td>Informed</td></tr>
+          <tr><td>Prompt engineering</td><td>Informed</td><td><strong>Responsible</strong></td><td>Consulted</td><td>—</td></tr>
+          <tr><td>UAT / demo review</td><td>Accountable</td><td>Consulted</td><td><strong>Responsible</strong></td><td>Consulted</td></tr>
+          <tr><td>Canopy API discovery</td><td><strong>Responsible</strong></td><td>Consulted</td><td>Informed</td><td>—</td></tr>
+          <tr><td>Integration build</td><td>Informed</td><td><strong>Responsible</strong></td><td>Consulted</td><td>—</td></tr>
+          <tr><td>Final handoff sign-off</td><td>Accountable</td><td>Consulted</td><td><strong>Responsible</strong></td><td>Informed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CLICKUP SETUP -->
+  <div id="tab-clickup" class="tab-panel">
+    <div class="section-title">ClickUp Entry Instructions</div>
+    <div class="section-desc">After roadmap is approved, follow these rules exactly when entering into ClickUp. Naming and time estimate format are critical.</div>
+    <div class="notice success"><span class="n-icon">✅</span><span><strong>ClickUp Roadmap Link:</strong> <a href="#" style="color:var(--green);text-decoration:underline;">[Paste ClickUp list/folder URL here once created]</a></span></div>
+    <div class="card">
+      <div class="cu-step"><div class="cu-step-num">1</div><div><h4>Phases → Create as Folders</h4><p>Each phase becomes a <strong>Folder</strong> inside the designated ClickUp Space. Do not create phases as tasks or lists.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">2</div><div><h4>Milestones → Tasks tagged "Milestone" inside each Phase Folder</h4><p>Each milestone becomes a Task inside its respective Phase Folder, tagged as <strong>Milestone</strong>. Use the milestone title exactly as written — no prefixes.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">3</div><div><h4>Tasks → Created separately from Task Breakdown output</h4><p>Individual tasks come from the Task Breakdown Prompt, not this roadmap. Tasks live as subtasks inside milestone tasks, or in a List inside the Phase Folder.</p></div></div>
+      <div class="cu-step"><div class="cu-step-num">4</div><div><h4>Naming — Clean titles only. No prefixes, numbers, or structural labels.</h4><p>❌ <code style="font-family:var(--mono);background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:3px;font-size:12px;">"Phase 2: Build"</code> &nbsp;&nbsp; ❌ <code style="font-family:var(--mono);background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:3px;font-size:12px;">"M2 — Core Prompts Built"</code><br><br>✅ <code style="font-family:var(--mono);background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:3px;font-size:12px;">"Prompt Engineering &amp; Build"</code> &nbsp;&nbsp; ✅ <code style="font-family:var(--mono);background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:3px;font-size:12px;">"Core Prompt Library Built &amp; Internally Tested"</code></p></div></div>
+      <div class="cu-step"><div class="cu-step-num">5</div><div><h4>Time Estimates — ClickUp API uses MILLISECONDS as quoted strings</h4><p>Always pass <code style="font-family:var(--mono);background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:12px;">time_estimate</code> as a <strong>quoted string in milliseconds</strong>. Never use hours, never pass as a plain number.</p></div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">⏱ Millisecond Reference Chart</div>
+        <table class="ms-ref-table">
+          <thead><tr><th>Readable</th><th>Milliseconds (string)</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>30 min</td><td>"1800000"</td><td>Quick tasks</td></tr>
+            <tr><td>1 hour</td><td>"3600000"</td><td>Standard task</td></tr>
+            <tr><td>2 hours</td><td>"7200000"</td><td></td></tr>
+            <tr><td>4 hours</td><td>"14400000"</td><td>Half day</td></tr>
+            <tr><td>8 hours</td><td>"28800000"</td><td>1 full day</td></tr>
+            <tr><td>16 hours</td><td>"57600000"</td><td>2 days</td></tr>
+            <tr><td>24 hours</td><td>"86400000"</td><td>3 days</td></tr>
+            <tr><td>40 hours</td><td>"144000000"</td><td>1 full week</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">✅ Correct API Entry Example</div><pre class="code-block"><span class="code-brace">{</span>
+  <span class="code-key">"name"</span>: <span class="code-str">"Core Prompt Library Built &amp; Internally Tested"</span>,
+  <span class="code-key">"time_estimate"</span>: <span class="code-str">"39600000"</span>,
+  <span class="code-key">"assignees"</span>: [<span class="code-str">"[jessica_user_id]"</span>],
+  <span class="code-key">"tags"</span>: [<span class="code-str">"milestone"</span>]
+<span class="code-brace">}</span></pre></div>
+        <div class="card"><div class="card-title">❌ Common Mistakes</div><pre class="code-block" style="color:var(--red);">"M2 — Core Prompts Built"   ❌
+time_estimate: 39600000     ❌
+time_estimate: "11h"        ❌
+time_estimate: 660          ❌</pre></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 Milestone Summary — ClickUp Reference</div>
+      <table class="ms-ref-table">
+        <thead><tr><th>Milestone Name</th><th>Phase</th><th>Est. Hours</th><th>Milliseconds (string)</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td>HatzAI Tenant Configured &amp; Governance Policy Reviewed</td><td>Secure AI Foundation</td><td>~4h</td><td>"14400000"</td><td>Jessica Peaden</td></tr>
+          <tr><td>Core Prompt Library Built &amp; Internally Tested</td><td>Prompt Engineering &amp; Build</td><td>~11h</td><td>"39600000"</td><td>Jessica Peaden</td></tr>
+          <tr><td>Phase 1 Live Demo Signed Off by Brian</td><td>Live Demo, UAT &amp; Refinement</td><td>~5h</td><td>"18000000"</td><td>Jessica / Marc</td></tr>
+          <tr><td>Phase 2 Prompt Library Complete &amp; Approved</td><td>Live Demo, UAT &amp; Refinement</td><td>~14h</td><td>"50400000"</td><td>Jessica Peaden</td></tr>
+          <tr><td>Canopy Integration &amp; Advisory Notes Automation Live</td><td>System Integration &amp; Handoff</td><td>~19h</td><td>"68400000"</td><td>Jessica Peaden</td></tr>
+          <tr><td>QuickBooks Insight Prompt &amp; Final Handoff</td><td>System Integration &amp; Handoff</td><td>~6h</td><td>"21600000"</td><td>Jessica / Marc</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card"><div class="card-title">📋 Pre-Entry Checklist</div><div class="checklist">☐ Roadmap approved by Brian and Marc after April 12 demo<br>☐ ClickUp Space/Folder URL documented above<br>☐ All phase names cleaned (no prefixes)<br>☐ All milestone names cleaned (no prefixes)<br>☐ All time estimates converted to milliseconds as quoted strings<br>☐ Assignees mapped to ClickUp user IDs<br>☐ Due dates entered (Phase 1 target: Week 2; Phase 4 target: Week 23)<br>☐ Milestone tag confirmed in ClickUp tag list</div></div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div id="tab-resources" class="tab-panel">
+    <div class="section-title">Project Resources</div>
+    <div class="section-desc">Centralized links to every document, system, and reference for the Brian Goodman AI engagement.</div>
+
+    <div class="card">
+      <div class="card-title"><span>🔍</span> Discovery &amp; Kickoff Documents</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:4px;">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">📋 Discovery Call Notes (Mar 11)</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Intro call transcript, pain points, tool stack, confirmed decisions</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint / ClickUp Doc — LINK]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🚀 April 12 Demo &amp; Kickoff Notes</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Demo session notes, decisions made, open items captured</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint / ClickUp Doc — LINK]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">📊 Time Estimate Document</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Prepared by Jessica Peaden — all 3 phases, task breakdown, ~62 hrs total</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint / ConnectWise — LINK]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:4px;">📝 Signed SOW / Contract</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Executed statement of work with AI scope defined across 3 phases</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[ConnectWise — LINK]</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🔧</span> Build &amp; Technical Documents</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:4px;">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">💬 HatzAI Prompt Library</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">All 5 prompts with version history, model pinned, usage notes — delivered post-build</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint — Post-Build]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">📐 AI Governance Policy</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">1-page firm AI usage policy: approved tools, approved workflows, PII rules</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint / Client Copy — LINK]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🔗 Workflow Documentation</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">End-to-end workflow: ProSeries → HatzAI → prompt → review → delivery</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint — Post-Build]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🔑 Integration &amp; Credential Map</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">HatzAI credentials, Canopy API keys, all auth types — internal only</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[Passportal — Internal Only]</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📖</span> Guidelines, SOPs &amp; User Guides</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:4px;">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🤖 End User AI Tool Guide</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">How Brian and Kevin use HatzAI prompts in daily workflow</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SOP / SharePoint — Post-Demo]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">🛠 Maintenance Runbook</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">How to update prompts, troubleshoot HatzAI, and roll back if needed</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[SharePoint — Post-Deploy]</a>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:600;font-size:12px;color:var(--text);margin-bottom:4px;">📞 Escalation &amp; Support Guide</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">What to do when a prompt gives bad output — who to contact and how</div>
+          <a href="#" style="font-family:var(--mono);font-size:11px;color:var(--navy);text-decoration:underline;word-break:break-all;">[Client-facing guide — LINK]</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;color:var(--text);">📋 Full Resource Index</div>
+      <table class="data-table">
+        <thead><tr><th>Document / Resource</th><th>Type</th><th>Location</th><th>Last Updated</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td>Discovery Call Notes (Mar 11)</td><td><span class="tag tag-blue">Discovery</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[LINK]</a></td><td>Mar 11, 2026</td><td>Marc Umstead</td></tr>
+          <tr><td>Kickoff Demo Notes (Apr 12)</td><td><span class="tag tag-blue">Discovery</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[LINK]</a></td><td>Apr 12, 2026</td><td>Marc Umstead</td></tr>
+          <tr><td>Time Estimate Document</td><td><span class="tag tag-cyan">Technical</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[LINK]</a></td><td>Mar 2026</td><td>Jessica Peaden</td></tr>
+          <tr><td>Signed SOW / Contract</td><td><span class="tag tag-gray">Contract</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[ConnectWise]</a></td><td>[Date]</td><td>Marc Umstead</td></tr>
+          <tr><td>AI Governance Policy</td><td><span class="tag" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr);">Security</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>Post-Phase 1</td><td>Jessica Peaden</td></tr>
+          <tr><td>HatzAI Prompt Library</td><td><span class="tag tag-teal" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr);">Technical</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>Post-Build</td><td>Jessica Peaden</td></tr>
+          <tr><td>Workflow Documentation</td><td><span class="tag tag-teal" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-bdr);">Technical</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>Post-Build</td><td>Jessica Peaden</td></tr>
+          <tr><td>Integration &amp; Credential Map</td><td><span class="tag tag-red">Credentials</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[Passportal]</a></td><td>Live</td><td>Marc Umstead</td></tr>
+          <tr><td>UAT Sign-Off Document</td><td><span class="tag tag-green">Sign-Off</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>Post-Demo</td><td>Marc Umstead</td></tr>
+          <tr><td>ConnectWise Company Record</td><td><span class="tag tag-gray">System</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[ConnectWise]</a></td><td>Live</td><td>Marc Umstead</td></tr>
+          <tr><td>ClickUp Project Folder</td><td><span class="tag tag-blue">Project</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[ClickUp]</a></td><td>Apr 2026</td><td>Marc Umstead</td></tr>
+          <tr><td>End User AI Tool Guide</td><td><span class="tag tag-cyan">Guide</span></td><td><a href="#" style="color:var(--navy);font-family:var(--mono);font-size:11px;">[SharePoint]</a></td><td>Post-Demo</td><td>Jessica Peaden</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📁</span> SharePoint Folder Structure</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:4px;">
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;"><span style="font-size:18px;">📁</span><div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">01 — Contracts &amp; SOW</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div></div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;"><span style="font-size:18px;">📁</span><div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">02 — Discovery &amp; Workflow Docs</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div></div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;"><span style="font-size:18px;">📁</span><div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">03 — Prompts &amp; Build Docs</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div></div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;"><span style="font-size:18px;">📁</span><div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">04 — UAT &amp; Sign-Off</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div></div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;"><span style="font-size:18px;">📁</span><div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">05 — Training &amp; User Guides</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div></div>
+        <div style="background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;"><span style="font-size:18px;">📁</span><div><div style="font-weight:600;font-size:12px;color:var(--navy);margin-bottom:2px;">06 — Compliance &amp; Security</div><a href="#" style="font-family:var(--mono);font-size:10px;color:var(--navy);opacity:0.7;text-decoration:underline;">[SharePoint link]</a></div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content-area -->
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <strong>Plus 1 Technology</strong> · AI Implementation Roadmap for <strong>Brian Goodman Tax &amp; Advisory</strong> · April 2026 · Confidential — Do Not Distribute
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    if (btn) {
+      btn.classList.add('active');
+      const bar = document.getElementById('tabsBar');
+      const btnLeft = btn.offsetLeft;
+      const btnRight = btnLeft + btn.offsetWidth;
+      const barLeft = bar.scrollLeft;
+      const barRight = barLeft + bar.clientWidth;
+      if (btnLeft < barLeft + 40) bar.scrollTo({ left: btnLeft - 40, behavior: 'smooth' });
+      else if (btnRight > barRight - 40) bar.scrollTo({ left: btnRight - bar.clientWidth + 40, behavior: 'smooth' });
+    }
+    updateScrollBtns();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function scrollTabs(dir) {
+    const bar = document.getElementById('tabsBar');
+    bar.scrollBy({ left: dir * 200, behavior: 'smooth' });
+    setTimeout(updateScrollBtns, 250);
+  }
+  function updateScrollBtns() {
+    const bar = document.getElementById('tabsBar');
+    const lBtn = document.getElementById('scrollLeft');
+    const rBtn = document.getElementById('scrollRight');
+    if (!bar || !lBtn || !rBtn) return;
+    lBtn.classList.toggle('hidden', bar.scrollLeft <= 2);
+    rBtn.classList.toggle('hidden', bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 2);
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    const bar = document.getElementById('tabsBar');
+    if (bar) { bar.addEventListener('scroll', updateScrollBtns); updateScrollBtns(); }
+  });
+</script>
+</body>
+</html>
