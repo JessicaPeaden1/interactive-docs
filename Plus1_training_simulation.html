@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Plus 1 Technology — Project Delivery Agent | Training Guide</title>
+<style>
+:root {
+  --bg:#f0f3fb;--surface:#fff;--surface2:#eef1f8;--border:#dce2f0;--border2:#c5ceed;
+  --text:#1a2040;--muted:#5a6589;--faint:#8e9ab8;
+  --navy:#1e2d8a;--navy-dim:#e8ecf8;--navy-mid:#c5ceed;
+  --cyan:#29abe2;--cyan-dim:#e0f4fc;--cyan-mid:#a8ddf5;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-br:#bbf7d0;
+  --yellow:#b45309;--yellow-bg:#fffbeb;--yellow-br:#fde68a;
+  --red:#dc2626;--red-bg:#fef2f2;--red-br:#fecaca;
+  --purple:#7c3aed;--r:12px;--r-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+
+/* INTRO */
+.intro{position:fixed;inset:0;background:var(--navy);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;overflow-y:auto}
+.intro.hide{display:none}
+.intro-logo{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.intro-logo svg{height:40px;width:auto}
+.intro-div{width:1px;height:40px;background:rgba(255,255,255,.2)}
+.intro-lbl{color:rgba(255,255,255,.65);font-size:12px;font-weight:500}
+.intro-title{font-size:26px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;letter-spacing:-.03em}
+.intro-sub{font-size:14px;color:rgba(255,255,255,.6);text-align:center;max-width:500px;margin-bottom:28px;line-height:1.65}
+.intro-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:680px;margin-bottom:22px}
+.intro-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--r);padding:14px}
+.intro-card-num{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:5px}
+.intro-card-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:3px}
+.intro-card-desc{font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}
+.intro-note{background:rgba(41,171,226,.12);border:1px solid rgba(41,171,226,.3);border-radius:var(--r-sm);padding:11px 16px;font-size:12px;color:rgba(255,255,255,.65);text-align:center;margin-bottom:22px;max-width:520px;line-height:1.6}
+.intro-note strong{color:var(--cyan)}
+.intro-btn{padding:12px 40px;background:var(--cyan);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.intro-btn:hover{background:#1e9fd4;transform:scale(1.02)}
+.intro-skip{margin-top:10px;font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;text-decoration:underline}
+.intro-skip:hover{color:rgba(255,255,255,.6)}
+
+/* HEADER */
+.hdr{height:52px;background:var(--surface);border-bottom:3px solid var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0;box-shadow:0 1px 4px rgba(30,45,138,.1)}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.h-div{width:1px;height:20px;background:var(--border)}
+.h-title{font-size:13px;font-weight:700}
+.h-sub{font-size:10px;color:var(--muted)}
+.hdr-c{display:flex;align-items:center;gap:3px}
+.pd{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .25s}
+.pl{width:8px;height:1px;background:var(--border2)}
+.pd.done{background:var(--green)}
+.pd.active{width:20px;border-radius:4px;background:var(--navy)}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.stage-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--navy-dim);color:var(--navy);border:1px solid var(--navy-mid)}
+.demo-badge{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#dc2626;padding:3px 10px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:20px}
+.demo-dot{width:7px;height:7px;border-radius:50%;background:#dc2626;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* BODY */
+.app-body{height:calc(100vh - 52px - 52px);display:flex;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:250px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.sb-hd{padding:12px 14px 8px;border-bottom:1px solid var(--border)}
+.sb-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:7px}
+.sb-stages{display:flex;flex-direction:column;gap:2px}
+.sb-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px}
+.sb-row.active{background:var(--navy-dim)}
+.sb-num{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;background:var(--border2);color:var(--muted);flex-shrink:0}
+.sb-row.active .sb-num{background:var(--navy);color:#fff}
+.sb-row.done .sb-num{background:var(--green);color:#fff}
+.sb-row.upcoming{opacity:.4}
+.sb-name{font-size:11px;font-weight:500;color:var(--text)}
+.sb-row.active .sb-name{font-weight:700;color:var(--navy)}
+.sb-row.done .sb-name{color:var(--muted)}
+.sb-ck{font-size:10px;margin-left:auto}
+.sb-div{height:1px;background:var(--border);margin:8px 0}
+.sb-info{padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.65}
+.sb-info strong{color:var(--text);display:block;margin-bottom:2px}
+.sb-files{font-family:monospace;font-size:10px;color:var(--navy);line-height:1.9}
+
+/* CHAT */
+.chat-wrap{flex:1;overflow-y:auto;padding:18px 20px 0;display:flex;flex-direction:column;gap:0}
+.chat-date{text-align:center;font-size:11px;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:10px 0}
+
+/* Agent messages */
+.msg-agent{display:flex;align-items:flex-start;gap:9px;margin-bottom:14px;max-width:800px}
+.av{width:28px;height:28px;border-radius:7px;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:13px}
+.bubble{background:var(--surface);border:1px solid var(--border);border-radius:0 11px 11px 11px;padding:11px 15px;font-size:13px;line-height:1.7;box-shadow:0 1px 3px rgba(30,45,138,.05);max-width:700px}
+.bubble p{margin-bottom:7px}
+.bubble p:last-child{margin-bottom:0}
+.bubble strong{color:var(--navy)}
+.bubble code{font-family:ui-monospace,monospace;font-size:11px;background:var(--bg);padding:1px 5px;border-radius:4px;color:var(--navy);border:1px solid var(--border)}
+.agent-lbl{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.06em}
+
+/* User messages */
+.msg-user{display:flex;justify-content:flex-end;margin-bottom:14px}
+.user-bub{background:var(--navy);color:#fff;border-radius:11px 0 11px 11px;padding:9px 14px;font-size:13px;max-width:540px;line-height:1.6}
+
+/* Inline tags */
+.hi-navy{background:var(--navy-dim);border:1px solid var(--navy-mid);border-radius:4px;padding:1px 7px;font-size:11.5px;font-weight:600;color:var(--navy)}
+.hi-cyan{background:var(--cyan-dim);border:1px solid var(--cyan-mid);border-radius:4px;padding:1px 7px;font-size:11.5px;font-weight:600;color:#0369a1}
+.hi-green{background:var(--green-bg);border:1px solid var(--green-br);border-radius:4px;padding:1px 7px;font-size:11.5px;font-weight:600;color:var(--green)}
+.hi-yellow{background:var(--yellow-bg);border:1px solid var(--yellow-br);border-radius:4px;padding:1px 7px;font-size:11.5px;font-weight:600;color:var(--yellow)}
+.hi-red{background:var(--red-bg);border:1px solid var(--red-br);border-radius:4px;padding:1px 7px;font-size:11.5px;font-weight:600;color:var(--red)}
+
+/* Callouts */
+.callout{border-radius:8px;padding:9px 13px;font-size:12px;margin-top:9px;line-height:1.6}
+.callout.success{background:var(--green-bg);border:1px solid var(--green-br);color:var(--green)}
+.callout.warn{background:var(--yellow-bg);border:1px solid var(--yellow-br);color:var(--yellow)}
+.callout.info{background:var(--cyan-dim);border:1px solid var(--cyan-mid);color:#0369a1}
+.callout.navy{background:var(--navy-dim);border:1px solid var(--navy-mid);color:var(--navy)}
+.callout strong{font-weight:700}
+
+/* Action cards */
+.ac{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-top:9px}
+.ac-hd{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.ac-ico{font-size:16px}
+.ac-title{font-size:13px;font-weight:700;color:var(--text)}
+.ac-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-br);margin-left:auto}
+.ac-tag.proc{background:var(--cyan-dim);color:#0369a1;border-color:var(--cyan-mid)}
+.ac-tag.warn{background:var(--yellow-bg);color:var(--yellow);border-color:var(--yellow-br)}
+.ac-body{font-size:12px;color:var(--muted);line-height:1.65}
+.ac-url{font-family:ui-monospace,monospace;font-size:11px;color:var(--navy);background:var(--surface);padding:5px 9px;border-radius:6px;border:1px solid var(--border);margin-top:7px;display:block;word-break:break-all}
+.ac-list{list-style:none;padding:0;margin-top:7px;display:flex;flex-direction:column;gap:4px}
+.ac-list li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.step-n{width:16px;height:16px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0}
+
+/* Connector popup */
+.conn-popup{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.14);max-width:360px;margin:8px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.conn-hd{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:12px 15px;display:flex;align-items:center;gap:10px}
+.conn-icon{width:32px;height:32px;border-radius:8px;background:#7B68EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;color:#fff;font-weight:700}
+.conn-hd-text{font-size:13px;font-weight:700;color:#1a202c}
+.conn-hd-sub{font-size:11px;color:#64748b}
+.conn-body{padding:14px 15px 15px}
+.conn-desc{font-size:12px;color:#374151;margin-bottom:11px;line-height:1.6}
+.conn-perms{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;margin-bottom:12px}
+.conn-perms-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:6px}
+.conn-perm{display:flex;align-items:center;gap:7px;font-size:12px;color:#374151;margin-bottom:4px}
+.conn-perm:last-child{margin-bottom:0}
+.conn-perm-ck{color:#16a34a;font-weight:700;flex-shrink:0}
+.conn-footer-note{font-size:11px;color:#94a3b8;margin-bottom:11px;line-height:1.5}
+.conn-btns{display:flex;gap:8px}
+.conn-btn-once{flex:1;padding:8px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;font-weight:500;color:#475569;cursor:default;text-align:center}
+.conn-btn-always{flex:1;padding:8px;background:#1e2d8a;border:none;border-radius:8px;font-size:12px;font-weight:700;color:#fff;cursor:default;text-align:center;box-shadow:0 2px 8px rgba(30,45,138,.3)}
+
+/* Typing */
+.typing{display:flex;align-items:flex-start;gap:9px;margin-bottom:14px}
+.typing-dots{background:var(--surface);border:1px solid var(--border);border-radius:0 11px 11px 11px;padding:11px 15px;display:flex;gap:5px;align-items:center}
+.typing-dots span{width:7px;height:7px;border-radius:50%;background:var(--border2);animation:tdot 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.3);opacity:1}}
+.typing.hide{display:none}
+
+/* BOTTOM */
+.bottom{height:52px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:8px}
+.choices{display:flex;gap:7px;flex-wrap:wrap;flex:1}
+.choice-btn{padding:6px 14px;background:var(--surface);border:1.5px solid var(--border2);border-radius:20px;font-size:12px;font-weight:600;color:var(--navy);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+.choice-btn:hover{background:var(--navy-dim);border-color:var(--navy)}
+.choice-btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.choice-btn.primary:hover{background:#2537a8}
+.choice-btn.sec{border-color:var(--border);color:var(--muted)}
+.choice-btn.sec:hover{border-color:var(--navy-mid);color:var(--navy)}
+.prog-lbl{font-size:11px;color:var(--muted);margin-left:auto;flex-shrink:0;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="intro" id="intro">
+  <div class="intro-logo">
+    <svg viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg" fill="white">
+      <text x="0" y="62" font-family="Arial Black,sans-serif" font-weight="900" font-size="72" letter-spacing="-2">PLUS</text>
+      <circle cx="208" cy="36" r="34" fill="none" stroke="white" stroke-width="7"/>
+      <text x="200" y="47" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="white">+1</text>
+      <text x="243" y="62" font-family="Arial Black,sans-serif" font-weight="900" font-size="72" letter-spacing="-2">NE</text>
+      <text x="18" y="78" font-family="Arial,sans-serif" font-weight="400" font-size="13" letter-spacing="8">TECHNOLOGY</text>
+    </svg>
+    <div class="intro-div"></div>
+    <div class="intro-lbl">Training Guide</div>
+  </div>
+  <div class="intro-title">Project Delivery Agent</div>
+  <div class="intro-sub">Interactive walkthrough of the full project setup — roadmap to live URL to ClickUp. Click through each step to see exactly how the agent works.</div>
+  <div class="intro-cards">
+    <div class="intro-card"><div class="intro-card-num">Part 1</div><div class="intro-card-title">Roadmap Generation</div><div class="intro-card-desc">Project type → discovery → roadmap with diagrams → deploy live</div></div>
+    <div class="intro-card"><div class="intro-card-num">Part 2</div><div class="intro-card-title">ClickUp Milestones</div><div class="intro-card-desc">Connector auth → milestones with dates, phases, assignees</div></div>
+    <div class="intro-card"><div class="intro-card-num">Part 3</div><div class="intro-card-title">Task Plan & Import</div><div class="intro-card-desc">Task plan generated → deployed → all tasks + dependencies in ClickUp</div></div>
+  </div>
+  <div class="intro-note">🎙️ <strong>Voice-over ready:</strong> Click any response to advance. Designed for screen recording with narration.</div>
+  <button class="intro-btn" onclick="startSim()">Start Training →</button>
+  <div class="intro-skip" onclick="startSim()">Skip intro</div>
+</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-l">
+    <svg viewBox="0 0 340 80" xmlns="http://www.w3.org/2000/svg" height="20" fill="#1e2d8a">
+      <text x="0" y="62" font-family="Arial Black,sans-serif" font-weight="900" font-size="72" letter-spacing="-2">PLUS</text>
+      <circle cx="208" cy="36" r="34" fill="none" stroke="#1e2d8a" stroke-width="7"/>
+      <text x="200" y="47" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1e2d8a">+1</text>
+      <text x="243" y="62" font-family="Arial Black,sans-serif" font-weight="900" font-size="72" letter-spacing="-2">NE</text>
+    </svg>
+    <div class="h-div"></div>
+    <div><div class="h-title">Project Delivery Agent</div><div class="h-sub">Training Simulation</div></div>
+  </div>
+  <div class="hdr-c" id="progBar">
+    <div class="pd active" id="pd1"></div><div class="pl"></div>
+    <div class="pd" id="pd2"></div><div class="pl"></div>
+    <div class="pd" id="pd3"></div><div class="pl"></div>
+    <div class="pd" id="pd4"></div><div class="pl"></div>
+    <div class="pd" id="pd5"></div><div class="pl"></div>
+    <div class="pd" id="pd6"></div><div class="pl"></div>
+    <div class="pd" id="pd7"></div><div class="pl"></div>
+    <div class="pd" id="pd8"></div><div class="pl"></div>
+    <div class="pd" id="pd9"></div><div class="pl"></div>
+    <div class="pd" id="pd10"></div><div class="pl"></div>
+    <div class="pd" id="pd11"></div><div class="pl"></div>
+    <div class="pd" id="pd12"></div>
+  </div>
+  <div class="hdr-r">
+    <div class="stage-pill" id="stagePill">Stage 1 of 12</div>
+    <div class="demo-badge"><div class="demo-dot"></div>DEMO</div>
+  </div>
+</header>
+
+<!-- BODY -->
+<div class="app-body">
+  <div class="sidebar">
+    <div class="sb-hd">
+      <div class="sb-lbl">Workflow Stages</div>
+      <div class="sb-stages" id="sbStages"></div>
+    </div>
+    <div class="sb-div"></div>
+    <div class="sb-info"><strong>How this works</strong>Click any response at the bottom to advance the conversation.</div>
+    <div class="sb-div"></div>
+    <div class="sb-info"><strong>Skills loaded in this demo</strong><div class="sb-files">Plus1_Skill_Roadmap_AI.md<br>Plus1_Skill_Deploy.md<br>Plus1_Skill_ClickUp.md<br>Plus1_Skill_TaskPlan.md<br>Plus1_Conversational_Guide.md</div></div>
+  </div>
+  <div class="chat-wrap" id="chatWrap">
+    <div class="chat-date">Today — Training Session</div>
+  </div>
+</div>
+
+<!-- BOTTOM -->
+<div class="bottom">
+  <div class="choices" id="choices"></div>
+  <div class="prog-lbl" id="progLbl">Stage 1 of 12</div>
+</div>
+
+<script>
+const STAGES = [
+  'Project Type','Generate Roadmap','Review Roadmap','Deploy Roadmap',
+  'ClickUp Milestones','Create Task Plan?','Generate Task Plan',
+  'Review Task Plan','Deploy Task Plan','Import Tasks','Dependencies','Complete'
+];
+
+// ─────────────────────────────────────────────────────────
+// FLOW — each entry is one conversational step
+// Fields: stageNum, user (optional), typing (ms), agent (html string), choices [{l,p,n}]
+// ─────────────────────────────────────────────────────────
+const F = [
+
+// 0 — Opening
+{s:1, a:`Hi! I'm the Plus 1 Project Delivery Agent. I'll walk you through the full process — roadmap, live URL, and ClickUp — without you needing to know the steps.<br><br>First question: is this an <strong>AI / Automation project</strong> — things like n8n, Make, chatbots, API integrations, or LLMs — or an <strong>MSP / Infrastructure project</strong> — things like network, hardware, servers, M365, VoIP, or security?`,
+c:[{l:'🤖 AI / Automation Project',p:1,n:1},{l:'🔧 MSP / Infrastructure',n:10}]},
+
+// 1 — AI selected
+{s:1, u:'AI / Automation Project',
+a:`Got it — <strong>AI / Automation project.</strong> Loading the AI Roadmap skill now.<br><br>Do you have <strong>discovery notes, a scope document, or any project details</strong> ready to share? Paste them now and I'll use everything to generate your roadmap. If not, I'll ask you the key questions one group at a time.<br><br>Also — before we get started, please <strong>add any supporting documents to this project now</strong> — things like your client profile, SOW, or discovery notes. Use the paperclip or project files panel to upload them. I'll pull from everything you add automatically.`,
+c:[{l:'✅ Notes ready — files added to project',p:1,n:2},{l:'📁 Files are already in the project',n:2},{l:'❌ No notes yet — ask me',n:11}]},
+
+// 2 — Generating roadmap
+{s:2, u:'Discovery notes are ready — files added', t:2000,
+a:`Reading your notes and loading skills...<br><br><span class="hi-navy">📄 Plus1_Skill_Roadmap_AI.md</span> &nbsp;<span class="hi-navy">🗺 workflow-diagram-guide</span> &nbsp;<span class="hi-cyan">🎨 icon-library</span><br><br>Generating your project roadmap:<br>• All tabs populated from your discovery notes<br>• <strong>Workflow Map tab:</strong> HubSpot webhook → Claude → lead score → CRM update (happy path + error path)<br>• <strong>Architecture tab:</strong> All system components with integration connections labeled<br>• <span class="hi-yellow">⚠️ PENDING</span> flags on anything not yet confirmed — nothing invented<br><br><div class="ac"><div class="ac-hd"><div class="ac-ico">📊</div><div class="ac-title">Acme Co — Lead Qualification AI Roadmap</div><div class="ac-tag">✅ Ready</div></div><div class="ac-body">AI/Automation · 4 phases · 8 milestones · Discovery &amp; Design → Go-Live &amp; Handoff<br>Workflow Map + Architecture diagram generated and embedded.</div></div><br>Quality gate passed ✅ — here's your roadmap. Does everything look correct, or are there changes needed?`,
+c:[{l:'✅ Looks correct — no changes',p:1,n:3},{l:'✏️ Need to make a change',n:12}]},
+
+// 3 — Roadmap confirmed, prep deploy
+{s:3, u:'Looks correct — no changes',
+a:`Perfect. Now let's get it live.<br><br>Please <strong>download this file</strong> to your computer, then upload it to <strong>the Plus1 GitHub Deploys folder on OneDrive.</strong><br><br>Name it exactly: <code>AcmeCo_Roadmap.html</code><br><br><div class="callout warn">⚠️ <strong>Watch the filename:</strong> If a file with that name already exists, OneDrive automatically adds <code>(1)</code> — like <code>AcmeCo_Roadmap (1).html</code>. That breaks the live URL. Delete the old file first if needed.</div><br>Tell me when it's uploaded and I'll push it live immediately.`,
+c:[{l:'✅ Done — uploaded to OneDrive',p:1,n:4}]},
+
+// 4 — Confirm filename
+{s:4, u:'Uploaded to OneDrive',
+a:`Quick check before I deploy — was the filename exactly <code>AcmeCo_Roadmap.html</code>? No spaces, no <code>(1)</code> at the end?`,
+c:[{l:'✅ Yes — clean filename confirmed',p:1,n:5},{l:'⚠️ OneDrive added (1) — fixing it now',n:13}]},
+
+// 5 — Deploy roadmap
+{s:4, u:'Clean filename confirmed', t:2000,
+a:`<div class="ac"><div class="ac-hd"><div class="ac-ico">🚀</div><div class="ac-title">Roadmap Deployed to GitHub Pages</div><div class="ac-tag">✅ Live</div></div><div class="ac-body">Commit: <code>8ac7fbf6</code> · Deployed 2:14 PM · Live in ~60–90 seconds.</div><span class="ac-url">https://plus1tech.github.io/interactive-docs/AcmeCo_Roadmap.html</span></div><br>Your roadmap is live. Give it 60–90 seconds to propagate, then open the link to confirm.<br><br>Is this roadmap ready to import into <strong>ClickUp?</strong> If yes, I'll add all milestones now with dates, phases, and assignees.`,
+c:[{l:'✅ Yes — add milestones to ClickUp',p:1,n:6},{l:'⏳ Not yet',n:14}]},
+
+// 6 — Get ClickUp list link
+{s:5, u:'Yes — add milestones to ClickUp',
+a:`What's the <strong>ClickUp list link</strong> for this project? If it was in your discovery notes I already have it — otherwise paste it here.`,
+c:[{l:'🔗 Pasting the ClickUp list link now',p:1,n:7}]},
+
+// 7 — Connector auth popup
+{s:5, u:"Here's the ClickUp list link",
+a:`<div class="conn-popup"><div class="conn-hd"><div class="conn-icon">✓</div><div><div class="conn-hd-text">ClickUp wants permission</div><div class="conn-hd-sub">Connector authorization required</div></div></div><div class="conn-body"><div class="conn-desc">Claude is requesting access to your <strong>ClickUp</strong> workspace to create and update tasks, milestones, and project data on your behalf.</div><div class="conn-perms"><div class="conn-perms-lbl">Permissions requested</div><div class="conn-perm"><span class="conn-perm-ck">✓</span>Create and update tasks and lists</div><div class="conn-perm"><span class="conn-perm-ck">✓</span>Create milestones and set due dates</div><div class="conn-perm"><span class="conn-perm-ck">✓</span>Set task dependencies and relationships</div><div class="conn-perm"><span class="conn-perm-ck">✓</span>Update custom fields and tags</div></div><div class="conn-footer-note">claude.ai is requesting access on your behalf. You can revoke this at any time in Claude settings.</div><div class="conn-btns"><div class="conn-btn-once">Allow once</div><div class="conn-btn-always">Always allow</div></div></div></div><div class="callout info" style="margin-top:10px">💡 Click <strong>Always allow</strong> — this lets Claude access ClickUp for this and future sessions without asking each time. "Allow once" means you'll see this popup again next session.</div>`,
+c:[{l:'✅ Clicked Always Allow',p:1,n:8}]},
+
+// 8 — Milestones added
+{s:5, u:'Clicked Always Allow', t:1800,
+a:`<div class="ac"><div class="ac-hd"><div class="ac-ico">🎯</div><div class="ac-title">8 Milestones Added to ClickUp</div><div class="ac-tag">✅ Complete</div></div><div class="ac-body"><ul class="ac-list"><li><span class="step-n">✓</span>Discovery Complete — Phase 1 · Due Apr 18 · tagged <code>milestone</code></li><li><span class="step-n">✓</span>API Credentials Confirmed — Phase 1 · Due Apr 21</li><li><span class="step-n">✓</span>Workflow Build Complete — Phase 2 · Due May 2</li><li><span class="step-n">✓</span>Integration Testing Passed — Phase 3 · Due May 9</li><li><span class="step-n">✓</span>UAT Sign-Off — Phase 3 · Due May 14</li><li><span class="step-n">✓</span>Go-Live — Phase 4 · Due May 16</li><li><span class="step-n">✓</span>Documentation Delivered — Phase 4 · Due May 20</li><li><span class="step-n">✓</span>Project Close — Phase 4 · Due May 23</li></ul></div></div><br>Can you open the ClickUp list and confirm the milestones look correct — names, dates, and phases? Any changes needed?`,
+c:[{l:'✅ Milestones look correct',p:1,n:9},{l:'✏️ Need to adjust a couple',n:15}]},
+
+// 9 — Offer task plan
+{s:6, u:'Milestones look correct',
+a:`Would you like to <strong>create the Project Task Plan</strong> now?<br><br>I'll generate the full task list for all phases — execution checklists, definitions of done, time estimates in milliseconds for ClickUp, dependency chains, and embedded workflow diagrams. Everything ready to deploy.`,
+c:[{l:'✅ Yes — create the task plan now',p:1,n:16},{l:'⏳ Not yet',n:17}]},
+
+// 10 — MSP branch
+{s:1, u:'MSP / Infrastructure Project',
+a:`Got it — <strong>MSP / Infrastructure project.</strong> Loading the MSP Roadmap skill now.<br><br>Do you have <strong>discovery notes, a site survey, equipment list, or scope document</strong> ready? Paste them now and I'll use everything.<br><br>Also — before we get started, please <strong>add any supporting documents to this project now</strong> — things like your client profile, SOW, site survey, equipment list, or quote. Use the paperclip or project files panel. I'll pull from everything automatically.`,
+c:[{l:'✅ Notes ready — files added to project',p:1,n:18},{l:'❌ No notes yet — ask me',n:11}]},
+
+// 11 — No notes, ask questions
+{s:1, u:'No notes yet — ask me the questions',
+a:`No problem — I'll ask the essentials:<br><br><strong>1.</strong> Client name and project name?<br><strong>2.</strong> What problem are we solving? Client's own words if possible.<br><strong>3.</strong> What tool stack is confirmed? (n8n, Make, Claude API, etc.)<br><strong>4.</strong> API and credential status?<br><strong>5.</strong> Team: PM, AI Builder, QA names?`,
+c:[{l:'📝 Answering all of these now',p:1,n:2}]},
+
+// 12 — Roadmap change request
+{s:3, u:'Need to make a change',
+a:`Tell me what needs to change — I'll update everything in one pass and re-deliver.`,
+c:[{l:'✅ Here is what to change',p:1,n:19}]},
+
+// 13 — OneDrive rename fix
+{s:4, u:'OneDrive added (1) — fixing it now',
+a:`Here's what to do:<br><br><span class="hi-yellow">1.</span> Delete the old <code>AcmeCo_Roadmap.html</code> from the Plus1 GitHub Deploys folder on OneDrive<br><span class="hi-yellow">2.</span> Rename <code>AcmeCo_Roadmap (1).html</code> → <code>AcmeCo_Roadmap.html</code><br><span class="hi-yellow">3.</span> Tell me when it's renamed<br><br>Don't confirm until the filename is completely clean — the live URL will contain a broken space otherwise.`,
+c:[{l:'✅ Renamed — clean filename now',p:1,n:5}]},
+
+// 14 — ClickUp not yet
+{s:5, u:'Not yet — will do ClickUp later',
+a:`No problem. Just say <strong>"add milestones to ClickUp"</strong> whenever you're ready and I'll pick up right here.`,
+c:[{l:'✅ Actually — let\'s do it now',p:1,n:6}]},
+
+// 15 — Milestone adjustments
+{s:5, u:'Need to adjust a couple of milestones',
+a:`Tell me what needs to change — I'll update via the ClickUp connector now.`,
+c:[{l:'✅ All updated — looks good now',p:1,n:9}]},
+
+// 16 — Generating task plan
+{s:7, u:'Yes — create the task plan now', t:2400,
+a:`Loading the task plan skill. Reading your approved roadmap phases as the locked structure.<br><br>Generating all five data arrays:<br><br><span class="hi-navy">PHASES</span> &nbsp;4 phases with entry/exit criteria and risk levels<br><span class="hi-navy">TASKS</span> &nbsp;28 tasks with checklists, DoD, and estimates<br><span class="hi-yellow">BLOCKERS</span> &nbsp;2 build-blocking items surfaced<br><span class="hi-cyan">DECISIONS</span> &nbsp;3 confirmed decisions logged<br><span class="hi-green">RISKS</span> &nbsp;5 risks with mitigation and contingency<br><br>Auto-generating embedded diagrams:<br>• <strong>Workflow Map tab:</strong> HubSpot → n8n → Claude → CRM update + error handling branch<br>• <strong>Architecture tab:</strong> All 6 components with labeled integration connections<br><br><div class="ac"><div class="ac-hd"><div class="ac-ico">📋</div><div class="ac-title">Acme Co — Lead Qualification AI Task Plan</div><div class="ac-tag">✅ Ready</div></div><div class="ac-body">28 tasks · 4 phases · Est. 87h total effort<br><br><span style="color:var(--red)">⛔ API credentials not obtained — staging blocked</span><br><span style="color:var(--red)">⛔ UAT contact not confirmed — testing phase blocked</span></div></div><br>Quality gate passed ✅ — here's your Project Task Plan. Does everything look correct?`,
+c:[{l:'✅ Looks correct — no changes',p:1,n:20},{l:'✏️ Need to adjust something',n:21}]},
+
+// 17 — Task plan not yet
+{s:6, u:'Not yet — will come back to this',
+a:`No problem. Say <strong>"create the task plan"</strong> whenever you're ready — the approved roadmap phases will be locked in as the structure automatically.`,
+c:[{l:'✅ Actually — let\'s do it now',p:1,n:16}]},
+
+// 18 — MSP generating roadmap
+{s:2, u:'Discovery notes ready (MSP)', t:2000,
+a:`Reading notes and loading MSP Roadmap skill.<br><br><span class="hi-navy">📄 Plus1_Skill_Roadmap_MSP.md</span> &nbsp;<span class="hi-navy">🗺 workflow-diagram-guide</span><br><br>Generating MSP roadmap including:<br>• <strong>Procurement Track:</strong> Every step from quote approval to bench staging<br>• <strong>Network Diagram tab:</strong> Current state + future state topology SVG<br>• Change window flagged <span class="hi-yellow">⚠️ CHANGE WINDOW TBD</span> until confirmed in writing<br>• Phases: Planning &amp; Procurement → Staging → Installation &amp; Go-Live → Handoff<br><br>Quality gate passed ✅ — roadmap is ready. Does everything look correct?`,
+c:[{l:'✅ Looks correct',p:1,n:3},{l:'✏️ Need a change',n:12}]},
+
+// 19 — After roadmap change
+{s:3, u:'Changes described', t:900,
+a:`Updated. Here's the revised roadmap — does this look right now?`,
+c:[{l:'✅ Yes — perfect now',p:1,n:3}]},
+
+// 20 — Task plan confirmed, prep deploy
+{s:8, u:'Task plan looks correct — no changes',
+a:`Please <strong>download this file</strong> and upload to the Plus1 GitHub Deploys folder on OneDrive as:<br><br><code>AcmeCo_Task_Plan.html</code><br><br>Same rule — if OneDrive adds <code>(1)</code>, delete the old file and rename before confirming.<br><br>Tell me when it's ready.`,
+c:[{l:'✅ Done — uploaded to OneDrive',p:1,n:22}]},
+
+// 21 — Task plan change request
+{s:7, u:'Need to adjust something',
+a:`Tell me what needs to change — I'll update everything in one pass.`,
+c:[{l:'✅ Changes described',p:1,n:23}]},
+
+// 22 — Deploy task plan
+{s:9, u:'Task plan uploaded to OneDrive', t:1800,
+a:`<div class="ac"><div class="ac-hd"><div class="ac-ico">🚀</div><div class="ac-title">Task Plan Deployed to GitHub Pages</div><div class="ac-tag">✅ Live</div></div><div class="ac-body">Commit: <code>3f1e9ac2</code> · Deployed 2:41 PM · Live in ~60–90 seconds.</div><span class="ac-url">https://plus1tech.github.io/interactive-docs/AcmeCo_Task_Plan.html</span></div><br>Would you like to <strong>import the full task list into ClickUp</strong> now? I'll add all 28 tasks with descriptions, dates, time estimates, phases, and assignees.`,
+c:[{l:'✅ Yes — import tasks to ClickUp',p:1,n:24},{l:'⏳ Not yet',n:25}]},
+
+// 23 — Task plan re-review after change
+{s:7, u:'Changes applied', t:700,
+a:`Updated. Here's the revised task plan — does everything look right now?`,
+c:[{l:'✅ Yes — perfect now',p:1,n:20}]},
+
+// 24 — Importing tasks
+{s:10, u:'Yes — import tasks to ClickUp', t:2400,
+a:`<div class="ac"><div class="ac-hd"><div class="ac-ico">✅</div><div class="ac-title">28 Tasks Imported to ClickUp</div><div class="ac-tag">✅ Complete</div></div><div class="ac-body"><strong>Phase 1 — Discovery &amp; Design:</strong> 7 tasks<br><strong>Phase 2 — Build &amp; Integration:</strong> 9 tasks<br><strong>Phase 3 — Testing &amp; UAT:</strong> 7 tasks<br><strong>Phase 4 — Go-Live &amp; Handoff:</strong> 5 tasks<br><br>Five-section description on every task. Time estimates as integers. Tags applied: 2 blocking, 1 change-window.</div></div><br>Please open the ClickUp list and confirm everything looks correct — names, assignees, dates, and estimates. Any changes needed?`,
+c:[{l:'✅ Tasks look correct',p:1,n:26},{l:'✏️ A few things to fix',n:27}]},
+
+// 25 — Tasks not yet
+{s:10, u:'Not yet — will import tasks later',
+a:`Got it. Say <strong>"import tasks to ClickUp"</strong> whenever you're ready.`,
+c:[{l:'✅ Let\'s do it now',p:1,n:24}]},
+
+// 26 — Offer dependencies
+{s:11, u:'Tasks look correct',
+a:`Would you like me to <strong>connect task dependencies and link every task to its milestone</strong> in ClickUp?<br><br>I'll also populate the <strong>Related Project Tasks</strong> field on each milestone — so every milestone shows all the tasks that roll up to it. This makes your ClickUp timeline and dependency view fully functional.`,
+c:[{l:'✅ Yes — connect everything',p:1,n:28},{l:'⏭ Skip — we\'re done',n:29}]},
+
+// 27 — Task fixes
+{s:10, u:'A few things to fix',
+a:`Tell me what needs to change — I'll update via the ClickUp connector now.`,
+c:[{l:'✅ All updated — looks correct now',p:1,n:26}]},
+
+// 28 — Connecting deps
+{s:11, u:'Yes — connect everything', t:2200,
+a:`<div class="ac"><div class="ac-hd"><div class="ac-ico">🔗</div><div class="ac-title">Dependencies &amp; Milestone Links Connected</div><div class="ac-tag">✅ Complete</div></div><div class="ac-body"><strong>18 dependency links</strong> connected (waiting_on type)<br><strong>28 tasks</strong> linked to their milestones<br><strong>8 milestones</strong> — Related Project Tasks field populated<br><br>Critical path is now visible in ClickUp timeline view.</div></div>`,
+c:[{l:'🎉 See the complete summary',p:1,n:30}]},
+
+// 29 — Skip deps
+{s:12, u:"Skip — we're done",
+a:`Got it. You can always say <strong>"connect dependencies"</strong> later and I'll run this step from here.`,
+c:[{l:'🎉 See the complete summary',p:1,n:30}]},
+
+// 30 — FINAL COMPLETE
+{s:12,
+a:`Your project is fully set up. Here's everything delivered:<br><br><div class="callout success">✅ <strong>Roadmap live:</strong> plus1tech.github.io/interactive-docs/AcmeCo_Roadmap.html</div><div class="callout success" style="margin-top:6px">✅ <strong>Task Plan live:</strong> plus1tech.github.io/interactive-docs/AcmeCo_Task_Plan.html</div><div class="callout navy" style="margin-top:6px">🎯 <strong>ClickUp:</strong> 8 milestones · 28 tasks · 18 dependencies · Related Project Tasks linked</div><div class="ac" style="margin-top:10px"><div class="ac-hd"><div class="ac-ico">📁</div><div class="ac-title">Move this chat to a client project folder</div></div><div class="ac-body">If you have a dedicated Claude project set up for this client, move this conversation there to keep everything organized:<br><br><ul class="ac-list"><li><span class="step-n">1</span>In the left sidebar, find this conversation</li><li><span class="step-n">2</span>Click the <strong>⋯ three-dot menu</strong> next to the conversation title</li><li><span class="step-n">3</span>Select <strong>"Move to project"</strong></li><li><span class="step-n">4</span>Choose the client project folder from the list</li></ul><br>This keeps all your roadmap, task plan, and ClickUp history in one place for that client.</div></div><br>Is there anything else you need help with?`,
+c:[{l:'🔄 Restart the demo',p:1,n:'restart'},{l:'📋 What is different for MSP?',n:31}]},
+
+// 31 — MSP differences
+{s:1, u:"What is different for MSP projects?",
+a:`For <strong>MSP / Infrastructure projects</strong> the workflow is identical — same 12 stages, same agent behavior.<br><br>The differences:<br><br>• Loads <span class="hi-navy">Plus1_Skill_Roadmap_MSP.md</span> instead of the AI skill<br>• <strong>Network Diagram tab</strong> auto-generated: current state + future state topology SVG<br>• <strong>Procurement Track</strong> surfaced immediately — quote → PO → confirm → ship → receive → stage → install are all separate tasks, never bundled<br>• Change window tasks flagged <span class="hi-yellow">⚠️ CHANGE WINDOW TBD</span> until confirmed in writing from the client decision maker<br>• Phase structure: Planning &amp; Procurement → Staging &amp; Pre-Config → Installation &amp; Go-Live → Handoff &amp; Support<br><br>Everything else — deploy, ClickUp connector auth, task import, dependencies, milestone links — works exactly the same.`,
+c:[{l:'🔄 Restart the demo from the top',p:1,n:'restart'}]},
+
+]; // END F
+
+// ─────────────────────────────────────────────────────────
+// ENGINE
+// ─────────────────────────────────────────────────────────
+function buildSidebar() {
+  const el = document.getElementById('sbStages');
+  el.innerHTML = STAGES.map((nm,i)=>`<div class="sb-row upcoming" id="sbr${i+1}"><div class="sb-num">${i+1}</div><div class="sb-name">${nm}</div><div class="sb-ck"></div></div>`).join('');
+}
+
+function updateUI(stageNum) {
+  for(let i=1;i<=12;i++){
+    const r=document.getElementById('sbr'+i);
+    const d=document.getElementById('pd'+i);
+    if(!r||!d)continue;
+    r.className='sb-row';d.className='pd';
+    if(i<stageNum){r.classList.add('done');r.querySelector('.sb-ck').textContent='✓';d.classList.add('done');}
+    else if(i===stageNum){r.classList.add('active');r.querySelector('.sb-ck').textContent='';d.classList.add('active');}
+    else{r.classList.add('upcoming');r.querySelector('.sb-ck').textContent='';}
+  }
+  document.getElementById('stagePill').textContent=`Stage ${stageNum} of 12`;
+  document.getElementById('progLbl').textContent=`Stage ${stageNum} of 12`;
+}
+
+function addUserMsg(text){
+  if(!text)return;
+  const d=document.createElement('div');
+  d.className='msg-user';
+  d.innerHTML=`<div class="user-bub">${text}</div>`;
+  document.getElementById('chatWrap').appendChild(d);
+  scroll();
+}
+
+function addAgentMsg(html,cb){
+  const chat=document.getElementById('chatWrap');
+  const w=document.createElement('div');
+  w.className='msg-agent';
+  w.innerHTML=`<div class="av">🤖</div><div><div class="agent-lbl">Plus 1 Delivery Agent</div><div class="bubble">${html}</div></div>`;
+  chat.appendChild(w);scroll();
+  if(cb)setTimeout(cb,80);
+}
+
+function showTyping(ms,cb){
+  const chat=document.getElementById('chatWrap');
+  const t=document.createElement('div');
+  t.className='typing';t.id='typing';
+  t.innerHTML=`<div class="av">🤖</div><div class="typing-dots"><span></span><span></span><span></span></div>`;
+  chat.appendChild(t);scroll();
+  setTimeout(()=>{t.remove();if(cb)cb();},ms);
+}
+
+function renderChoices(choices){
+  const el=document.getElementById('choices');
+  el.innerHTML='';
+  choices.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='choice-btn'+(c.p?' primary':' sec');
+    btn.textContent=c.l;
+    btn.onclick=()=>pick(c.n,c.l);
+    el.appendChild(btn);
+  });
+}
+
+function pick(next,label){
+  document.getElementById('choices').innerHTML='';
+  addUserMsg(label);
+  if(next==='restart'){setTimeout(restart,400);return;}
+  setTimeout(()=>runStep(next),500);
+}
+
+function runStep(idx){
+  const step=F[idx];
+  if(!step)return;
+  updateUI(step.s);
+  if(step.t){
+    showTyping(step.t,()=>{addAgentMsg(step.a,()=>{if(step.c)renderChoices(step.c);});});
+  } else {
+    addAgentMsg(step.a,()=>{if(step.c)renderChoices(step.c);});
+  }
+}
+
+function scroll(){
+  const c=document.getElementById('chatWrap');
+  c.scrollTop=c.scrollHeight;
+}
+
+function restart(){
+  document.getElementById('chatWrap').innerHTML='<div class="chat-date">Today — Training Session</div>';
+  document.getElementById('choices').innerHTML='';
+  runStep(0);
+}
+
+function startSim(){
+  document.getElementById('intro').classList.add('hide');
+  buildSidebar();
+  runStep(0);
+}
+</script>
+</body>
+</html>
